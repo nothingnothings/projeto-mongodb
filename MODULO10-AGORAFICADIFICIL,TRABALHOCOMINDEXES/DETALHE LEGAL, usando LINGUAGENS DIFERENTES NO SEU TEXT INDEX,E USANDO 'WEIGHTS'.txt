@@ -1,0 +1,1028 @@
+
+
+
+
+
+
+
+
+
+QUASE ACABAMOS COM TEXT INDEXES... 
+
+
+
+
+
+
+
+
+-->  AGORA O PROFESSOR QUER DROPPAR NOSSO INDEX, + UMA VEZ,
+
+PQ 
+
+ELE QUER 
+
+
+NOS MOSTRAR MAIS COISAS INTERESSANTES QUE PODEMOS SETTAR,
+
+QUANDO CRIAMOS NOSSO TEXT INDEX...
+
+
+
+
+
+
+
+
+
+rodamos 
+
+
+
+db.products.getIndexes() para 
+
+CONSEGUIR 
+
+
+O NAME 
+
+DE 
+NOSSO INDEX,
+
+
+PARA AÍ O DROPPAR....
+
+
+
+
+
+droppamos com 
+
+
+
+
+
+
+
+db.products.dropIndex("title_text_description_text")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... AGORA QUEREMOS CRIAR UM NOVO TEXT INDEX,
+
+
+
+
+
+--> VAMOS QUERER INCLUIR NOSSO TITLE E NOSSA DESCRIPTION COMO PARTES/FIELDS DO NOSSO TEXT INDEX ('text index misto', portanto... combined text index)...
+
+
+
+
+
+
+
+
+
+COM 
+
+
+
+
+
+
+
+
+db.products.createIndex(
+    {
+        title: "text",
+        description: "text"
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> CERTO... MAS AGORA VAMOS PASSAR UM SEGUNDO PARÂMETRO,
+
+
+
+PARÂMETRO DE CONFIG,
+
+
+
+
+PQ 
+
+
+
+TEMOS 2 
+
+COISAS INTERESSANTES QUE PODEMOS CONFIGURAR, NOS TEXT INDEXES...
+
+
+
+
+
+
+
+
+
+
+
+
+1a COISA) -------> PODEMOS MUDAR A 'DEFAULT LANGUAGE' do nosso text index.... --> PODEMOS MANUALMENTE ASSIGNAR NOSSA 'default_language' como OUTRO VALUE....
+
+
+
+--> vimos no 'getIndexes()" que a language DEFAULT QUE ELE ASSUME é 'english' ------> MAS VOCÊ TAMBÉM PODE SETTAR ISSO COMO OUTRA LANGUAGE --> professor propõe colocar 'german' (mas só algumas languages são suportadas)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS ESSAS 'default_language'
+
+
+NÃO É 
+
+
+
+APENAS 'COSMETICS' ------> ELE VAI 
+
+
+'DEFINE' 
+
+COMO 
+
+
+AS 
+
+PALAVRAS SÃO 'STEMMED' ( ou seja, vai definir QUAIS 'PREFIXES SÃO REMOVIDOS"),
+
+
+
+
+MAS TAMBÉM VAI DEFINIR QUAIS 'STOP WORDS' são removidas (
+
+
+    como 'is', 'a', no inglês....
+
+
+
+
+
+
+    --> em alemão, 'est', 'dea',
+
+    etc etc....
+)
+
+
+
+
+
+
+
+
+--> VOCÊ DEVE ESPECIFICAR ISSO SE SUA LANGAUGE FOR DIFERENTE, ISSO PARA QUALQUER APP QUE VOCÊ ESCREVER....
+
+
+
+
+
+
+
+
+
+--> A DEFAULT_LANGUAGE_ ___ VAI AFETAR__ QUAIS PALAVARAS VÃO ACABAR NO SEU INDEX, em outras palavras...
+
+
+
+
+
+
+
+
+
+2a COISA) -----> VOCÊ PODE 
+
+
+DEFINIR 
+
+
+
+
+DIFERENTES 
+
+
+'WEIGHTS'  PARA OS DIFERNTES FIELDS QUE VOCê ESTÁ MERGEANDO UNICAMENTE... ----> TALVEZ VOCÊ QUEIRA 
+
+
+
+DIZER 
+
+
+
+
+'''SIM, EU QUERO OS MERGEAR,
+
+MAS 
+
+O 
+
+
+DESCRIPTION DEVE SER DE WEIGHT MAIOR''' --> e os weights vão ser importantes 
+
+
+
+
+
+
+QUANDO O MONGODB CALCULAR O 'SCORE' DO SEU RESULT --> pq 
+
+
+
+VOCÊ PODE TER 
+
+
+'awesome'
+
+NO 'TITLE',
+
+
+MAS 
+
+
+ISSO 
+
+
+
+TALVEZ NÃO CONTE tanto (o fato de 'awesome' estar lá no title)
+
+
+
+
+
+
+
+COMO SE ELE ESTIVESSE LÁ EM 'description'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> PARA SETTAR WEIGHTS COMO ESSES,
+
+
+
+devemos 
+
+
+
+adicionar uma key de 'weights'... ----> e aí definimos, como seu value,
+
+UM OBJECT... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.products.createIndex(
+    {
+        title: "text",
+        description: "text"
+    },
+
+    {
+        default_language: "english",
+        weights: {
+
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> CERTO... MAS O QUE ESCREVEMOS NELE?
+
+
+
+
+
+
+
+
+
+
+BEM, NESSE DOCUMENT REFERENCIAMOS NOSSOS FIELD NAMES,
+
+E AÍ 
+
+
+
+
+SIMPLESNETNE 
+
+
+
+
+DEFINIMOS 
+
+WEIGHTS,
+
+RELATIVOS UM AO OUTRO....
+
+
+
+
+
+
+ex:
+
+
+
+
+db.products.createIndex(
+    {
+        title: "text",
+        description: "text"
+    },
+
+    {
+        default_language: "english",
+        weights: {
+
+            title: 1,
+            description: 10
+
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, AGORA SE NOSSA WORD APARECER 
+
+NA 'description',
+
+
+SEU VALOR VAI VALER 
+
+10x 
+
+
+
+o valor que valeria em 'title',
+
+se aparecesse lá....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> OK... 
+
+
+
+
+
+
+
+
+
+
+
+
+--> APERTAMOS ENTER,
+
+
+E AÍ 
+
+
+CRIAMOS ESSE 
+
+
+
+
+NEGÓCIO..
+
+
+
+
+
+
+
+
+
+
+-> 
+
+
+
+> db.products.createIndex(     
+...     {
+...         title: "text",     
+...         description: "text"
+...     },
+...
+...     {
+...         default_language: "english",
+...         weights: {       
+...
+...             title: 1,    
+...             description: 10
+...
+...         }
+...     }
+... )
+{
+        "numIndexesBefore" : 1,
+        "numIndexesAfter" : 2,
+        "createdCollectionAutomatically" : false,
+        "ok" : 1
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--_> AGORA VAMOS FAZER SEARCH,
+
+COM ESSE TEXT INDEX...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> professor escreve:
+
+
+
+
+
+
+
+
+
+
+
+db.products.find(
+    {
+        $text: {
+            $search: " ", 
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> LOGO ESPECIFICAREMOS O 'search',
+
+
+como antes...
+
+
+
+
+
+
+
+
+--> MAS ANTES DISSO,
+
+PROFESSOR NOS EXPLICA QUE PODEMOS ESPECIFICAR '$language',
+
+
+
+SE VOCÊ ESTIVER 
+
+
+
+USANDO 'DIFERENTES MANEIRAS DE ARMAZENAR SUAS LANGUAGES '(
+
+
+    pq você pode armazenar TEXTS EM DIFERENTES LANGUAGES,
+
+    EM DIFERENTES
+     
+     DOCUMENTS...
+)
+
+
+
+
+
+
+
+
+
+
+
+-> FICARIA TIPO ASSIM:
+
+db.products.find(
+    {
+        $text: {
+            $search: " ", 
+            $language: 'german'
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> TAMBÉM INTERESSANTE PARA NÓS É QUE PODEMOS 
+
+LIGAR 
+
+
+"$caseSensitive:',
+
+
+
+
+
+
+QUE 
+
+
+PODEMOS SETTAR como 'true' (que não é o default)...
+
+
+
+db.products.find(
+    {
+        $text: {
+            $search: " ", 
+            $language: 'german',
+            $caseSensitive: true
+        }
+    }
+)
+
+
+
+
+
+
+-_> esses são apenas alguns sidenotes....
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, MAS VOLTAMOS AO SEARCH,
+
+
+E AGORA PROCURAMOS POR 'red'...
+
+
+
+
+
+
+
+
+-> É CLARO QUE ISSO FUNCIONA,
+PQ 
+
+TEMOS ESSA KEYWORD NAS NOSSAS STRINGS,
+
+NOS NOSSOS FIELDS,
+
+NOS NOSSOS DOCUMETNS...
+
+
+
+
+
+
+ex:
+
+
+
+
+
+db.products.find(
+    {
+        $text: {
+            $search: "red", 
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> CERTO.... MAS AÍ O PROFESSOR 
+
+
+TAMBÉM 
+
+DEFINE 
+
+aquela 
+
+
+
+KEY DE 'score'
+
+
+NO SEGUNDO PARÂMETRO,
+
+PARA 
+
+
+QUE 
+
+SEJA 
+
+CONTADO 
+O  _ SCORE__ 
+
+DE 
+
+CADA 
+
+
+'MATCH'
+
+na 
+
+
+nossa database, a partir desse find --> aí ele adicioona o CÓDIGO DE SORTING A PARTIR DESSE SCORE,
+
+
+
+para 
+que 
+
+
+aí 
+
+sejam
+
+ordenados 
+
+
+
+nossos documents por 'match score'...
+
+
+
+
+
+
+ex:
+
+
+
+
+
+db.products.find(
+    {$text: {$search: 'red'},
+    },
+    {score: {$meta: "textScore",
+     } }
+  ).sort({
+    score: {
+      $meta: 'textScore',
+    },
+  }).pretty()
+
+
+
+
+------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------- OK.... GANHAMOS ESTE RESULTADO:
+
+
+
+
+
+
+
+
+ db.products.find(
+...     {$text: {$search: 'red'},
+...     },
+...     {score: {$meta: "textScore",
+...      } }
+...   ).sort({
+...     score: {
+...       $meta: 'textScore',
+...     },
+...   }).pretty()
+{
+        "_id" : ObjectId("620fcccc1622c3230aa0fde9"),
+        "title" : "Red T-Shirt",
+        "description" : "This T-Shirt is red and it's pretty awesome!",
+        "score" : 6.666666666666667
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O SCORE FICOU COMO '6.6666666666666',
+
+
+
+que é um VALOR DIFERENTE DAQUELE QUE RECEBÍAMOS ANTERIORMETNE,
+
+
+
+
+TUDO GRAÇAS AOS 'weights'.... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> professor droppa o index para aí provar que o valor era diferente, antigamente...
+
+
+
+
+
+
+
+
+
+
+
+--> DE FATO,
+
+
+
+ELE CRIA UM INDEX COM 
+
+
+
+'{title: "text", description: "text"},
+
+
+
+
+
+
+
+SÓ QUE SEM os 'weights',
+
+
+
+
+
+E AÍ 
+
+
+
+O SCORE FICA DE '
+
+1.2666666666666666666666666'
+
+
+
+
+
+
+
+
+
+
+
+
+--> o score agora é calculado diferentemente,
+
+
+
+
+pq os weights não estão sendo aplicados... -----> E OS WEIGHTS TE DEIXAM
+
+COLOCAR MAIS PESO NO 
+
+
+
+FIELD QUE SEGURA SUAS KEYWORDS MAIS IMPORTANTES....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> A MAIOR PARTE DAS 
+
+
+FEATURES IMPORTANTES DOS INDEXES FORAM COBERTAS AQUI...
+
+
+
+
+
+
+
+
+
+
+--> VOCÊ PRECISA SABER COMO FUNCIONAM 
+
+OS TEXT INDEXES,
+
+
+
+SABER COMO 
+
+ELE FUNCIONA COM O 'meta score',
+
+
+E QUE 
+
+ELE TAMBÉM FUNCIONA 'ACROSS MULTIPLE FIELDS'... 
+
+

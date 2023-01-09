@@ -1,0 +1,973 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+AGORA DEVEMOS VER A MATÉRIA DO QUERY DE ARRAYS UM POUCO MAIS A FUNDO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO PQ 
+HÁ MAIS DE 1 COISA QUE PODEMOS  FAZER, QUANDO O ASSUNTO É QUERY DE ARRAYS....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E HÁ OPERATORS ESPECIAIS QUE NOS AJUDAM COM O QUERY DE ARRAYS, TAMBÉM....
+
+
+
+
+
+
+
+
+
+
+
+OPERATORS:
+
+
+
+
+
+
+1) $all  --> matches arrays THAT CONTAIN ALL ELEMENTS SPECIFIED IN THE QUERY...
+
+
+
+
+
+
+
+
+
+2) $elemMatch ---> SELECTS DOCUMENTS IF ELEMENT IN THE ARRAY FIELD MATCHES ALL THE SPECIFIED '$elemMatch' conditions....
+
+
+
+
+
+
+
+3) $size  --> selects documents IF THE ARRAY FIELD IS A SPECIFIED SIZE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ANTES DE MAIS NADA... ------> O PROFESSOR VOLTA A MESMA DATABASE DE ANTES..
+.
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR EXPLICA QUE VAMOS USAR A MESMA DATA QUE 
+USAMOS NO 'ASSIGNMENT'... 
+
+
+
+
+
+
+
+
+
+
+
+---> que assignment? 
+
+
+
+
+
+
+
+
+
+
+-----> professor escreve 'use user' ----> 
+
+
+
+
+AÍ, DENTRO DE LÁ,
+
+
+temos um punhado de users...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> eu já havia feito esse assignemnt,
+
+
+eu acho...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> 3 users, e todos eles tinham hobbies....
+
+
+
+
+
+
+
+
+
+
+
+-> TIPO ASSIM:
+
+
+
+
+
+> db.users.find({}).pretty()
+{
+        "_id" : ObjectId("62087cf32867f483687f8345"),
+        "name" : "Anna",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Yoga",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : 24
+}
+{
+        "_id" : ObjectId("62087cf32867f483687f8346"),
+        "name" : "CJ",
+        "hobbies" : [
+                {
+                        "title" : "Gym",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Swimming",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : 35
+}
+{
+        "_id" : ObjectId("62087cf32867f483687f8347"),
+        "name" : "Yan",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : null
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+AGORA DIGAMOS QUE QUEREMOS ACHAR TODOS OS USERS COM 
+
+
+'HOBBIES' DE SPORTS...
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... MAS UM PROBLEMA QUE TEMOS COM ESSA ESTRUTURA AÍ,
+
+NO CASO,
+
+
+É QUE 
+
+
+
+
+
+TODOS OS 'hobbieS'
+
+
+
+
+
+SÃO EMBEDDED DOCUMENTS,
+
+E NÃO STRINGS... (
+
+
+
+    por isso não podemos executar algo como 
+
+
+    "db.users.find({"hobbies": "Sports})"
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PQ NÓS PRECISAMOS PROCURAR O VALOR DO FIELD 'title',
+
+
+que é ele que tem esse valor de 'sports'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> PROFESSOR EXPLICA QUE UMA SOLUÇÃO, É CLARO,
+
+
+
+SERIA 
+
+
+
+USAR 'NESTING' com equality,
+
+
+para procurar POR HOBBIES COM NESTED DOCUMENTS EM QUE O 'title' seja 'sports'...
+
+
+
+
+
+
+TIPO ASSIM
+
+
+
+
+ex:
+
+
+
+
+
+
+
+db.users.find({hobbies: {title: "Sports"}})
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS ISSO __ TAMBÉM FALHARÁ... --> FALHARÁ PQ 
+
+
+
+
+
+O  OBJECT QUE ESTAMOS PROCURANDO em 
+
+
+
+''{hobbies: {title: "Sports"}}'''
+
+
+
+
+TAMBÉM 
+
+CONTÉM UMA KEY DE 'frequency'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> E, SIM, NÓS PODERÍAMOS PROCURA PELA FREQUENCY NESSE OBJECT, PARA EVITAR 
+
+ESSE COMPORTAMENTO INDESEJADO,
+
+
+
+MAS ISSO __ AÍ __ TAMBÉM 
+
+TRARIA UM OUTRO PROBLEMA (
+
+
+    pq encontraríamos os users com aquele número em 'frequency',
+
+    mas nem todos possuem/possuirão esse número específico...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... ISSO SIGNIFICA QUE 
+
+
+
+
+
+
+TUDO ISSO NÃO NOS LEVA A LUGAR ALGUM... --> não podemos procurar por 'Sports'
+
+
+
+
+em 1 embedded document, em 1 propriedade 'title',
+
+
+assim....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS E SE EU QUISER, NA VERDADE,
+
+
+
+ENCONTRAR 
+
+
+
+
+1 '''embedded sports document'''' (com a estrutura '{title: "Sports", frequency: xxxx}),
+
+
+
+
+SEM ME IMPORTAR COM O NÚMERO DA FREQUENCY?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, ISSO TAMBÉM É ALGO BEM SIMPLES DE SE FAZER, COM O MONGODB... ---> SÓ PRECISAMOS TROCAR NOSSA QUERY UM POUQUINHO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> EM VEZ DE SÓ escrever 
+
+
+
+db.users.find({hobbies: {title: "Sports", frequency: 2}}),
+
+
+
+
+
+
+
+
+E PROCURAR POR UM 'EQUAL DOCUMENT',
+
+
+
+
+
+
+NÓS 
+
+
+
+
+__ PODEMOS PROCURAR POR ALGO MAIS 'ABSTRATO/GENÉRICo''...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO,
+
+
+
+PODEMOS USAR UM 'PATH' AQUI... (por meio do uso da dot notation),
+
+
+
+
+PARA ENTÃO PROCURAR por 
+
+
+'hobbies.title',
+
+
+
+QUE 
+
+SEJA IGUAL 
+
+
+
+A 
+
+
+'Sports',
+
+
+
+tipo assim:
+
+
+
+
+
+
+db.users.find({"hobbies.title": "Sports"})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> CERTO... MAS A PARTE ESTRANHA, AQUI, É QUE 
+
+'title'
+
+É UMA PROPRIEDADE QUE É OBSERVADA DENTRO DOS 'documents/embedded documents' do array de 'hobbies', tipo assim:
+
+
+
+
+
+
+
+
+
+{
+        "_id" : ObjectId("62087cf32867f483687f8345"),
+        "name" : "Anna",
+        "hobbies" : [
+                {
+                        "title" : "Sports", /////AQUI....
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Yoga",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : 24
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS ISSO AÍ, ESSA QUERY ESTRANHA, REALMENTE VAI FUNCIONAR.... --> ISSO SIGNIFICA QUE 
+
+
+
+PODEMOS 
+
+
+'ACT AS  IF' 
+
+
+
+
+
+AS IF O 
+
+
+
+'hobbies'
+SEGURASSE 
+
+
+__aPENAS 1 ÚNICO 'embedded document' 
+
+
+com essa key de title,
+
+
+
+
+
+
+MESMO COM NÓS ___ POSSUINDO ___ DIVERSOS__ EMBEDDED DOCUMENTS DENTRO DESSE 
+
+
+ARRAY de 'hobbies'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> TRATA-SE, PORTANTO, DE UM TRUQUE MUITO INTERESSANTE,
+
+
+
+
+que faz com que uma propriedade que é 'LIDA' como se só existisse em 1 embedded document
+
+
+FOSSE ALVO DE UM CHECK DE VALOR _ EM TODOS OS __ EMBEDDED DOCUMENTS QUE POSSUEM ESSA KEY...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.users.find({"hobbies.title": "Sports"})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> O MONGODB VAI ENTENDER ESSA QUERY E VAI IR POR DENTRO DE CADA 
+
+
+
+
+'DOCUMENT/ELEMENTS'
+
+
+em hobby,
+
+
+E, PARA CADA 
+
+
+ELEMENT,
+
+
+
+
+ELE VAI __ 'DIG INTO' 
+
+o document,
+
+e aí 
+
+
+COMPARAR O 
+
+
+TITLE COM NOSSO QUERY VALUE, QUE É 'SPORTS'...
+
+
+
+
+
+
+
+
+
+
+--> É POR ISSO QUE ESSA QUERY FUNCIONA,
+
+
+
+
+
+tipo assim:
+
+
+
+
+db.users.find({"hobbies.title": "Sports"}).pretty()
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+> db.users.find({"hobbies.title": "Sports"}).pretty()
+{
+        "_id" : ObjectId("62087cf32867f483687f8345"),
+        "name" : "Anna",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Yoga",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : 24
+}
+{
+        "_id" : ObjectId("62087cf32867f483687f8347"),
+        "name" : "Yan",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : null
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> É UMA QUERY SUPER ÚTIL,
+
+
+
+QUE VOCÊ DEVE TER EM MENTE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+RESUMINDO:
+
+
+ESSA 
+
+'PATH EMBEDDED APPROACH' PODE SER 
+
+USADA 
+
+
+
+__ NÃO SÓ 
+
+
+EM 'DIRECTLY EMBEDDED DOCUMENTS' ( ou seja, em APENAS 1 DOCUMENT EM 1 FIELD, EMBEDDED DOCUMENT),
+
+
+
+
+
+MAS TAMBÉM SE VOCÊ _ TIVER____ 1 ARRAY_ DE DOCUMENTS.... -----> E AÍ VOCÊ PODE USAR 
+
+
+O 
+
+
+MESMO 
+
+
+
+MUNDO DE QUERIES COM "$gt',
+
+
+
+"$lt',
+
+
+
+"$expr',
+
+QUALQUER COISA QUE VOCÊ QUISER,
+
+
+
+com essa mesma sintaxe de embedded documents com path...

@@ -1,0 +1,677 @@
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA QUE TEMOS AS CRUD OPERATIONS BÁSICAS 
+
+
+
+
+
+JÁ EXPLICADAS,
+
+
+
+
+
+PROFESSOR QUER DIVAR UM POUCO MAIS FUNDO...
+
+
+
+
+
+
+
+
+
+
+--> ELE QUER VER A RELAÇÃO ENTRE UPDATEONE E UPDATEMANY...
+
+
+
+
+
+
+
+
+
+
+
+--> antes de mais nada,
+
+
+
+daremos uma olhada em toda nossa data,
+
+
+por meio do comando de 
+
+
+
+
+
+db.flightData.find().pretty()...
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... AÍ O PROFESSOR QUER __ MUDAR/CHANGE A PRIMEIRA FLIGHT...
+
+
+
+
+
+
+-_> QUER ADICIONAR UM EXTRA FIELD NA PRIMEIRA FLIGHT DE NOSSO 
+
+
+
+
+NEGÓCIO....
+
+
+
+
+
+
+
+
+--> EXTRA FIELD QUE SEGURARÁ 
+
+
+A INFO SE O 
+
+
+VOO FOI 
+
+
+
+ADIADO OU NÃO...
+
+
+
+
+
+
+
+
+db.flightData.updateOne({_id: ObjectId(seuObjectId)})
+
+
+
+
+
+
+
+
+
+
+
+--> OK, ISSO SELECIONA O PRIMEIRO FLIGHT COM ESSE CRITÉRIO...
+
+
+
+
+-> aí usamos '{$set: {delayed: false}}" 
+
+
+NO SEGUNDO PARÂMETRO, PARA DEFINIR ESSA KEY AÍ....
+
+
+
+
+
+
+eX:
+
+
+db.flightData.updateOne({_id: ObjectId(seuObjectId)}, {$set: {delayed: false}})
+
+
+
+
+
+
+
+
+-----------------------------------------
+
+
+
+
+
+
+
+ObjectId("61ff05eb156a623d98a99136")
+
+
+
+
+-----> ex:
+
+
+db.flightData.updateOne({_id: ObjectId("61ff05eb156a623d98a99136")}, {$set: {delayed: false}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... PERCEBEMOS QUE O DELAYED FOI ADICIONADO...
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+> db.flightData.updateOne({_id: ObjectId("61ff05eb156a623d98a99136")}, {$set: {delayed: false}})
+{ "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+> db.flightData.find({})
+{ "_id" : ObjectId("61ff05eb156a623d98a99136"), "departureAirport" : "MUC", "arrivalAirport" : "SF0", "aircraft" : "AIRBUS 
+A380", "distance" : 12000, "intercontinental" : true, "delayed" : false }
+{ "_id" : ObjectId("61ff05eb156a623d98a99137"), "departureAirport" : "LHR", "arrivalAirport" : "TXL", "aircraft" : "AIRBUS 
+A320", "distance" : 950, "intercontinental" : false, "example course" : true }
+>                                                                                             
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> MAS HÁ OUTRO COMANDO QUE AINDA NÃO VIMOS , E QUE PODERÍAMOS TER USADO AQUI....
+
+
+
+
+
+
+
+
+
+
+--> é o 'update'... só 'update', sem 'updateOne' ou 'updateMany'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESCREVEMOS ASSIM:
+
+
+
+
+> db.flightData.update({_id: ObjectId("61ff05eb156a623d98a99136")}, {$set: {delayed: false}})
+                                                                     
+
+
+
+
+
+
+
+
+--> SE FAZEMOS ISSO,
+
+RECEBEMOS 
+
+
+
+
+
+
+um output de 
+
+
+
+
+WriteResult({ "nMatched": 1, "nUpserted": 0, "nModified": 0})
+
+
+
+
+
+
+
+
+
+
+
+
+---> ISSO SIGNIFICA 
+
+
+
+
+
+
+QUE ___ NADA FOI MODIFICADO.... --> NADA FOI MODIFICADO JUSTAMENTE PQ __ JÁ TÍNHAMOS UM VALOR DE 'delayed: false'...
+
+
+
+
+
+
+
+--> SE TENTAMOS TROCAR ESSE VALOR DE 'delayed' para 'TRUE',
+
+
+tipo assim:
+
+
+
+
+> db.flightData.update({_id: ObjectId("61ff05eb156a623d98a99136")}, {$set: {delayed: true}})
+                                                                     
+
+,
+
+
+
+
+
+
+
+
+
+
+
+
+AÍ O ELEMENTO REALMENTE É MODIFICADO ('nModified' fica como 1)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR EXPLICA QUE 'update' É BEM PARECIDO COM 'updateMany'...
+
+
+
+
+
+
+
+
+
+--> updateMany' FOI _ _USADO __ PARA UPDATAR TODOS OS MATCHING ELEMENTS,
+
+
+E O 
+
+UPDATE TAMBÉM FAZ ISSO... --> OK ,
+
+
+
+ENTÃO QUAL É A DIFERNEÇA 
+
+
+
+
+ENTRE OS DOIS?
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> A DIFERENÇA PODE SER VISTA __ SE O __ PROFESSOR __ 
+
+
+
+REMOVER O '{$set: }' 
+
+
+QUE WRAPPA O VALOR QUE HAVÍAMOS UPDATADO....
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+> db.flightData.update({_id: ObjectId("61ff05eb156a623d98a99136")},  {delayed: false})
+                                                                     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> LEMBRE-SE: QUANDO 
+
+
+
+FIZEMOS ISSO COM 'updateOne',
+
+
+
+RECEBEMOS AQUELE ERROR BIZARRO DE 
+
+
+'the update operation document must contain atomic operators'...
+
+
+
+
+
+
+
+
+
+
+--------------> E A MESMA COISA ACONTECE SE VOCê TENTA ESCREVER ASSIM ('{delayed: false}' )
+
+
+
+
+com o UPDATEMANY...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> JÁ COM O 'update',
+
+
+isso ACTUALLY FUNCIONA- --->  1 DOCUMENT TERÁ DADO MATCH,
+
+E ESSE DOCUMENT TERÁ SIDO 'changed'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS O QUE MUDOU ?
+
+
+
+
+BEM, NOSSO FLIGHT DEVE TER FICADO 
+
+SÓ COM ESSA KEY DE 'delayed: false',
+
+
+E SEM MAIS PORRA NENHUMA....
+
+
+
+(
+
+
+    ESSE É O EFEITO DE ESCREVER um OBJETO SOLTO no segundo parâmetro de update;
+
+
+    seu document é updatado de maneira que 
+
+
+    TUDO É OVERWRITTADO PELO OBJECT QUE VOCÊ ESCREVEU ALI.... com a exceção do '_id'...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------> ISSO SIGNIFICA QUE O 
+
+
+
+
+OBJETO FICOU ASSIM:
+
+
+{
+    _id: "ObjectId(asjakisjaskjsaljaskl)", "delayed": true
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> O OBJECTID CONTINUA O MESMO, MAS TODOS OS OUTROS KEY-VALUE PAIRS SÃO 
+OVERWRITTADOS...
+
+
+
+
+
+
+
+
+
+
+
+--> O UPDATE ENTÃO É 
+
+
+
+MAIS AVANÇADO,
+
+PQ 
+
+ACEITA ESSA SINTAXE ALTERNATIVA,
+
+DE SUBSTITUIR TUDO DO 
+
+
+OBJECT ANTERIOR.... -----> E SE VOCÊ USA O '$', 
+
+
+
+
+
+
+VOCÊ EVITA ISSO...
+
+
+
+
+
+
+
+
+
+
+
+--> É MAIS RECOMENDADO USAR O 'updateOne'
+
+
+e o 'updateMany',
+
+JUSTAMENTE POR CONTA DO PERIGO DE OVERWRITTAR ISSO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> EM VEZ DE USAR ESSA FEATURE ESPECAIL DO UPDATE,
+
+
+
+
+você deve usar OUTRO METHOD, QUE É O METHOD 
+
+
+DE 
+
+'replaceOne()',
+
+
+
+
+
+
+
+QUE É UM NEGÓCIO QUE VOC~E COLOCA 
+
+
+
+O 
+
+
+
+FILTER NO PRIMEIRO PARÂMETOR,
+
+
+
+E AÍ O OBJECT A OVERWRITAR SEU DOCUMENT ORIGINAL,
+
+
+NO SEGUNDO PARÂMETRO...
+
+
+
+
+
+
+EX:
+
+
+
+
+db.flightData.replaceOne({_id: ObjectId('asjasoasjoasjaso'), delayed: false})
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, CUIDADO COM O COMPORTAMENTO DE 'UPDATE'...

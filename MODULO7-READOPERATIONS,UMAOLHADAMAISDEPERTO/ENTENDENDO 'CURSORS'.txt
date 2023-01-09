@@ -1,0 +1,521 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... NA VERDADE,
+
+
+ACABAMOS COM OS QUERY SELECTORS E OPERATORS....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA DEVEMOS VOLTAR BREVEMENTE ÀQUELA COISA DE 'cursors',
+
+que o professor 
+
+
+MOSTROU LÁ NO INÍCIO DO CURSO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O METHOD DE 'find()'...
+
+
+
+
+
+
+
+
+--> AO CONTRÁRIO DE 'findOne()',
+
+ELE NOS RETORNA 1 CURSOR.... --> PQ ISSO É IMPORTANTE E PQ ELE FAZ ISSO? ---> BEM,
+
+
+
+SE 
+
+NÓS 
+
+
+TEMOS NOSSO CLIENT (server)
+
+SE 
+
+
+COMUNICANDO 
+
+COM O 
+
+
+
+MONGODB SERVER,
+
+
+
+
+NÓS POTENCIALMENTE 
+
+
+
+
+
+OBTEREMOS 
+
+
+MILHOES DE 
+
+
+
+DOCUMENTS COM 'find()',
+
+especialmente 
+
+
+SEM 
+
+CONDITIONS... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+MAS VOCÊ PODE RECEBER MILHARES DE REUSLTS,
+
+
+MESMO COM ALGUMAS CONDITIONS....
+
+
+
+
+
+
+
+
+
+
+--> E RECEBER TODOS ESSES MILHARES DE REUSLTS É MT INEFICIENTE,
+
+
+PQ 
+
+TODOS ELES TEM QUE SER FETCHEADOS DA DATABASE,
+
+
+
+
+
+ENVIADOS OVER THE WIRE,
+
+E AÍ 
+
+CARREGADOS 
+
+NA MEMÓRIA DA SUA CLIENT APPLICATION...
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... --> SÃO AS 3 COISAS QUE NÃO SÃO OPTIMAL.
+
+
+
+
+
+
+
+
+
+ VOCÊ PROVAVELMENTE NÃO VAI PRECISAR DE TODOS OS DOCUMENTS AO MESMO TEMPO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> É POR ISSO QUE 'FIND' 
+
+ TE DÁ UM 'CURSOR' --> 1 CURSOR É ESSENCIALMENTE UM 
+
+
+ POINTER... ---> É UM POINTER 
+
+
+
+ QUE 
+
+ POSSUI A QUERY QUE VOCÊ ESCREVEU __ ARMAZENADa__ ,
+
+
+
+ E QUE 
+
+
+ PODE, PORTANTO,
+
+
+
+
+
+ IR ATÉ A DATABASE E FALAR 
+
+
+
+
+
+'HEY, ME DÊ O PRÓXIMO BATCH,
+
+HEY, ME DÊ O PRÓXIMO BATCH,
+ 
+ ETC ETC'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> E, DE FATO,
+
+
+ VOCÊ 
+
+ TRABALHA COM REQUEST BATCHES,
+
+
+ com vários 
+
+
+
+
+ 'REQUEST BATCH'..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -----------> VOCÊ TRABALHA COM BATCHES OF DATA -->  VOCê VAI FETCHEAR A DATA 
+
+
+
+
+ 'ONE-BY-ONE',
+
+
+
+ 1 DOCUMENT POR VEZ... ----------->  E AÍ,
+
+
+
+
+
+
+
+ DOCUMENT SÓ É REALMENTE 'TRANSFERRED OVER THE WIRE' 
+
+
+
+
+
+NO MOMENTO QUE VOCÊ __ REQUESTA __ AINDA __ OUTRO __ DOCUMENT... ----> BEM... NA SHELL,
+
+
+
+
+NÓS GANHAMOS 
+
+20 DOCUMENTS POR DEFAULT _ PQ _ A SHELL 
+
+
+
+
+BASICAMENTE 
+
+
+
+AUTOMATICAMENTE 
+
+PEGA 
+
+O 
+
+CURSOR 
+E 
+
+'GETS THE FIRST 20 DOCUMENTS' 
+
+
+
+
+
+
+
+
+ANTES DE CONSEGUIRMOS MAIS... --> SE VOCÊ ESCREVER UM APP COM O MONGODB DRIVER (
+
+
+
+    E VEREMOS ISSO NO MODULO DE 'FROM DRIVER TO SHELL',
+
+    no final do curso,
+
+
+)
+,
+
+
+
+AÍ 
+
+VOCÊ VAI TER QUE CONTROLAR ESSE CURSOR MANUALLY,
+
+PARA ENTÃO GARANTIR QUE VOCÊ GANHA SEUS RESULTS DE VOLTA... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+E ESSE APPROACH DO CURSOR É ÓTIMO, PQ ELE SALVA MTOS RESOURCES...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> SE VOCÊ TIVER UMA QUERY QUE 
+
+
+'MEETS 1 THOUSAND DOCUMENTS',
+
+
+
+
+
+E 
+
+
+
+AÍ VOCÊ TEM 1 SITE EM QUE VOCÊ SÓ DISPLAYA 
+
+
+
+10 PRODUCTS 
+
+
+
+
+
+
+
+POR VEZ,
+
+
+
+
+de qualquer modo,
+
+
+AÍ 
+
+
+
+NÃO TEM NENHUMA RAZÃO/PROPÓSITO DE CARREGAR 
+
+
+
+OS 
+
+1000 RESULTS QUE 
+
+MATCHEARAM SUA QUERY 'RIGHT AT THE START' --> EM VEZ DISSO,
+
+
+VOCÊ PROVAVELMENTE 
+
+FETCHEARÁ 
+
+
+'ONLY THE FIRST 10',
+
+para os displayar 
+
+
+NA TELA,
+
+
+E AÍ 
+
+
+
+
+
+
+CARREGAR 
+
+
+
+OS PRÓXIMOS 10,
+
+
+QUANDO O USER NAVEGAR À PRÓXIMA PAGE,
+
+
+
+
+COISAS ASSIM....
+
+
+
+
+
+
+
+
+
+
+--> ESSA É A IDEIA POR TRÁS DE UM CURSOR...
+
+
+
+
+
+
+
+
+
+
+-> FALAREMOS DE CURSORS MAIS TARDE,
+
+QUANDO O USER 
+
+
+
+
+MOSTRAR O USO DO MONGODB DRIVER EM UM APP DE VERDADE....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------------------> MAS O PROFESSOR JÁ PODE NOS MOSTRAR ALGUMAS COISAS NESTE MÓDULO...
+
+
+
+
+
+
+
+
+

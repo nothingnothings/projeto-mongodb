@@ -1,0 +1,1712 @@
+
+
+
+
+
+
+
+
+
+
+
+
+NÓS JÁ TRANSFORMAMOS UMA __ STRING__ EM NUMBER (em double, no caso),
+
+POR MEIO DO MONGODB....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA É HORA DE TRANSFORMAR A 'birthdate' 
+
+
+DE NOSSOS 
+
+
+USER,
+
+como visto em:
+
+
+
+
+
+
+
+
+
+
+
+
+
+{
+        "_id" : ObjectId("62127db4e5b1e4e4716ec27b"),
+        "gender" : "female",
+        "name" : {
+                "title" : "mrs",
+                "first" : "signe",
+                "last" : "jensen"
+        },
+        "location" : {
+                "street" : "3589 vordingborgvej",
+                "city" : "frederiksberg",
+                "state" : "midtjylland",
+                "postcode" : 76528,
+                "coordinates" : {
+                        "latitude" : "-81.8830",
+                        "longitude" : "-56.3434"
+                },
+                "timezone" : {
+                        "offset" : "-8:00",
+                        "description" : "Pacific Time (US & Canada)"
+                }
+        },
+        "email" : "signe.jensen@example.com",
+        "login" : {
+                "uuid" : "4b3cd21c-ca29-4071-b18e-c03ae6da7edc",
+                "username" : "organicbird675",
+                "password" : "pickle",
+                "salt" : "uEIyIGro",
+                "md5" : "b7b07cae0c56742754d8634e9bbea13b",
+                "sha1" : "659ea5f7cb393e51b7a9cf4c38744f09dccf5398",
+                "sha256" : "9fe614e0e5c54ecbbcd8064d3c14f621633ccde9dbc610185d58b4dbd9730eaa"
+        },
+        "dob" : {
+                "date" : "1970-03-07T22:58:58Z",
+                "age" : 48
+        },
+        "registered" : {
+                "date" : "2013-12-25T21:31:37Z",
+                "age" : 4
+        },
+        "phone" : "40951879",
+        "cell" : "95738610",
+        "id" : {
+                "name" : "CPR",
+                "value" : "266784-8748"
+        },
+        "picture" : {
+                "large" : "https://randomuser.me/api/portraits/women/46.jpg",
+                "medium" : "https://randomuser.me/api/portraits/med/women/46.jpg",
+                "thumbnail" : "https://randomuser.me/api/portraits/thumb/women/46.jpg"
+        },
+        "nat" : "DK"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------> COMO VOCÊ PODE VER,
+ 
+
+
+ TEMOS ISTO:
+
+
+
+        "dob" : {
+                "date" : "1970-03-07T22:58:58Z",
+                "age" : 48
+        },
+
+
+
+
+
+
+
+
+--------> MAS VAMOS QUERER __ CONVERTER/TRANSFORMAR 
+
+ESSA 
+
+
+DATE,
+
+
+usando o operator de 
+
+
+'$convert'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> VAMOS QUERER MANTER  ESSE 'BIRTH DATE' em 'date',
+
+
+MAS EM 
+
+UM 
+
+
+'SEPARATE TOP-LEVEL FIELD'... --> E VAMOS QUERER MANTER A AGE_ _TAMBÉM EM UM SEPARATE, TOP LEVEL FIELD...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> para isso,
+
+
+
+
+vamos ter que 
+
+ADAPTAR NOSSO CALL DE AGGREGATE,
+
+QUE POR ENQUANTO ESTÁ ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.persons.aggregate([
+  {
+    $project: {
+      _id: 0,
+      gender: 1,
+      fullName: {
+        $concat: [
+          { $toUpper: { $substrCP: ['$name.first', 0, 1] } },
+          {
+            $substrCP: [
+              '$name.first',
+              1,
+              { $subtract: [{ $strLenCP: '$name.first' }, 1] },
+            ],
+          },
+          ' ',
+          { $toUpper: { $substrCP: ['$name.last', 0, 1] } },
+          {
+            $substrCP: [
+              '$name.last',
+              1,
+              { $subtract: [{ $strLenCP: '$name.first' }, 1] },
+            ],
+          },
+        ],
+      },
+
+      location: {
+        type: 'Point',
+        coordinates: [
+          { $toDouble: '$location.coordinates.longitude'},
+          { $toDouble: '$location.coordinates.latitude'},
+        ],
+      },
+    },
+  },
+]).pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> VAMOS QUERER 
+
+
+
+COMEÇAR PELA 'AGE',
+
+pq é mais fácil..
+
+
+
+
+
+
+
+escrevemos um novo field,
+
+
+'personAge',
+
+
+e aí 
+
+
+
+
+definimos um value que 
+
+será 
+
+
+extraído daquele embedded 'age':
+
+
+
+
+
+
+db.persons.aggregate([
+  {
+    $project: {
+      _id: 0,
+      gender: 1,
+      personAge: "$dob.age",
+      fullName: {
+        $concat: [
+          { $toUpper: { $substrCP: ['$name.first', 0, 1] } },
+          {
+            $substrCP: [
+              '$name.first',
+              1,
+              { $subtract: [{ $strLenCP: '$name.first' }, 1] },
+            ],
+          },
+          ' ',
+          { $toUpper: { $substrCP: ['$name.last', 0, 1] } },
+          {
+            $substrCP: [
+              '$name.last',
+              1,
+              { $subtract: [{ $strLenCP: '$name.first' }, 1] },
+            ],
+          },
+        ],
+      },
+
+      location: {
+        type: 'Point',
+        coordinates: [
+          { $toDouble: '$location.coordinates.longitude'},
+          { $toDouble: '$location.coordinates.latitude'},
+        ],
+      },
+    },
+  },
+]).pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+personAge: "$dob.age" 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> DEU CERTO:
+
+
+
+
+
+
+
+> db.persons.aggregate([
+...   {
+...     $project: {
+...       _id: 0,
+...       gender: 1,
+...       personAge: "$dob.age",
+...       fullName: {
+...         $concat: [
+...           { $toUpper: { $substrCP: ['$name.first', 0, 1] } },
+...           {
+...             $substrCP: [
+...               '$name.first',
+...               1,
+...               { $subtract: [{ $strLenCP: '$name.first' }, 1] },
+...             ],
+...           },
+...           ' ',
+...           { $toUpper: { $substrCP: ['$name.last', 0, 1] } },
+...           {
+...             $substrCP: [
+...               '$name.last',
+...               1,
+...               { $subtract: [{ $strLenCP: '$name.first' }, 1] },
+...             ],
+...           },
+...         ],
+...       },
+...
+...       location: {
+...         type: 'Point',
+...         coordinates: [
+...           { $toDouble: '$location.coordinates.longitude'},
+...           { $toDouble: '$location.coordinates.latitude'},
+...         ],
+...       },
+...     },
+...   },
+... ]).pretty()
+{
+        "gender" : "male",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        168.9462,
+                        -22.5329
+                ]
+        },
+        "personAge" : 30,
+        "fullName" : "Harvey Chambe"
+}
+{
+        "gender" : "male",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -154.6037,
+                        -29.6721
+                ]
+        },
+        "personAge" : 33,
+        "fullName" : "Carl Jaco"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -172.3753,
+                        83.3998
+                ]
+        },
+        "personAge" : 64,
+        "fullName" : "Madeleine Till"
+}
+{
+        "gender" : "male",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        101.5995,
+                        78.8545
+                ]
+        },
+        "personAge" : 59,
+        "fullName" : "Isolino Viana"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        43.9085,
+                        25.1614
+                ]
+        },
+        "personAge" : 66,
+        "fullName" : "Mestan Kaplan"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -83.3326,
+                        -88.6846
+                ]
+        },
+        "personAge" : 43,
+        "fullName" : "Sandra Lorenz"
+}
+{
+        "gender" : "male",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -54.1364,
+                        -86.1268
+                ]
+        },
+        "personAge" : 47,
+        "fullName" : "Gideon Van dr"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        135.9359,
+                        71.9851
+                ]
+        },
+        "personAge" : 27,
+        "fullName" : "Katie Welch"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        34.1689,
+                        4.6625
+                ]
+        },
+        "personAge" : 56,
+        "fullName" : "پریا پارس"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        148.0944,
+                        35.5726
+                ]
+        },
+        "personAge" : 47,
+        "fullName" : "Louise Graham"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -8.557,
+                        -14.4912
+                ]
+        },
+        "personAge" : 70,
+        "fullName" : "Shona Kempe"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        59.5703,
+                        -67.6434
+                ]
+        },
+        "personAge" : 58,
+        "fullName" : "Andreia Arnaud"
+}
+{
+        "gender" : "male",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -90.9499,
+                        21.3388
+                ]
+        },
+        "personAge" : 34,
+        "fullName" : "بنیامین سالاری"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        78.0207,
+                        -84.1572
+                ]
+        },
+        "personAge" : 35,
+        "fullName" : "Anne Ruiz"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -90.4049,
+                        -65.0877
+                ]
+        },
+        "personAge" : 52,
+        "fullName" : "Delia Duran"
+}
+{
+        "gender" : "male",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        80.9269,
+                        17.4101
+                ]
+        },
+        "personAge" : 48,
+        "fullName" : "Vincent Küper"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        174.2405,
+                        3.6559
+                ]
+        },
+        "personAge" : 30,
+        "fullName" : "Anaëlle Adam"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        130.0105,
+                        88.1818
+                ]
+        },
+        "personAge" : 29,
+        "fullName" : "Gonca Alnıa"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -48.3596,
+                        -13.9479
+                ]
+        },
+        "personAge" : 46,
+        "fullName" : "Maeva Grewa"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        14.0142,
+                        18.2563
+                ]
+        },
+        "personAge" : 35,
+        "fullName" : "Signe Rasmu"
+}
+Type "it" for more
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------> OK... AGORA NOS RESTA MANIPULAR A 
+
+
+
+
+'date of birth',
+
+colocar isso em um top level field,
+
+
+e aí 
+
+
+converter 
+
+a data 
+
+
+
+
+no field de 
+
+
+"dob.date"...
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+"date of birth": { $convert: { input: "$dob.date", to: "date"}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> TALVEZ ISSO FUNCIONE....
+
+
+
+
+
+
+
+
+
+TIPO ASSIM:
+
+
+
+
+
+
+
+db.persons.aggregate([
+  {
+    $project: {
+      _id: 0,
+      gender: 1,
+      personAge: "$dob.age",
+      "date of birth": { $convert: { input: "$dob.date", to: "date"}}
+      fullName: {
+        $concat: [
+          { $toUpper: { $substrCP: ['$name.first', 0, 1] } },
+          {
+            $substrCP: [
+              '$name.first',
+              1,
+              { $subtract: [{ $strLenCP: '$name.first' }, 1] },
+            ],
+          },
+          ' ',
+          { $toUpper: { $substrCP: ['$name.last', 0, 1] } },
+          {
+            $substrCP: [
+              '$name.last',
+              1,
+              { $subtract: [{ $strLenCP: '$name.first' }, 1] },
+            ],
+          },
+        ],
+      },
+
+      location: {
+        type: 'Point',
+        coordinates: [
+          { $toDouble: '$location.coordinates.longitude'},
+          { $toDouble: '$location.coordinates.latitude'},
+        ],
+      },
+    },
+  },
+]).pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ACHO QUE DEU CERTO... FICOU ASSIM:
+
+
+
+
+
+
+
+
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        14.0142,
+                        18.2563
+                ]
+        },
+        "personAge" : 35,
+        "date of birth" : ISODate("1983-05-20T21:26:44Z"),
+        "fullName" : "Signe Rasmu"
+}
+
+
+
+
+
+
+
+
+
+
+        "date of birth" : ISODate("1983-05-20T21:26:44Z"),
+
+
+
+RESULTADO COMPLETO:
+
+
+
+
+
+
+
+
+
+
+
+
+
+> db.persons.aggregate([
+...     {
+...       $project: {
+...         _id: 0,
+...         gender: 1,
+...         personAge: '$dob.age',
+...         'date of birth': { $convert: { input: '$dob.date', to: 'date' } },
+...         fullName: {
+...           $concat: [
+...             { $toUpper: { $substrCP: ['$name.first', 0, 1] } },
+...             {
+...               $substrCP: [
+...                 '$name.first',
+...                 1,
+...                 { $subtract: [{ $strLenCP: '$name.first' }, 1] },
+...               ],
+...             },
+...             ' ',
+...             { $toUpper: { $substrCP: ['$name.last', 0, 1] } },
+...             {
+...               $substrCP: [
+...                 '$name.last',
+...                 1,
+...                 { $subtract: [{ $strLenCP: '$name.first' }, 1] },
+...               ],
+...             },
+...           ],
+...         },
+...
+...         location: {
+...           type: 'Point',
+...           coordinates: [
+...             { $toDouble: '$location.coordinates.longitude' },
+...             { $toDouble: '$location.coordinates.latitude' },
+...           ],
+...         },
+...       },
+...     },
+...   ]).pretty()
+{
+        "gender" : "male",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        168.9462,
+                        -22.5329
+                ]
+        },
+        "personAge" : 30,
+        "date of birth" : ISODate("1988-05-27T00:14:03Z"),
+        "fullName" : "Harvey Chambe"
+}
+{
+        "gender" : "male",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -154.6037,
+                        -29.6721
+                ]
+        },
+        "personAge" : 33,
+        "date of birth" : ISODate("1984-09-30T01:20:26Z"),
+        "fullName" : "Carl Jaco"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -172.3753,
+                        83.3998
+                ]
+        },
+        "personAge" : 64,
+        "date of birth" : ISODate("1954-05-01T02:34:40Z"),
+        "fullName" : "Madeleine Till"
+}
+{
+        "gender" : "male",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        101.5995,
+                        78.8545
+                ]
+        },
+        "personAge" : 59,
+        "date of birth" : ISODate("1959-03-22T14:53:41Z"),
+        "fullName" : "Isolino Viana"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        43.9085,
+                        25.1614
+                ]
+        },
+        "personAge" : 66,
+        "date of birth" : ISODate("1951-12-17T20:03:33Z"),
+        "fullName" : "Mestan Kaplan"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -83.3326,
+                        -88.6846
+                ]
+        },
+        "personAge" : 43,
+        "date of birth" : ISODate("1975-03-23T17:01:45Z"),
+        "fullName" : "Sandra Lorenz"
+}
+{
+        "gender" : "male",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -54.1364,
+                        -86.1268
+                ]
+        },
+        "personAge" : 47,
+        "date of birth" : ISODate("1971-03-28T04:47:21Z"),
+        "fullName" : "Gideon Van dr"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        135.9359,
+                        71.9851
+                ]
+        },
+        "personAge" : 27,
+        "date of birth" : ISODate("1990-10-14T05:02:12Z"),
+        "fullName" : "Katie Welch"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        34.1689,
+                        4.6625
+                ]
+        },
+        "personAge" : 56,
+        "date of birth" : ISODate("1962-01-10T05:26:30Z"),
+        "fullName" : "پریا پارس"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        148.0944,
+                        35.5726
+                ]
+        },
+        "personAge" : 47,
+        "date of birth" : ISODate("1971-01-21T20:36:16Z"),
+        "fullName" : "Louise Graham"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -8.557,
+                        -14.4912
+                ]
+        },
+        "personAge" : 70,
+        "date of birth" : ISODate("1948-04-23T03:40:22Z"),
+        "fullName" : "Shona Kempe"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        59.5703,
+                        -67.6434
+                ]
+        },
+        "personAge" : 58,
+        "date of birth" : ISODate("1960-01-31T05:16:10Z"),
+        "fullName" : "Andreia Arnaud"
+}
+{
+        "gender" : "male",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -90.9499,
+                        21.3388
+                ]
+        },
+        "personAge" : 34,
+        "date of birth" : ISODate("1984-03-10T22:12:43Z"),
+        "fullName" : "بنیامین سالاری"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        78.0207,
+                        -84.1572
+                ]
+        },
+        "personAge" : 35,
+        "date of birth" : ISODate("1982-10-09T12:10:42Z"),
+        "fullName" : "Anne Ruiz"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -90.4049,
+                        -65.0877
+                ]
+        },
+        "personAge" : 52,
+        "date of birth" : ISODate("1966-08-03T09:22:41Z"),
+        "fullName" : "Delia Duran"
+}
+{
+        "gender" : "male",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        80.9269,
+                        17.4101
+                ]
+        },
+        "personAge" : 48,
+        "date of birth" : ISODate("1970-02-18T12:38:36Z"),
+        "fullName" : "Vincent Küper"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        174.2405,
+                        3.6559
+                ]
+        },
+        "personAge" : 30,
+        "date of birth" : ISODate("1987-10-20T11:33:44Z"),
+        "fullName" : "Anaëlle Adam"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        130.0105,
+                        88.1818
+                ]
+        },
+        "personAge" : 29,
+        "date of birth" : ISODate("1988-11-08T00:18:59Z"),
+        "fullName" : "Gonca Alnıa"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -48.3596,
+                        -13.9479
+                ]
+        },
+        "personAge" : 46,
+        "date of birth" : ISODate("1972-04-23T04:31:25Z"),
+        "fullName" : "Maeva Grewa"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        14.0142,
+                        18.2563
+                ]
+        },
+        "personAge" : 35,
+        "date of birth" : ISODate("1983-05-20T21:26:44Z"),
+        "fullName" : "Signe Rasmu"
+}
+Type "it" for more
+>
+
+
+
+
+
+
+
+
+
+
+----------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> podemos também tentar usar 
+
+o 
+
+SHORTCUT,
+
+TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.persons.aggregate([
+    {
+      $project: {
+        _id: 0,
+        gender: 1,
+        personAge: '$dob.age',
+        'date of birth': { $toDate:"$dob.date"},
+        fullName: {
+          $concat: [
+            { $toUpper: { $substrCP: ['$name.first', 0, 1] } },
+            {
+              $substrCP: [
+                '$name.first',
+                1,
+                { $subtract: [{ $strLenCP: '$name.first' }, 1] },
+              ],
+            },
+            ' ',
+            { $toUpper: { $substrCP: ['$name.last', 0, 1] } },
+            {
+              $substrCP: [
+                '$name.last',
+                1,
+                { $subtract: [{ $strLenCP: '$name.first' }, 1] },
+              ],
+            },
+          ],
+        },
+
+        location: {
+          type: 'Point',
+          coordinates: [
+            { $toDouble: '$location.coordinates.longitude' },
+            { $toDouble: '$location.coordinates.latitude' },
+          ],
+        },
+      },
+    },
+  ]).pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO TAMBÉM FUNCIONOU...
+
+
+
+
+
+
+
+FICOU TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+> db.persons.aggregate([     {       $project: {         _id: 0,         gender: 1,         personAge: '$dob.age',         'date of birth': { $toDate:"$dob.date"},         fullName: {           $concat: [             { $toUpper: { $substrCP: ['$name.first', 0, 1] } },             {               $substrCP: [                 '$name.first',                 1,                 { $subtract: [{ $strLenCP: '$name.first' }, 1] },               ],             },             ' ',             { $toUpper: { $substrCP: ['$name.last', 0, 1] } },             {               $substrCP: [                 '$name.last',                 1,                 { $subtract: [{ $strLenCP: '$name.first' }, 1] },               ],             },           ],         },          location: {           type: 'Point',
+  coordinates: [             { $toDouble: '$location.coordinates.longitude' },             { $toDouble: '$location.coordinates.latitude' },           ],         },       },     },   ]).pretty()
+{
+        "gender" : "male",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        168.9462,
+                        -22.5329
+                ]
+        },
+        "personAge" : 30,
+        "date of birth" : ISODate("1988-05-27T00:14:03Z"),
+        "fullName" : "Harvey Chambe"
+}
+{
+        "gender" : "male",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -154.6037,
+                        -29.6721
+                ]
+        },
+        "personAge" : 33,
+        "date of birth" : ISODate("1984-09-30T01:20:26Z"),
+        "fullName" : "Carl Jaco"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -172.3753,
+                        83.3998
+                ]
+        },
+        "personAge" : 64,
+        "date of birth" : ISODate("1954-05-01T02:34:40Z"),
+        "fullName" : "Madeleine Till"
+}
+{
+        "gender" : "male",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        101.5995,
+                        78.8545
+                ]
+        },
+        "personAge" : 59,
+        "date of birth" : ISODate("1959-03-22T14:53:41Z"),
+        "fullName" : "Isolino Viana"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        43.9085,
+                        25.1614
+                ]
+        },
+        "personAge" : 66,
+        "date of birth" : ISODate("1951-12-17T20:03:33Z"),
+        "fullName" : "Mestan Kaplan"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -83.3326,
+                        -88.6846
+                ]
+        },
+        "personAge" : 43,
+        "date of birth" : ISODate("1975-03-23T17:01:45Z"),
+        "fullName" : "Sandra Lorenz"
+}
+{
+        "gender" : "male",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -54.1364,
+                        -86.1268
+                ]
+        },
+        "personAge" : 47,
+        "date of birth" : ISODate("1971-03-28T04:47:21Z"),
+        "fullName" : "Gideon Van dr"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        135.9359,
+                        71.9851
+                ]
+        },
+        "personAge" : 27,
+        "date of birth" : ISODate("1990-10-14T05:02:12Z"),
+        "fullName" : "Katie Welch"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        34.1689,
+                        4.6625
+                ]
+        },
+        "personAge" : 56,
+        "date of birth" : ISODate("1962-01-10T05:26:30Z"),
+        "fullName" : "پریا پارس"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        148.0944,
+                        35.5726
+                ]
+        },
+        "personAge" : 47,
+        "date of birth" : ISODate("1971-01-21T20:36:16Z"),
+        "fullName" : "Louise Graham"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -8.557,
+                        -14.4912
+                ]
+        },
+        "personAge" : 70,
+        "date of birth" : ISODate("1948-04-23T03:40:22Z"),
+        "fullName" : "Shona Kempe"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        59.5703,
+                        -67.6434
+                ]
+        },
+        "personAge" : 58,
+        "date of birth" : ISODate("1960-01-31T05:16:10Z"),
+        "fullName" : "Andreia Arnaud"
+}
+{
+        "gender" : "male",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -90.9499,
+                        21.3388
+                ]
+        },
+        "personAge" : 34,
+        "date of birth" : ISODate("1984-03-10T22:12:43Z"),
+        "fullName" : "بنیامین سالاری"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        78.0207,
+                        -84.1572
+                ]
+        },
+        "personAge" : 35,
+        "date of birth" : ISODate("1982-10-09T12:10:42Z"),
+        "fullName" : "Anne Ruiz"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -90.4049,
+                        -65.0877
+                ]
+        },
+        "personAge" : 52,
+        "date of birth" : ISODate("1966-08-03T09:22:41Z"),
+        "fullName" : "Delia Duran"
+}
+{
+        "gender" : "male",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        80.9269,
+                        17.4101
+                ]
+        },
+        "personAge" : 48,
+        "date of birth" : ISODate("1970-02-18T12:38:36Z"),
+        "fullName" : "Vincent Küper"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        174.2405,
+                        3.6559
+                ]
+        },
+        "personAge" : 30,
+        "date of birth" : ISODate("1987-10-20T11:33:44Z"),
+        "fullName" : "Anaëlle Adam"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        130.0105,
+                        88.1818
+                ]
+        },
+        "personAge" : 29,
+        "date of birth" : ISODate("1988-11-08T00:18:59Z"),
+        "fullName" : "Gonca Alnıa"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -48.3596,
+                        -13.9479
+                ]
+        },
+        "personAge" : 46,
+        "date of birth" : ISODate("1972-04-23T04:31:25Z"),
+        "fullName" : "Maeva Grewa"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        14.0142,
+                        18.2563
+                ]
+        },
+        "personAge" : 35,
+        "date of birth" : ISODate("1983-05-20T21:26:44Z"),
+        "fullName" : "Signe Rasmu"
+}
+Type "it" for more
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... COM ISSO, CONVERTEMOS ESSA STRING 
+
+
+
+
+DE 
+
+"1971-03-28T04:47:21Z"
+
+
+
+
+EM 
+
+
+UMA 
+
+
+ISODate -------> 
+
+
+
+
+
+
+
+
+
+
+ESSE formato é 
+
+tipo 
+
+
+'ISODate("1983-05-20T21:26:44Z")' 
+
+
+
+
+
+
+
+
+
+
+
+
+COMO VISTO EM:
+
+
+
+
+
+
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        14.0142,
+                        18.2563
+                ]
+        },
+        "personAge" : 35,
+        "date of birth" : ISODate("1983-05-20T21:26:44Z"),
+        "fullName" : "Signe Rasmu"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... JÁ TRANSFORMAMOS UM MONTE O NOSSO DOCUMENT... isso ajuda bastante... 
+
+
+
+
+
+
+
+
+
+
+
+
+--> VAMOS VER UMA COISINHA A MAIS ACERCA DO CONVERT (os shorthands)
+
+ANTES DE PROSSEGUIRMOS COM AS OUTRAS STEPS DE 
+
+'aggregate'..

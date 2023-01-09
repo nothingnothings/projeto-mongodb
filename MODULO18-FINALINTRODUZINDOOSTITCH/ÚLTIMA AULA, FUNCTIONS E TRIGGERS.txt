@@ -1,0 +1,678 @@
+
+
+
+
+
+
+FALAMOS MT SOBRE COMO PODEMOS USAR O STITCH PARA QUERY DATA 
+
+
+
+E COMO PODEMOS USÁ-LO PARA AUTHENTICATE USERS....
+
+
+
+
+
+
+
+
+--> PODEMOS ACESSAR OS DOCS OFICIAIS PARA VER COMO PODEMOS 'LOCK DOWN ACCESS AINDA MAIS'...
+
+
+
+
+
+
+
+-->fine-grain control...
+
+
+
+
+
+
+
+
+
+
+
+----> PROFESSOR QUER FALAR BREVEMENTE DE 2 OUTRAS FEATURES DO STITCH,
+
+
+QUE SÃO 
+
+AS 
+
+'FUNCTIONS'
+
+
+e os 
+
+
+'TRIGGERS' --> são 
+2
+ 
+
+ main 
+
+
+ FEATURES DO STITCH...
+
+
+
+
+
+
+
+
+
+
+
+
+ --> FUNCTIONS TE DEIXA ESCREVER CÓDIGOS QUE VOCÊ PODE EXECUTAR...
+
+
+
+
+
+
+
+
+
+
+
+
+ --> PROFESSOR 
+
+
+ ESCREVE UMA 
+
+
+ FUNCTION 
+
+
+ DE 'GREET'...
+
+
+
+
+
+
+
+
+
+
+ --> DENTRO DE UMA FUNCTION,
+
+
+ VOCÊ PODE:
+
+
+
+
+
+
+ 1) EXECUTAR CÓDIGO JAVASCRIPT 
+
+
+
+ 2) ACESSAR OUTROS SERVICES
+  
+
+
+
+3) ACESSAR SUA DATABASE... 
+
+
+
+
+
+4) VOCÊ TAMBÉM PODE CONSOLE.LOGGAR ALGO, PARA MOSTRAR COMO ISSO  FUNCIONA... (para mostrar como podemos a chamar...)
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+exports = function(arg){
+  /*
+    Accessing application's values:
+    var x = context.values.get("value_name");
+
+    Accessing a mongodb service:
+    var collection = context.services.get("mongodb-atlas").db("dbname").collection("coll_name");
+    collection.findOne({ owner_id: context.user.id }).then((doc) => {
+      // do something with doc
+    });
+
+    To call other named functions:
+    var result = context.functions.execute("function_name", arg1, arg2);
+
+    Try running in the console below.
+  */
+  console.log('HELLO');
+  return {arg: arg};
+  
+  
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> CERTO.... ISSO FEITO,
+
+
+PODEMOS 
+
+
+
+
+CHAMAR ESSA FUNCTION, QUE RECÉM SALVAMOS LÁ NO SITE DO MONGODB, __ DE 
+
+
+DENTRO 
+
+DA 
+
+'STITCH SDK' (
+
+
+
+    ou seja,
+
+
+
+    no próprio CÓDIGO DO NOSSO FRONTEND, ATRAVÉS DESSA SDK..
+)
+
+
+
+
+
+
+
+
+
+
+--> DIGAMOS QUE QUEREMOS CHAMAR ESSA 
+
+FUNÇAÕ SEMPRE QUE NOSSO APP FOR CARREGADO -->  
+
+
+
+
+
+
+
+
+PODEMOS FAZER ISSO LÁ NO 'App.js',
+
+NO CONSTRUCTOR,
+
+
+
+
+
+LOGO DEPOIS DE INICIALIZARMOS 
+
+
+
+O 
+
+
+
+
+CLIENT DO STITCH,
+
+TIPO ASSIM:
+
+
+
+
+
+  constructor() {
+    super();
+    this.client = Stitch.initializeDefaultAppClient('application-0-acjfk'); /// adicionamos esse client como PROPRIEDADE DESSA NOSSA CLASSE, PARA QUE SEJA POSSÍVEL O UTILIZAR EM OUTRAS FUNCTIONS DE NOSSA CLASS, e não só no constructor...
+
+    XXXXXXX
+  
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> VAMOS ESCREVÊ-LA ALI...
+
+
+
+
+
+
+
+
+
+
+
+  -> PARA ISSO,
+
+  VOCÊ DEVE USAR 
+
+
+
+  O CALL DE 
+
+
+
+
+  'this.client.callFunction' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+  -----> DENTRO DE 'callFunction',
+
+  VOCê DEVE PASSAR O NOME DA SUA FUNÇAÕ... -> COMO CRIAMOS UMA FUNCTION CHAMADA DE 'Greet',
+
+  escrevemos assim msm:
+
+
+
+
+
+
+  
+
+  constructor() {
+    super();
+    this.client = Stitch.initializeDefaultAppClient('application-0-acjfk'); /// adicionamos esse client como PROPRIEDADE DESSA NOSSA CLASSE, PARA QUE SEJA POSSÍVEL O UTILIZAR EM OUTRAS FUNCTIONS DE NOSSA CLASS, e não só no constructor...
+
+    this.client.callFunction('Greet');
+  
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NESSE CALL AÍ,
+
+VOCÊ PODE PASSAR UM SEGUNDO PARÂMETRO,
+
+
+
+
+
+
+QUE SERÃO OS __ ARGUMENTS__ DESSA FUNÇÃO...
+
+
+
+tipo assim:
+
+
+  this.client.callFunction('Greet', ['parametrodafuncao1', 'parametrodafuncao2']);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ------> OK.... ----> PODEMOS EDITAR NOSSA FUNCTION UM POUCO, PARA VER O QUE ACONTECE,
+   
+
+   TIPO ASSIM:
+
+
+
+
+
+   exports = function(arg){
+  /*
+    Accessing application's values:
+    var x = context.values.get("value_name");
+
+    Accessing a mongodb service:
+    var collection = context.services.get("mongodb-atlas").db("dbname").collection("coll_name");
+    collection.findOne({ owner_id: context.user.id }).then((doc) => {
+      // do something with doc
+    });
+
+    To call other named functions:
+    var result = context.functions.execute("function_name", arg1, arg2);
+
+    Try running in the console below.
+  */
+  console.log('HELLO', arg);
+  return {arg: arg};
+  
+  
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'console.log('Hello', arg)' 
+
+
+
+
+
+
+
+
+
+
+
+
+--> ARG SERÃO ESSES PARÂMETROS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ISSO FEITO,
+
+
+DEVEMOS 
+
+IR 
+
+
+ATÉ OS 'LOGS' 
+
+
+
+
+DO STITCH,
+
+
+
+
+PARA 
+
+AÍ VER AS FUNCTIONS QUE FORAM EXECUTADAS (
+
+
+    aí encontraremos 
+
+
+
+
+
+    o que essa function fez,
+
+    etc etc... 
+
+
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> O INTERESSANTE É QUE 
+
+
+
+ESSA FUNCTION __ RODA__ TOTALMENTE NO SERVER... (
+
+
+
+    ISSO SIGNIFIC QUE 
+
+
+
+    OS USERS 
+
+    NÃO 
+
+    VÃO PODER CONSEGUIR 
+
+
+    VISUALIZAR O CÓDIGO DESSA FUNCTION -------> SE VOCÊ QUER 
+
+
+ESCONDER CÓDIGO DE SEUS USERS,
+
+VOCê 
+
+
+PODE 
+
+
+CHAMAR ESSA FUNCTION COM 
+
+
+'this.client.callFunction('functionName)',
+
+
+
+
+
+
+
+QUE ELE REALMENTE NAÕ CONSEGUIRÁ VISUALIZAR O SEU CÓDIGO....
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOCÊ TAMBÉM PODE RODAR TASKS _ MAIS LONGAS, QUE DEMORAM MAIS,
+
+
+NESSAS 
+
+FUNCTIONS,
+
+
+
+TAREFAS QUE VOCÊ _ NÃO QUER_ QUE SEJAM EXECUTADAS NO BROWSER...
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOCÊ TAMBÉM PODE EXECUTAR UMA FUNCTION A PARTIR DE UM 
+
+
+
+EVENTO,
+
+
+
+
+COM OS TRIGGERS -------> 
+
+
+
+
+
+
+
+
+
+
+
+
+'QUANDO 1 USER FOI DELETADO/CRIADO/LOGIN, QUERO 
+
+
+
+
+EXECUTAR 
+
+
+UMA 
+
+
+
+FUNCAO'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> TAMBÉM 
+
+
+HÁ O CASO DAS DATABASE TRIGGERS --> a partir de 
+
+
+
+eventos 
+
+
+
+
+NAS NOSSAS COLLECTIONS/DATABASES,
+
+
+
+PODEMOS 
+
+RODAR 
+
+
+
+
+
+
+
+UMA FUNCTION..
+
+
+
+
+
+
+-> é só clicar na opção de 'triggers' e aí customizar...
+
+
+
+
+
+
+
+
+
+
+
+--> certo, acabamos.... essas são as functions e triggers...

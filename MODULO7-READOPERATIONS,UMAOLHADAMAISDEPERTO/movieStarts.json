@@ -1,0 +1,88 @@
+{
+
+
+    "title": "The Last Student Returns",
+    "meta": {
+        "rating": 9.5,
+        "aired": 2018,
+        "runtime": 100
+    },
+
+    "visitors": 1300000,
+    "expectedVisitors": 15500000,
+    "genre": [
+        "thriller",
+        "drama",
+        "action"
+    ]
+},
+
+
+{
+
+
+    "title": "DEEP",
+    "meta": {
+        "rating": 8.0,
+        "aired": 2019,
+        "runtime": 140
+    },
+
+    "visitors": 1100000,
+    "expectedVisitors": 13000000,
+    "genre": [
+        "Comedy"
+        "drama",
+        "action"
+    ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.users.insertMany(
+[
+    {
+        "title": "The Last Student Returns",
+        "meta": {
+            "rating": 9.5,
+            "aired": 2018,
+            "runtime": 100
+        },
+    
+        "visitors": 1300000,
+        "expectedVisitors": 15500000,
+        "genre": [
+            "thriller",
+            "drama",
+            "action"
+        ]
+    },
+    {
+        "title": "DEEP",
+        "meta": {
+            "rating": 8.0,
+            "aired": 2019,
+            "runtime": 140
+        },
+        "visitors": 1100000,
+        "expectedVisitors": 13000000,
+        "genre": [
+            "Comedy"
+            "drama",
+            "action"
+        ]
+    }
+])

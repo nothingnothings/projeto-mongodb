@@ -1,0 +1,562 @@
+
+
+
+
+
+
+
+
+--> DATA SCHEMAS E DATA MODELLING...
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA QUE APRENDEMOS QUE__ PODEMOS__ USAR__ SCHEMAS,
+
+
+
+
+
+
+
+
+
+E QUE 
+
+__PROVAVELMENTE AS UTILIZAREMOS,
+
+
+PQ 
+
+
+NOSSO APP SEMPRE VAI TRABALAHR COM CERTA ESTRUTURA,
+
+
+
+
+
+
+
+
+
+
+
+
+
+E AGORA QUE APRNEDEMOS SOBRE 
+AS 
+
+DATA 
+
+TYPES QUE SÃO SUPORTADAS, QUE PDOEM SER ARMAZENADAS,
+
+
+
+
+
+
+
+
+
+
+O PROFESSOR QUER NOS ENSINAR 
+
+
+
+
+'A COMO PENSAR EM MODELLING DE NOSSOS SCHEMAS''... --> 
+
+
+
+
+
+
+
+
+O PROFESSOR VAI DAR UMA DICA DE 'COMO VOU QUERER ORGANIZAR MINHA DATA'...
+
+
+
+
+
+
+
+
+
+
+
+-> AINDA NÃO USAREMOS RELATIONS, MAS 
+
+
+
+ESTAMOS NO CAMINHO...
+
+
+
+
+
+
+
+
+
+
+
+
+--> A PRIMEIRA PERGUNTA É:
+
+
+
+
+
+
+
+
+
+
+
+1) ''''QUAL/QUAIS DATA MEU APP _PRECISA__ GERAR, OU 'GERA''''
+ 
+
+
+
+
+
+
+
+--> mt amplo --> pode ser um mobile app,
+
+ou um gps tracker,
+
+
+
+pode ser uma infinidade de coisas... --> PRECISO ANALISAR MEU BUSINESS MODEL,
+
+
+VER QUAL DATA ELE PRECISA,
+
+OU GERA (ou os 2 ).... --> ISSO PODE SER QUALQUER COISA,
+
+
+
+
+USER INFO,
+
+
+PRODUCT INFO,
+
+
+ORDERS,
+
+etc...
+
+
+
+
+
+
+
+
+
+--> ISSO JÁ VAI DEFINIR OS __FIELDS_ DE QUE VOC~E PRECISARÁ,
+
+NOS SEUS DOCUMENTS...
+
+
+
+
+
+
+-------> E TAMBÉM JÁ VAI, às VEZES,
+
+
+
+
+DEFINIR COMO ESSES FIELDS VÃO SE 'RELATE'....
+
+
+
+
+
+
+
+
+
+ISSO VAI TE DAR O 'FRAME' 
+
+
+
+
+PARA SUA ESTRUTURA GERAL...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2) A SEGUNDA PERGUNTA É:
+
+
+
+
+
+'EM QUE LUGAR VAMOS PRECISAR DESSA DATA?' 
+
+
+
+
+
+
+
+--> VAMOS PRECISAR DESSA DATA, POR EXEMPLO, NA WELCOME PAGE,
+
+
+NA PRODUCT LISTS PAGE,
+
+
+
+NA ORDERS PAGE ---> e qual data vou precisar em qualquer uma dessas pages?  -------> 
+
+
+
+
+
+
+
+
+SÃO PERGUNTAS MT IMPORTANTES...
+
+
+
+
+
+
+
+
+
+-_> ISSO PQ A IDEIA COM O MONGODB É QUE VOCê ARMAZENA SUA DATA __ NO FORMATO __ QUE VOCÊ PRECISA,
+
+NO SEU APP...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E SE VOCÊ PRECISA DA __ MESMA ___ DATA, mas EM OUTRA LINGUAGEM DE PROGRAMAÇÃO,
+
+
+
+você 
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO PQ A IDEIA DO MONGODB É VOC~E ARMAZENAR O OBJECT/DOCUMENT NO FORMATO QUE VOCê QUER ....
+
+
+
+
+
+
+
+
+--> ISSO VAI DEFINIR SUAS 'REQUIRED COLECTIONS', ALÉM DE DEFNIR OS 'FIELD GROUPINGS' ( ou seja, quais fleids você vai....)
+
+
+
+
+
+
+
+
+
+
+-_> O REACT/MONGODB TAMBÉM 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> resumindo:
+
+
+
+
+
+
+
+
+
+
+
+
+QUAL DATA MEU APP PRECISA/VAI GERAR -----------> ISSO VAI INFLUENCIAR: 'User information', 'product information', 'orders'... -------> DEFINIRÃO OS FIELDS logo de cara, e como eles vao RELATE....
+
+
+
+
+
+
+
+
+
+
+EM QUE LUGAR PRECISO DE minha data --> isso influcencia welcome page, products list page , orders page --> DEFINE SUAS COLLECTIONS NECESSÁRIAS, MAIS OS 'FIELD GROUPINGS'...  
+
+
+
+
+
+
+
+
+
+QUE TIPO DE DATA OU INFORMAÇÃO QUERO DISPLAYAR NO MEU APP? ----> Isso influencia a WELCOME PAGE, OS PRODUCTS NAMES NAS PAGES, A PAGE DE PRODUCTS, ETC -------> ISSO DEFINE QUAIS QUERIES VOCÊ PRECISARÁ (de find, no caso)....
+
+
+
+
+EX: orders collection, para a page de orders; products collection, para products, eetc...
+
+
+
+
+
+
+
+
+--->  FAÇO O DISPLAY DE UMA LIST DE PRODUCTS, OU SÓ 1 PRODUCT?
+ 
+
+FAÇO UMA QUERY DE 'FIND()' OU 'findOne()'?
+
+
+
+
+
+
+
+--> manu vai detalhar bastante como você deve 
+
+
+estabelecer suas queries, para 'narrow down'
+
+as coisas que 
+
+
+você 
+
+vai queriar...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MONGODB 
+
+
+EMBRACES ESSA IDEIA 
+
+
+
+DE ORGANIZAÇÃO DE SUA DATA STRUCTURE COM BASE 
+
+
+NA MANEIRA PELA QUAL 
+
+VOCê 
+
+
+RETRIEVARÁ SUA DATA (
+
+
+    tudo para que vocÊ evite ter de fazer complex joints 
+
+    para retrievar sua data...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+HÁ TBM OUTRO CRITÉRIO:
+
+
+
+
+
+
+''COM QUAL FREQUÊNCIA FETCHEAREI MINHA DATA,
+
+
+PARA CADA PAGE RELOAD? OU MAIS INFREQUENTEMENTE?'' -----> ISSO TAMBÉM DETERMINA 
+
+
+
+SE 
+VOCÊ 
+
+
+VAI 
+
+OPTIMIZAR PARA 'easy fetching '------->  OU SEJA,
+
+
+
+
+PROCESSOS EM QUE VOCÊ NÃO 
+
+
+VAI DUPLICAR TANTO SUA DATA,
+
+PARA EVITAR TER QUE 
+
+
+CORRIGIR SUA DATA MANUALMENTE....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> COM QUAL FREQUENCIA 
+
+
+VOU ESCREVER/ALTERAR MINHA DATA -----------> 
+
+
+EX: ORDERS SÃO ALTERADAS FREQUENTEMENTE
+
+
+MAS 
+
+
+PRODUCT DATA (preço, etc) NÃO SÃO UPDATADAS FREQUENTEMENTE... --------> NESSE CASE,
+
+
+
+VOCÊ VAI QUERER 
+QUE 
+
+SUAS ORDERS NÃO SEJAM DUPLICADAS 
+
+
+DESNECESSARIAMENTE 
+
+AO LONGO DE MÚLTIPLAS COLLECTIONS (e sim que você tenha SÓ 1 COLLECTION COM ORDERS, EM QUE VOCÊ AS ESCREVE)..
+
+
+
+
+
+
+
+
+--> JÁ O PRODUCT METADATA VOCÊ PODE ESCREVER AO LONGO DE MÚLTIPLAS COLLECTIONS... (
+    pq você não vai alterar tanto...
+) 
+
+
+
+
+
+
+
+
+
+
+
+--> DEFINES 'WHETHER YOU SHOULD OPTIMIZE FOR EASY WRITING'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> UMA PERGUNTA QUE ESTÁ RELACIONADA A ISSO TUDO:
+
+
+
+'''COMO DEFINIMOS RELATIONS ENTRE NOSSAS DIFERENTES DATA E COLLECTIONS??''

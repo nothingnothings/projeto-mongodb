@@ -1,0 +1,235 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR QUER NOS MOSTRAR UM RECURSO 
+
+
+
+ADICIONAL,
+
+
+QUE É 
+
+
+
+
+
+UM ARTICLE 
+
+
+
+
+LÁ NA DOCUMENTAÇAÕ DO MONGODB..
+
+
+
+
+
+
+
+
+--> É O ARTIGO 
+
+
+
+DE 
+
+
+'MODEL MONETARY DATA' --> ELE FALA 
+
+
+
+
+SOBRE 
+
+
+
+COMO 
+
+MODELAR DADOS MONETÁRIOS ---> ELE FALA SOBRE COMO 
+
+
+
+
+CONSEGUIR 
+
+
+A PRECISÃO 
+
+
+
+
+DE QUE PRECISAMOS...
+
+
+
+
+
+
+
+
+--> ELE TBM TE DÁ UM ALTERNATIVE APPROACH AO USO DAQUELE TYPE/VALUE DE 'NumberDecimal'... --> essa alternativa 
+
+
+é 
+o 
+
+uso de um 
+
+'SCALE FACTOR'... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SCALE FACTOR NÃO É O METHOD MAIS APROPRIADO, ATUALMENTE, é por isso que o professor usou o decimal type...
+
+
+
+
+
+
+
+
+
+
+--> MAS O SCALE FACTOR É UMA MANEIRA DE TRABALHAR/USAR NUMBERS 
+
+
+
+
+POR MEIO DO 
+
+'MULTIPLY'
+ 
+ DELES,
+
+
+
+ COM A PRECISÃO 
+
+
+ DE 
+
+ QUE 
+
+ VOCê 
+
+ PRECISA,
+
+
+
+
+você escreve tipo assim:
+
+
+
+
+{
+    price: 9990, currency: "USD" }
+}
+
+
+
+
+
+
+--> VOCê SEMPRE TRABALHA COM INTEGERS,
+
+E NUNCA 
+
+
+
+COM 
+
+
+
+
+
+FLOATING POINT NUMBERS... --> é uma alternativa 
+
+
+aos 
+
+
+decimals,
+
+
+
+
+
+MAS 
+
+
+OS 
+
+DECIMALS SÃO MELHORES...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> COM ESSE MÓDULO, AGORA FAZ SENTIDO PQ TEMOS ESSES DIFERENTES NUMBER TYPES..
+
+
+
+
+
+
+-> vimos: 
+
+
+
+
+
+
+A) SUAS LIMITAÇÕES 
+
+
+
+B) SEUS USOS 
+
+
+
+
+
+C) SUAS VANTAGENS 
+
+
+
+D ) SUAS DESVANTAGENS..

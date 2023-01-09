@@ -1,0 +1,255 @@
+
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR PREPAROU UM POUCO DE DATA...
+
+
+
+
+
+
+
+
+[
+    {
+        "departureAirport": "MUC",
+        "arrivalAirport": "SF0",
+        "aircraft": "AIRBUS A380",
+        "distance": 12000,
+        "intercontinental": true
+    },
+        {
+        "departureAirport": "LHR",
+        "arrivalAirport": "TXL",
+        "aircraft": "AIRBUS A320",
+        "distance": 950,
+        "intercontinental": false
+    }
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> NA DIREITA PODEMOS TER DIFERENTES TIPOS DE DATA...
+
+
+
+
+
+
+
+
+STRINGS,
+
+NUMBERS,
+
+
+BOOLEANS....
+
+
+
+
+
+
+
+
+OU ENTÃO OBJECTS COM MAIS DATA NO INTERIOR.... 
+
+
+
+TAMBÉM ARRAYS, COM MAIS COISAS AINDA....
+
+
+
+
+
+
+
+em objects e arrays podemos ter 
+
+
+
+
+embedded documents...
+
+
+
+
+
+
+
+
+
+
+-> PROFESSOR PEDE QUE PEGUEMOS UM DOS 'JSON DOCUMENTS',
+
+
+
+
+dentro desse array,
+
+
+
+e aí 
+
+coloquemos 
+
+lá 
+
+
+
+
+no nosso código de insert 
+
+
+
+
+na database....
+
+
+
+
+
+
+ex:
+
+
+
+
+
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("61fef822fc186957c008a01b")
+}
+
+
+
+
+
+
+
+
+
+-> ISSO SIGNIFICA QUE 
+
+
+O NEGÓCIO FOI 'ACEITO',
+
+
+e que 
+
+ele recebeu um UNIQUE ID,
+
+
+representado por '_id'...
+
+
+
+
+
+
+
+O TYPE SEMPRE SERÁ DE 'ObjectId()',
+
+
+
+
+usado pelo mongodb....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> O PROFESSOR ESCREVE 
+
+
+
+
+
+
+db.flightData.find({_id:ObjectId("61fef822fc186957c008a01b") }).pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+
+ISSO ACHA NOSSA DATA, BEM CERTINHA...
+
+
+
+
+
+
+
+
+
+
+(
+
+
+
+    encontrará só esse document aí... que é o que queremos...
+
+
+
+
+
+    --> essa é uma query bem comum.....
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE TIVERMOS UM NOVO DOCUMENT, O OBJECTID DELE SERÁ DISTINTO EM RELAÇÃO A ESSE....
+
+
+
+
+
+
+
+
+--> VALID JSON DATA, INSERIDA NA NOSSA DATABASE, NA COLLECTION DENTRO DELA...

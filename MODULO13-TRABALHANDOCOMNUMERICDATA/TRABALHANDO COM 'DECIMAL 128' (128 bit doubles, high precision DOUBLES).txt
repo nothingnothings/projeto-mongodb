@@ -1,0 +1,699 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESSE É O FORMATO MAIS PESADO,
+
+
+O 
+
+FORMATO DO 'HIGH PRECISION DOUBLE'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VAMOS NA NOSSA COLLECTION E INSERIMOS UM DOCUMENT ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.science.insertOne(
+    {
+        a: NumberDecimal()
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> NUMBERDECIMAL É O 
+
+
+
+CONSTRUCTOR/WRAPPER 
+
+
+DO 
+
+MONGODB PARA ESSE TYPE DE VALUES...
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+db.science.insertOne(
+    {
+        a: NumberDecimal("10.021094104021820")
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> DE NOVO, SE VOcê ESTÁ USANDO UM DRIVER PARA O JAVA, C++, PHYTON, etc,
+
+
+
+VOCÊ ENCONTRARÁ 
+
+AJUDA 
+
+NOS 'DRIVER DOCS',
+
+
+em que 
+
+encontrará 
+
+
+
+
+O CONSTRUCTOR QUE VOCÊ USARÁ PARA CRIAR ESSE '128 BIT DECIMAL'...
+
+
+
+
+
+
+
+
+
+
+
+
+-_> na shell,
+
+
+o negócio é chamado de 
+
+
+
+'NumberDecimal' .... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> E VOCê DEVE ESCREVER SEU NUMBER COMO UMA __ STRING,
+
+
+
+DENTRO DO WRAPPER,
+
+PARA QUE O MONGOSHELL N TRATE ESSE NUMBER, INICIALMENTE,
+COMO 
+
+
+UM FLOAT IMPRECISO (como '10.100000000000000000000')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OU SEJA,
+
+
+
+VOCÊ DEVE ESCREVER EXATAMENTE ASSIm:
+
+
+
+db.science.insertOne(
+    {
+        a: NumberDecimal("10.021094104021820")
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+no exemplo do professor, ele escreve assim:
+
+
+
+
+
+
+db.science.insertOne(
+    {
+        a: NumberDecimal("0.3"),
+        b: NumberDecimal("0.5")
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> NA NOSSA DATABASE,
+
+VEREMOS QUE 
+
+
+ESSE NEGÓCIO VAI SER ARMAZENADO EXATAMENTE ASSIM,
+
+
+com esse wrapper, ainda...:
+
+
+
+
+
+
+
+> db.science.insertOne(
+...     {
+...         a: NumberDecimal("0.3"),
+...         b: NumberDecimal("0.5")
+...     }
+... )
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("621a8ca1ef803c8ce605d001")
+}
+> db.science.find({})
+{ "_id" : ObjectId("621a8ca1ef803c8ce605d001"), "a" : NumberDecimal("0.3"), "b" : NumberDecimal("0.5") }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> QUANTO A ISSO, ELE DIFERE DOS OUTROS NUMBER TYPES,
+
+
+que são 
+
+
+armazenados como 'coisas simples' (sem o wrapper ao redor)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA VAMOS REPETIR AQUELE COMANDO DE AGGREGATE 
+
+
+anterior, em que retornávamos os results, mas com um project em que usávamos 'subtract":
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.science.aggregate(
+    [
+        {
+            $project: {
+                result: {
+                    $subtract: [
+                        "$a", "$b"
+                    ]
+                }
+            }
+        }
+    ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> ISSO NOS RETORNA ISTO:
+
+
+
+{ "_id" : ObjectId("621a8ca1ef803c8ce605d001"), "result" : NumberDecimal("-0.2") }
+
+
+
+
+
+
+
+
+
+
+
+
+-> AGORA VEMOS QUE O RESULTADO ___ FOI UM __ EXATO __ 'NUMBER DECIMAL'.. -->  E ESSE É O EXATO VALOR QUE 
+
+
+
+PRECISMAOS....
+
+
+
+
+
+
+
+
+
+
+
+--> E PODEMOS USAR ESSE NUMBERDECIMAL PARA TODO TIPO DE CALCULATIONS,
+
+
+
+como esse 'subtract' --> tambem 
+
+
+
+podemos usá-lo com 
+
+'sort',
+
+
+
+ou então 
+
+
+
+
+em operations de '$inc' (incrment)...
+
+
+
+
+
+
+
+
+
+
+
+
+-> VOCê TEM QUE TER EM MENTE, NO ENTANTO,
+QUE 
+
+
+SE 
+
+VOC~E 
+
+
+FOR UPDATAR ESSE VALOR,
+
+
+
+
+UPDATAR COM COISAS COMO '$inc',
+
+
+ISSO VAI FUNCIONAR,
+
+
+
+MAS 
+
+VOCÊ 
+
+
+
+
+PRECISA_  _ 
+
+
+
+
+UPDATAR COM VALORES 
+
+
+
+
+
+que são 'NumberDecimal' TAMBÉM....
+
+
+
+
+
+
+
+
+
+
+
+
+ex (ESCREVA ASSIM, PQ AÍ VOCÊ EVITA O 'MIX' DE SEU NUMBERDECIMAL, EVITA A INTRODUÇÃO DE IMPRECISÃO NELE)...
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+db.science.updateOne(
+    {
+
+    },
+
+
+    {
+        $inc: {a: NumberDecimal("0,1")}
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOCÊ TEM QUE ESCREVER ASSIM,
+
+
+USAR ESSE WRAPPER,
+
+
+
+
+
+
+E AÍ PASSAR SEU VALUE COMO UMA STRING...
+
+
+
+
+
+
+
+
+
+--> AÍ 
+
+
+
+NÕA SERÁ INTRODUZIDA 
+
+
+
+IMPRECISION NO SEU BACKEND,
+
+
+
+NA 
+
+
+SUA 
+
+DATABASE...
+
+
+
+
+
+
+
+
+
+
+
+-----> E VOCÊ PODE USAR 
+
+
+
+'NumberDecimal()'
+
+
+
+
+
+NAS SUAS OPERAÇÕES, COMO SORT,
+
+
+
+'QUERY',
+
+
+OU 
+
+
+
+'GROUP',
+
+
+
+
+
+
+COMO UM NUMBER NORMAL,
+
+
+MAS COM MAIOR PRECISION...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS É CLARO QUE O USO DE 'NumberDecimal()'
+
+
+
+
+
+
+
+TEM UM PREÇO --> ELE PESA MAIS DO QUE 
+
+
+
+
+
+FLOATS/DOUBLE 64 numbers...
+
+
+
+
+
+
+
+
+e pesa mais do que qualuqer outro number type...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> mais espaço é reservado para esse 'DECIMAL'... -----> É UM DOWNSIDE,
+
+
+POR ISSO USAR 
+
+
+
+ESSE NEGÓCIO PARA TODOS OS 'DECIMAL VALUES'
+
+
+
+tvz n seja optimal...
+
+
+
+
+
+
+
+
+--> MAS ISSO TE DEIXA FAZER HIGH-PRECISION MATH SEM PERDER PRECISÃO...

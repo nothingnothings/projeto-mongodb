@@ -1,0 +1,581 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESTAMOS QUASE ACABADOS COM OS LOGICAL OPERATORS....
+
+
+
+
+
+
+
+VIMOS:
+
+
+
+
+
+1) $or 
+
+
+
+
+2) $nor 
+
+
+
+3) $and 
+
+
+
+
+
+
+
+
+
+--> HÁ MAIS 1 OPERATOR QUE DEVEMOS VER,
+
+QUE É O LOGICAL OPERATOR 
+
+de 
+
+
+'$not'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... QUAL É O EFEITO DO '$not'?
+
+
+
+
+
+
+
+
+
+BEM, ELE ESSENCIALMENTE 
+
+
+
+'''INVERTE O EFEITO DE UMA QUERY EXPRESSION'''' ... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA DEMONSTRAR SEU EFEITO,
+
+
+PROFESSOR EXPLICA UQE PODEMOS LOOK FOR 
+
+MOVIES QUE 
+
+
+__ NÃO POSSUAM UM RUNTIME DE '60min'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> na verdade, professor vai CONTAR por todos esses items...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO,
+
+
+
+O PROFESSOR 
+
+
+VAI COMEÇAR ESCREVENDO ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+
+db.movies.find({}).count()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... MAS ONDE VOCê ACHA QUE COLOCAMOS O '$not'? 
+
+
+
+
+
+
+
+
+
+--> bem, o not NÃO FUNCIONA SENDO COLOCADO NO INÍCIO (tipo {$not: })....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> EM VEZ DISSO,
+
+
+
+VOCÊ __ ESPECIFICA__ O FIELD QUE VOCÊ QUER 'look for', como 'runtime,'
+
+tipo assim:
+
+
+
+
+
+
+
+
+
+
+
+
+db.movies.find({runtime: }).count()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------> AÍ, ISSO FEITO,
+
+você usa '{}' e dentro desse object/document,
+
+
+você escreve 
+
+
+"$not' 
+
+
+
+
+E AÍ 
+
+
+
+A QUERY, em um __ OBJECt__ ,
+
+QUE NÓS __ NÃO _ QUEREMOS RODAR/conseguir resultados por...
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+db.movies.find({runtime: {$not: {}} }).count()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOU DIZER, NO CASO,
+
+
+
+
+
+'''QUERO QUE SEJAM RETORNADOS OS ELEMENTS QUE NÃO SEJAM '''EQUAL'''' A ''''...
+
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+db.movies.find({runtime: {$not: {$eq: }} }).count()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR EXPLCIA QUE O OPERATOR DE 'equal' É IMPORTANTE, AQUI,
+
+
+
+PQ __ NÃO TEREMOS NENHUMA OUTRA MANEIRA DE EXPRESSAR ESSA 'EQUALITY'... ( o '$not', para ser usado adequadamente, DEPENDE DE '$eq')...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NO CASO, VAMOS DIZER '''RETORNE TODOS OS DOCUMENTS CUJO RUNTIME NÃO SEJA IGUAL ($not + $eq) 
+
+
+
+A 60'''''...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+db.movies.find({runtime: {$not: {$eq: 60}} }).count()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------- COM ISSO,
+
+
+SE APERTARMOS 'ENTER',
+
+VAMOS RECEBER 70 ITEMS EM QUE 
+O RUNTIME NÃO É IGUAL A '60'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> É EVIDENTE QUE 
+
+
+"$not + $eq' 
+
+
+
+NÃO SERÁ UTILIZADO COM TANTA FREQUÊNCIA....... ---> NÃO É USADO COM TANTA FREQUÊNCIA JUSTAMENTE 
+
+
+PQ 
+
+
+SEU CÓDIGO É BASICAMENTE A MESMA COISA QUE 
+
+
+
+
+"$ne",
+
+aquele 
+
+
+
+
+
+QUERY SELECTOR OPERATOR DE 'comparison', que estudamos mais cedo.....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ex de sintaxe aprimorada/menos clunky:
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.movies.find(
+    {runtime: {$ne: 60}
+    }
+).count()
+
+
+
+
+
+
+
+
+
+
+
+
+--> isso vai nos retornar '70'... sucesso... ----> 70 MOVIES EM QUE 
+
+O 
+
+
+RUNTIME NÃO É IGUAL A 60...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> CERTO.. E PARA 'or',
+
+VOCÊ JÁ TEM 'nor'....
+
+
+
+
+
+
+
+
+
+
+
+
+---> OU SJEA,
+HÁ MTAS MANEIRAS DE 'QUERY PELO INVERSO'... --> 
+
+
+MAS SE VOCÊ PRECISAR DISSO,
+
+SE HÁ UMA QUERY EM QUE 
+
+VOCê  
+NÃO CONSEGUE INVERTER DE OUTRA FORMA,
+
+VOCÊ SEMPRE PODE USAR ESSE METHOD DE '$not',
+
+
+
+
+QUE VOCÊ PODE USAR PARA __ PROCURAR PELO OPOSTO...

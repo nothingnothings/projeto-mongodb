@@ -1,0 +1,840 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> AGORA QUE FALAMOS SOBRE AS DIFERENTES OPTIONS QUE PODEMOS USAR PARA RODAR NOSSO MONGOD server,
+
+
+
+
+
+TAMBÉM É BOM MENCIONAR QUE PODMEOS SALVAR NOSSAS CONFIGURAÇÕES EM UMA CONFIG FILE...
+
+
+
+
+
+
+
+
+
+
+
+
+--> basta procurar no google por 'mongodb config file'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> aí temos um article do official docs:
+
+
+
+
+
+https://docs.mongodb.com/manual/reference/configuration-options/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ALI DENTRO,
+
+
+VOCÊ APRENDE QUE VOCÊ PODE __CRIAR__ 1 CONFIG FILE DE 'MONGODB',
+
+e que 
+
+você 
+
+
+JÁ PODE GANHAR 1 DESSES ARQUIVOS, POR DEFAULT,
+
+DPOIS DE SUA INSTALLATION... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->OS ARQUIVOS SÃO 
+
+
+
+'mongod.cfg'...
+
+
+
+
+
+
+
+
+-_> VOcÊ PODE CRIAR 1 DESSES ARQUIVOS NO LUGAR QUE VOCÊ QUISER...
+
+
+
+
+
+--> PROFESSOR CRIA 1 DESSES AÍ 
+
+
+LÁ NO FOLDER DE 'bin'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... EU JÁ TINHA ESSA FILE AÍ...
+
+
+
+
+
+
+
+
+SEU CONTEÚDO :
+
+
+
+
+
+
+
+
+
+# mongod.conf
+
+# for documentation of all options, see:
+#   http://docs.mongodb.org/manual/reference/configuration-options/
+
+# Where and how to store data.
+storage:
+  dbPath: C:\Program Files\MongoDB\Server\5.0\data
+  journal:
+    enabled: true
+#  engine:
+#  wiredTiger:
+
+# where to write logging data.
+systemLog:
+  destination: file
+  logAppend: true
+  path:  C:\Program Files\MongoDB\Server\5.0\log\mongod.log
+
+# network interfaces
+net:
+  port: 27017
+  bindIp: 127.0.0.1
+
+
+#processManagement:
+
+#security:
+
+#operationProfiling:
+
+#replication:
+
+#sharding:
+
+## Enterprise-Only Options:
+
+#auditLog:
+
+#snmp:
+
+
+
+
+
+----------------------------
+
+
+OK... 
+
+
+
+NESSE FILE JÁ TEMOS ALGUMAS SETTINGS....
+
+
+
+
+
+
+
+
+
+
+--> VOCÊ ENCONTRA SETTINGS DETALHADAS NO ARTIGO DE 'CONFIGURATION FILE OPTIONS',
+
+
+
+
+TAMBÉM SE VOCê GOOGLA 'mongodb example config file'
+
+você 
+
+
+
+encontra examples 
+
+
+de outros users..
+
+
+
+
+
+
+
+
+
+
+
+--> o config file do professor ficou bem simples,
+
+
+
+nada de mais....
+
+
+
+
+
+
+
+
+--> VOCÊ SÓ DEVE TER EM MENTE QUE EM 'systemLog'
+
+
+
+devemos apontar pARA UMA LOG FILE JÁ EXISTENTE, TIPO ASSIM:
+
+
+
+
+# mongod.conf
+
+# for documentation of all options, see:
+#   http://docs.mongodb.org/manual/reference/configuration-options/
+
+# Where and how to store data.
+storage:
+  dbPath: C:\Program Files\MongoDB\Server\5.0\data
+  journal:
+    enabled: true
+#  engine:
+#  wiredTiger:
+
+# where to write logging data.
+systemLog:
+  destination: file
+  logAppend: true
+  path:  C:\Program Files\MongoDB\Server\5.0\log\mongod.log
+
+# network interfaces
+net:
+  port: 27017
+  bindIp: 127.0.0.1
+
+
+
+
+
+
+
+
+
+
+  --------------------------
+
+
+
+
+
+
+
+
+  MAS A PERGUNTA É:
+
+
+
+
+
+
+
+COMO USAMOS UM ARQUIVO CONFIG DESSES ,QUANDO 
+
+
+
+INICÍAMOS UMA INSTANCE DO MONGOD? 
+
+
+
+
+
+
+
+
+
+
+-----> esse arquivo não é ativado automaticamente/flaggado automaticamente...
+
+
+
+
+
+
+
+
+
+
+
+
+---> OK, MAS COMO DIZEMOS AO MONGODB ONDE ESSA FILE EXISTE, E COMO ENCONTRÁ-LA? 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EM VEZ DISSO,
+
+VOCÊ DEVE RODAR 
+
+
+
+'mongod --config' ,
+
+
+
+
+
+
+
+E AÍ 
+
+
+ESPECIFICAR O PATH 
+
+
+
+à CONFIG FILE... -----> 
+
+
+
+
+NO CASO 
+
+
+DO DRIVE DE 
+
+'A',
+
+
+vamos colocar essa config file 
+
+
+em 
+
+
+''''
+
+A:\mongodb\db\config
+
+
+
+''''
+
+
+
+
+
+
+
+
+PARA FAZER SUA INSTANCE RODAR COM ESSE NEGÓCIO, PRIMEIRAMENTE PARE-A 
+
+
+COM 
+
+
+
+'net stop MongoDB'...
+
+
+
+
+
+
+
+
+DEPOIS INICIE ESSE SERVIÇO,
+
+
+COM 
+
+
+
+net start mongoDB --config mongodb\db\config
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... MAS ISSO AÍ _ NÃO FUNCIONA/NÃO FUNCIONOU...
+
+
+
+
+
+
+
+
+
+
+
+
+
+https://stackoverflow.com/questions/40653112/starting-mongod-as-a-service-with-config-file-setting
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ACHO QUE A SOLUÇÃO PARA ISSO É ESPECIFICAR O 'RUN OPTION' 
+
+
+lá 
+
+
+na sua 
+
+
+
+
+config file (que é 'mongod.cfg', no meu caso)....
+
+
+
+
+
+
+
+
+
+
+
+
+--> se você fizer isso, em vez de executar 'net start mongoDB',
+
+
+
+
+
+
+
+PROVAVELMENTE VOCÊ TERÁ O MESMO EFEITO DE 'RUN MONGOD AS A SERVICE',
+
+
+
+
+mas dessa vez com a aplicaçaõ dessa config file...
+
+
+
+
+
+
+
+
+
+
+Ex:
+
+
+
+
+
+
+
+
+Using a configuration file makes managing mongod and mongos options easier, especially for large-scale deployments. You can also add comments to the configuration file to explain the server's settings.
+
+If you installed MongoDB with a package manager such as yum or apt on Linux or brew on macOS, or with the MSI installer on Windows, a default configuration file has been provided as part of your installation:
+
+Platform
+Method
+Configuration File
+Linux
+apt, yum, or zypper Package Manager
+/etc/mongod.conf
+macOS
+brew Package Manager
+/usr/local/etc/mongod.conf (on Intel processors), or
+
+/opt/homebrew/etc/mongod.conf (on Apple M1 processors)
+
+Windows
+MSI Installer
+<install directory>\bin\mongod.cfg
+If you installed MongoDB via a downloaded TGZ or ZIP file, you will need to create your own configuration file. The basic example configuration is a good place to start.
+File Format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO SIGNIFICA QUE JÁ TENHO UMA FILE DESSAS,
+
+QUE ESTÁ 
+
+LÁ 
+
+
+
+EM 
+
+
+
+
+'/bin/mongod.cfg'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK.... AGORA ENTENDI...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O QUE ESTAVA ACONTECENDO:
+
+
+
+meu mongod já estava rodando como service em 'C', nativamente, no background...
+
+
+
+
+
+
+
+
+
+
+--> quando eu iniciava mongod 
+
+
+com 
+
+
+'mongod',
+
+no terminal do visual studio code,
+
+eu acabava 
+
+INICIANDO UM __ NOVO _ PROCESSO 'mongod',
+
+
+mas em 'A' (outro drive)...
+
+
+
+
+
+
+
+
+
+
+---> aí quando eu executava alguma operação na minha database,
+
+
+
+a operação era executada 
+
+__ NAS 2 DATABASES.... 
+
+
+
+
+
+
+
+
+-> mas agora estou usando só 
+
+
+
+a database de 'C',
+
+
+
+rodando no background do meu pc,
+
+
+e cujo arquivo de config fica 
+
+
+
+em 
+
+'bin',
+
+
+
+COMO _ DEFAULT___.... --> SE VOCÊ QUISER 
+
+DEFINIR 
+
+
+OUTRO ARQUIVO 'CONFIG' (.cfg)
+
+
+QUE NÃO ESTÁ NA PASTA DE 'bin',
+
+
+VOCÊ DEVE ESCREVER 
+
+
+
+
+
+net start mongoDB --config C:\Program Files\MongoDB\Server\5.0\cfg
+
+
+
+
+
+
+
+
+
+-> TALVEZ A SOLUÇÃO SEJA NAVEGAR ATÉ O FOLDER DO CONFIG,
+
+
+
+
+
+e aí executar algo como:
+
+
+
+mongod.exe --config D:\mongodb\mongodb.conf
+
+
+
+
+
+
+(tendo os arquivos de 'bin' dentro desse folder)..
+
+
+
+
+
+
+
+
+
+
+
+-_> é claro que a solução mais fácil é simplesmente enfiar o arquivo '.cfg'
+
+lá no folder de 'bin',
+
+
+e aí 
+
+
+
+ELE SERÁ EXECUTADO NORMALMENTE/AUTOMATICAMENTE,
+
+QUANDO VOCÊ RODAR 
+
+
+
+
+
+'net start MongoDB',
+
+
+no windows...
+
+
+
+
+
+
+
+
+
+
+
+
+
+COM O MODO DE 'RUN AS PROCESS' (em uma janela dedicada),
+
+
+você pode especificar certinho o folder de seu arquivo '.cfg'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O USO DE UMA CONFIG FILE É BEM ÚTIL,
+
+PQ 
+
+
+TE DEIXA SALVAR UMA 'BLUEPRINT/SNAPSHOT' DE SUAS SETTINGS,
+
+EM 1 ARQUIVO SEPARADO,
+
+QUE VOCÊ PODERÁ SEMPRE 
+
+
+ENTÃO UTILIZAR,
+
+PARA 
+
+COMEÇAR 
+
+SEU SERVER....
+
+
+
+
+
+
+
+
+--> OK... AGORA TEMOS UM SÓLIDO ENTENDIMENTO DE COMO INICIAR O MONGODB SERVER..
+
+
+

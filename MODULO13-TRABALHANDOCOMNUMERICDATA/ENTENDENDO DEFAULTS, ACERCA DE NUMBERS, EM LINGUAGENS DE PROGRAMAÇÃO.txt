@@ -1,0 +1,670 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ANTES DE EXPLORARMOS TODOS ESSES TYPES INTERESSANTES 
+
+de 
+
+
+
+int32  INTEGERS --> números inteiros NÃO TÃO GRANDES
+
+
+
+
+int64  LONG INTEGERS --> números INTEIROS maiores...
+
+
+
+
+
+DOUBLES 64 bit ----> 1.22314921214
+
+
+
+
+
+
+
+
+128bit HIGH PRECISION DOUBLES- -> 34 decimal places, high precision..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O MONGODBSHELL É BASEADO NO JAVASCRIPT.... --> 
+
+
+
+POR ISSO,
+
+ELE 
+
+
+SEGUE 
+
+
+
+ALGUNS BASICS ,
+
+
+
+INHERITADOS 
+
+
+
+PELO JAVASCRIPT...
+
+
+
+
+
+
+
+
+
+
+
+--> UM NÚMERO COMO '512'
+
+
+NÃO 
+
+
+É 
+
+
+TRATADO COMO 
+
+
+UM INTEGER 32 BITS,
+
+
+
+E SIM 
+
+É 
+
+TRATADO COMO UM 
+DOUBLE,
+
+
+UM 
+
+64 BIT FLOAT.... 
+
+
+
+(
+
+
+    um double com precisão MENOR do que um double de 128 bits...
+)
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO SIGNFIICA QUE 
+
+
+
+512 e 512.00000 
+
+
+
+
+SÃO A MESMA COISA, NO JAVASCRIPT... 
+
+
+
+
+SÃO TRATADOS COMO A MESMA COISA..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> eventualmente,
+
+
+
+nesse DOUBLE 64BIT,
+
+
+o javascript vai ter uma IMPRECISÃO,
+
+
+como 
+
+
+
+
+64.000000000000000000000000000000000000000002
+
+
+
+
+
+
+
+
+
+
+
+--> VAI TER IMPRECISÃO JUSTAMENTE PQ É UM '64 BIT FLOAT' ----------->
+
+
+
+
+
+
+
+
+
+
+É ASSIM QUE AS COISAS FUNCIONAM NO JAVASCIPRT...
+
+
+
+
+
+
+
+
+
+
+
+
+--. PORTANTO,
+
+SE O PROFESSOR USAR UMA DUMMY COLLECTION AQU,
+
+
+
+
+
+como 
+
+db.numTest.insertOne(
+    {
+        a: 1
+    }
+)
+
+
+
+
+
+
+
+
+
+
+--> ESSE value de '1'
+
+VAI SER INSERIDO NO MONGODB COMO UM 'DOUBLE',
+
+
+E NAÕ 
+
+
+
+
+
+
+
+
+COMO 
+
+UM 
+
+
+'128 high precision double',
+
+
+
+
+ou como um 
+
+
+'int32 integer normalzinho, simples'... 
+
+
+
+
+
+
+
+
+
+
+
+--> SERÁ INSERIDO COMO UM 64BIT DOUBLE...
+
+
+
+
+
+
+
+
+
+
+
+
+-> E O PROFESSOR ESTÁ FALANDO TUDO ISSO PQ USAMOS O MONGOSHELL,
+
+
+
+QUE É BASEADO NO JAVASCRIPT...
+
+
+
+
+
+
+
+
+
+
+
+--> E VOCÊ ENFRENTARÁ O EXATO MESMO COMPORTAMENTO QUANDO LIDAR COM O  NODEJS 
+
+
+E O MONGODB DRIVER LÁ...
+
+
+
+
+
+
+
+
+-> MAS PARA OUTRAS LINGUAGENS E SEUS DRIVERS,
+
+
+
+O STORE DE NUMBERS __ VAI SER DIFERENTE---> 
+
+
+
+
+EM PHYTON,
+
+
+
+
+
+UM 
+
+
+
+VALOR 
+
+COMO 
+
+'1' 
+
+
+
+SERÁ __ 
+
+UM 'INTEGER',
+
+
+
+
+
+e um valor 
+
+
+como 
+
+'1.0'
+
+
+
+
+SERÁ __ DEFINITIVAMENTE UM FLOAT...
+.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ou seja,
+
+linguagens diferentes tratam os numbers de forma diferente...
+
+
+
+
+
+
+
+
+
+
+
+--> O PHYTON DIFERENCIA,
+
+
+E LÁ 
+
+
+
+
+O 1.0
+
+será 
+
+ARMAZENADO COMO UM DOUBLE,
+
+E 
+
+'1' 
+
+
+SERÁ 
+
+ARMAZENADO COMO UM 
+
+'int32'....
+
+
+
+
+
+
+
+
+-> MAIS TARDE,
+
+
+NO MÓDULO DE 'FROM SHELL TO DRIVER',
+
+
+
+O PROFESSOR NOS MOSTRARÁ COMO 
+
+
+
+ESCREVER CÓDIGO COM O MONGODB DRIVER EM UM APP DE VERDADE,
+
+
+E 
+
+AÍ 
+
+VAI 
+
+NOS MOSTRAR 
+
+
+
+COMO 
+
+'GET A FEEL' 
+
+
+
+
+
+POR AQUILO QUE É SUPORTADO,
+
+
+POR 
+
+'QUAIS TYPES TENHO QUE CONVERTER' ---> MAS 
+
+
+
+VOCê 
+
+SEMPRE 
+
+TEM 
+
+QUE 
+
+SABER 
+
+
+
+A LANGUAGE EM QUE VOCê ESTÁ TRABALHANDO,
+
+E OS DEFAULTS
+ 
+ DESSA 
+
+ LANGUAGE... --> 
+
+
+
+
+DEVE SABER:
+
+
+
+
+
+ A) ESSA LANGUAGE DIFERENCIA ENTRE INTEGERS E DOUBLES? 
+
+
+
+
+
+
+ B) SE SIM, QUAL É O DEFAULT? É O INT32? é 64 BIT DOUBLES? 
+
+
+
+
+
+
+
+
+
+
+ -> PRECISO CONVERTER ESSE VALOR PARA 
+
+
+ ARMAZENAR 
+
+
+
+
+ NA NOSSA DATABASE?
+
+
+
+
+
+
+ (veremos como converter numbers 
+ 
+ 
+
+
+ nesse módulo,
+
+ pq 
+
+ NO SHELL 
+
+
+ SOMOS 
+
+ OBRIGADOS 
+
+ A CONVERTER MANUALMENTE 
+
+ NUBMERS EM 'int32',
+
+ '128bit',
+
+ etc...
+ 
+ )
+
+
+
+
+
+
+
+
+
+
+ --> PARA OUTRAS LANGUAGES,
+
+
+
+ ISSO TVZ NÃO SEJA NECESSÁRIO... -> E ISSO É UMA COISA IMPORTANTE QUE 
+
+
+
+ VOCÊ 
+
+
+
+ TEM QUE TER EM MENTE,
+ PARA 
+
+
+ A 
+ LANGUAGE EM QUE 
+
+ VOCÊ 
+
+ ESTÁ TRABALHANDO...
+
+
+
+
+
+
+
+
+
+
+
+
+ --> NO MÓDULO DE 'FROM SHELL TO DRIVER',
+
+
+
+ VEREMOS 
+
+
+
+ BEM COMO 
+
+
+
+ ESCREVER CÓDIGO 
+
+
+
+
+
+
+
+ E COMO 
+
+ VOCÊ PODE CREATE 
+
+
+
+
+ ESSES 
+
+
+ '64BIT integER' 
+
+
+
+ NO SEU CÓDIGO..
+
+
+
+
+
+
+
+
+
+ --> MAS AQUI O PROFESSOR SÓ QUER NOS DIZER 
+
+ QUE 
+
+ O 
+
+ DEFAULT QUE 
+
+
+ ACABA WRITTEN NO MONGODB DATABASE NÃO DEPENDE DO MONGODB,
+
+
+ E SIM 
+
+ DO 
+
+
+
+ _cLIENT/DRIVER QUE VOCÊ ESTÁ USANDO...
+
+
+
+
+
+
+
+
+
+ --> COMO O MONGOSHELL USA 64bit doubles como default, é  isso que está sendo armazenado, por enqunato...

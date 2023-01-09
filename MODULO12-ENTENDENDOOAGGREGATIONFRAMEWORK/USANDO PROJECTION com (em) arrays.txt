@@ -1,0 +1,1003 @@
+
+
+
+
+
+
+
+
+
+
+
+É HORA DE VER MAIS PROJECTIONS INTERESSANTES....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS AGORA VEREMOS PROJECTIONS  QUE FUNCIONAM COM ARRAYS/POSSUEM RELAÇÃO COM ARRAYS...
+
+
+
+
+
+
+
+
+
+
+-> PROFESSOR VAI  CONTINUAR USANDO AQUELA COLLECTION DE 'arrayCollection'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> VAMOS TRABALHAR COM ISTO, COM OS 'examScores':
+
+
+
+
+
+
+
+{
+        "_id" : ObjectId("6215b908ecbbf58f4c1d5e5b"),
+        "name" : "Max",
+        "hobbies" : [
+                "Sports",
+                "Cooking"
+        ],
+        "age" : 29,
+        "examScores" : [
+                {
+                        "difficulty" : 4,
+                        "score" : 57.9
+                },
+                {
+                        "difficulty" : 6,
+                        "score" : 62.1
+                },
+                {
+                        "difficulty" : 3,
+                        "score" : 88.5
+                }
+        ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+----> DIGAMOS QUE QUEREMOS OUTPUTTAR ___ SOMENTE__ O PRIMEIRO VALUE, O 
+
+
+
+PRIMEIRO 
+
+
+OBJECT em '
+
+
+examScores'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+->  ou seja,
+
+vamos querer só o value DO PRIMEIRO 
+
+
+
+OBJECT DESSE ARRAY DE 'examScores',
+
+
+
+em vez de todos os 'EXAM SCORES'
+
+
+
+
+
+
+
+
+
+
+-------> ok.... --> para isso,
+
+
+
+
+
+
+PRECISAMOS DE UMA PROJECTION, É CLARO...
+
+
+
+
+
+
+
+
+
+
+
+escrevemos assim, no começo:
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.arrayCollection.aggregate(
+        [
+                {
+                        $project: {
+                                        _id: 0,
+
+
+                                        examScore
+                        }
+                }
+        ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> nessa project phase,
+
+
+
+NÃO TEREMOS INTERESSE NO 'id',
+
+MAS 
+
+
+VAMOS TER BASTANTE INTERESSE 
+
+
+
+
+
+
+
+
+
+
+NO PRIMEIRO 'OBJECT' no array de 'examScores'....
+
+
+
+
+
+
+
+
+
+
+----> por isso vamos nomear 'examScore',
+
+pq vamos 
+OUTPUTTAR 
+
+
+APENAS 
+
+1 ÚNICO OBJECT...  (de muitos)
+
+
+
+
+
+
+
+
+
+--> PARA OUTPUTTAR 
+
+APENAS 1 ÚNICO 
+
+
+OBJECT DENTRO DE  1 ARRAY
+
+
+
+NA PHASE DE 
+
+
+'project',
+
+
+
+
+
+
+VOCÊ DEVE USAR 
+
+
+
+
+O ___ OPERATOR __ SUPER ÚTIL DE 
+
+
+
+
+
+
+
+'
+
+$slice'..
+
+
+
+
+
+
+
+
+
+--> ESSE OPERATOR 
+TE DEIXA 
+
+
+
+''GET BACK A SLICE OF AN ARRAY''' -> é bem parecido com o method javascript de '.slice()'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> para usá-lo,
+
+
+
+nós escrevemos assim:
+
+
+
+
+
+
+
+
+db.arrayCollection.aggregate(
+        [
+                {
+                        $project: {
+                                        _id: 0,
+
+
+                                        examScore: {
+                                                $slice: 
+                                        }
+                        }
+                }
+        ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------> O OPERATOR DE '$slice'
+
+
+PROVAVELMENTE __ aCEITARÁ__ 
+
+
+2 
+
+PARAMETERS... ->
+
+
+
+
+
+
+
+
+
+1o parameter --> PROVAVELMENTE SERÁ '''O  ARRAY QUE VOCÊ QUER DAR SLICE''' (no caso, 'examScores')...
+
+
+
+
+
+
+2o parameter --> PROVAVELMENTE SERÁ UM OBJECT/ARRAY com o __ INDEXADOR__ em que vocÊ quer começar o slice, e aí O NÚMERO DE ELEMENTOS QUE VOCÊ QUER CORTAR... (index-based)...
+
+
+
+
+
+
+
+
+
+
+eX:
+
+
+
+
+
+
+db.arrayCollection.aggregate(
+        [
+                {
+                        $project: {
+                                        _id: 0,
+
+
+                                        examScore: {
+                                                $slice: []
+                                        }
+                        }
+                }
+        ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ACERTEI.... --> você vai estipular esses 2 valores/parâmetros em 1 ARRAY...
+
+
+
+
+
+
+ex:
+
+
+
+
+
+db.arrayCollection.aggregate(
+        [
+                {
+                        $project: {
+                                        _id: 0,
+
+
+                                        examScore: {
+                                                $slice: ["$examScores", ]
+                                        }
+                        }
+                }
+        ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... AGORA VAMOS QUERER PEGAR SÓ O PRIMEIRO ELEMENT,
+
+
+
+
+
+
+__ POR ISSO VAMOS PASSAR SÓ '1'
+
+
+COMO O SEGUNDO PARÂMETRO... (
+
+
+        pq 'slice'
+
+
+        ACEITA,
+
+
+        NA SUA FORMA 
+
+        BASE MAIS SIMPLES:
+
+
+
+
+        1) O ARRAY 
+
+
+
+        2) O NÚMERO DE ELEMENTS QUE VOCê QUER __ RETIRAR__ DO ARRAY,
+
+
+
+        '''SEEN FROM THE START''' (ou seja, diretamente do indexador '0')...
+)
+
+
+
+
+
+
+
+
+
+
+--> isso significa que 
+
+
+
+a estrutura default de 
+
+
+$slice, normal,
+
+é assim:
+
+
+
+
+
+$slice: ["$examScore", [0, 1]]
+
+
+
+
+
+
+
+
+
+
+---------> 
+
+
+
+
+
+
+OK, ESCREVEMOS ASSIM:
+
+
+
+
+
+
+
+
+db.arrayCollection.aggregate(
+        [
+                {
+                        $project: {
+                                        _id: 0,
+
+
+                                        examScore: {
+                                                $slice: ["$examScores", 1]
+                                        }
+                        }
+                }
+        ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+COM ISSO, NOSSO RESULT DE AGGREGATE FICA ASSIM:
+
+
+
+
+
+
+
+
+
+> db.arrayCollection.aggregate([      
+...   {
+...     $project: {
+...       _id: 0,
+...
+...       examScore: {
+...         $slice: ['$examScores', 1],
+...       },
+...     },
+...   },
+... ]);
+{ "examScore" : [ { "difficulty" : 3, "score" : 75.1 } ] }
+{ "examScore" : [ { "difficulty" : 7, "score" : 52.1 } ] }
+{ "examScore" : [ { "difficulty" : 4, "score" : 57.9 } ] }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> OK... AGORA SÓ TEMOS 
+
+
+
+1 OBJECT 'examScore' 
+
+
+
+
+POR USER,
+
+
+DENTRO DAQUELE FIELD DE 'examScore',
+
+
+
+
+E FOI EXATAMENTE ISSO QUE ESCREVEMOS NA NOSSA QUERY/AGGREGATE QUERY... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> CERTO.... --> MAS àS VEZES 
+
+
+
+você 
+
+VAI QUERER 
+
+
+MAIS ELEMENTOS,
+
+
+
+OU ELEMENTOS 
+
+
+
+EM LUGARES DIFERNTES DO ARRAY....
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO,
+
+
+
+VOCÊ PODE  ALTERAR A QUERY UM POUCO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> OBS:::: NÃO SEI SE É POSSÍVEL ''ESCOLHER O LOCAL DE PARTIDA''' ---> 
+
+
+
+
+
+
+o professor nos mostra apenas jeitos de 'COMEÇAR DO INÍCIO E IR SELECIONANDO' 
+
+
+ou 
+
+
+'COMEÇAR DO FINAL E IR SELECIONANDO' 
+
+
+
+
+
+
+
+--> no caso, o número que você coloca ali é apenas O NÚMERO DE ELEMENTOS/VALUES QUE VOCÊ VAI QUERER QUE SEJAM CORTADOS/RETORNADOS 
+
+DESSE ARRAY ORIGINÁRIO..
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+$slice: ["$examScores", 3] --------------> ISSO VAI CORTAR/RETORNAR 3 ELEMENTS, COMEÇANDO DO INDEXADOR '0'..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Ex:
+
+
+$slice: ["$examScores", -2] -----------> ISSO VAI SELECIONAR/RETRIEVAR  OS __ 2 ÚLTIMOS ELEMENTS__ (pq com '-', COMEÇAMOS DO FINAL, O SENTIDO É INVERSO)...
+
+
+
+
+
+
+
+
+
+
+----------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+> db.arrayCollection.aggregate([
+...   {
+...     $project: {
+...       _id: 0,
+...
+...       examScore: {
+...         $slice: ['$examScores', -2],
+...       },
+...     },
+...   },
+... ]);
+{ "examScore" : [ { "difficulty" : 8, "score" : 44.2 }, { "difficulty" : 6, "score" : 61.5 } ] }
+{ "examScore" : [ { "difficulty" : 2, "score" : 74.3 }, { "difficulty" : 5, "score" : 53.1 } ] }
+{ "examScore" : [ { "difficulty" : 6, "score" : 62.1 }, { "difficulty" : 3, "score" : 88.5 } ] }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> COMO VOCÊ PODE OBSERVAR, NOSSA QUERY MUDOU UM POUCO, DE NOVO...
+
+
+
+
+
+(ganhamos os 2 últimos objetos 'examScore' por users)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... MAS E SE EU QUISER PEGAR  
+
+
+
+
+1 ELEMENTO, MAS COMEÇANDO DO 'SEGUNDO ELEMENTO' ?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> bem,
+
+
+AÍ VOCê USA AQUELA SINTAXE LÁ,
+
+
+QUE EU MENCIONEI ANTES....
+
+
+
+
+
+
+
+
+
+
+VOCÊ VAI ESCREVER ASSIM:
+
+
+
+
+
+$slice: ["$examScores", 2, 1] 
+
+
+
+
+
+
+
+
+
+
+---> OU SEJA, AQUI ESTAMOS DIZENDO:
+
+
+
+
+
+''''TOME O ARRAY DE examScores por BASE''''
+
+
+
+
+'''' DEPOIS VÁ ATÉ O INDEXADOR DE NÚMERO 2 (3o elemento) '''''
+
+
+
+
+''' ISSO FEITO, NOS DÊ EXATAMENTE 1 ELEMENT...'''' 
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+> db.arrayCollection.aggregate([
+...   {
+...     $project: {
+...       _id: 0,
+...
+...       examScore: {
+...         $slice: ['$examScores', 2, 1],
+...       },
+...     },
+...   },
+... ]);
+{ "examScore" : [ { "difficulty" : 6, "score" : 61.5 } ] }
+{ "examScore" : [ { "difficulty" : 5, "score" : 53.1 } ] }
+{ "examScore" : [ { "difficulty" : 3, "score" : 88.5 } ] }
+
+
+
+
+
+
+
+
+
+
+--------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+------> OK.... ENTENDI...
+
+
+
+
+
+
+--> ESSE É O SLICE, E ELE PODE SER MT ÚTIL PARA TRANSFORMAR 1 ARRAY, OU PARA CONSEGUIR OS VALUES DE QUE VOCê PRECISA....

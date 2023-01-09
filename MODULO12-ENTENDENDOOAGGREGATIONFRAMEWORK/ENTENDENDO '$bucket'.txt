@@ -1,0 +1,2331 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOLTAMOS AO DATASET DE 
+
+
+
+
+'persons',
+
+
+
+
+
+
+
+
+com aquelas persons com este formato:
+
+
+
+
+
+
+
+
+{
+        "_id" : ObjectId("62127db4e5b1e4e4716eb34e"),
+        "gender" : "female",
+        "name" : {
+                "title" : "ms",
+                "first" : "signe",
+                "last" : "rasmussen"
+        },
+        "location" : {
+                "street" : "3635 koldingvej",
+                "city" : "ryslinge",
+                "state" : "sjælland",
+                "postcode" : 44840,
+                "coordinates" : {
+                        "latitude" : "18.2563",
+                        "longitude" : "14.0142"
+                },
+                "timezone" : {
+                        "offset" : "+4:30",
+                        "description" : "Kabul"
+                }
+        },
+        "email" : "signe.rasmussen@example.com",
+        "login" : {
+                "uuid" : "687099d9-b4bd-4881-8657-90abd559844f",
+                "username" : "sadpeacock229",
+                "password" : "baggio",
+                "salt" : "J1WBRau1",
+                "md5" : "2b0824d7f90452cc93a879aaf717fa40",
+                "sha1" : "d7fc48d34816bccf8cac0c532b06e37e65974759",
+                "sha256" : "2388d9162c447e163fdaaf94fb99bc5ca42a93de167d82eed59e296f8d1de8dd"
+        },
+        "dob" : {
+                "date" : "1983-05-20T21:26:44Z",
+                "age" : 35
+        },
+        "registered" : {
+                "date" : "2010-09-30T04:08:40Z",
+                "age" : 7
+        },
+        "phone" : "46945447",
+        "cell" : "97293211",
+        "id" : {
+                "name" : "CPR",
+                "value" : "082246-7576"
+        },
+        "picture" : {
+                "large" : "https://randomuser.me/api/portraits/women/5.jpg",
+                "medium" : "https://randomuser.me/api/portraits/med/women/5.jpg",
+                "thumbnail" : "https://randomuser.me/api/portraits/thumb/women/5.jpg"
+        },
+        "nat" : "DK"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, 
+
+
+
+MAS ÀS VEZES VOCÊ VAI QUERER 'GET A FEEL' acerca da 
+
+
+
+DISTRIBUTION DE DATA QUE VOCê 
+
+
+TEM....
+
+
+
+
+
+
+
+
+
+
+
+
+-> E, PARA ISSO,
+
+HÁ 
+
+
+
+UM 
+
+
+
+
+
+COMMAND ESPECIAL QUE TE AJUDA COM ISSO,
+ 
+ o 
+
+
+ '$bucket'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> PREPARAMOS NOSSO PIPELINE PARA ISSO,
+
+
+
+
+ TIPO ASSIM:
+
+
+
+
+
+
+
+
+ db.persons.aggregate(
+     [
+         {$bucket: {}}
+     ]
+ ).pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> MAS O QUE O BUCKET PHASE FAZ?
+
+
+
+
+
+
+
+
+
+
+ -_> BEM, O BUCKET STAGE TE DEIXA OUTPUTTAR SUA 
+
+ DATA 
+
+ EM 
+
+
+ BUCKETS,
+
+
+
+
+NOS QUAIS VOCÊ PODE 
+
+
+
+CALCULAR CERTOS ''summary statistics'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------> O BUCKET 
+
+
+exige 
+
+
+1 
+
+parameter 
+de
+
+
+'groupBy',
+
+
+
+
+
+
+
+
+QUE É UM PARÂMETRO/FIELD EM UQE 
+
+
+
+VOCÊ 
+
+
+ESPECIFICA 
+
+
+'POR QUAL FIELD VOCÊ VAI QUERER 
+
+
+AGRUPAR SUA DATA EM BUCKETS'... --> AQUI,
+
+
+
+
+
+
+
+
+o professor 
+
+
+
+vai ir por 
+
+
+"dob.age"..
+
+
+
+
+
+
+
+
+
+
+
+--> POR ISSO VAMOS ESCREVER ASSIM:
+
+
+
+
+
+
+
+db.persons.aggregate(
+    [
+        {$bucket: {
+            groupBy: "$dob.age"
+
+
+
+        }}
+    ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO VAI DIZER AO BUCKET: 
+
+
+
+
+'''OK, ONDE ESTÁ 
+
+
+MINHA DATA QUE VOU QUERER ESSENCIALMENTE COLOCAR EM 'BUCKETS' ? '' 
+
+
+
+
+
+
+
+
+
+
+--> aí, depois disso,
+você 
+
+
+estabelece algumas BOUNDARIES... --> boundaries são basicamente CATEGORIAS...
+
+
+
+
+
+
+
+
+--> o professor, como exemplo,
+
+
+
+
+vai dizer que 
+
+
+
+
+''ESTOU INTERESSADO NAS AGES 
+
+
+0, 18, 30, 50, 80, 120'''...
+
+
+
+
+
+
+
+
+
+
+O CÓDIGO FICA ASSIM:
+
+
+
+
+
+
+db.persons.aggregate(
+    [
+        {$bucket: {
+            groupBy: "$dob.age",
+
+            boundaries: [
+                0, 18, 30, 50, 80, 120
+            ]
+        }}
+    ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO VAI ESSENCIALMENTE CRIAR O SEU 'bucket',
+
+
+
+
+
+ou seja,
+
+
+
+AS DIFERENTES 'CATEGORIES'
+
+
+que 
+
+vocÊ terá... ------> as categories pelas quais você vai querer 'CATEGORIZE YOUR DATA INTO'....
+
+
+
+
+
+
+
+
+
+
+
+--> se rodamos esse bucket,
+
+
+ganhamos isto:
+
+
+
+
+
+> db.persons.aggregate(
+...     [
+...         {$bucket: {
+...             groupBy: "$dob.age",
+...
+...             boundaries: [
+...                 0, 18, 30, 50, 80, 120
+...             ]
+...         }}
+...     ]
+... )
+{ "_id" : 18, "count" : 868 }
+{ "_id" : 30, "count" : 1828 }
+{ "_id" : 50, "count" : 2304 }
+
+
+
+
+
+
+
+
+--> esses 3 counts, quando somados, darão 5 MIL (que é o número total de documents na nossa collection)...
+
+
+
+
+
+
+
+--> ISSO QUER DIZER QUE 
+
+O 
+
+
+BUCKET REALMENTE VAI CATEGORIZAR COMPLETAMENTE NOSSA COLLECTION....
+
+
+
+0 - 18 -> temos 868 PESSOAS....
+
+
+
+
+18 - 30 ---> temos 1828 
+
+
+
+
+30 - 50 --> temos 2304? 
+
+
+
+
+
+
+
+
+
+
+-----------> MAS A PERGUNTA, AGORA, É 
+
+
+
+
+
+'' O QUE VOCÊ VAI QUERER OUTPUT'' (
+
+
+
+    e isso é expresso pelo último parameter,
+
+
+    '
+    output'...
+)
+
+
+
+
+
+
+
+
+
+
+
+--> O QUE VOCÊ VAI QUERER OUTPUTTAR PARA CADA UM DESSES BUCKETs?
+
+
+
+
+
+
+
+
+
+
+
+
+--> em 'output',
+
+você define a ESTRUTURA DE CADA 'BUCKET' que vocÊ vai GET BACK...
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR DIZ QUE EM CADA BUCKET VAMOS QUERER UM 
+
+
+ARRAY DE 
+
+NOSSOS NAMES.... 
+
+
+
+
+
+
+-->  isso pode ser feito, EXATAMENTE COMO NA PHASE DE '$group',
+
+
+
+
+POR MEIO DO OPERATOR DE 
+
+'$push'...
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+output: {
+    names: {
+        $push 
+    }
+}
+
+
+
+
+
+
+
+
+--> OK, TEREMOS UM FIELD DE 'names', com todos nossos names...
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+output: {
+    names: {
+        $push: {
+                "$name.first"
+        }
+    }
+}
+
+
+
+
+
+
+
+
+--> AGORA VEREMOS OS NAMES DAS PESSOAS QUE ESTÃO NO BUCKET...
+
+
+
+
+
+
+
+
+CÓDIGO COMPLETO FICA ASSIM:
+
+
+db.persons.aggregate(
+  [
+      {$bucket: {
+          groupBy: "$dob.age",
+
+          boundaries: [
+              0, 18, 30, 50, 80, 120
+          ],
+          output: {
+              names: {
+                  $push: "$name.first"
+              }
+          }
+      }}
+  ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            ..................
+
+
+                "aloïs",
+                "norman",
+                "mahé",
+                "olivier",
+                "zackary",
+                "emilia",
+                "eemeli",
+                "mathis",
+                "ekkehard",
+                "bernice",
+                "آراد",
+                "jens",
+                "floriano",
+                "rolf-dieter",
+                "donna",
+                "lorenz",
+                "sarah",
+                "omar",
+                "christian",
+                "christos",
+                "soham",
+                "naomi",
+                "zoey",
+                "emilio",
+                "max",
+                "madeleine",
+                "juninho",
+                "پرهام",
+                "owen",
+                "olaí",
+                "afşar",
+                "chad",
+                "rasmus",
+                "rasmus",
+                "hunter",
+                "kristin",
+                "sophie",
+                "bilal",
+                "alexis",
+                "brad",
+                "florence",
+                "diana",
+                "salvador",
+                "elias",
+                "ava",
+                "ulla",
+                "oskari",
+                "amanda",
+                "doris",
+                "lauri",
+                "lumi",
+                "alberte",
+                "logan",
+                "مهراد",
+                "levi",
+                "bernard",
+                "adonilo",
+                "kürşat",
+                "isabella",
+                "susanna",
+                "lorraine",
+                "آوینا",
+                "oscar",
+                "wisal",
+                "christy",
+                "sophia",
+                "roxane",
+                "leonora",
+                "theo",
+                "afşar",
+                "مهدیس",
+                "albin",
+                "marina",
+                "عسل",
+                "artur",
+                "brennan",
+                "francisco",
+                "stephen",
+                "olivia",
+                "alexandra",
+                "destin",
+                "christian",
+                "victoria",
+                "rasmus",
+                "elvin",
+                "danja",
+                "مانی",
+                "storm",
+                "مرسانا",
+                "afşar",
+                "radi",
+                "yvonne",
+                "darko",
+                "anas",
+                "پرنیا",
+                "blake",
+                "rebecca",
+                "patrick",
+                "enni",
+                "howard",
+                "laura",
+                "kayla",
+                "cory",
+                "yasemin",
+                "adriana",
+                "julia",
+                "olivia",
+                "سپهر",
+                "ayşe",
+                "ملینا",
+                "anthony",
+                "celia",
+                "edward",
+                "belen",
+                "bobby",
+                "تارا",
+                "neea",
+                "alexandra",
+                "jacey",
+                "lily",
+                "misty",
+                "susanna",
+                "martin",
+                "caroline",
+                "zoe",
+                "dan",
+                "beverly",
+                "jeannine",
+                "latife",
+                "sandra",
+                "chris",
+                "philip",
+                "serenity",
+                "taylor",
+                "jade",
+                "rachel",
+                "ella",
+                "کیانا",
+                "sadie",
+                "adrien",
+                "allie",
+                "simon",
+                "ramon",
+                "ralph",
+                "filoteu",
+                "owen",
+                "justin",
+                "marcus",
+                "byron",
+                "dorothea",
+                "margot",
+                "leah",
+                "konsta",
+                "flurin",
+                "margot",
+                "naod",
+                "milton",
+                "sibylle",
+                "lilja",
+                "viivi",
+                "emre",
+                "bella",
+                "donald",
+                "ines",
+                "alicia",
+                "یلدا",
+                "natão",
+                "fatma",
+                "eduardo",
+                "oliver",
+                "الینا",
+                "christoffer",
+                "aiden",
+                "katrine",
+                "louise",
+                "aafke",
+                "حسین",
+                "herbert",
+                "طاها",
+                "aino",
+                "isabelita",
+                "susie",
+                "claudia",
+                "olaídes",
+                "saana",
+                "alexandre",
+                "carl",
+                "ella",
+                "samuel",
+                "oya",
+                "dale",
+                "maeva",
+                "nandielly",
+                "zoe",
+                "charles",
+                "vildan",
+                "abbey",
+                "alicia",
+                "emilie",
+                "eva",
+                "quinta",
+                "juul",
+                "tyler",
+                "ariane",
+                "gavin",
+                "تینا",
+                "ernest",
+                "roberto",
+                "josefine",
+                "yoshka",
+                "nanna",
+                "giray",
+                "tracey",
+                "oya",
+                "britney",
+                "julie",
+                "eva",
+                "randall",
+                "سینا",
+                "غزل",
+                "حامد",
+                "amparo",
+                "gökhan",
+                "mason",
+                "norma",
+                "nataniel",
+                "gonca",
+                "pablo",
+                "sam",
+                "kimberly",
+                "kelly",
+                "claas",
+                "felix",
+                "hélèna",
+                "mila",
+                "judy",
+                "juliette",
+                "benjamin",
+                "فاطمه زهرا",
+                "amelly",
+                "nicky",
+                "peppi",
+                "zara",
+                "edgar",
+                "melinda",
+                "gabriella",
+                "cristian",
+                "fahrettin",
+                "elliot",
+                "dicky",
+                "عباس",
+                "latife",
+                "peyton",
+                "nur",
+                "ryder",
+                "albert",
+                "thomas",
+                "claire",
+                "tessa",
+                "emile",
+                "lauren",
+                "gina",
+                "ملینا",
+                "ceylan",
+                "isabella",
+                "justine",
+                "ida",
+                "matthew",
+                "denise",
+                "پارمیس",
+                "andréa",
+                "dan",
+                "juho",
+                "patrice",
+                "christopher",
+                "miguel",
+                "ella",
+                "peppi",
+                "mateo",
+                "frederik",
+                "ella",
+                "carmim",
+                "sanni",
+                "solveig",
+                "phoenix",
+                "ceyhan",
+                "james",
+                "marie-louise",
+                "kimberly",
+                "fride",
+                "gabe",
+                "adam",
+                "alberte",
+                "jack",
+                "christoffer",
+                "sherri",
+                "leevi",
+                "wyatt",
+                "phoebe",
+                "remedios",
+                "samuel",
+                "soledad",
+                "marvin",
+                "isabella",
+                "miguel",
+                "valentine",
+                "nidélia",
+                "assunção",
+                "suzy",
+                "mia",
+                "antonia",
+                "sivert",
+                "teresa",
+                "benito",
+                "dursun",
+                "hugo",
+                "leo",
+                "gerrit",
+                "kuzey",
+                "frank",
+                "juliette",
+                "damien",
+                "nella",
+                "laszlo",
+                "leonardo",
+                "david",
+                "xavier",
+                "aino",
+                "matt",
+                "asta",
+                "ege",
+                "maria",
+                "véronique",
+                "christian",
+                "allison",
+                "mona",
+                "heidi",
+                "پارمیس",
+                "veli",
+                "bobby",
+                "viljami",
+                "eddie",
+                "sonja",
+                "maëva",
+                "adelheid",
+                "marie",
+                "faith",
+                "xavier",
+                "noel",
+                "felix",
+                "peetu",
+                "alão",
+                "باران",
+                "abigail",
+                "sérgio",
+                "aada",
+                "remy",
+                "luzio",
+                "elida",
+                "ruby",
+                "rosario",
+                "dominic",
+                "oğuzhan",
+                "silje",
+                "nara",
+                "alice",
+                "evelyn",
+                "yolanda",
+                "oliver",
+                "philippe",
+                "mathis",
+                "alyssa",
+                "notburga",
+                "randy",
+                "logan",
+                "kajus",
+                "clarisse",
+                "محیا",
+                "hans-hermann",
+                "پرهام",
+                "jimmy",
+                "lauranne",
+                "gabriel",
+                "michelle",
+                "kirk",
+                "debra",
+                "luukas",
+                "ملینا",
+                "aaya",
+                "afet",
+                "myrtle",
+                "meral",
+                "justin",
+                "marianne",
+                "simon",
+                "consuelo",
+                "iida",
+                "regina",
+                "marshall",
+                "carole",
+                "teresa",
+                "victoria",
+                "noémie",
+                "nour",
+                "hermitério",
+                "rosa",
+                "venla",
+                "alpoim",
+                "joel",
+                "marielle",
+                "clem",
+                "deniz",
+                "monika",
+                "francisca",
+                "wayne",
+                "hans-ulrich",
+                "johanne",
+                "francisco",
+                "elaine",
+                "jared",
+                "nikodem",
+                "mikkel",
+                "vicky",
+                "jeppe",
+                "jacqueline",
+                "juliette",
+                "sophia",
+                "carina",
+                "ahmet",
+                "merigley",
+                "paulina",
+                "maëlyne",
+                "olga",
+                "maya",
+                "gabriel",
+                "marco",
+                "flynn",
+                "amável",
+                "inaya",
+                "زهرا",
+                "valdomiro",
+                "annette",
+                "eevi",
+                "elizabeth",
+                "ellen",
+                "deniz",
+                "isabel",
+                "elsa",
+                "مهراد",
+                "naël",
+                "annie",
+                "max",
+                "carter",
+                "delmar",
+                "رها",
+                "gerald",
+                "william",
+                "lucas or luke",
+                "پرهام",
+                "aaron",
+                "oya",
+                "annie",
+                "vedat",
+                "alfred",
+                "pinja",
+                "karla",
+                "amaal",
+                "zarco ",
+                "kuzey",
+                "adner",
+                "joe",
+                "birgid",
+                "evan",
+                "alexandra",
+                "julio",
+                "owen",
+                "vicki",
+                "baguandas",
+                "christopher",
+                "رادین",
+                "isla",
+                "lauro",
+                "lucas",
+                "florence",
+                "rebecca",
+                "koray",
+                "peetu",
+                "maddison",
+                "marinda",
+                "antoinette",
+                "dino",
+                "wilko",
+                "joona",
+                "gene",
+                "gonçalo",
+                "alexandra",
+                "kelly",
+                "joseph",
+                "ece",
+                "پوریا",
+                "jeremy",
+                "sharron",
+                "jorge",
+                "kenan",
+                "laurin",
+                "sindre",
+                "caleb",
+                "chester",
+                "sofia",
+                "sophie",
+                "isaac",
+                "mathilde",
+                "arttu",
+                "gabriel",
+                "lærke",
+                "pierre",
+                "benjamin",
+                "tilman",
+                "رهام",
+                "elmer",
+                "marino",
+                "leyla",
+                "amira",
+                "sadrudine",
+                "lenni",
+                "eduartino",
+                "linda",
+                "juanita",
+                "مرسانا",
+                "sofia",
+                "chloé",
+                "tracy",
+                "étienne",
+                "milka",
+                "sebastian",
+                "astrid",
+                "dan",
+                "édith",
+                "النا",
+                "ivan",
+                "amelia",
+                "markus",
+                "gonca",
+                "sheryl",
+                "jocelyne",
+                "summer",
+                "jules",
+                "rosemary",
+                "norah",
+                "daniella",
+                "storm",
+                "isaiah",
+                "eevi",
+                "amine",
+                "elena",
+                "oscar",
+                "helene",
+                "betânia",
+                "getúlio",
+                "josefine",
+                "marlies",
+                "eemil",
+                "angel",
+                "theodore",
+                "adna",
+                "traute",
+                "louane",
+                "fernando",
+                "محمدطاها",
+                "peter",
+                "mustafa",
+                "sedef",
+                "rene",
+                "آرسین",
+                "linnea",
+                "diane",
+                "georgios",
+                "juliana",
+                "regina",
+                "charles",
+                "vilma",
+                "rita",
+                "ella",
+                "emeline",
+                "noémie",
+                "tasmira",
+                "leah",
+                "alexis",
+                "lucy",
+                "lonnie",
+                "aurelio",
+                "lola",
+                "mario",
+                "carl",
+                "antonius",
+                "torjus",
+                "krin",
+                "mercedes",
+                "arian",
+                "raymond",
+                "saana",
+                "رونیکا",
+                "marine",
+                "kathy",
+                "erkan",
+                "elouan",
+                "abdullahi",
+                "abram",
+                "emel",
+                "megan",
+                "austin",
+                "sophie",
+                "justin",
+                "cody",
+                "constâncio",
+                "frank",
+                "madalene",
+                "felix",
+                "felix",
+                "vicente",
+                "phoebe",
+                "liam",
+                "nikolaj",
+                "isaac",
+                "cain",
+                "madison",
+                "ثنا",
+                "andira",
+                "lillie",
+                "josephine",
+                "matthew",
+                "abigail",
+                "nelli",
+                "salustiniano",
+                "elisa",
+                "silas",
+                "wilson",
+                "cindy",
+                "estácio",
+                "sofia",
+                "jean-pierre",
+                "zoe",
+                "german",
+                "marcus",
+                "timon",
+                "selma",
+                "alexander",
+                "alison",
+                "diane",
+                "chloe",
+                "marcus",
+                "عباس",
+                "victor",
+                "maurícia",
+                "pearl",
+                "zachary",
+                "chloé",
+                "mara",
+                "benjamin",
+                "niilo",
+                "cathy",
+                "thomas",
+                "till",
+                "billy",
+                "beau",
+                "آرمیتا",
+                "brett",
+                "hazel",
+                "ramon",
+                "ava",
+                "kate",
+                "louanne",
+                "erich",
+                "hugh",
+                "willie",
+                "cecilie",
+                "filippa",
+                "inara",
+                "یلدا",
+                "enni",
+                "مهرسا",
+                "gregory",
+                "ashley",
+                "margaret",
+                "stephen",
+                "clémence",
+                "oskar",
+                "jane",
+                "harper",
+                "sadie",
+                "ryan",
+                "pauline",
+                "نیایش",
+                "lotta",
+                "kenan",
+                "lígia",
+                "dorothea",
+                "benjamin",
+                "marc",
+                "کوروش",
+                "سپهر",
+                "carl-heinz",
+                "célio",
+                "mylan",
+                "andrea",
+                "jobst",
+                "samantha",
+                "michele",
+                "dounia",
+                "jonathan",
+                "magdalena",
+                "elijah",
+                "mimosa",
+                "jesus",
+                "lewis",
+                "rafael",
+                "stjepan",
+                "naomi",
+                "phyllis",
+                "carl",
+                "aiden",
+                "charlie",
+                "claudia",
+                "herminia",
+                "ines",
+                "vicky",
+                "kristina",
+                "ryder",
+                "amelia",
+                "gonca",
+                "willow",
+                "anna",
+                "lucille",
+                "julia",
+                "erundina",
+                "umut",
+                "lily",
+                "suradj",
+                "begüm",
+                "timmothy",
+                "aila",
+                "آرسین",
+                "rembrandt",
+                "valdemar",
+                "elli",
+                "leah",
+                "wanderleya",
+                "anaïs",
+                "huibrecht",
+                "lewis",
+                "erik",
+                "sofia",
+                "رضا",
+                "dylan",
+                "agathe",
+                "elliot",
+                "jackson",
+                "simone",
+                "jeremy",
+                "miriam",
+                "magnus",
+                "anton",
+                "angeles",
+                "august",
+                "julião",
+                "alina",
+                "leta",
+                "emilie",
+                "cherly",
+                "eeli",
+                "vêndel",
+                "katrina",
+                "ruben",
+                "higino",
+                "necati",
+                "sebastian",
+                "alexis",
+                "nanna",
+                "آوین",
+                "izabel",
+                "paula",
+                "niilo",
+                "zilena",
+                "connie",
+                "wart",
+                "jared",
+                "paige",
+                "viivi",
+                "frankie",
+                "maxence",
+                "jo",
+                "minea",
+                "نیایش",
+                "meghan",
+                "مارال",
+                "olof",
+                "sócrates",
+                "eléna",
+                "كيان",
+                "marcos",
+                "joar",
+                "ralf",
+                "امیر",
+                "avery",
+                "dominykas",
+                "joan",
+                "ronnie",
+                "silva",
+                "nurdan",
+                "simon",
+                "hugo",
+                "georg",
+                "isabella",
+                "hector",
+                "melina",
+                "perry",
+                "fredi",
+                "viljami",
+                "romano",
+                "ieda",
+                "charlotte",
+                "ملینا",
+                "oya",
+                "lawrence",
+                "lesley",
+                "anatole",
+                "radha",
+                "sylvia",
+                "ronja",
+                "gaëtan",
+                "elif",
+                "jonathan",
+                "felipe",
+                "german",
+                "james",
+                "acelya",
+                "ülkü",
+                "stefano",
+                "jacomijn",
+                "sofia",
+                "felecia",
+                "محمدامين",
+                "siiri",
+                "juliette",
+                "lesa",
+                "wayne",
+                "marialba",
+                "linda",
+                "nelson",
+                "beatriz",
+                "tomothy",
+                "yaël",
+                "rosa",
+                "philip",
+                "sebastian",
+                "filip",
+                "clara",
+                "cynthia",
+                "mustafa",
+                "amy",
+                "violet",
+                "eino",
+                "mickey",
+                "ashley",
+                "lily",
+                "ceyhan",
+                "sadie",
+                "rafael",
+                "michèle",
+                "sıla",
+                "agatha",
+                "carl",
+                "nino",
+                "kristina",
+                "elif",
+                "matteo",
+                "laurine",
+                "astrid",
+                "are",
+                "florence",
+                "olivia",
+                "madelène",
+                "sônia",
+                "beate",
+                "alyssa",
+                "henry",
+                "eevi",
+                "helfried",
+                "lachlan",
+                "timothy",
+                "النا",
+                "kathleen",
+                "mattis",
+                "marigje",
+                "hans-h.",
+                "veera",
+                "caroline",
+                "justin",
+                "veeti",
+                "murat",
+                "belen",
+                "jeremy",
+                "donald",
+                "urte",
+                "randy",
+                "anna",
+                "hector",
+                "alisa",
+                "elmar",
+                "iina",
+                "jeff",
+                "maike",
+                "vilho",
+                "nicolau",
+                "richard",
+                "leo",
+                "cihangir",
+                "ege",
+                "neo",
+                "siegried",
+                "marianna",
+                "اميرعلي",
+                "kristin",
+                "edward",
+                "anna-lena",
+                "ananias",
+                "araci",
+                "ülkü",
+                "johan",
+                "eleanor",
+                "lucy",
+                "jacob",
+                "ernesto",
+                "liam",
+                "hector",
+                "marcus",
+                "ülkü",
+                "riley",
+                "çetin",
+                "maëlle",
+                "melike",
+                "emmy",
+                "arvin",
+                "jessica",
+                "پرهام",
+                "ruben",
+                "gabriele",
+                "jade",
+                "gonca",
+                "liesel",
+                "noah",
+                "laura",
+                "tino",
+                "frederikke",
+                "ada",
+                "heidi",
+                "jerome",
+                "andy",
+                "jânia",
+                "adam",
+                "charles",
+                "aleksi",
+                "dwight",
+                "shayenna",
+                "marcel",
+                "maia",
+                "nihal",
+                "germano",
+                "carmelo",
+                "ashley",
+                "wyatt",
+                "lucas",
+                "tilde",
+                "آرمین",
+                "tina",
+                "victoria",
+                "ashley",
+                "justin",
+                "arian",
+                "neea",
+                "maëlle",
+                "bruce",
+                "nicole",
+                "leo",
+                "gretchen",
+                "nihal",
+                "adina",
+                "corien",
+                "karen",
+                "jimi",
+                "katherine",
+                "barış",
+                "igor",
+                "raymond",
+                "folkert",
+                "erika",
+                "gládis",
+                "ella",
+                "alberto",
+                "charlie",
+                "kurt",
+                "max",
+                "louis",
+                "lotta",
+                "evelyn",
+                "erin",
+                "brian",
+                "chloe",
+                "diane",
+                "jacob",
+                "wenke",
+                "viljami",
+                "louanne",
+                "پریا",
+                "oliver",
+                "oscar",
+                "lieselotte",
+                "olivier",
+                "maxime",
+                "liam"
+        ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NÓS TAMBÉM VAMOS QUERER VER A 'AVERAGE AGE',
+
+
+
+
+
+tudo por meio 
+
+
+
+
+
+
+DAQUELE OPERATOR DE '$avg',
+
+QUE JÁ VIMOS ANTES....
+
+
+
+
+
+
+
+--> TAMBÉM VAMOS QUERER VER O '''NÚMERO TOTAL DE PESSOAS''' 
+
+
+para 
+
+cada bucket,
+
+
+por isso 
+
+vamos usar 
+
+
+'$sum: 1'  no field de 'numPersons'...
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+db.persons.aggregate(
+  [
+      {$bucket: {
+          groupBy: "$dob.age",
+
+          boundaries: [
+              0, 18, 30, 50, 80, 120
+          ],
+          output: {
+              names: {
+                  $push: "$name.first"
+              },
+
+              averageAge: {
+                  $avg: "$dob.age"
+              },
+              numPersons: {$sum: 1}
+          }
+      }}
+  ]
+).pretty()
+
+
+
+
+
+
+
+
+
+
+SUM: 1 -----> 1 ELEMENTO SERÁ 'ADDED', nesse field,
+
+para CADA DOCUMENT/ELEMENTO QUE FOR PUSHED PARA DENTRO DESSE BUCKET...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+VEMOS ISTO:
+
+
+
+
+
+
+
+
+{ "_id" : 18, "averageAge" : 25.101382488479263, "numPersons" : 868 }
+{ "_id" : 30, "averageAge" : 39.4917943107221, "numPersons" : 1828 }
+{ "_id" : 50, "averageAge" : 61.46440972222222, "numPersons" : 2304 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VEMOS, AGORA, QUE TEMOS '3 BUCKETS' aqui.... 3 categorias...
+
+
+
+
+
+
+
+
+
+--> E A RAZÃO DE  NÓS TERMOS 3 BUCKETS,
+
+AQUI,
+
+É 
+
+QUE 
+
+
+
+''''NÃO TEMOS NENHUMA PESSOA MENOR DE 18, OU MAIOR DO QUE 80'.. 
+
+
+
+
+
+
+
+
+
+
+--> ISSO SIGNIFICA QUE 
+
+
+O STARTING POINT DE '0' em 'boundaries' 
+
+
+
+
+e os valores de '80' e '120' 
+
+acabaram sendo REDUNDANTES...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> podemos checar isso manualmente,
+
+
+
+
+basta 
+
+
+procurar todas as persons menores do que 18 em "dob.ag"...
+
+
+
+
+
+
+
+
+
+
+
+--> ex:
+
+
+
+
+
+
+db.persons.find(
+    {
+        "dob.age": {$lt: 18}
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+-> OK.... ESSE É O COMANDO 'BUCKET',
+
+E É ASSIM QUE PODEMOS O UTILIZAR 
+
+PARA 
+
+
+'GET AN IDEA OF DISTRIBUTION' ao longo de números nos fields de nossos documents...
+
+
+
+
+
+
+
+
+
+
+os boundaries foram 
+
+
+
+18-30 
+
+
+30-50 
+
+
+50-80
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS É CLARO QUE EXISTE UMA __ ALTERNATIVA A ISSO...
+
+
+
+
+
+
+
+
+
+
+
+
+-> PODEMOS TAMBÉM RODAR 
+
+
+
+
+
+
+outra query,
+
+A QUERY 
+
+
+
+
+DE 'bucketAuto' ...
+
+
+
+
+
+
+
+
+
+
+$bucketAuto...
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESSE OPERATOR FAZ __ O 'ALGORITMO DO BUCKETING' 
+
+
+
+para nós,
+
+automaticmaente...
+
+
+
+
+
+
+
+
+
+
+
+eX:
+
+
+
+
+
+
+db.persons.aggregate(
+    [
+        {
+            $bucketAuto: {
+
+            }
+        }
+    ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> DENTRO DO BUCKETAUTO,
+ 
+ VOCê SÓ PRECISA PASSAR A KEY DE 'groupBy',
+
+
+ colocar o valor 
+
+ do field pelo qual você vai querer 'bucket by'... (categorizar)...
+
+
+
+
+
+
+
+
+ --> AÍ VOCÊ TAMBÉM DEFINE O __ NÚMERO DE BUCKETS QUE VOCÊ VAI QUERER TER... --> aí eles serão DERIVADOS AUTOMATICAMENTE...
+
+
+
+
+
+
+
+ ex:
+
+
+
+
+
+
+ db.persons.aggregate(
+    [
+        {
+            $bucketAuto: {
+                groupBy: "$dob.age",
+                buckets:  5
+            }
+        }
+    ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+POR FIM, VOCÊ TAMBÉM DEFINE O 'OUTPUT' 
+
+
+de seus buckets (
+
+
+
+
+    PQ VOCÊ AINDA DEFINE O QUE VOCÊ VAI QUERER VER...
+)
+
+
+
+
+
+
+
+
+
+
+
+--> PORTANTO, A ÚNICA COISA QUE É DEFINIDA AUTOMATICAMENTE PARA NÓS, NO CASO,
+
+
+
+
+É OS 'boundaries'...
+
+
+
+
+
+
+
+
+
+
+
+--> VOCÊ AINDA PRECISA DEFINIR no 'output'
+ 
+
+
+ as coisas que 
+
+ você 
+
+ quer 
+
+
+
+ver.... ----> 
+
+
+
+
+SÓ QUE O BONUS É QUE 
+
+
+ELE 
+
+
+VAI TE DAR 
+
+
+
+BUCKETS 
+
+
+automáticos (
+
+
+    os boundaries serão automátics...
+)
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+
+
+
+> db.persons.aggregate(
+...   [
+...       {
+...           $bucketAuto: {
+...               groupBy: "$dob.age",
+...               buckets:  5,
+...               output: {
+...                 numPersons: { $sum: 1},
+...                 averageAge: {$avg: "$dob.age"}
+...               }
+...           }
+...       }
+...   ]
+... )
+{ "_id" : { "min" : 21, "max" : 32 }, "numPersons" : 1042, "averageAge" : 25.99616122840691 }
+{ "_id" : { "min" : 32, "max" : 43 }, "numPersons" : 1010, "averageAge" : 36.97722772277228 }
+{ "_id" : { "min" : 43, "max" : 54 }, "numPersons" : 1033, "averageAge" : 47.98838334946757 }
+{ "_id" : { "min" : 54, "max" : 65 }, "numPersons" : 1064, "averageAge" : 58.99342105263158 }
+{ "_id" : { "min" : 65, "max" : 74 }, "numPersons" : 851, "averageAge" : 69.11515863689776 }
+
+
+
+
+
+
+------------------------------------------------------------
+
+
+
+
+
+
+
+--> OS 5 BUCKETS TERÃO QUASE A MESMA QUANTIDADE DE VALUES,
+
+PQ O MONGODB 
+
+ 
+
+ VAI SEMPRE TENTAR DISTRIBUIR SUA DATA DA MANEIRA MAIS UNIFORME POSSÍVEL,
+
+
+ NOS SEUS BUCKETS....
+
+
+
+
+
+
+
+ --> o bucket é uma boa maneira de 'get a feel' acerca de sua data,
+
+
+ ver para quais valores ela pende mais...
+
+
+
+ 

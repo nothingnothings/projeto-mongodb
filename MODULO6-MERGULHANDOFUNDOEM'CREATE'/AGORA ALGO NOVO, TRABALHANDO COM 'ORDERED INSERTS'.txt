@@ -1,0 +1,1791 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> OK... NA ÚLTIMA LIÇÃO TIVEMOS UM BREVE OVERVIEW DOS DIFERENTES METHODS DE INSERT, E COMO FUNCIONAM (
+
+
+
+    insertOne,
+     insertMany e 
+
+
+     insert (meio deprecado)....
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR TAMBÉM MENCIONA, AQUI, QUE EXISTEM __ OUTRAS_ _ MANEIRAS__ 
+
+
+DE 
+
+
+'INSERTING'.. --> UMA MANEIRA IMPORTANTE ALTERNATIVA PODE SER VISTA LÁ 
+
+
+
+
+
+NO MÓDULO DE 'update'... --> PQ LÁ VAMOS 
+
+
+
+ESTUDAR SOBRE  ________ 
+
+
+
+
+
+
+
+
+
+
+
+
+UMA OPTION PARA 'EITHER UPDATE A DOCUMENT ' ( se ele já existe) OU INSERIR ESSE DOCUMENT, SE ELE AINDA NÃO EXISTE..
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS ERA ISSO, POR ENQUANTO, NO MUNDO DO method de 'create'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS A PARTE MAIS INTERESSANTE DOS CREATE METHODS SÃO 
+
+
+AS COISAS QUE VOCÊ PODE FAZER COM ELES.... --> 
+
+
+
+
+
+
+
+
+
+
+ISSO PQ 
+
+
+VOCÊ PODE SETTAR UMAS ADDITIONAL INFORMATION 
+
+
+
+
+
+
+
+
+QUANDO RODA OS CÓDIGOS DE INSERt....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> DIGAMOS QUE TEMOS UMA COLLECTION DE 'HOBBIES',
+
+
+em que 
+
+NÓS 
+
+'KEEP TRACK' 
+
+
+
+DE TODOS 
+
+OS HOBBIES QUE UMA PESSOA POSSIVELMENTE PODE TER...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-. e aí rodamos insertMany..
+
+
+
+
+
+
+
+
+
+
+
+
+--> SERÃO VÁRIOS OBJECTS 'hobby'...
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.hobbies.insertMany(
+[
+
+
+    {
+
+        name: "Sports"
+
+    },
+        {
+
+        name: "Cooking"
+
+    }
+    ,
+        {
+
+        name: "Cars "
+
+    }
+]
+)
+
+
+
+
+
+
+
+
+
+
+
+---> SE PRESSIONARMOS 'ENTER',
+
+esse código funcionará ,
+
+
+e essees 
+
+
+
+
+documents se~rao inseridos na collection 'hobbies'..
+
+
+
+
+
+
+
+
+
+
+
+
+-------------> ENTRETATNO,
+
+
+
+ANTERIORMENTE O PROFESSOR HAVIA MENCIONADO QUE 
+
+
+
+
+'''WE ALWAYS GET THIS AUTO-GENERATED ID, BY DEFAULT''' ---------> E FREQUENTEMENTE VOCê __ VAI QUERER___ USAR __ 
+
+
+
+ESSE ID....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS 
+
+
+
+
+EXISTIRÃO CASOS EM QUE VOCÊ VAI QUERER USAR SEU PRÓPRIO ID.... --> 
+
+
+
+
+
+
+
+
+TALVEZ PQ 
+
+
+SUA DATA É FETCHEADA DE OUTRA DATABASE,
+
+EM QUE 
+
+VOCê JÁ TINHA O '_id'.... --> OU TALVEZ PQ 
+
+
+VOCÊ PRECISA DE UM ID MENOR,...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AQUI, NO CASO,
+
+
+
+PODERÍAMOS DIZER 
+
+
+QUE 
+O 
+
+
+'name'  DO SPORT __ TAMBÉM SERIA UM 'NICE ID'..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> É POR ISSO QUE O PROFESSOR DECIDE ESCREVER:
+
+
+
+
+
+
+
+{
+    _id: "sports",
+
+    name: "Sports"
+}
+
+
+
+
+
+
+
+
+
+
+
+--> COMO NÃO TEREMOS SPORTS 2 VEZES EM 1 OBJECT NESSA COLLECTION,
+
+TEORICAMENTE ESSA STRING É 'UNIQUE'.... ----> É POR ISSO QUE PODEMOS USAR 
+
+
+
+
+
+'sports',
+essa string,
+
+
+COMO ID, AQUI...
+
+
+
+
+
+
+
+
+
+
+--> MESMA COIAS PARA O COOKING E CARS:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.hobbies.insertMany(
+[
+    {
+           _id: "sports",
+        name: "Sports"
+    },
+        {
+               _id: "cooking",
+        name: "Cooking"
+    }
+    ,
+        {
+               _id: "cars",
+        name: "Cars "
+    }
+]
+)
+
+
+
+
+
+---------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+OK.... AGORA QUANDO EXECUTARMOS 'db.hobbies.find().pretty()',
+
+
+VEREMOS ISTO:
+
+
+
+
+
+
+
+
+>
+> db.hobbies.find().pretty()
+{ "_id" : "sports", "name" : "Sports" }
+{ "_id" : "cooking", "name" : "Cooking" }
+{ "_id" : "cars", "name" : "Cars " }
+>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> E É ABSOLUTAMENTE 'FINE'
+
+USAR 
+
+ESSAS STRINGS CURTAS COMO '_id's....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------> MAS DIGAMOS QUE _ RE-EXECUTAMOS ESSA OPERATION.... ----> OU SEJA,
+
+
+
+O PROFESSOR DECIDE ADICIONAR MAIS HOBBIES,
+
+DESSA VEZ DE 
+
+'yoga' 
+
+
+e 
+
+'hiking',
+
+
+
+MAS DEIXANDO 
+
+AQUELE DOCUMENT DE 
+
+'_id: cooking' e 'name: Cooking'
+
+
+
+INTACTO, NESSE INSERT... TIPO ASSIM:
+
+
+
+
+
+
+
+
+db.hobbies.insertMany(
+[
+    {
+           _id: "yoga",
+        name: "Yoga"
+    },
+        {
+               _id: "cooking",
+        name: "Cooking"
+    }
+    ,
+        {
+               _id: "hiking",
+        name: "Hiking"
+    }
+]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------> OK......... MAS PQ DEIXAR O 'COOKING' INTACTO? 
+
+
+
+
+
+
+
+
+
+
+
+É PQ DIGAMOS QUE O PROCESS EM QUE USAMOS ISSO AÍ (TALVEZ SEJA USER ADDED DATA) __ NÃO VAI CHECAR_ SE 
+
+ESSE ITEM DE 
+
+
+
+'_id: "cooking" ' 
+
+
+EXISTE NA DATABASE ANTERIORMENTE....
+
+
+
+
+
+
+
+
+
+
+
+-> É POR ISSO QUE TENTAMOS EXECUTAR ISSO AÍ...
+
+
+
+
+
+
+
+
+
+
+--> TENTAMOS INSERIR DATA QUE TEM UM ID __ QUE __ JÁ EXISTE NA DATABASE... --> ISSO NÃO DÁ CERTO..
+
+
+
+
+
+
+
+
+
+--> RECEBEMOS O ERROR DE 
+
+
+BulkWriteError({
+        "writeErrors" : [
+                {
+                        "index" : 1,
+                        "code" : 11000,
+                        "errmsg" : "E11000 duplicate key error collection: society.hobbies index: _id_ dup key: { _id: \"cooking\" }",
+                        "op" : {
+                                "_id" : "cooking",
+                                "name" : "Cooking"
+                        }
+                }
+        ],
+
+
+
+
+
+
+
+
+-------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+--> OK, GANHAMOS UM ERROR... ------> GANHAMOS 
+
+
+
+
+
+
+
+1 ERROR 
+
+NO 'INDEX: 1' ------> OU SEJA,
+É O SEGUNDO ELEMENTO DO ARRAY... -----> 
+
+
+
+
+
+
+
+
+
+
+
+
+E ELE DIZ:
+
+
+
+
+
+
+
+
+     {
+                        "index" : 1,
+                        "code" : 11000,
+                        "errmsg" : "E11000 duplicate key error collection: society.hobbies index: _id_ dup key: { _id: \"cooking\" }",
+                        "op" : {
+                                "_id" : "cooking",
+                                "name" : "Cooking"
+                        }
+                }
+
+
+
+
+
+
+
+
+-------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+ELE NOS DIZ 
+
+
+
+EM QUE PARTE ERRAMOS,
+
+
+
+
+E TAM´BEM 
+
+
+A RAZÃO DISSO (
+
+
+    '311000 duplicate key error collection''.. 
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> É CLARO QUE ESSE APP PODE TER FALHADO DEVIDO A OUTRO ERRO,
+
+
+
+
+como coisas no app...
+
+
+
+
+
+
+
+
+
+
+
+
+-----> MAS O QUE INTERESSA É QUE O MONGODB 
+
+
+NOS DIZ A RAZÃO DO ERRO,
+
+
+E TAMBE´M __ ONDE __ ELE PODE SER ENCONTRADO/FOI CAUSADO......
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS O QUE INTERESSA RESIDE AQUI:
+
+
+
+
+
+BulkWriteError({
+        "writeErrors" : [
+                {
+                        "index" : 1,
+                        "code" : 11000,
+                        "errmsg" : "E11000 duplicate key error collection: society.hobbies index: _id_ dup key: { _id: \"cooking\" }",
+                        "op" : {
+                                "_id" : "cooking",
+                                "name" : "Cooking"
+                        }
+                }
+        ],
+        "writeConcernErrors" : [ ],
+        "nInserted" : 1,
+        "nUpserted" : 0,
+        "nMatched" : 0,
+        "nModified" : 0,
+        "nRemoved" : 0,
+        "upserted" : [ ]
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> A PARTE INTERESSANTE É 'nInserted' ----->    ISSO SIGNIFICA QUE O PRIMEIRO ITEM DO ARRAY 
+
+
+
+__ FOI __ ADICIONADO À COLLECTION..
+
+
+
+
+
+
+
+OU SEJA,
+
+
+
+'{
+    name: 'Yoga',
+    _id: 'yoga'
+}
+' 
+
+
+
+
+
+
+
+
+
+
+--> ESSE CÓDIGO/DOCUMENT FOI ADICIONADO À COLLECTION.... (antes do error de 'cooking' ter o mesmo _id de document anterior)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... O 
+
+'{
+    name: 'Yoga',
+    _id: 'yoga'
+}
+' 
+
+
+
+
+
+
+
+-->   O CÓDIGO FALHOU _ _APENAS__ APÓS ESSE ELEMENT AÍ... (
+
+    e esse é o comportamento default do 
+
+    MONGODB....
+)
+
+
+
+
+
+
+
+
+
+--> COMPORTAMENTO DEFAULT --> MONGODB SEGUE 
+
+
+
+
+
+
+A LÓGICA DOS 'ORDERED INSERTS' --> ORDERED INSERT SIMPLEMSNETE SIGNIFICA QUE 
+
+
+
+''''CADA ELEMENT QUE VOCê INSERE _ É PROCESSADO STANDALONE''' ->  E COMO CONSEQUêNCIA
+
+
+
+
+DISSO,
+
+
+QUANDO HÁ UM _ ERRO__ NO MEIO DE UM INSERT MANY/chain de insertONes,
+
+
+
+
+
+EXISTIRÁ 
+
+O ERROR, SIM, QUE VAI PARAR O CÓDIGO DE RUN DOS INSERTS,
+
+
+MAS ISSO NÃO QUER DIZER QUE OS INSERTS EXISTENTES/ESCRITOS _ ANTES__ DO ERROR SERÃO 'ROLLED BACK'...
+
+
+
+
+(
+
+    E ISSO É BEM IMPORTANTE,
+
+
+
+    pq ele só vai parar 
+
+
+    com 
+
+
+    a execução/inserção dos elemetnos mais para a direita do error...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... ESSE É O COMPORTAMENTO DEFAULT...
+
+
+
+
+
+
+
+
+
+
+--> ALGUMAS VEZES, VOCê VAI QUERER ISSO... OUTRAS, NÃO.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA OS CASOS QUE VOCÊ __ NÃO QUER, ESSE COMPORTAMENTO PODE SER OVERWRITTADO..
+
+
+
+
+
+
+
+
+
+
+----> REPITA A MESMA OPERATION,
+
+
+OPERATION DE 
+
+
+
+'''
+
+
+
+
+
+db.hobbies.insertMany(
+[
+    {
+           _id: "yoga",
+        name: "Yoga"
+    },
+        {
+               _id: "cooking",
+        name: "Cooking"
+    }
+    ,
+        {
+               _id: "hiking",
+        name: "Hiking"
+    }
+]
+)
+
+
+
+
+
+
+
+''''
+
+
+
+
+
+
+
+
+
+
+-----> MAS AGORA,
+
+
+
+COMO 
+
+
+PASSAREMOS A TER O 'YOGA'
+ 
+
+
+
+
+ na nossa database,
+
+
+
+ esse primeiro elemento aí,
+
+
+ IMEDIATAMENTE 
+
+
+
+
+ TEREMOS O ERROR E MAIS NADA SERÁ INSERTED...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> OK.... MAS COMO PODEMOS ALTERAR ESSE BEHAVIOR? 
+
+
+
+
+
+
+
+
+
+
+
+ BEM, PODEMOS PASSAR UM SEGUNDO PARâMETRO A 'insertMany()',
+
+
+ QUE VAI INFORMAR O 
+
+ MONGODB DE QUE 
+
+
+
+
+ VOCÊ QUER QUE SEJA IGNORADO O COMPORTAMETNO DEFAULT de insert/error no insert... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> PARA ISSO,
+
+ VOCÊ 
+
+
+ ESCREVE UM '{}' (document) 
+
+
+ no segundo parâmetro.... -> esse DOCUMENT VAI __ CONFIGURAR_ ESSA SUA 
+
+
+ INSERT OPERATION ESPECÍFICA...
+
+
+
+
+
+
+
+
+
+ TIPO ASSIM:
+
+
+
+
+
+
+
+
+ 
+db.hobbies.insertMany(
+[
+    {
+           _id: "yoga",
+        name: "Yoga"
+    },
+        {
+               _id: "cooking",
+        name: "Cooking"
+    }
+    ,
+        {
+               _id: "hiking",
+        name: "Hiking"
+    }
+],
+
+
+
+
+
+
+
+{
+    ////EIS O CÓDIGO EM QUESTÃO. 
+}
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> OK... ALI DENTRO PODEMOS SETTAR ALGUMAS OPTIONS....
+
+
+
+
+
+
+
+--> A OPTION QUE DESEJAMOS, NESSE CASO,
+
+É REGIDA PELA KEY DE 'ordered' --> essa option 
+
+
+
+NOS DEIXA ESPECIFICAR 
+
+
+
+
+
+
+
+'''IF __ MONGODB SHOULD PERFORM 
+
+
+AN ORDERED INSERT'''' (
+
+
+
+QUE É O DEFAULT;
+
+
+O DEFAULT É O MONGODB 
+
+EXECUTAR UM ORDERED INSERT,
+
+
+INSERIR 1 POR UM OS ELEMENTS/DOCUMENTS 
+
+
+lá na sua collection...
+
+)
+
+
+
+
+
+
+
+
+
+
+
+--> SE VOCÊ QUER O DEFAULT,
+
+VOCÊ SETTA 
+
+'ordered: true'....
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+ 
+db.hobbies.insertMany(
+[
+    {
+           _id: "yoga",
+        name: "Yoga"
+    },
+        {
+               _id: "cooking",
+        name: "Cooking"
+    }
+    ,
+        {
+               _id: "hiking",
+        name: "Hiking"
+    }
+],
+
+
+
+
+
+
+
+{
+    ordered: true
+}
+)
+
+
+
+
+
+
+
+
+
+
+-----------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS TAMBÉM PODEMOS SETTAR ESSA SETTING COMO 'FALSE'..
+
+
+
+
+
+
+
+
+
+
+
+-> O QUE ISSO FARÁ É 
+
+
+
+
+
+__ DEIXAR DE TER AQUELE 'ORDERED INSERT'.... -> qual é o resultado prático disso?
+
+
+
+
+
+
+
+
+
+
+
+BEM, SE TENTAMOS INSERIR 
+
+AQUELE ARRAY DE DOCUMENTS CUJOS _'id'
+
+JÁ 
+
+EXISTIAM
+
+
+
+NA COLLECTION ANTERIORMENTE,
+
+
+VAMOS 
+
+
+
+NOVAMENTE 
+
+
+
+
+
+
+RECEBER UM ERROR DE 
+
+
+
+'DUPLICATE KEY ERROR COLLECTION',
+
+
+
+
+
+
+
+
+
+
+
+
+MAS __ AGORA __ 
+
+VAMOS GANHAR, EM VEZ DISSO,
+
+
+UMA __ LIST_  DE ERRORS,
+
+
+
+
+
+ERRORS PARA __ CADA__ DOCUMENT QUE TENTAMOS INSERIR ....
+
+
+
+(
+
+
+
+
+
+ISSO QUER DIZER QUE 
+
+
+
+
+
+
+
+__ O MONGODB __ CONTINUOU '''TENTANDO''' O INSERT 
+
+
+DOS DOCUMENTS RESTANTES,
+MESMO APÓS 
+
+O 
+FAIL
+
+
+
+
+
+
+
+DO PRIMEIRO ELEMENT NO SEU ARRAY...
+
+) 
+
+
+
+
+
+
+
+
+
+
+
+
+--> E AÍ VEMOS QUE 
+
+
+1 DOCUMENT CONSEGUIU SER ADICIONADO, 
+
+O 
+
+DOCUMENT DE 'hiking',
+
+que vinha por último.... ------> ELE FOI ADICIONADO SÓ PQ 
+
+ESSA OPTION DE
+
+'ordered: false'
+
+FOI MARCADA...
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+ 
+db.hobbies.insertMany(
+[
+    {
+           _id: "yoga",
+        name: "Yoga"
+    },
+        {
+               _id: "cooking",
+        name: "Cooking"
+    }
+    ,
+        {
+               _id: "hiking",
+        name: "Hiking"
+    }
+],
+
+
+
+
+
+
+
+{
+    ordered: false
+}
+)
+
+
+
+-----------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> CERTO... E SE AGORA OLHARMOS NOSSA DATABASE,
+
+VEERMOS 
+
+
+
+O 'HIKING' LÁ DENTRO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> DEFINIDO 'ordered: false',
+
+MUDAMOS ESSE COMPORTAMENTO DE INSERT... --> 
+
+
+
+
+
+VOCÊ DEVE VER QUAL COMPORTAMENTO SE ENCAIXA AO SEU APp....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E VOCÊ DEVE TER EM MENTE QUE TANTO O COMPORTAMENTO DEFAULT QUANTO O DE 'ordered: false' NUNCA VÃO 'ROLL BACK' A 
+
+
+
+
+
+
+
+
+
+OPERATION INTEIRA, __ CASO 
+
+
+
+
+ALGUMA COISA TENHA DADO ERRADO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> O 'ROLLBACK DA OPERATION INTEIRA, EM CASO DE ERROR'
+
+
+
+É ALGO QUE _ SÓ VEREMOS __ LÁ PELO FINAL DO CURSO,
+
+
+
+
+COM 
+O MÓDULO DE 'TRANSACTIONS'.... -------> (
+
+
+    PQ VAMOS 
+
+
+    PRECISAR DE ALGUNS CONHECIMENTOS EXTRAS PARA 
+
+    TRABALHAR COM ESSAS TRANSACTIONS....
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> 1 ROLLBACK, NO CASO,
+NÃO ACONTECERÁ AQUI, DE JEITO NENHUM.... ------> MAS VOCÊ PODE, NO ENTANTO, WHETHER O MONGODB AINDA VAI 
+
+
+
+QUERER TENTAR INSERIR O RESTO DOS DOCUMENTS,
+
+
+
+
+
+
+E SE VAI TENTAR INSERIR TODO O RESTO, OU NÃO...
+(
+
+
+
+
+    e isso,
+
+
+    a definição dessa opção,
+
+    É MT ÚTIL... --> PQ EXISTIRÃO 
+
+
+
+CASES EM QUE VOCÊ _ NÃO VAI CONSEGUIR ACTUALLY 
+
+CONTROLAR 
+
+
+
+
+
+'WHETHER THE DATA YOU ARE TRYING TO INSERT '
+
+já 
+
+
+
+existe no database ---------> AÍ, NESSES CASOS,
+
+
+O 
+
+
+'ordered: false'
+
+
+PODE SER SEU AMIGO,
+
+
+PQ AÍ VOCÊ NÃO VAI QUERER SE IMPORTAR 
+
+COM QUAISQUER 
+
+
+DOCUMENTS QUE FALHARAM ESSE CHECK, 
+
+
+
+pq 
+
+vocÊ ainda VAI QUERER ADICIONAR O 'RESTO',
+
+
+o resto que 'AINDA NÃO ESTÁ NA SUA DATABASe'...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... É ASSIM, PORTNATO, COMO VOCÊ PODE USAR 'ordered: true/false'
+
+
+PARA 
+
+
+
+__ FINETUNE __ A MANEIRA PELA QUAL 
+
+
+OS DOCUMENTS SÃO INSERIDOS, de acordo com suas necessdades....

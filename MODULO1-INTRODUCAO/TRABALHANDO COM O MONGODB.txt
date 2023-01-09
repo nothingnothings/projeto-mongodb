@@ -1,0 +1,577 @@
+
+
+
+
+
+
+
+
+
+
+QUASE ACABAMOS....
+
+
+
+
+
+
+
+-> É HORA DE MANCHAR AS MAOS...
+
+
+
+
+
+
+
+
+---> PROFESSOR VAI DAR UM OVERVIEW DE COMO TRABALHAREMOS COM O MONGODB,
+
+
+
+E DE O QUE 
+
+
+
+O MONGODB FAZ EXATAMENTE, POR TRÁS DAS CENAS.....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PODEMOS DIFERENCIAR ENTRE 2 COISAS:
+
+
+
+
+
+
+
+
+
+
+
+1) APPLICATION (node app que você está criando) 
+
+
+
+
+
+--> é tipicamente seu APP, 
+
+
+composto por uma FRONTEND (UI, pode ser uma single page application, um mobile app, ou um conjunto de views, renderizados por laravel/nodeapp )
+
+
+
+
+
+composto por um BACKEND, um SERVER, com sua SERVERSIDE LOGIC...
+
+
+
+
+
+
+
+
+2) DATA LAYER .....  ------> É SUA DATABASE, A DATA STORAGE, AS FILES EM UMA FILE SYSTEM QUE SEGURAM
+
+SUA DATA,
+
+NO FINAL DAS CONTAS....
+
+
+
+
+
+
+--> é no data layer que temos nosso MONGODB SERVER....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1) APPLICATION (node app que você está criando) 
+
+
+
+
+
+
+
+
+
+---> É NO 'APPLICATION' QUE TEMOS __ OS _ DRIVERS,
+
+
+
+OS DIFERENTES DRIVERS PARA AS DIFERENTES LINGUAGENS QUE VOCê UTILIZA/UTILIZARÁ COM O MONGODB...
+
+
+
+
+
+algumas delas são:
+
+
+
+NODEJS 
+JAVA 
+PHYTON
+
+
+
+
+
+
+
+
+--> ELAS INTERAGEM COM  O MONGODB SERVER, QUE É INICIALIZADO COM O COMANDO 
+
+
+'mongod' 
+
+
+
+
+
+
+
+
+
+
+2) DATA LAYER ..... 
+
+
+
+
+É O MONGODB SERVER....
+
+
+
+
+
+
+
+--> O MONGODB SERVER NÃO VAI __ACTUALLY__ ESCREVER 
+
+A DATA EM ARQUIVOS, 
+
+
+MAS SIM 
+
+VAI CONVERSAR (communicate) COM AQUILO QUE É CHAMADO DE 
+
+
+
+''''STORAGE ENGINE'''  (QUE VOCÊ PODERIA SUBSTITUIR POR SUA STORAGE ENGINE FAVORITA) -------> mas 
+
+
+
+
+a storage engine DEFAULT 
+
+
+é a 
+
+
+'WIRED TIGER' ---------> JÁ É UMA STORAGE ENGINE MT BOA, QUE TE DEIXA TRABALHAR COM SUA
+
+
+
+DATA EFICIENTEMENTE,
+
+ ETC ETC.... 
+
+
+
+
+
+
+
+
+
+
+
+     (APPLICATION) <-> (MONGODBSERVER) <-> (STORAGEENGINE)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1) O MONGODB SERVER RECEBE SUA QUERY, LÁ DE SUA LINGUAGEM DE PROGRAMAÇÃO/application 
+
+
+
+
+
+
+
+2) O MONGODB SERVER FORWARDA ESSA INFO ('quero inserir algo') à STORAGE ENGINE....
+
+
+
+
+
+
+
+3) A STORAGE ENGINE ENTÃO ARMAZENA ESSA INFO/DATA EM __ ARQUIVOS, NO FINAL DAS CONTAS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> É CLARO QUE VOCÊ PODE SUBSTITUIR O PASSO nº1, 'enviada query por meio de linguagem de programação',
+ 
+
+
+
+ PELO USO DA 'MONGODB SHELL'.... -----> 
+
+
+
+
+
+
+ LÁ NA MONGODBSHELL VOCÊ PODE EXECUTAR TODAS AS QUERIES DIFERENTES,
+
+
+
+
+
+
+
+
+ pode fazer:
+
+
+
+
+
+ 1) PLAYGROUND 
+
+
+ 2) ADMINISTRATION, etc...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -------> VOCÊ PODE USAR O MONGOSHELL COMO PLAYGROUND, E TAMBÉM PARA __ ADMINISTRAR___ SEU APP... (
+
+
+     pq isso 
+
+
+     NÃO É ALGO __ QUE _ O SEU APP VAI FAZER.... se você tiver que 
+
+
+
+     CONFIGURAR ALGO NA DATABASE MONGO,
+
+
+     você 
+
+
+
+     FARÁ ISSO COMO __ ADMINISTRADOR, LÁ DA NETWORK DE SUA COMPANY,
+
+     ATRAVÉS DESSE SHELL..... --> essa shell é seu ACESSO DIRETO AO MONGODB SERVER...
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ------> AGORA VAMOS DAR UMA OLHADA MAIS APROFUNDADA NESSE 'DATA LAYER':
+
+
+
+
+
+
+
+
+
+
+
+
+
+ É COMPOSTO POR :
+
+
+
+
+
+
+
+
+
+
+ 1) MONGODB SERVER 
+
+
+
+ 2) STORAGE ENGINE 
+
+
+
+
+
+ 3) FILE SYSTEM 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -> dentro desse negócio, temos que diferenciar entre o READ E O __ WRITE__ DE FILES...
+
+
+
+
+
+
+
+
+
+
+ --> o 
+
+
+
+ READ E O __ WRITE__ DE 
+
+
+ FILES__ 
+
+
+
+É SEMPRE UM POUCO _ MAIS LENTO__...
+
+
+
+
+
+
+ ------> JÁ O __ WRITE__ E O READ___ DA MEMÓRIA (memory) DE SUA DATABASE É __ SEMPRE____ 
+
+ MAIS _ RÁPIDO__...
+
+
+
+
+
+
+
+
+
+
+
+ -----> A STORAGE ENGINE, NO CASO, ACTUALLY FAZ AS 2 COISAS:
+
+
+
+
+
+
+ ELA CARREGA UM 'CHUNK' DE DATA __ NA SUA MEMORY,
+
+
+
+E AÍ 
+
+
+
+MANAGEIA ISSO DE MODO QUE __ A DATA QUE VOCê USA/USARÁ COM MAIS FREQUÊNCIA 
+
+
+
+FICA DISPONÍVEL NA MEMORY, SE POSSÍVEL.... ---> para isso,
+
+
+
+
+
+ela vai 'WRITE THIS DATA TO MEMORY, AT FIRST',
+ 
+
+ para que 
+
+ isso seja super rápido... -----------> MAS DPS, É CLARO QUE ELA ARMAZENA
+
+
+ DATA 
+
+
+
+ NAS FILES DA DATABASE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> PROFESSOR VAI NOS MOSTRAR MAIS SOBRE ISSO, MAIS TARDE....
+
+
+
+
+
+
+
+
+
+
+
+
+ --> MAS VOCÊ DEVE TER EM MENTE QUE:
+
+
+
+ A) VOCÊ CONVERSA COM ESSE MONGODB SERVER,
+
+
+
+
+ e que 
+
+
+
+ B) ATRÁS DESSE SERVER, O SERVER CONVERSA COM UMA STORAGE ENGINE,
+
+
+
+
+
+ que 
+
+
+
+
+
+C) MANAGEIA ESSA DATA, E AÍ __ A ARMAZENA EM FILES, 
+
+
+NO FINAL DAS CONTAS, MAS TAMBÉM '''IN MEMORY''', IN BETWEEN (ou seja, uns pingados ),
+
+
+TUDO PARA QUE 
+
+VOCê CONSIGA TRABALHAR COM DATA DE UMA MANEIRA SUPER RÁPIDA....

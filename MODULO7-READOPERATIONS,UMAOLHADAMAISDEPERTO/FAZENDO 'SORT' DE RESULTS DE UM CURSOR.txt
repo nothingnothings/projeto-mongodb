@@ -1,0 +1,778 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> OK.... TRABALHAMOS COM CURSORS NAS ÚLTIMAS AULAS...
+
+
+
+
+
+
+
+
+
+
+--> MAS HÁ MAIS ALGUMAS COISAS QUE PODEMOS FAZER COM OS RESULTS/DOCUMENTS 
+
+
+
+QUE 
+
+
+ESSE 
+
+
+CURSOR 
+
+
+NOS DÁ/entrega,
+
+
+para sermos mais precisos...
+
+
+
+
+
+
+
+
+
+
+
+--> MAS O QUE PODEMOS FAZER COM ELES?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> bem, se escrevermos 
+
+
+
+'db.movies.find({})'
+,
+
+
+
+RECEBEMOS 
+
+20 DE NOSSOS MOVIE DOCUMENTS..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> db.movies.find({}).pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR NÃO ESTÁ HANDLANDO O CURSOR MANUALMENTE,
+
+
+E SIM 
+
+ESTÁ DEIXANDO O 
+
+
+
+
+SHELL FAZER ISSO PARA NÓS (sem extinguir o cursor)..., deixando ele fetchear os primeiros 20 elements...
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, UMA 
+
+
+
+OPERATION BEM COMUM É 
+
+
+
+
+'''VOCÊ QUER FAZER SORT 
+
+
+DOS 
+
+
+RESULTS QUE VOCÊ GET BACK'''' -->  VOCÊ PODE SORTAR 
+
+
+
+
+POR QUALQUER COISA.... --> 
+
+
+
+VOCÊ 
+
+PODE 
+
+
+
+SORTEAR POR UMA 'STRING' (aí 
+o 
+
+
+
+
+
+sorting será feito de forma ALFABÉTICA),
+
+
+
+
+
+
+
+
+OU ENTÃO POR UM NUMBER (crescente ou decrescente, a ordem)...
+
+
+
+
+
+
+
+
+
+
+
+
+--> DIGAMOS QUE QUEREMOS FAZER SORT DE 
+
+
+
+NOSSOS DOCUMENTS __ PELO NÚMERO DA 'RATING'...
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, PODEMOS FAZER SORT POR MEIO DA 
+
+
+
+ESCRITA DE 
+
+'.sort()'
+
+
+
+
+
+DEPOIS DA ESCRITA DE '.find()"....
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+db.movies.find().sort().pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> O '.sort()',
+
+
+NO CASO,
+
+
+DEMANDA 1 DOCUMENT.... --> NESSE DOCUMENT, VOCÊ DESCREVE 'COMO SORTEAR'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VAMOS QUERER SORTEAR PELO 
+
+
+
+
+'RATING.AVERAGE' --->  E ISSO 
+
+
+
+
+JÁ NOS MOSTRA QUE PODEMOS 
+
+
+
+
+
+'
+''SORTEAR PELO VALOR DE UM FIELD 
+
+
+
+EM EMBEDDED DOCUMENTS NOS NOSSOS DOCUMENTS'''....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> isso pq a estrutura de um movie é esta:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{
+        "_id" : ObjectId("62052b52d9ec2278a3f59325"),
+        "id" : 1,
+        "url" : "http://www.tvmaze.com/shows/1/under-the-dome",
+        "name" : "Under the Dome",
+        "type" : "Scripted",
+        "language" : "English",
+        "genres" : [
+                "Drama",
+                "Science-Fiction",
+                "Thriller"
+        ],
+        "status" : "Ended",
+        "runtime" : 60,
+        "premiered" : "2013-06-24",
+        "officialSite" : "http://www.cbs.com/shows/under-the-dome/",
+        "schedule" : {
+                "time" : "22:00",
+                "days" : [
+                        "Thursday"
+                ]
+        },
+        "rating" : {
+                "average" : 6.5
+        },
+        "weight" : 91,
+        "network" : {
+                "id" : 2,
+                "name" : "CBS",
+                "country" : {
+                        "name" : "United States",
+                        "code" : "US",
+                        "timezone" : "America/New_York"
+                }
+        },
+        "webChannel" : null,
+        "externals" : {
+                "tvrage" : 25988,
+                "thetvdb" : 264492,
+                "imdb" : "tt1553656"
+        },
+        "image" : {
+                "medium" : "http://static.tvmaze.com/uploads/images/medium_portrait/0/1.jpg",
+                "original" : "http://static.tvmaze.com/uploads/images/original_untouched/0/1.jpg"
+        },
+        "summary" : "<p><b>Under the Dome</b> is the story of a small town that is suddenly and inexplicably sealed off from the rest of the world by an enormous transparent dome. The town's inhabitants must deal with surviving the post-apocalyptic conditions while searching for answers about the dome, where it came from and if and when it will go away.</p>",
+        "updated" : 1529612668,
+        "_links" : {
+                "self" : {
+                        "href" : "http://api.tvmaze.com/shows/1"
+                },
+                "previousepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/185054"
+                }
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------------------
+
+
+
+
+
+
+
+
+COMO VOCÊ PODE VER, A RATING FICA ASSIM:
+
+
+
+
+
+      "rating" : {
+                "average" : 6.5
+        },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        -----------> É CLARO QUE VOCÊ TAMBÉM PODE FAZER SORT POR UM 'TOP-LEVEL FIELD'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> para fazer sort desse field específico, escreveremos assim:
+
+
+
+
+
+
+
+
+
+
+
+db.movies.find().sort(
+    {
+        "rating.average": {}
+    }
+).pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------------> BEM.... MAS EU ERREI, AQUI.... --> errei pq não preciso desse '{}'
+
+
+
+
+
+
+
+-> O QUE DEVO FAZER É APENAS ESPECIFICAR UM 'VALUE' do lado desse ':' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OS VALUES SÃO: 
+
+
+A) 1 ---> ''1'' SIGNIFICA ORDEM CRESCENTE....
+
+
+
+
+
+
+
+
+B) '-1 ' ---__> SIGNIFICA 'DESCENDING'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE ESCREVERMOS '-1',
+
+
+
+TEREMOS AS RATINGS MAIS ALTAS __ PRIMEIRO__... -----> 
+
+
+
+
+
+
+
+
+
+
+
+
+SE ESCREVEMOS 
+
+
+
+'1',
+
+
+TEREMOS AS PIORES RATINGS PRIMEIRO,
+
+
+
+e as melhores depois....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS A PARTE INTERESSANTE É QUE VOCÊ NÃO ESTÁ LIMITADO àPENAS A UMA ÚNICA 'SORTING CRITERIA'- -- >
+
+
+
+
+
+
+vocÊ 
+
+pode 
+
+estabelecer MÚLTIPLAS...
+
+
+
+
+
+
+--> NESSE EXEMPLO, PROFESSOR QUER COMEÇAR SORTANDO PELA 'RATING', SIM,
+
+
+
+mas depois 
+
+VAI QUERER SORTAR PELO 'runtime',
+
+
+ou seja,
+
+
+POR UMA PROPRIEDADE DISTINTA DE 'rating',
+
+dentro de cada document...
+
+
+
+
+
+
+
+--> para isso,
+
+SEPARE OS CRITÉRIOS COM ',' (vírgula),
+
+
+TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+db.movies.find().sort({"rating.average": 1, runtime: 1}).pretty();
+
+
+
+
+
+
+
+
+
+
+
+
+--------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+TESTEI ESSA SINTAXE ASSIM:
+
+
+ db.movies.find().sort({"rating.average": 1, runtime: 1}).forEach((doc) => {printjson(doc)})
+
+
+
+
+
+
+
+ -> E FUNCIONOU (tive 
+ 
+ 
+ printado todos os documents, com a rating em ordem ascendente, tendo esse critério de 'runtime' como critério secundário para o sorting, tbm em ordem ascendente)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ OK.... ISSO É BEM ÚTIL...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -> VOCê PODE COMBINAR MÚLTIPLOS (QUANTOS VOCÊ QUISER) SORTING CRITERIA....
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -> E SORTING É UMA TAREFA BEM COMUM QUE VOCê FAZ QUANDO VOCê TRABALHA COM DATA,
+
+ PQ 
+
+ ELA 
+
+ TE DEIXA 
+
+ FAZER MAIS DO QUE O 'NARROW DOWN'
+
+
+ do set de data que vocÊ quer,
+
+ mas também 
+
+ RETRIEVÁ-LO 
+
+ na ordem certa...
+
+
+
+
+
+
+
+
+
+
+
+
+ --> BEM... --> O 'sort()'
+
+ SÓ SE ENCONTRA DISPONÍVEL NESSE CURSOR AÍ.... --> ELE NÃO 
+
+
+
+
+ FICA DISPONÍVEL EM 'findOne'... (pq findOne só te dá 1 único document).

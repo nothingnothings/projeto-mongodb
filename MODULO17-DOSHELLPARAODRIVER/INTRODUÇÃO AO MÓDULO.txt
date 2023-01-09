@@ -1,0 +1,296 @@
+
+
+
+
+
+
+
+
+
+
+DO MONGO SHELL PARA DRIVERS DE DIVERSOS APPS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> 'ESCREVENDO APPLICATION CODE'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AO LONGO DO CURSO,
+
+SEMPRE 
+
+TRABALHAMOS COM A MONGOSHELL --> POR BOA RAZÃO,
+PQ 
+É 
+
+
+UM INSTRUMENTO NEUTRO EM QUE 
+
+PODEMOS 
+
+PRATICAR OS DIFERENTES ASPECTOS DO MONGODB,
+
+
+
+
+AS DIFERENTES OPERAÇÕES QUE VOCÊ PODE EXECUTAR,
+
+
+
+
+E TODAS AQUELAS 
+
+
+
+COISAS 
+
+QUE 
+
+
+SÃO 
+
+'independentes' 
+
+
+
+
+
+
+DO 
+
+
+
+APPLICATION QUE VOCê ESTÁ CONSTRUINDO (
+
+    não interessa se você está escrevendo um app 
+
+
+    'PHYTON',
+
+
+    C++,
+
+    JAVASCRIPT-NODEJS APP,
+
+
+
+    VOCê 
+
+    PODE 
+
+
+    AINDA 
+
+
+    TRABALHAR COM A MONGOSHELL PARA 
+
+    PRATICAR 
+
+
+
+
+    MONGODB...
+    
+)
+
+
+
+
+
+
+
+
+
+
+
+--> MAS VOCÊ TEM QUE TRANSFERIR SEU CONHECIMENTO 
+
+DO 
+
+
+
+MONGO SHELL PARA OS 
+
+
+
+DRIVERS... (as diferentes linguagens)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VAMOS ACTUALLY TRABALHAR EM UM PROJETO INTEIRO COM JAVASCRIPT E NODEJS,
+
+
+para que 
+
+
+
+
+
+vejamos como devemos implementar o driver mongodb lá...
+
+
+
+
+
+
+
+
+
+
+--> AÍ VEREMOS COMO TUDO ISSO FUNCIONA,
+
+COMO 
+
+NOS CONECTAMOS AO MONGODB INSTANCE,
+
+
+COMO 
+
+
+
+EXECUTAMOS OPERAÇÕES DENTRO DO JAVASCRIPT APP..
+
+
+
+
+
+
+
+
+
+
+---> VAMOS CONSTRUIR 
+
+
+UM 
+
+APP 
+
+
+COM 
+
+NODE,
+ 
+ REACT 
+
+ E 
+
+ MONGODB....
+
+
+
+
+
+
+
+
+
+ ----> JÁ SEI SOBRE OS 2...
+
+
+
+
+
+
+
+
+
+
+
+ ---> VOCê AINDA SERÁ CAPAZ DE ENTENDER A FILOSOFIA GERAL
+  
+
+
+
+  ACERCA DO CONNECT DO MONGODB A UM APP...
+
+
+
+
+
+
+
+
+
+  --> VEREMOS, NESSE MÓDULO:
+
+
+
+
+
+
+
+
+
+
+  1) COMO SHELL COMMANDS SÃO TRADUZIDOS PARA 'DRIVER COMMANDS'... (como usar o driver de sua escolha)...
+
+
+
+
+
+
+
+
+
+
+
+  2) COMO CONECTAR A MONGODB SERVERS, de dentro de seu driver... -> E USAREMOS O MONGODB ATLAS PARA ISSO, NESSE MÓDULO....
+
+
+
+
+
+
+
+
+
+  3) VEREMOS COMO EXECUTAR CRUD OPERATIONS DENTRO DO DRIVER...
+
+
+
+
+
+
+
+
+
+  --> vamos começar....

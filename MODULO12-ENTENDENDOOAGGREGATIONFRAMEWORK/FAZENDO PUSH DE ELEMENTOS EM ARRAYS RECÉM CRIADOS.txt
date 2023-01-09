@@ -1,0 +1,1146 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NÓS JÁ DEMOS UMA OLHADA EM UM MONTE DE PIPELINE STAGES E OPERATORS....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA VAMOS DAR UMA OLHADA 
+
+
+EM 
+
+STAGES 
+
+E OPERATORS 
+
+
+
+
+
+
+QUE VÃO NOS AJUDAR COM O TRABALHO COM __ ARRAYS__....
+
+
+
+
+
+
+
+
+
+
+
+
+--> TEMOS NOVA DATA,
+
+
+
+QUE PODERÁ SER IMPORTADA COM 'mongoimport'...
+
+
+
+
+
+é o arquivo de 'array-data'...
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+PS A:\projeto6-MONGODB\MODULO12-ENTENDENDOOAGGREGATIONFRAMEWORK> mongoimport array-data.json -d arrayData -c arrayCollection --jsonArray  
+2022-02-23T01:33:12.946-0300    connected to: mongodb://localhost/
+2022-02-23T01:33:12.970-0300    3 document(s) imported successfully. 0 document(s) failed to import.
+PS A:\projeto6-MONGODB\MODULO12-ENTENDENDOOAGGREGATIONFRAMEWORK> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> certo....
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+> db.arrayCollection.find({}).pretty()
+{
+        "_id" : ObjectId("6215b908ecbbf58f4c1d5e59"),
+        "name" : "Maria",
+        "hobbies" : [
+                "Cooking",
+                "Skiing"
+        ],
+        "age" : 29,
+        "examScores" : [
+                {
+                        "difficulty" : 3,
+                        "score" : 75.1
+                },
+                {
+                        "difficulty" : 8,
+                        "score" : 44.2
+                },
+                {
+                        "difficulty" : 6,
+                        "score" : 61.5
+                }
+        ]
+}
+{
+        "_id" : ObjectId("6215b908ecbbf58f4c1d5e5a"),
+        "name" : "Manu",
+        "hobbies" : [
+                "Eating",
+                "Data Analytics"
+        ],
+        "age" : 30,
+        "examScores" : [
+                {
+                        "difficulty" : 7,
+                        "score" : 52.1
+                },
+                {
+                        "difficulty" : 2,
+                        "score" : 74.3
+                },
+                {
+                        "difficulty" : 5,
+                        "score" : 53.1
+                }
+        ]
+}
+{
+        "_id" : ObjectId("6215b908ecbbf58f4c1d5e5b"),
+        "name" : "Max",
+        "hobbies" : [
+                "Sports",
+                "Cooking"
+        ],
+        "age" : 29,
+        "examScores" : [
+                {
+                        "difficulty" : 4,
+                        "score" : 57.9
+                },
+                {
+                        "difficulty" : 6,
+                        "score" : 62.1
+                },
+                {
+                        "difficulty" : 3,
+                        "score" : 88.5
+                }
+        ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+NESSA COLLECTION, TEMOS 3 DOCUMENTS,
+
+
+
+
+DOCUMENTS 'PERSON', com name, age e hobbies,
+
+e aí
+ 
+
+ alguns exam scores....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ---> O PROFESSOR DIZ QUE PRECISA DE ALGUNS ARRAYS, AQUI,
+
+ PQ 
+
+
+ PODEMOS FAZER UM PUNHADO DE COISAS COM 
+
+
+
+
+ ARRAYS,
+
+ COM 
+
+ O 
+
+ AGGREGATION FRAMEWORK..
+
+
+
+
+
+
+
+
+
+
+
+ --> OK, MAS O QUE PODEMOS FAZER COM ESSES ARRAYS?
+
+
+
+
+
+
+
+
+
+
+
+ --> bem, o que podemos fazer, frequentemente,
+
+ é 
+
+
+ kindof 
+
+ 'merge' 
+
+ arrays/combine arrays
+
+
+
+
+
+
+
+
+
+
+EM 1 STAGE DE 'grouping'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> VAMOS COMEÇAR COM ISSO...
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR 
+
+
+
+
+
+
+
+VAI ESCREVER UM PIPELINE COMPLETAMENTE DIFERENTE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ele vai querer fazer 'group' 
+
+
+
+POR 'AGE',
+
+
+digamos....
+
+
+
+
+
+
+
+
+
+
+
+ex (nossa data):
+
+
+
+
+
+
+{
+        "_id" : ObjectId("6215b908ecbbf58f4c1d5e59"),
+        "name" : "Maria",
+        "hobbies" : [
+                "Cooking",
+                "Skiing"
+        ],
+        "age" : 29,
+        "examScores" : [
+                {
+                        "difficulty" : 3,
+                        "score" : 75.1
+                },
+                {
+                        "difficulty" : 8,
+                        "score" : 44.2
+                },
+                {
+                        "difficulty" : 6,
+                        "score" : 61.5
+                }
+        ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> nosso aggregate query:
+
+
+
+
+
+
+
+
+
+
+
+db.persons.aggregate(
+        [
+                {
+                        $group: {
+                                _id: {
+                                        personAge: "$age"
+                                }
+                        }
+                }
+        ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGRUPAMOS POR 'AGE'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS AÍ VAMOS QUERER COMBINAR OS ARRAYS DE 'HOBBIES' --> isso pq 
+
+
+
+VMAOS QUERER DIZER 
+
+'''QUAIS HOBBIES EXISTEM PARA ESSE AGE GROUP,
+
+
+E PARA AQUELE OUTRO AGE GROUP'''....
+
+
+
+
+
+
+
+
+
+
+
+-----> e PODEMOS fazer isso.... ------> PARA FAZER ISSO,
+
+
+
+
+PODEMOS ADICIONAR UM NOVO ARRAY/PROPRIEDADE COM ARRAY,
+
+
+
+
+
+
+você 
+
+
+
+pode chamá-lo de QUALQUER NOME (não precisa ser 'hobbies')...
+
+
+
+
+
+
+
+
+
+
+--> vamos escrever 'allHobbies'... -->  
+
+
+
+
+
+
+
+
+
+E AÍ, 
+
+DENTRO DESSA KEY,
+
+
+
+
+
+VAMOS USAR 2 OPERATORS,
+
+
+
+
+OPERATORS QUE 
+
+
+
+'TE AJUDAM COM O COMBINE DE ARRAY VALUES' -----> isso pq você deve ter em mente que 
+
+NO GROUPING STAGE,
+
+
+
+
+MÚLTIPLOS DOCUMENTS SÃO MERGEADOS EM 1 SÓ... --> É POR ISSO QUE 
+
+
+PRECISAMOS 
+
+
+DE UMA 
+
+MANEIRA 
+
+PARA 
+
+FAZER 
+
+'HANDLE' 
+
+
+
+
+
+
+
+
+
+
+DE MÚLTIPLOS 'ARRAY VALUES' 
+
+
+
+em 
+
+1 único array --> E PODEMOS 
+
+
+
+
+
+FAZER ISSO JUSTAMENTE 
+
+
+POR MEIO DO OPERATOR DE '$push'...
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+
+db.persons.aggregate(
+        [
+                {
+                        $group: {
+                                _id: {
+                                        personAge: "$age", 
+
+                                        allHobbies: {$push: }
+                                }
+                        }
+                }
+        ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O OPERATOR DE 'push'
+
+TE 
+
+
+
+
+DEIXA __ FAZER 'PUSH' 
+
+DE UM NOVO ELEMENT PARA 
+
+
+
+DENTRO 
+
+DE 
+
+1 ARRAY ___ PARA __ CADA _ INCOMING__ DOCUMENT.... --> 
+
+
+
+
+
+
+
+
+
+
+
+CERTO...E CADA DOCUMENT, NO CASO,
+
+VAI POSSUIR UM 
+
+ARRAY 
+
+DE 
+
+
+'
+hobbies',
+
+
+tipo 
+
+
+
+
+
+hobbies: [
+        'cooking', 'skiing'
+]
+
+
+
+
+
+
+
+
+
+
+-----> E VOCê PODERIA PUSHAR QUALQUER FIELD VALUE PARA dentro desse array de 'allHobbies', não sendo limitado apenas a esse array que existia anteriormetne...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O QUE O PROFESSOR VAI FAZER, AGORA,
+
+NO CASO,
+
+
+
+É 
+
+
+O 
+
+
+
+'$push' 
+
+
+
+
+de '$hobbies'....
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+db.persons.aggregate(
+        [
+                {
+                        $group: {
+                                _id: {
+                                        personAge: "$age", 
+
+                                        allHobbies: {$push: "$hobbies"}
+                                }
+                        }
+                }
+        ]
+)
+
+
+
+
+
+
+
+
+VAMOS TENTAR ESSA QUERY...
+
+
+
+
+
+
+
+
+
+
+
+eX:
+
+
+
+
+db.persons.aggregate([
+    {
+      $group: {
+        _id: {
+          personAge: '$age',
+
+          allHobbies: { $push: '$hobbies' },
+        },
+      },
+    },
+  ]).pretty();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> MAS ISSO NOS DEU UM __ ERROR__:
+
+
+
+
+
+
+  on connection: connection to 127.0.0.1:27017 : aggregate failed :
+_getErrorWithCode@src/mongo/shell/utils.js:25:13
+doassert@src/mongo/shell/assert.js:18:14
+_assertCommandWorked@src/mongo/shell/assert.js:737:17
+assert.commandWorked@src/mongo/shell/assert.js:829:16
+DB.prototype._runAggregate@src/mongo/shell/db.js:281:5
+DBCollection.prototype.aggregate@src/mongo/shell/collection.js:1058:12
+@(shell):1:1
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> ACHO QUE É PQ 
+
+EU COLOQUEI 'db.persons.aggregate()',
+
+
+e não 
+
+'db.arrayData.aggregate()' (que é o nome certo)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS AINDA RECEBI 1 ERROR:
+
+
+
+on connection: connection to 127.0.0.1:27017 : aggregate failed :
+_getErrorWithCode@src/mongo/shell/utils.js:25:13
+doassert@src/mongo/shell/assert.js:18:14
+_assertCommandWorked@src/mongo/shell/assert.js:737:17
+assert.commandWorked@src/mongo/shell/assert.js:829:16
+DB.prototype._runAggregate@src/mongo/shell/db.js:281:5
+DBCollection.prototype.aggregate@src/mongo/shell/collection.js:1058:12
+@(shell):1:1
+
+
+
+
+
+
+
+-------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> tion: Error: command failed: {
+        "ok" : 0,
+        "errmsg" : "Unrecognized expression '$push'",
+        "code" : 168,
+        "codeName" : "InvalidPipelineOpera
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        -->  O PROBLEMA ERA QUE EU HAVIA COLOCADO 'allHobbies' dentro de '_id'....
+
+
+
+
+
+
+
+
+
+
+        CONSERTEI, FICOU ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+        db.arrayCollection.aggregate([
+    {
+      $group: {
+        _id: {
+          personAge: '$age',
+        },
+        allHobbies: { $push: '$hobbies' }
+      },
+    },
+  ]).pretty();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  RESULTADO:
+
+
+
+
+
+
+
+
+
+
+
+
+  > db.arrayCollection.aggregate([
+...     {
+...       $group: {
+...         _id: {
+...           personAge: '$age',
+...         },
+...         allHobbies: { $push: '$hobbies' }
+...       },
+...     },
+...   ]).pretty();
+
+
+
+
+{
+        "_id" : {
+                "personAge" : 29
+        },
+        "allHobbies" : [
+                [
+                        "Cooking",
+                        "Skiing"
+                ],
+                [
+                        "Sports",
+                        "Cooking"
+                ]
+        ]
+}
+{
+        "_id" : {
+                "personAge" : 30
+        },
+        "allHobbies" : [
+                [
+                        "Eating",
+                        "Data Analytics"
+                ]
+        ]
+}
+
+
+
+
+----------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+ou seja,,
+
+
+
+
+ele AGRUPOU TODOS OS 'hobbies' (arrays de hobbies), de cada DOCUMENT,
+
+
+
+
+DENTRO DESSA KEY de 'allHobbies'... (
+
+
+        ao mesmo tempo que 
+
+
+        AGRUPAVA 
+
+        NOSSOS DOCUMENTS POR 'age'...
+)
+
+
+
+
+------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> 2 grupos, age '30' 
+
+
+e 
+
+'29'...
+
+
+
+
+
+
+
+
+
+
+
+--> E 'allHobbies'
+
+
+É UM ARRAY DE ARRAYS...
+
+
+
+
+
+
+
+--------> OK........
+
+
+
+
+
+MAS AGORA O PROFESSOR IMPÕE OUTRO PROBLEMA:
+
+
+
+
+
+
+
+
+ELE QUER QUE 
+
+NÃO EXISTAM ESSES 'ARRAYS DENTRO DO ARRAY' ---> ele quer que essas strings nos arrays fiquem SOLTAS DENTRO DESSE 
+
+ARRAY 
+
+
+DE 
+
+'allHobbies'...... ----> ou seja, ele quer REALMENTE MERGEAR TUDO EM 1 ÚNICO ARRAY... 
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO É ALGO QUE PODEMOS FAZER,
+
+
+
+E VEREMOS COMO, 
+
+NA PRÓXIMA AULA...

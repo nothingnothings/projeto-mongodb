@@ -1,0 +1,1071 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> OK.... VAMOS BRINCAR UM POUCO COM ISSO...
+
+
+
+
+
+
+
+
+
+
+--> COMEÇAMOS PELO INT32,
+
+E PQ 
+
+DIABOS 
+
+
+EVENTUALMENTE O USARÍAMOS..
+
+
+
+
+
+
+
+
+
+
+
+
+-> críamos uma collection de 'persons '
+
+
+
+na database de 
+
+'numbers'...
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+> db.persons.insertOne({name: "Max", age: 29})
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("6217ed35c1c215691b8d72a3")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... ARMAZENAMOS ESSE NEGÓCIO AÍ,
+
+
+
+E ARMAZENAMOS 
+
+A AGE como um 
+
+
+
+number 
+'64 bit'...
+
+
+
+
+
+
+
+
+64 bit DOUBLE/FLOAT...
+
+
+
+
+
+
+
+
+
+
+
+--> NO CASO,
+
+
+
+A PARTE 'INTEGER' 
+
+desse negócio é armazenada COM FULL PRECISION;
+
+
+
+
+APENAS A PARTE DECIMAL (.0000000) 
+
+
+
+NÃO É 
+
+
+
+ARMAZENADA COM FULL PRECISION..
+
+
+
+
+
+
+
+
+
+
+
+---> e o mongodb realmente lê esse valor numérico como 
+
+
+'29.00000000000000000000'
+
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR 
+
+
+
+APOTNA QUE OS 
+
+DECIMAL 
+
+NUMBERS 
+
+
+
+
+
+
+ESTÃO PRESENTES NESSE NUMBER, TAMBÉM... -> 
+
+
+
+
+e a imprecision 
+
+
+
+
+existirá nele, também..
+
+
+
+
+
+
+
+-> E ISSO É FINE, AQUI,
+
+PQ 
+
+
+SEMPRE USAREMOS ESSA AGE COMO UM 
+
+'INTEGER' NO NOSSO APP,
+
+
+
+por isso não nos importmaos....
+
+
+
+
+
+
+
+
+
+
+--> MAS É 
+
+
+BOM 
+
+SABER QUE 
+
+
+
+TEREMOS ESSA IMPRECISION...
+
+
+
+
+
+
+
+
+
+
+
+
+-------> O PROFESSor então escreve 
+
+
+
+
+db.persons.stats(),
+
+
+
+
+
+PARA CONSEGUIR AQUELA LISTA DE STATS,
+
+
+
+STATS ACERCA DA COLLECTION DE 'persons'..
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE FORMOS ATÉ O TOPO DESSA LIST,
+
+
+vemos isto:
+
+
+
+
+
+
+ "size" : 49,
+
+
+
+
+
+
+
+
+
+
+
+
+ --> SIZE DE 49... --> ESTÁ COMO 49 PQ TEMOS 1 ENTRY,
+
+
+ E 
+
+
+ ESSA 
+
+ ENTRY TEM 1 NAME E UMA AGE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -> O PROFESSOR 
+
+ NOS MOSTROU ISSO ANTES NO CURSO,
+
+
+ MAS 
+
+
+ ELE 
+
+ QUER 
+
+
+
+
+ MOSTRAR DNV...
+
+
+
+
+
+
+
+
+
+
+
+
+--> ELE DELETA TODAS AS PERSON com 
+
+'deleteMany({})'...
+
+
+
+
+
+
+
+
+
+
+ ex:
+
+
+
+
+
+
+db.persons.deleteMany({})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> DEPOIS DISSO,
+
+ELE 
+
+
+ADICIONA 
+
+
+
+UM DOCUMENT COM APENAs 
+
+'age: 29'.. 
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+db.persons.insertOne(
+    {
+        age: 29
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA, SE CHECARMOS OS STATS DE NOVO,
+
+
+
+VEMOS ISTO:
+
+  "size" : 35,
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> O TAMANHO DIMINUIU, PORTANTO....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> MAS AGORA DEVEMOS USAR UM 'INT32',
+
+
+  para ver  O QUANTO ISSO 
+
+  VAI 
+
+
+
+  REDUZIR O TAMANHO OCUPADO POR ESSE DOCUMENT...
+
+
+
+
+
+
+
+
+  ex:
+
+
+
+
+
+
+
+db.persons.insertOne(
+    {
+        age: 
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO,
+
+DEVEMOS ESCREVER O OBJECT de 
+
+'NumberInt()'
+
+
+
+
+
+E AÍ O WRAPPAR EM VOLTA DO NOSSO NUMBER...
+
+
+
+
+
+ex:
+
+
+
+
+
+db.persons.insertOne(
+    {
+        age: NumberInt(29)
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> IMPORTANTE!!!! -_> VOCÊ PODE ESCREVER TANTO 29 solto, como com "", tipo assim: NumberInt("29")
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> SE INSERIRMOS NOSSO INTEGER ASSIM,
+
+
+e aí 
+
+
+
+OLHARMOS NOSSOS STATS,
+
+
+
+
+
+VEMOS QUE 
+
+ELE 
+
+FICOU 
+
+
+
+UM POUQUINHO MENOR,
+
+
+
+
+
+
+
+
+
+
+size de '31' em vez de '35'...
+
+
+
+
+
+
+
+
+
+
+   "size" : 31,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ---> E ESSA É A RAZÃO PARA USAR INT32 (integers comuns),
+
+
+
+
+
+
+   ELAS VÃO OCUPAR MENOS ESPAÇO NA DATABAS.e..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   -----> E, IMPORTANTE,
+
+
+
+   'NumberInt' 
+
+
+   É ISSO QUE 
+
+
+   USMAOS NESSA SHELL,
+
+   PARA 
+
+   CRIAR UM NUMBER COM ESSE TPYE AÍ...
+
+
+
+
+
+
+
+
+
+
+
+
+   --> E SE VOCÊ ESTIVER USANDO 
+
+
+   UM 
+
+
+
+   MONGODB DRIVER NO SEU APP,
+
+   VOCÊ 
+
+   SERÁ OBRIGADO A USAR UM TYPE/METHOD 
+
+
+   PROVIDENCIADO 
+
+
+
+   __ PELO __ DRIVER DO 'mongodb' (
+
+
+
+       E ISSO DEPENDE DA PROGRAMMING LANGUAGE COM A QUAL VOCÊ ESTÁ TRABALHANDO...
+   ) ---------> VOCê TEM QUE TER CUIDADO,
+
+
+
+   PQ 
+
+   ALGUMAS LANGUAGES USAM O 'int32' 
+
+   COMO DEFAULT VALUE,
+
+
+
+
+
+   DEIXANDO DE USAR/ARMAZENAR AS COISAS COMO '64 BIT DOUBLES/floating points'...
+
+
+
+
+
+
+
+
+
+
+
+   ->  ISSO SIGNIFICA QUE OS DOCS DO SEU MONGODB DRIVER SÃO IMPORTANTES,
+
+
+
+   PQ 
+
+   TE DIZEM QUAIS SÃO OS FORMATOS DEFAULT....
+
+
+
+
+
+
+
+
+
+
+
+   --> NO MÓDULO DE 
+
+
+   from shell to 
+
+
+   driver 
+
+   PROFESSOR VAI NOS MOSTRAR ALGUMAS MANEIRAS DE CONVERTER 
+
+
+
+
+   NUMBERS, LÁ...
+
+
+
+
+
+
+
+
+
+   -> O PROFESSOR MOSTRA UM 
+
+
+   EXEMPLO DO STACKOVERFLOW....
+
+
+
+
+
+
+
+
+   -----> 
+
+
+
+
+
+
+
+
+   é o wrapper de 
+
+
+NumberInt(32121021)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+certo.......
+
+
+
+
+
+
+
+
+
+
+
+continuando........
+
+
+
+
+
+
+
+
+
+
+
+
+agora devemos inserir 
+
+
+números pequenos assim,
+
+
+portanto escrevemos assim:
+
+
+
+
+
+
+
+db.persons.insertOne(
+    {
+        age: NumberInt(32),
+        name: 'Max',
+        address: 'Brazil'
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> A DOCUMENTAÇÃO DO SEU MONGODB DRIVER É A 'WAY TO GO' 
+
+
+para ver qual é o data type padrão do seu number.....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> O PROFESSOR MOSTRA UM EXEMPLO DO STACKOVERFLOW...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ELE MOSTRA COMO UM INT64 É 
+
+
+
+
+CRIADO NO MONGODB DRIVER no 
+
+phyton....
+
+
+
+
+
+
+
+
+
+
+--> ele escreve:
+
+
+
+
+>>>> from bson.int64 import Int64 
+
+
+
+
+
+
+
+(
+
+    ISSO IMPORTA 
+
+    ESSE NEGÓCIO AÍ, LÁ DO DRIVER DO MONGODB.... --> as dependencies que ele shippa...
+)
+
+
+
+
+
+
+
+
+
+--> AÍ VOCÊ USA ESSA CONSTRUCTOR de Int64 
+
+
+tipo assim:
+
+
+
+
+
+
+
+
+'int64': Int64 (2 ** 32) ' 
+
+
+
+
+
+
+
+
+
+
+
+
+------> E PARA INT32,
+
+
+
+NÃO TEMOS ISSO AÍ, NO PHYTON.... --> pq no phyton,
+
+
+
+
+1 integer 
+
+
+SERÁ ARMAZENADO COMO UM INT32 __ POR DEFAULT___... (
+
+    ele é 
+
+    realmente o que parece, no caso...
+
+
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS EM GERAL,
+
+O QUE O PROFESSOR NOS MOSTROU AQUI,
+
+
+
+VAI FUNCIONAR  NOS OUTROS DRIVERS,
+
+
+
+
+ESSE 
+
+
+
+WRAPPER 
+de 
+
+'NumberInt()'
+
+
+
+VAI FUNCIONAR 
+
+E TRANSFORMAR SEU NUMBER 'double 64' 
+
+
+
+em 
+
+
+
+
+
+
+INT32 ------------> mas você ainda deve ver os docs,
+
+para 
+
+
+determinar se o 
+
+default é realmente  64 double....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESSES NUMBERS INT32 OCUPAM MENOS ESPAÇO, 
+
+PQ NÃO USAM OS 'DECIMAL PLACES'...

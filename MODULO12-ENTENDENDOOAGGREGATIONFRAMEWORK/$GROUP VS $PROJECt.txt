@@ -1,0 +1,275 @@
+
+
+
+
+
+
+
+
+
+
+
+APRENDEMOS MT SOBRE OS 2, E AGORA É HORA DE 
+
+
+ENTENDER SUAS DIFERENÇAS..
+
+
+
+
+
+
+
+
+
+
+
+
+
+$group -------->  É _ USADO __ PRA O GRUP De mútliplos doc em 1 só..
+
+
+
+
+
+
+
+
+
+--> já 'project' É UMA RELATION 'one-to-one '--------> VOCÊ VAI TER 1 document dentro dali,
+
+
+E É ESSE DODCUM
+
+
+
+
+
+
+
+
+
+
+
+
+--> JÁ PARA 'PROJECT' VOA^VA TRE  
+
+
+
+
+
+
+
+
+-> ISSO SIGNICCA QUE EM __$GROUP$-_ TEMOS 
+
+QUE OS DOCUMENTS SERÃO 
+
+
+
+
+
+SORTED PELOS FIELDS DE SUA ESCOLAH...
+
+(
+
+
+    já em 'PROJECTION/ PROJECT,  vocÈ PODE __ EXCLUIR E INCLUIR FIELDS,
+
+
+    TRANSFORMAR FIELDS, TUDO DENTRO DE 1 SINGLE DOCUMENT/TODOS SEUS DOCUMENTS...
+)
+
+
+
+
+
+
+
+
+
+
+
+-> JÁ EM GROUP _ APENAS _ PODEMOS FAZER:
+
+
+
+1) SUM 
+
+2) COUNT 
+
+3 ) AVERAGE 
+
+
+
+4) BUILD ARRAY...
+
+
+
+
+
+
+
+
+OK.... ESSA É A DIFERENÇA E É IMPORTANTE ENTENDER ISSO, para VER O QUE É O CERTO..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> group --> agrupa 
+
+
+
+
+
+
+
+
+MÚLTIPLOS DOCUMENTS EM 1 ÚNICO DOCUMENT...
+
+
+
+
+
+
+
+
+
+
+
+
+-> já 
+
+"$project' 
+
+
+
+é uma ONE TO ONE RELATION, você faz get de 1 document, e aí retrieva o mesmo document, mas alterado...
+
+
+
+
+
+
+
+
+
+
+
+
+--> EM GROUP,
+
+
+
+
+
+
+NÓS AGRUPAMOS MÚLTIPLOS DOCUMENTS,
+
+E AÍ 
+
+RETRIEVAMOS APENAS 1 DOCUMENT,
+
+
+
+
+agrupado por '1 ou mais categorias de sua escolha' (
+
+
+    tudo junto em um mesmo document.... --> vimos isso apenas com 'sum', que somou todas nossas persons com aquele state...
+)
+
+
+
+
+
+
+----> E AÍ, NESSA '1 OU MAIS CATEGORIAS DE SUA ESCOLHA',
+
+você também 
+
+
+pode adicionar ANY NEW FIELDS
+
+
+
+com coisas como 
+
+'
+summary calculations/statistics'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> EM 'GROUP',
+
+
+vocÊ faz coisas como:
+
+
+
+
+
+
+1) SUM
+
+
+
+
+2) COUNT 
+
+
+3) AVERAGE 
+
+
+
+4) BUILD ARRAY 
+
+
+
+
+
+
+
+
+
+
+
+JÁ NO 
+
+
+
+PROJECT VOCÊ INCLUI/EXCLUÍ fields,
+
+
+
+transforma fields... ---> tudo em 1 mesmo document...

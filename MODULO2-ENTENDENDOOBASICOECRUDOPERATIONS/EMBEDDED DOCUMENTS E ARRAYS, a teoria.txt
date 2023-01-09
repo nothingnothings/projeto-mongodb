@@ -1,0 +1,181 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EMBEDDED DOCUMENTS ---> quase acabamos com este módulo..
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VEREMOS MAIS 2 TIPOS DE DATA QUE PODEMOS INSERIR NOS NOSSOS DOCUMENTS... 
+
+
+
+
+
+
+
+
+
+
+
+--> EMBEDDED DOCUMENTS --. UMA CORE FEATURE DO MONGODB, QUE SERÁ REVISITADA NO MÓDULO DE 
+
+DATA SCHEMA E RELATIONS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> IMAGINEMOS UMA CAIXA, que é um document...
+
+
+
+
+
+
+
+
+
+
+--> embedded documents são caixas dentro dessa caixa...
+
+
+
+
+
+
+
+
+
+
+
+---> esses sub-documents podem ter, ainda, outros sub-documents...
+
+
+
+
+
+
+
+
+
+
+-----> PODEMOS TER ATÉ 100 LEVELS DE NESTING (é um hard limit, mas é mt nesting)... --> 
+
+
+
+você raramente precisará de mais do que 3-4 levels....
+
+
+
+
+
+
+
+
+
+
+
+
+----> o limite, hard limit, do tamanho do documento deve OBRIGATORIAMENTE SER DE ATÉ 
+
+
+
+16mb.... ---> isso pode parecer pouco, mas 
+
+
+16mb é MUITO para texto...
+
+
+
+
+
+
+
+
+
+
+
+--> OK... ESSES SÃO OS EMBEDDED DOCUMENTS...
+
+
+
+
+
+
+
+
+
+
+--> outro tipo de data que você pode armazenar são ARRAYS.... --> isso não possui relação estrita 
+
+
+com documents/objects,
+
+
+
+pq 
+
+
+arrays podem segurar QUALQUER TIPO DE DATA (strings, numbers, etc)...
+
+
+
+
+
+
+
+
+
+
+
+---> TBM BOOLEANS....
+
+
+
+
+
+
+
+
+
+--> isso tudo é bem teórico, veremos um exemplo na próxima aula...

@@ -1,0 +1,943 @@
+
+
+
+
+
+
+
+
+
+VAMOS COMEÇAR A VER O WRITECONCERN EM USO...
+
+
+
+
+
+
+
+
+
+
+
+--> já temos umas persons na database,
+
+por isso chamamos 
+
+
+
+'db.persons.find()'...
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+> db.persons.find()
+{ "_id" : ObjectId("620460d7ecccc90a67dbdfd9"), "name" : "Max", "age" : 30, "hobbies" : [ "Sports", "Cooking" ] }
+{ "_id" : ObjectId("620460ffecccc90a67dbdfda"), "name" : "Max", "age" : 30, "hobbies" : [ "Sports", "Cooking" ] }
+{ "_id" : ObjectId("6204612ade45f9124c2cd8b6"), "name" : "Manu", "age" : 40, "hobbies" : [ "Sports", "Cooking" ] }
+{ "_id" : ObjectId("62048a1bde45f9124c2cd8b7"), "name" : "Anna", "age" : 29, "hobbies" : [ "hobby1", "hobby2", "hobby3" ] }
+{ "_id" : ObjectId("62048a1bde45f9124c2cd8b8"), "name" : "Axel", "age" : 29, "hobbies" : [ "hobby1", "hobby2", "hobby3" ] }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> ESSES WRITES FORAM BEM SUCEDIDOS,
+
+
+EM SUMA...
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA VAMOS ESCREVER UM 'insertOne'
+
+
+
+PASSANDO O 
+
+WRITECONCERN, COMO SEGUNDO PARÂMETRO....
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.persons.insertOne(
+    {
+        name: "Chris",
+        age: 41
+    },
+
+
+    {
+  
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> EM VEZ DE PASSARMOS 
+
+
+
+AQUELE '{ordered: true/false}', VAMOS PASSAR NOSSO 'WRITE CONCERN'.... -------> PARA ISSO,
+
+
+
+
+
+
+
+escrevemos 
+
+
+'writeConcern',
+
+
+
+E AÍ 
+
+
+
+
+ARMAZENAMOS UM OBJECT DENTRO DESSA KEY...
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+
+db.persons.insertOne(
+    {
+        name: "Chris",
+        age: 41
+    },
+
+
+    {
+
+            writeConcern: {
+
+            }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESSE OBJECT CONTERÁ 
+
+
+'w' ---> se O SERVER DEVE ACKNOWLEDGE esse write, e em quantas instances... (colocamos só 1)....
+
+
+
+
+
+
+
+
+--> j --> SE DEVE SER INSCRITA UMA ENTRY NO JOURNAL, COMO MEDIDA DE SEGURANÇA....
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+db.persons.insertOne(
+    {
+        name: "Chris",
+        age: 41
+    },
+
+
+    {
+
+            writeConcern: {
+                w: 1,
+                j: true
+            }
+    }
+)
+
+
+-------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+W 1 ---------> 'PRECISO TER CERTEZA DE QUE O SERVER ACKNOWLEDGEOU ISSO'.... 
+
+
+
+
+
+
+
+
+
+
+
+W 0 --> SE VOCÊ DEFINIR O W como '0', VOCê VERÁ, QUANDO FOR INSERIDO O DOCUMENT, UM RETURN DE 'acknowledged: false' ---------> MAS SE VOCÊ PROCURAR POR ESSE DOCUMENT NA SUA DATABASE, VOCÊ VERÁ QUE ELE TERÁ SIDO INSERIDO.... (ou seja, nunca deixe como '0' esse 'w')...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, ISSO SIGNIFICA QUE 
+
+
+
+
+VOCÊ 
+
+
+''GANHA DE VOLTA UM RETURN DIFERENTE''',
+
+
+um 
+
+
+return que TAMBÉM NÃO TERÁ 
+
+aquele 
+
+
+'insertedId: ObjectId(asssakasaskashjas)'....
+
+
+
+
+
+
+
+
+
+
+
+-----> OK... ------> VOCÊ NÃO RECEBE ESSE 'insertedId'
+
+
+
+PQ __ O SERVER NÃO VAI PODER TE ENTREGAR 1 (
+
+     
+     pq o server REALMENTE NÃO TERÁ REGISTRADO 
+
+     ESSE DOCUMENT DE FORMA ADEQUADA, AINDA, no momento em que ele te responde... ---->  ISSO SIGNIFICA QUE 
+
+
+
+     
+
+     o 
+
+
+     'w: 0' 
+
+
+     faz com que 
+
+
+     O 
+
+
+     SERVER IMEDIATAMENTE TE RESPONDA, 
+
+
+     SEM NEM TER 'ACKNOWLEDGED'  
+
+     o sucess dessa operação de 'insertOne'...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> É TÃO RÁPIDO QUE A STORAGE ENGINE  NÃO 
+
+
+
+TEVE/NÃO TEM 
+
+
+
+
+
+TEMPO __ PARA _ 'STORE IT IN MEMORY' e aí gerar um ObjectId(aaaaaa) -------> E É POR ISSO QUE 
+
+
+
+
+recebemos 
+
+
+'acknowledged: false' ---> ''''sim, recebemos uma response, mas nós NEM MESMO SABEMOS SE ESSE REQUEST ATINGIU O SERVER''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> É CLARO QUE O 'writeConcern: {w: 0}'
+
+
+
+
+
+
+
+
+DEIXA SUA RESPONSE SUPER RÁPIDA,
+
+
+
+PQ VOCÊ NÃO VAI TER QUE ESPERAR POR QUALQUER RESPONSE, QUALQUER ID GENERATION,
+
+
+
+
+
+MAS OBVIAMENTE ISSO NÃO TE DIZ NADA ACERCA DO 'SUCCESS/FAIL'
+
+
+dessa operação..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> o 'w: 0' 
+
+
+
+
+
+
+
+
+PODE SER UMA OPÇÃO VÁLIDA EM casos 
+
+
+
+
+EM QUE 
+
+
+'''É OK NÃO SABER SE UMA DATA REALMENTE ENTROU NA DATABASE OU NÃO'''....
+
+
+
+
+(
+
+
+
+
+    EX: CASOS EM QUE VOCê LOGGA 1 VALOR A CADA SEGUNDO, SOBRE UM APP,
+
+
+    E AÍ VOCÊ NÃO SE IMPORTA SE UM PUNHADO DE SEGUNDOS ACABA 'LOST' .. --> aí você poderia definir esse 'w: 0'...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------------->  O DEFAULT, É CLARO,
+
+
+
+É 
+
+
+
+'w: 1'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> 'W: 1'
+
+
+
+TE DÁ AQUELES OUTPUTS COMO :
+
+
+
+
+> db.persons.insertOne({person: 'a person'})
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("62051e7c57fe3c5b2661c5a9")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+AGORA O PROFESSOR INSERE UMA NOVA PERSON,
+
+MAS COM O DEFINE DE 'j:' no writeConcern...
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+
+
+db.persons.insertOne(
+    {
+        name: 'Michael',
+        age: 51
+    },
+
+    {
+        writeConcern: {
+            w: 1,
+            j: false
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O 'FALSE' é o default, é claro...
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA VAMOS DEFINIR ISSO COMO 'TRUE'....
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.persons.insertOne(
+    {
+        name: 'Michael',
+        age: 51
+    },
+    {
+        writeConcern: {
+            w: 1,
+            j: true
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O OUTPUT AQUI NÃO VAI MUDAR.... E TUDO VAI RODAR SUPER RÁPIDO,
+
+COMO ANTES...
+
+
+
+
+
+
+
+
+--> RODARÁ RÁPIDO PQ ESTAMOS RODANDO TUDO LOCALMENTE,
+
+SEM LATENCY...
+
+
+
+
+
+
+
+
+
+--> MAS VAI TER SIDO 1 POUQUINHO MAIS LENTO... ---> PQ A ENTRY TERÁ SIDO ADICIONADA AO JOURNAL,
+
+
+E TEREMOS 'WAITED' 
+
+
+
+
+PELO FIM DESSE EDIT DO JOURNAL...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------> AQUI, NO CASO, TEMOS MAIOR SEGURANÇA,
+
+
+
+
+PQ 
+
+
+SABEREMOS/TEREMOS CERTEZA DE QUE 
+
+ESSE WRITE 
+
+VAI ACABAR NA 'TODOLIST' da storage engine,
+
+
+
+
+QUE VAI EVENTUALMENTE LEVAR AO WRITE ACONTECENDO NAS DATABASE FILES (mesmo que o server caia; só reiniciá-lo, para aí as operações resumirem, a partir desse journal)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA O PROFESSOR ADICIONA UMA NOVA PERSON,
+
+
+
+
+
+
+e aí 
+
+
+DEFINE 
+
+
+
+TAMBÉM 
+
+
+
+A OPTION DE 'wtimeout'...
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+db.persons.insertOne(
+    {
+        name: 'Michaela',
+        age: 51
+    },
+    {
+        writeConcern: {
+            w: 1,
+            j: true,
+            wtimeout: 200
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.persons.insertOne(
+    {
+        name: 'Michaela',
+        age: 51
+    },
+    {
+        writeConcern: {
+            w: 1,
+            j: true,
+            wtimeout: 1
+        }
+    }
+)
+
+
+
+
+
+AINDA FUNCIONA... (1ms, localhost)....
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+ --> ISSO AINDA VAI __ 
+
+
+
+ DAR 'SUCCEED',
+
+
+
+ pq 
+
+
+
+ NOSSO LOCALHOST É SUPER RÁPIDO....
+
+
+
+
+
+
+
+
+
+
+ --> MAS SE VOCÊ 
+
+
+ TIVER 
+
+
+ 1 APP EM QUE 'SPEED REALLY MATTERS',
+
+ e sua 
+
+ connection é geralmente 'good',
+
+
+
+
+
+
+ MAS QUE EM 1 DIA DO ANO 
+
+ ESSA SPEED SERÁ 
+
+
+RUIM,
+
+
+MENOR DO QUE O COMUM,
+
+
+VOCÊ TERÁ DE ALTERAR ESSE 
+
+
+'wtimeout' 
+
+para algo como 300.

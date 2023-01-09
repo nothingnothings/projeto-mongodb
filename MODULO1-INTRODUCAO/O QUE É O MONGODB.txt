@@ -1,0 +1,796 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> O QUE É O MONGODB
+
+
+
+
+
+
+--> é uma database--->
+
+
+
+
+
+MAS A COMPANHIA POR TRÁS DO MONGODB,
+
+
+QUE 
+
+
+
+É FOCADA NO MONGODB E EM OUTROS PRODUTOS,
+
+
+
+
+
+
+TAMBÉM É CHAMADA DE 'MONGODB'....
+
+
+
+
+
+
+
+
+
+
+
+--> MAS É CLARO QUE POR 'MONGODB' QUEREMOS DIZER A DATABASE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> MONGODB- -> HUMONGOUS --> 
+
+
+te deixa armazenar um monte de data,
+
+
+
+
+
+
+
+E TAMBÉM PODE TRABALHAR COM ESSE MONTE DE DATA EFICIENTEMENTE..
+
+
+
+
+
+
+--> É UMA DATABASE SOLUTION....
+
+
+
+
+
+--> É CLARO QUE JÁ TEMOS 
+
+
+DATABASE SOLUTIONS, COMO 
+
+O MYSQL,
+
+
+
+
+
+POSTGRESQL, etc..
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS COMO O MONGODB É DIFERENTE/
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, O MONGODB, É CLARO, IMPORTANTÍSSIMO,
+
+
+
+É TAMBÉM UM DATABASE SERVER,
+
+QUE 
+
+
+
+
+
+
+TE DEIXA ENTÃO RODAR DIFERENTES DATABASES NO INTERIOR DO DATABASE SERVER...
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+DATABASE --> SHOP 
+
+
+---> USERS....
+
+
+
+
+
+
+
+--> O ENVIRONMENT DO MONGODB TE DÁ UM SERVER,
+
+
+
+COM O QUAL VOCÊ COMEÇA,
+
+
+
+
+E EM QUE VOCÊ PODE CRIAR MÚLTIPLAS DATABASES,
+
+
+
+
+A PARTIR DISSO....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> DIGAMOS QUE TEMOS UM SHOP... --> 
+
+
+
+
+
+
+
+
+EM CADA table/collection,
+
+
+
+teremos DOCUMENTS.... (são as 'entries')...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... -_> VAMOS TER COLLECTIONS EM CADA DATABASE... --> e podemos ter MÚLTIPLAS DATABASES,
+
+CADA UMA DELAS COM MÚLTIPLAS COLLECTIONS.. 
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+DATABASE: SHOP 
+
+
+
+COLLECTIONS DISPNÍVEIS: 'USERS' 'ORDERS' 
+
+
+ 
+
+
+
+
+
+
+
+ --> EM CADA 1 DESSAS COLLECTIONS VOCê TERÁ 
+
+
+
+
+ DOCUMENTS,
+
+
+
+ QUE SE PARECEM ASSIM:
+
+
+
+
+
+
+
+ {
+     name: 'Max', age: 29
+ }
+
+
+
+
+
+
+
+
+
+
+
+ -> ESSE FORMATO 'OBJECT' ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ EX:
+
+
+
+
+
+
+
+
+ 
+DATABASE: SHOP 
+
+
+
+COLLECTIONS DISPNÍVEIS: 'USERS'         'ORDERS' 
+
+
+
+
+                    { name: 'Max', age: 29}   
+                    { age: 29}
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --------> AQUI, NESSE EXEMPLO DE CIMA,
+
+
+ JÁ PODEMOS OBSERVAR A SEGUNDA CARACTERÍSTICA 
+
+
+
+ DAS DATABASES MONGODB,
+
+ QUE É O FATO DE ELAS SEREM __ SCHEMALESS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -----------> DENTRO DE UMA COLLECTION, SOMOS SCHEMALESS... -> 
+
+
+ por isso que o 'name' está faltando no segundo document...
+
+
+
+
+
+
+
+
+
+
+
+ --> ISSO SIGNIFICA QUE O MONGODB TE DÁ UM MONTE DE FLEXIBILIDADE... 
+
+
+
+
+
+
+
+
+
+ --> JÁ AS DATABASES SQL SÃO BEM RESTRITAS QUANTO O TIPO DE DATA QUE VOCÊ PODE ARMAZENAR EM CADA TABLE... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ----> PODEMOS ARMAZENAR TIPOS DE DATA COMPLETAMENTE DIFERENTES EM UMA MESMA COLLECTION... --> AÍ 
+
+
+ SUA DATABASE PODE _ _CRESCER__ de acordo com seu app e suas necessidades....
+
+
+
+
+
+
+
+
+
+
+
+
+ --> É CLARO QUE TIPICAMENTE VOCÊ PRECISARÁ DE UMA MÍNIMA ESTRUTURA 
+
+
+
+ EM 
+
+
+
+
+ SUAS COLLECTIONS, PQ SEU APP TIPICAMENTE PRECISARÁ DE UM POUCO DE ESTRUTURA 
+
+ PARA TRABALHAR COM SUA DATA....
+
+
+
+
+
+
+
+ --> O PROFESSOR TERÁ UM MÓDULO INTEIRO SOBRE DATA STRUCTURES E RELATIONS...
+
+
+
+
+
+
+
+
+ --> PROFESSOR VAI DEIXAR BEM CLARO:
+
+
+
+ 1) COMO VOCÊ PODE ESTRUTURAR SUAS COLLECTIONS 
+
+
+
+
+
+
+
+ 2) COMO VOCÊ PODE SEGUIR MELHORES PRACTICES...
+
+
+
+
+
+
+
+ 3) COMO VOCÊ QUER ESTRUTURAR 'DIFFERENT RELATED DATA'
+
+
+
+ e assim por diante...
+
+
+
+
+
+
+
+
+
+
+
+
+ --> MAS O QUE INTERESSA É QUE VOCÊ FICA SCHEMALESS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ---> BEM, DENTRO DE 1 DOCUMENT,
+
+ VOCÊ 
+
+ USA ESSES 'JAVASCRIPT OBJECTS'
+
+ para armazenar sua data....
+
+
+
+
+
+
+
+
+
+
+ --> PARA SERMOS PRECISOS,
+
+
+ USAMOS 
+
+ ALGO QUE É CHAMADO DE 'BSON DATA' (
+
+
+     BINARY JSON data...
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> JSON --> COM O JSON,
+
+
+
+
+
+
+ UM DOCUMENT É SEMPRE ENVELOPADO POR 
+
+
+
+
+ '{}' 
+
+
+
+
+
+
+
+
+ --> AÍ TEMOS NOSSAS KEYS,
+
+
+ que ficam com 
+
+ '
+
+
+
+"key" 
+
+
+
+
+
+
+
+--> AÍ A DATA NA DIREITA TAMBÉM TERÁ ""....
+
+
+
+
+
+
+
+
+
+
+
+-----> KEY-VALUE PAIRS....
+
+
+
+
+
+
+
+
+
+
+
+--> certo.... 
+
+
+
+
+
+
+
+
+
+
+{
+
+
+    "name": "Max",
+    "age": 29,
+    "address": {
+        "city": "Munich"
+    },
+    "hobbies": [
+        {"name": "Cooking" }
+    ]
+}
+
+
+
+
+
+
+
+
+
+
+
+-------> TEMOS DIFERENTES TIPOS DE DATA ARMAZEANDAS AQUI... --> podemos armazenar NESTED DATA--> ISSO É ÚTIL PQ 
+
+
+
+TE DEIXA CRIAR COMPLEX RELATIONS ENTRE DATA,
+
+
+E AÍ 
+
+
+
+ARMAZENAR 
+
+
+
+
+TODA ESSA DATA EM 1 ÚNICO DOCUMENT --> O QUE DEIXA O TRABALHO COM ESSA DATA, E O FETCH DELA,
+
+
+SUPER EFICIENTE... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> JÁ EM SQL,
+
+OCORRE O OPOSTO,
+
+PQ LÁ TEMOS QUE CONSTRUIR COMPLEX JOINTS 
+
+
+
+__PARA__ ENCONTRAR DATA DE ARQUIVOS CORRELACIONADOS... --> NO MUNDO NOSQL,
+
+
+VOCÊ PODE FETCHEAR TUDO EM 1 ÚNICO DOCUMENT,
+
+E PRONTO...
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO TE DEIXA ARMAZENAR DADOS DE MANEIRA EFICIENTE...
+
+
+
+
+
+
+
+
+
+
+AQUELE EXEMPLO DE 'hobbies',
+
+o array de objetos,
+
+é um EXEMPLO DE LIST DE EMBEDDED DOCUMENTS,
+
+
+
+
+
+
+
+
+
+
+
+... --> VOCÊ TAMBÉM PODE TER LISTS DE NUMBERS, DE STRINGS, ETC....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> BSON DATA FORMAT ---> POR TRÁS DAS CENAS, NO SERVER, O MONGODB CONVERTE SUA JSON DATA 
+
+EM UMA VERSÃO BINARY, QUE 
+
+
+BASICAMENTE PODE SER QUERIADA E MANAGEADA MAIS 
+
+
+
+FACILMENTE.... --> mas não temos que nos preocupar com isso....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O TEMA DO MONGODB É A FLEXIBILIDADE E A OPTIMIZAÇÃO PARA USABILIDADE... --> é o que diferencia o mongodb 
+
+de outras soluções  de database..
+
+
+
+
+
+
+
+--> TAMBÉM É O QUE DEIXA O MONGODB TÃO EFICIENTE, DE UMA PERSPECTIVA DE PERFORMANCE...
+
+
+
+
+
+
+
+
+
+-----> VOCÊ PODE QUERIAR DATA NO FORMAT OQUE VOCÊ PRECISA,
+
+SEM PRECISAR RODAR 'COMPLEX REESTRUCTURINGs' lá no server...

@@ -1,0 +1,285 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--_> OK... PROFESSOR FALOU UM MONTE SOBRE REPLICA SETS,
+
+
+
+SHARDING 
+
+
+ e etc.... --> ele falou que 
+
+ veríamos ver isso 
+
+
+ QUANDO FOSSEMOS FAZER DEPLOY DE NOSSO SERVER MONGODB...
+
+
+
+
+
+
+
+
+
+
+
+
+ --> É HORA DE FAZER ISSO...
+
+
+
+
+
+
+
+
+
+
+
+ --> QUEREMOS PEGAR NOSSA INSTANCE 'mongod' 
+
+
+ E COLOCÁ-LA NA WEB... -> QUEREMOS A COLOCAR EM UM SERVER QUE PODEMOS ALCANÇAR DE QUALQUER LUGAR,
+
+ E NÃO 
+
+ SÓ
+
+
+ DE DENTRO 
+
+ DE NOSSO 
+ PC...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> BEM... FAZER O DEPLOY 
+
+ DE UM MONGODB SERVER É 
+
+ UMA TAREFA 
+
+ BEM COMPLEXA... ---------> É BEM MAIS COMPLEXO DO QUE O DEPLOY DE UM 
+
+
+ WEBSITE... --> É 
+ PQ 
+
+
+ VOCê TEM QUE FAZER UM MONTE DE COISAS,
+
+
+ 1 
+
+ MONTE DE CONFIGURATION...
+
+
+
+
+
+
+
+
+
+
+
+ --> VOCÊ TEM QUE FAZER MANAGE DE:
+
+
+
+
+
+
+
+ 1) SHARDS 
+
+
+
+ 2) REPLICA SETS 
+
+
+
+ 3) SETUP USER AUTHENTICATION/AUTH SETUP (authentication à database)...
+
+
+
+
+
+
+
+
+
+ 4) PROTEGER O WEBSERVER/NETWORK,
+
+
+
+ algo que 
+
+
+ NÃO TEM RELAÇÃO COM O MONGODB,
+
+ MAS QUE É UMA TAREFA GERAL DE WEBHOSTING...
+
+
+
+
+
+
+ 5) UPDATE SOFTWARE --> '''GENERAL SERVER SOFTWARE''',
+
+ mas também 
+
+ TODOS OS 'MONGODB-RELATED SOFTWARE', 
+
+ security patches
+
+
+
+
+
+
+ 6) SETTAR REGULAR BACKUPS PARA SUA DATA --> você 
+
+
+ pode 
+
+ ter 
+
+ replica sets,
+
+
+
+ mas 
+
+
+
+ fazer backups 
+
+ regulares pode ser algo bom, nos casos em que tudo 'goes down'....
+
+
+
+
+
+
+
+
+ 7) ENCRYPTION (transportation e rest)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -------> PROFESSOR É HONESTO:
+
+
+
+
+
+
+
+ O DEPLOY DE UM MONGODB SERVER VAI ALÉM DA GRANDE PARTE DOS DESENVOLVEDORES, E ATÉ MESMO DELE...
+
+
+
+
+
+
+
+
+
+
+ --> É POR ISSO QUE NESSE MÓDULO O PROFESSOR NOS MOSTRA UMA 'MANAGED SOLUTION',
+
+
+
+
+ que é O
+
+
+ 'MONGODB ATLAS' --> É UMA SCALABLE 
+
+ E 
+
+ BEST PRACTICE MONGODB SERVER,
+
+
+
+
+ rodando na nuvem,
+
+ que você pode configurar através 
+
+ de uma 
+
+
+ interface conveniente,
+
+
+ que você 
+ pode 
+
+
+
+ 'scale up/scale down',
+
+
+ E QUE 
+
+
+ NOS 
+
+
+ DÁ 
+
+
+ TODAS ESSAS COISAS 
+ QUE 
+
+ VIMOS ANTERIORMENTE,
+
+
+ MAS AUTOMATICAMENTE...
+
+
+
+
+
+
+
+ --> DEVEMOS VER COMO PODEMOS DEPLOYAR UM SERVER MONGODB COM O MONGODB ATLAS...

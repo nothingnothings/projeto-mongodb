@@ -1,0 +1,725 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> OK.... NA ÚLTIMA AULA ESTUDAMOS 
+
+
+TEXT INDEXES,
+
+
+que são criados assim:
+
+
+
+
+
+
+
+
+db.products.createIndex(
+    {
+        "description": "text"
+    }
+)
+
+
+
+
+
+
+
+
+
+E USADOS ASSIM:
+
+
+
+
+
+
+
+
+
+db.products.find(
+    {
+        $text: {
+            $search: "red"
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+------> AGORA VAMOS FAZER UMA QUERY DIFERENTE...------> AINDA TEMOS AQUELE TEXT INDEX NA DESCRIPTION,
+
+
+
+E AGORA VAMOS PROCURAR POR 
+
+
+
+
+'awesome t-shirt' (
+
+
+
+    ou seja, POR TANTO 'awesome', como 'T-SHIRT'....
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> db.products.find(
+    {
+        $text: {
+            $search: "awesome t-shirt"
+        }
+    }
+)
+
+
+
+
+
+> db.products.find(
+...     {
+...         $text: {
+...             $search: "awesome t-shirt"
+...         }
+...     }
+... )
+{ "_id" : ObjectId("620fcc701622c3230aa0fde7"), "title" : "A Book", "description" : "This is an awesome book about a young artist." }
+{ "_id" : ObjectId("620fcccc1622c3230aa0fde9"), "title" : "Red T-Shirt", "description" : "This T-Shirt is red and it's pretty awesome!" }      
+>
+
+
+
+
+
+
+
+
+
+
+
+ACHAMOS AMBAS AS ENTRIES,
+
+
+
+PQ TEMOS 'awesome' no primeiro product tbm...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> E ACHAR OS 2 PODE SER 'FINE',
+
+mas tvz 
+
+VOCÊ QUEIRA __ OS __ ORDENAR__ DE FORMA DIFERENTE... --> PARA NÓS,
+
+
+
+HUMANOS,
+
+
+É 
+
+
+
+BEM 'EVIDENTE' QUE 
+O 
+
+SEGUNDO PRODUCT 
+
+É 
+
+O 
+
+
+'BETTER HIT' (
+
+
+    melhor resultado
+),
+
+
+
+PQ LÁ 
+
+
+
+
+ENCONTRAMOS TANTO A PALAVRA 'awesome' 
+
+
+
+COMO 
+
+A 
+PALAVRA 
+
+'t-shirt'...
+
+
+
+
+
+
+
+
+
+----> É POR ISSO QUE SERIA MAIS LEGAL 
+
+
+SE 
+
+ESSE RESULTADO 'MAIS MATCHING'
+
+
+
+viesse __ PRIMEIRO_ NA NOSSA LIST DE RESULTADOS....
+
+
+
+
+
+
+
+
+
+
+
+
+--> E NÓS, NA VERDADE,
+
+PODEMOS CONSEGUIR 
+
+ESSE 
+
+EFEITO... ------> PQ O MONGODB 
+
+FAZ ALGO INTERESSANTE/ESPECIAL quando 
+
+
+
+faz 
+
+
+
+SEARCH POR 1 TEXT em 1 TEXT INDEX DESSES... ------> NÓS PODEMOS
+
+
+
+
+
+
+
+
+
+
+DESCOBRIR COMO ELE 'SCORES' OS RESULTS DE SUA QUERY...
+
+
+
+
+
+
+
+
+
+
+
+
+---> PODEMOS DESCOBRIR ESSE 'SCORING'
+
+
+por meio de __ PROJECTION__ (escolher alguns fields para serem retornados, dentro de nossos documents)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO,
+
+
+
+PROFESSOR ADICIONA UM SEGUNDO PARÂMETRO em 'find()',
+
+para aí fazer PROJECT dos results...
+
+
+
+
+
+
+
+
+ex:
+
+
+
+db.products.find(
+    {
+        $text: {
+            $search: "awesome t-shirt"
+        }
+    },
+
+    {
+        score: 
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AÍ ELE COLOCA UMA KEY DE 'score',
+
+
+
+EM QUE 
+
+
+ELE 
+
+
+
+
+
+
+VAI USAR/REFERENCIAR O OPERATOR ESPECIAL de nome 
+
+'$meta'... ---------> 
+
+
+
+
+
+
+
+
+
+NO VALUE DESSE OPERATOR,
+
+PROFESSOR PASSA 
+
+
+"textScore'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR EXPLICA QUE ESSE É UM 'META FIELD'
+
+
+adicionado/manageado pelo MONGODB,
+
+
+
+ESPECIFICAMENTE PARA 'TEXT SEARCHES.'..  (ou seja, o 'score: {$meta: "textScore"}' SÓ FICA DISPONÍVEL SE VOCê USAR '$text' e '$search', no primeiro parâmetro)...
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+db.products.find(
+    {
+        $text: {
+            $search: "awesome t-shirt"
+        }
+    },
+
+    {
+        score: {
+            $meta: "textScore"
+        }
+    }
+)
+
+
+
+
+
+
+-----------------------------------
+
+
+
+
+
+
+
+
+
+
+
+--> SE VOCÊ FIZER ISSO,
+
+VOCÊ VERÁ O 'SCORE' 
+
+que o mongodb ASSIGNA 
+
+
+
+A CADA DOCUMENT QUE É RETRIEVADO....
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+> db.products.find(     {         $text: {             $search: "awesome t-shirt"         }     },      {         score: {             $meta: "textScore"         }     } ).pretty()
+{
+        "_id" : ObjectId("620fcc701622c3230aa0fde7"),
+        "title" : "A Book",
+        "description" : "This is an awesome book about a young artist.",
+        "score" : 0.625
+}
+{
+        "_id" : ObjectId("620fcccc1622c3230aa0fde9"),
+        "title" : "Red T-Shirt",
+        "description" : "This T-Shirt is red and it's pretty awesome!",
+        "score" : 1.7999999999999998
+}
+
+
+
+
+
+
+
+
+
+
+
+
+-------------> como você pode observar,
+
+
+
+
+
+O SEGUNDO DOCUMENT TEM UM SCORE BEM MAIOR, PQ FORAM MATCHEADAS 2 'WORDS'...
+
+
+
+
+
+
+
+
+
+--------> OK, mas meus DOCUMENTS NÃO ESTÃO SORTEADOS COMO OS DO PROFESSOR...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE QUEREMOS GARANTIR ESSE SORTING CORRETO,
+
+
+DEVEMOS 
+
+ADICIONAR 
+
+
+'.sort()",
+
+
+
+
+
+E AÍ 
+ESCREVER 
+
+
+
+
+
+
+
+'score',
+
+
+
+
+
+
+
+E AÍ __ DENTRO DESSE SCORE COLOCAR TODA AQUELA LENGA-LENGA,
+
+
+escrever 
+
+
+
+
+'score: {
+    $meta: "textScore"
+}
+'
+
+
+
+
+
+
+
+
+
+
+
+
+
+FICA TIPO ASSIM:
+
+
+
+
+
+db.products.find(     {         $text: {             $search: "awesome t-shirt"         }     },      {         score: {             $meta: "textScore"         }     } ).pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.products.find(
+    { $text: { $search: 'awesome t-shirt' } },
+    { score: { $meta: 'textScore' } }).sort(
+      score: {
+          $meta: "textScore"
+      }
+  ).pretty()
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+> db.products.find(
+...     { $text: { $search: 'awesome t-shirt' } },
+...     { score: { $meta: 'textScore' } }).sort({
+...       score: {
+...           $meta: "textScore"
+...       }
+...     }
+...   ).pretty()
+{
+        "_id" : ObjectId("620fcccc1622c3230aa0fde9"),
+        "title" : "Red T-Shirt",
+        "description" : "This T-Shirt is red and it's pretty awesome!",
+        "score" : 1.7999999999999998
+}
+{
+        "_id" : ObjectId("620fcc701622c3230aa0fde7"),
+        "title" : "A Book",
+        "description" : "This is an awesome book about a young artist.",
+        "score" : 0.625
+}
+
+
+
+
+
+
+-----------------------
+
+
+
+
+
+
+
+
+OK, ISSO DEU CERTO....
+
+
+
+
+--------------------
+
+
+
+
+
+
+
+
+
+
+ENFORÇAMOS O SORTING POR MEIO DO 'LOOK' 
+
+
+NAQUELE 
+
+
+'$meta: "textscore"' 
+
+
+
+fornecido pelo 
+
+
+
+
+mongodb...
+
+
+
+
+
+
+
+
+
+--> OK... ESSE É UM CONSTRUCT 
+
+
+
+
+QUE VOCÊ PODE LEMBRAR QUANDO ESTIVER TRABALHANDO COM TEXT EM TEXT INDEXES... --->  VOCê PODE EXTRAIR essa meta-info de 
+
+
+
+'textScore',
+
+
+
+
+
+LÁ 
+
+DO MONGODB... ( que faz manage disso para nós),
+
+
+e aí 
+
+
+
+podemos ver como os results são scorados,
+
+e aí podemos 
+
+USAR ISSO PARA FAZER 'SORT',
+
+também....

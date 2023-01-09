@@ -1,0 +1,233 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> COM 'TEXT INDEXES',
+
+
+PODEMOS NÃO SÓ 'SEARCH FOR WORDS',
+
+
+
+
+
+
+MAS TAMBÉM 'RULE OUT' words... --->
+
+
+
+
+
+TIPO O FIND DO GOOGLE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------->
+
+
+
+
+no nosso exemplo,
+
+
+
+
+
+
+fazemos este find:
+
+
+
+
+
+
+
+
+
+db.products.find(
+    {
+        $text: {
+            $search: "awesome"
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+------------------
+
+
+
+VAMOS ENCONTRAR OS 2 DOCUMENTS,
+
+ 
+
+estes aqui:
+
+
+
+
+> db.products.find(
+...     {
+...         $text: {
+...             $search: "awesome"
+...         }
+...     }
+... )
+{ "_id" : ObjectId("620fcc701622c3230aa0fde7"), "title" : "A Book", "description" : "This is an awesome book about a young artist." }
+{ "_id" : ObjectId("620fcccc1622c3230aa0fde9"), "title" : "Red T-Shirt", "description" : "This T-Shirt is red and it's pretty awesome!" }  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS AGORA DIGAMOS QUE QUEREMOS 
+
+ENCONTRAR APENAS OS PRODUCTS QUE NÃO SÃO 'T-Shirt'...
+
+
+
+
+
+
+
+
+
+
+
+
+-------> PARA CONSEGUIR FAZER ISSO,
+
+
+você 
+deve 
+
+
+escrever 
+
+
+
+"awesome -t-shirt" 
+
+
+
+
+
+
+(
+    OU SEJA,
+
+    AWESOME, MENOS T-SHIRT....
+)
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+db.products.find(
+    {
+        $text: {
+            $search: "awesome -t-shirt"
+        }
+    }
+)
+
+
+
+
+
+Ex:
+
+
+
+
+
+
+
+
+
+> db.products.find(
+...     {
+...         $text: {
+...             $search: "awesome -t-shirt"
+...         }
+...     }
+... )
+{ "_id" : ObjectId("620fcc701622c3230aa0fde7"), "title" : "A Book", "description" : "This is an awesome book about a young artist." }
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> ISSO FUNCIONA PQ O '-' 
+
+NA FRENTE DE UMA PALAVRA  SIGNIFICA QUE ESSA PALAVRA DEVE SER _eXCLUÍDA... --> ISSO É ÓTIMO,
+PQ 
+
+TE 
+
+DEIXA 
+
+
+RODAR 'NARROWED DOWN SEARCHES'.... 

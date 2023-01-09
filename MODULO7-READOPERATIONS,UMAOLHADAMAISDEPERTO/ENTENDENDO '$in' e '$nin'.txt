@@ -1,0 +1,488 @@
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ AGORA QUE DEMOS UMA BREVE OLHADA EM COMO PODEMOS QUERY EMBEDDED DOCUMENTS E ARRAYS,
+
+
+ PROFESSOR 
+
+
+
+
+ DIZ UQE DEVEMOS 
+ VOLTAR BREVEMENTE AOS 
+
+ SELECTORS DE 'comparison'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> eram eles:
+
+
+
+
+
+ 1) $eq 
+
+
+
+
+ 2) $gt 
+
+
+
+ 3) $gte 
+
+
+
+ 4) $lte 
+
+
+
+
+ 5) $ne  
+
+
+
+
+ 6) $lt 
+
+
+
+
+
+
+
+
+ MAS AINDA FALTAM OS 
+
+
+
+
+
+COMPARISON QUERY SELECTORS DE 
+
+
+'$in' 
+
+
+
+e 
+
+
+
+"$nin'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------> OK, O QUE SÃO ESSES 2 OPERATORS? 
+
+
+
+
+
+
+
+
+
+
+
+
+BEM, PARA ENTENDÊ-LOS,
+
+DEVEMOS VOLTAR 
+
+
+
+
+
+
+ao query de runtime...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NESSE QUERY,
+
+
+
+VAMOS QUERER NOS CERTIFICAR DE QUE ESSE RUNTIME SERÁ 
+
+
+
+
+''OU 30, OU 42'''... --> 
+
+
+
+
+
+
+
+
+
+
+BEM... --> NÓS SABEMOS QUE NO NOSSO DATASET,
+
+
+
+PODERÍAMOS CONSEGUIR ISSO COM 
+
+
+
+{
+    runtime: {$lte: 42}
+}
+,
+
+
+
+
+
+
+
+
+
+
+PQ NÃO TEMOS NADA COM MENOS DO QUE '30'... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> MAS É CLARO QUE ISSO NÃO SERÁ ASSIM COM TODOS OS DATASETS...
+
+
+
+
+
+
+
+
+
+
+
+
+-> EM CASOS EM QUE VAMOS QUERER ESPECIFICAMENTE 2 VALORES 
+
+
+NESSA COLLECTION, EM 1 DETERMINADO FIELD,
+
+
+
+
+2
+
+
+'DISCRETE VALUES',
+
+
+
+
+
+
+
+PODEMOS USAR O 
+
+
+
+OPERATOR DE 
+
+
+'$in'...
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+db.movies.find({runtime: {$in: []}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O IN SEMPRE VAI ACEITAR/EXIGIR UM __ ARRAY.... --> ISSO NÃO SIGNIFICA, NECESSARIAMENTE,
+
+QUE O 
+
+
+'$in' 
+
+
+
+VAI PROCURAR POR ESSE ARRAY... --> DENTRO DESSE ARRAY,
+
+ESPECIFICAMOS 
+
+
+
+
+TODOS OS VALUES QUE QUEREMOS QUE SEJAM 
+
+OS 
+
+VALUES DESSA KEY...
+
+
+
+
+
+
+
+
+ex:
+
+
+
+db.movies.find({runtime: {$in: [30, 42]}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> COM ISSO,
+
+
+O MONGODB VAI PROCURAR POR TODOS OS VALUES COM VLAOR DE '30' E '42',
+
+
+MAS NÃO DE 
+
+'60',
+
+
+POR EXEMPLO....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ok.... acho que entendi.... --> ESSE É O "$in'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> JÁ O "$nin' 
+
+
+
+
+É O CONTRÁRIO ---> QUEREMOS ACHAR TUDO, MENOS OS 
+
+
+
+
+
+
+DOCUMENTS QUE TENHAM 
+
+
+
+
+
+
+OS VALORES DE '30' e '42' 
+
+
+em 'runtime'....
+
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+db.movies.find({runtime: {$nin: [30, 42]}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------------------------------
+
+
+
+
+
+
+
+
+
+OK... FAZ PERFEITO SENTIDO....
+
+
+
+
+
+
+
+
+
+
+
+
+--> COM ISSO,
+
+
+DEMOS UMA OLHADA EM TODOS COMPARISON OPERATORS,
+
+
+POR ISSO É HORA DE EXAMINARMOS OS 'LOGICAL OPERATORS',
+
+
+na próxima aula...

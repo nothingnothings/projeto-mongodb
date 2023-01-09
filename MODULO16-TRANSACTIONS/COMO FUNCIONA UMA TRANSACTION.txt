@@ -1,0 +1,1412 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, COMO FUNCIONA UMA TRANSACTION?
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, PARA UMA TRANSACTION, VAMOS PRECISAR DE UMA __ SESSION...
+
+
+
+
+
+
+
+
+
+
+-> E NÓS AINDA NÃO TRABALHAMOS COM SESSIONS,
+
+EMBORA TENHAMOS 
+
+AS ESTUDADO 
+
+
+NAQUELE 
+
+MÓDULO QUE 
+
+MOSTRA O CREATE 
+
+
+
+DE 
+
+DATABASES 
+
+COM 
+
+
+timeStamps...  (mas isso não era SESSIONS DO MONGODB.... ESTAMOS FALANDO, AQUI, DE SESSIONS DO MONGODB, QUE SÃO OUTRA COISA...)
+
+
+
+
+
+
+
+
+
+--> MAS 1 SESSION BASICAMENTE SIGNIFICA QUE 
+
+
+'TODOS NOSSOS REQUESTS SÃO AGRUPADOS LOGICAMENTE',
+
+vocÊ poderia dizer..
+
+
+
+
+
+
+
+
+
+
+
+--> CRIAMOS UMA SESSION E A ARMAZENAMOS EM UMA CONST,
+
+
+por meio deste código:
+
+
+
+
+
+
+
+
+
+const session = db.getMongo().startSession
+
+
+
+
+
+
+
+
+
+
+
+
+--> AH, ISSO É UMA SESSION DO MONGODB....
+
+
+
+
+
+
+
+
+
+
+
+
+--> ok... agora teremos uma session armazenada dentro dessa const...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> ESSA SESSION É BASICAMENTE 1 OBJECT QUE 
+
+
+
+ME DEIXA 'GROUP ALL THE REQUESTS THAT I SEND, BASED ON THAT SESSION, TOGETHER' 
+
+
+
+
+
+
+
+
+
+
+
+
+-----> VOCÊ PODE USAR ESSA SESSION AÍ PARA 
+
+
+
+
+'START A TRANSACTION'...
+
+
+
+
+
+
+
+
+
+--> para isso,
+
+escreva as linhas:
+
+
+
+
+
+
+
+
+---------------------------------------
+
+
+
+const session = db.getMongo().startSession()
+
+
+
+
+session.startTransaction()
+
+
+
+--------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+---------> OK, MAS CABE RESSALTAR QUE AQUI ESSA CONST DE 'session' É __ iMPORTANTE___ ... --> é importante 
+
+
+
+PQ 
+
+AQUI,
+
+
+TECNICAMENTE,
+
+
+TODO 
+
+COMMAND/request QUE O PROFESSOR 
+
+
+ESCREVE AQUI É 
+
+
+'SENT TO THE SERVER' 
+
+
+__ E ENTÃO, NORMALMENTE, 
+
+O 
+
+
+ 
+SERVER MONGODB_ _ SE ESQUECERIA DE 'QUEM ENVIOU ESSE REQUEST'.. --------> É POR ISSO QUE 
+
+
+PRECISAMOS 
+
+
+CRIAR 1 SESSION,
+
+PRECISAMOS PQ 
+
+
+QUANDO ENVIARMOS ALGUMA COISA BASEADA NESSA SESSION,
+
+
+O
+
+
+SERVER 
+
+'SE LEMBRARÁ' DESSA SESSION (
+
+
+que, por trás das cenas,
+é manageada por uma SESSION KEY e assim por diante...
+
+) -----> 
+
+
+
+
+,
+
+
+
+
+''''EU CONHEÇO 
+
+
+ESSA SESSION, DEVO CONSIDERAR ESSE SEU COMANDO NO CONTEXTO DOS __ OUTROS__ COMANDOS __ QUE 
+
+
+VOCÊ me enviou  com base nessa session...'''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ok... agora começamos a transaction... -> 
+
+
+
+PROFESSOR ENTRA NAS DATABASES DE 'user' 
+
+e 'products'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> AÍ ELE CRIA UMA NOVA CONSTANTE,
+
+
+
+'const usersC'....
+
+
+
+
+
+
+
+
+
+-> AÍ USAMOS 
+
+
+A SESSION QUE ESCREVEMOS ANTERIORMENTE:
+
+
+
+
+
+
+
+
+
+
+
+
+const blog2Database = session.getDatabase('blog2'); 
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO VAI ARMAZENAR ESSA NOSSA DATABASE DE 'blog2' DENTRO DESSA CONST...
+
+
+
+
+
+
+
+
+
+-----> ISSO FEITO, 
+
+
+TEREMOS ACESSO àS COLLECTIONS DENTRO DESSA DATABASE, POR ISSO EDITAMOS:
+
+
+
+
+
+const usersCollection = session.getDatabase('blog2').users;
+const postsCollection = session.getDatabase('blog2').posts;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TIPO ASSIM:
+
+
+
+
+
+
+ 
+MongoDB Enterprise atlas-gc0c6b-shard-0:PRIMARY> const session = db.getMongo().startSession()
+MongoDB Enterprise atlas-gc0c6b-shard-0:PRIMARY> session.startTransact
+MongoDB Enterprise atlas-gc0c6b-shard-0:PRIMARY> session.startTransaction()
+MongoDB Enterprise atlas-gc0c6b-shard-0:PRIMARY> const usersCollection = session.getDatabase('blog2').users;
+MongoDB Enterprise atlas-gc0c6b-shard-0:PRIMARY> const postsCollection = session.getDatabase('blog2').posts;
+MongoDB Enterprise atlas-gc0c6b-shard-0:PRIMARY> 
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA PODEMOS ESCREVER 'TODOS OS COMANDOS' QUE QUEREMOS EXECUTAR CONTRA ESSAS COLLECTIONS DE NOSSA DATABASE....
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> AGORA COMEÇAMOS A TRANSACTION, E TEMOS ACESSO A NOSSAS COLLECTIONS... --> 
+
+
+
+
+AGORA DEVEMOS ESCREVER TODOS OS COMANDOS  QUE QUEREMOS EXECUTAR CONTRA ESSAS COLLECTIONS..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> A PRIMEIRA COISA QUE O PROFESSOR VAI QUERER FAZER 
+
+
+É 
+
+
+
+EXECUTAR
+
+
+
+
+'db.users.find().pretty()' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> IMPORTANTE: COMO O PROFESSOR EXECUTOU ESSA OPERAÇÕA/QUERY __ NORMALMENTE,
+
+OU SEJA,
+
+SEM 
+A SESSION,
+
+
+ELE RETRIEVOU O RESULTADO DE 'find'
+
+
+NORMALMENTE,
+
+
+
+
+
+GANHAMOS OS OBJECTS NORMALMENTE...  --------> ISSO SIGNIFICA:
+
+
+
+
+
+
+
+A) ESSA OPERAÇÃO NÃO ESTÁ INCLUÍDA NA TRANSACTION,
+
+PQ NÃO ESTÁ INCLUÍDA NA SESSION (const session = db.getMongo().startSession() )
+
+
+EM QUE EU COMECEI A TRANSACTION (session.startTransact() )
+
+
+
+
+
+
+
+
+
+
+
+
+-----> ok... agora 
+
+
+
+podemos 
+
+
+
+
+
+
+B) USAR AQUELE OBJETO DE 'usersCollection', que é uma REPRESENTAÇÃO 
+
+da collection de 'users' na database de 'blog2'...
+
+
+
+
+
+
+
+------> isso significa que esse 'usersCollection' É BASICAMENTE _ UM __ POINTER A MINHA COLLECTION,
+
+
+MAS 1 POINTER ___ QUE __ TAMBÉM __ ESTÁ 'MAPPED'
+
+
+ÀQUELA SESSION QUE CRIEI ANTERIORMENTE,
+
+
+Pq o comando que eu havia executado era/é
+
+
+'SESSION.getDatabase("blog").users"
+
+
+
+
+
+
+
+
+
+
+
+
+isso significa que quando eu escrevo/invoco 
+
+
+
+'usersCollection' (A constante),
+
+
+
+
+ESTOU INVOCANDO ESSA COLLECTION ___ '''NO CONTEXTO DA SESSION'''... -> 
+
+
+
+
+
+
+
+
+
+
+CERTO... E ASSIM QUE EU ESCREVO 
+
+
+
+'usersCollection',
+
+POSSO 
+
+
+
+
+
+COMEÇAR A USAR OPERAÇÕES NORMAIS NESSA CONST/POINTER À COLLECTION NO CONTEXTO DA 'SESSION'....
+
+
+
+
+
+
+
+
+
+--> ou seja,
+
+
+
+escreveremos coisas como 
+
+
+
+
+usersCollection.find({}),
+
+
+
+
+usersCollection.deleteOne({})
+
+
+
+
+
+usersCollection.updateMany({}), etc...
+
+
+
+
+
+
+--------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+-----> ok......
+
+
+
+
+
+
+
+
+
+--> PARA EXEMPLIFICAR O USO DAS SESSIONS,
+
+O PROFESSOR 
+
+VAI 
+
+LÁ 
+
+
+E 
+
+roda 
+
+'deleteOne'
+
+
+
+em cima do DOCUMENT COM AQUELE _id específico:
+
+
+
+
+
+
+
+
+
+usersCollection.deleteOne(
+    {
+        _id: ObjectId("621ef42a8ba295d281e9772c")
+    }
+)
+
+
+
+
+
+
+
+
+
+
+--> SE DIGITARMOS 'enter',
+
+
+VEREMOS 
+
+
+QUE 
+
+
+ESSE NEGÓCIO SERÁ RECONHECIDO, E O DOCUMENT APARENTARÁ TER SIDO DELETADO....
+
+
+
+
+
+
+
+
+
+
+---------> EX:
+
+
+
+
+MongoDB Enterprise atlas-gc0c6b-shard-0:PRIMARY> usersCollection.deleteOne({
+...   _id: ObjectId('621ef42a8ba295d281e9772c')
+... });
+{ "acknowledged" : true, "deletedCount" : 1 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> OK... MAS ISSO _ NÃO TERÁ ACONTECIDO...
+
+
+
+
+
+-> O DOCUMENT NÃO TERÁ SIDO REALMENTE APAGADO.... --> ISSO É VISTO SE EXECUTARMOS 
+
+
+'db.users.find({})'...
+
+
+
+
+
+
+
+-> se fizermos isso, veremos que o document não terá sido deletado....
+
+
+
+
+
+
+------------------------------------
+
+
+
+
+
+
+
+
+
+MongoDB Enterprise atlas-gc0c6b-shard-0:PRIMARY> db.users.find({})
+{ "_id" : ObjectId("621ef42a8ba295d281e9772c"), "name" : "Max" }
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> ou seja,
+
+O 
+
+
+
+DOCUMENT AINDA NÃO TERÁ SIDO DELETADO,
+
+
+ELE 
+
+
+
+SÓ VAI TER 
+
+SIDO 
+
+'
+SAVED AS A TODO',
+
+
+
+
+
+
+
+
+
+------> ISSO FEITO,
+
+
+VOU RODAR 
+
+
+
+UM CALL DE 
+
+
+
+
+postsCollection.deleteMany(
+    {
+        userId: ObjectId("621ef42a8ba295d281e9772c"
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+-------> CERTO... FAREI ISSO PARA DELETAR TODOS OS POSTS COM ESSE 'userId' aí, essa REFERENCE...
+
+
+
+
+
+
+
+
+
+
+
+--> OK...  --> MAS MINHA TRANSACTION DEU UM ERRO:
+
+
+
+
+
+
+
+
+
+MongoDB Enterprise atlas-gc0c6b-shard-0:PRIMARY> usersCollection.deleteOne({   _id: ObjectId('621ef42a8ba295d281e9772c') });
+uncaught exception: WriteCommandError({
+        "errorLabels" : [
+                "TransientTransactionError"
+        ],
+        "ok" : 0,
+        "errmsg" : "Transaction 0 has been aborted.",
+        "code" : 251,
+        "codeName" : "NoSuchTransaction",
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1646237374, 12),
+                "signature" : {
+                        "hash" : BinData(0,"RAodIS1YZuVBawqPaT+SHkjEFBk="),
+                        "keyId" : NumberLong("7026883533561921537")
+                }
+        },
+        "operationTime" : Timestamp(1646237374, 12)
+}) :
+WriteCommandError({
+        "errorLabels" : [
+                "TransientTransactionError"
+        ],
+        "ok" : 0,
+        "errmsg" : "Transaction 0 has been aborted.",
+        "code" : 251,
+        "codeName" : "NoSuchTransaction",
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1646237374, 12),
+                "signature" : {
+                        "hash" : BinData(0,"RAodIS1YZuVBawqPaT+SHkjEFBk="),
+                        "keyId" : NumberLong("7026883533561921537")
+                }
+        },
+        "operationTime" : Timestamp(1646237374, 12)
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> qual a razão desse error?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ESQUEÇA, AGORA DEU CERTO:
+
+
+
+
+
+
+
+
+
+MongoDB Enterprise atlas-gc0c6b-shard-0:PRIMARY> postsCollection.deleteMany({
+...   userId: ObjectId('621ef42a8ba295d281e9772c')
+... });
+{ "acknowledged" : true, "deletedCount" : 3 }
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+ --> OK, A TRANSACTION 'DIZ' 
+
+
+ QUE 
+
+ ESSE NEGÓCIO FOI APAGADO,
+
+
+
+
+
+ MAS NA REAL ELE NÃO FOI REMOVIDO AINDA... -> ELE AINDA NÃO FEZ 'WRITE' DA MUDANÇA NA 
+
+
+ DATABASE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> PARA __ REALMENTE__ FAZER/COMMIT ESSAS CHANGES À DATABASE,
+
+
+
+
+ SOMOS OBRIGADOS 
+
+
+
+
+
+
+ A ESCREVER 
+
+
+
+ 'session.commitTransaction()' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> TAMBÉM EXISTE O 
+
+
+
+ session.abortTransaction() ------->  CASOS EM QUE 
+
+
+ VOCÊ QUER 
+
+ 'CLEANLY CLOSE/CANCEL' 
+
+
+
+ suas mudanças..
+
+
+
+
+
+
+
+
+
+ --> RODO 'commit',
+
+ E ISSO 
+
+ VAI FUNCIONAR....
+
+
+
+
+
+
+
+
+
+
+
+
+ --> é bem finnicky... --> buga bastante...
+
+
+
+
+
+
+
+
+
+ --> RECAPITULANDO OS PASSOS:
+
+
+ const session = db.getMongo().startSession() 
+
+
+
+ session.startTransaction() 
+
+
+
+
+const usersCollection = session.getDatabase('blog2').users;
+
+
+
+const postsCollection = session.getDatabase('blog2').posts; 
+
+
+
+
+session.commitTransaction()
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, ISSO DEU CERTO,
+
+
+
+
+MINHA 
+DATABASE 
+
+FOI REALMENTE LIMPA:
+
+
+me livrei do 'user' e dos 'post'
+
+
+
+
+QUE TINHAM ESSE USER COMO REFERENCIA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->  A VANTAGEM É QUE SE ESSA 
+
+TRANSACTION FALHAR, ELA FALHA POR INTEIRO (revertemos todos os steps)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> É ASSIM QUE SESSIONS FUNCIONAM:
+
+
+
+
+1) VOCÊ GANHA ACESSO A UMA SESSION..
+
+
+
+
+
+
+
+
+
+2) BASEADO NESSA SESSION, VOCÊ ARMAZENA REFERENCES A SUAS COLLECTIONS, em VARIABLES/CONSTANTES... (você faz isso em cada driver/shell)....
+
+
+
+
+
+
+
+
+3) aí VOCÊ INICIA UMA TRANSACTION NA SESSION, com 'session.startTransaction()'...
+
+
+
+
+
+
+
+
+4) AÍ VOCÊ RODA SUAS 'MANIPULATING QUERIES' (coisas como delete, update, insert, etC)... -> O FIND NÃO É MT USADO 
+
+EM TRANSACTIONS, PQ NÃO FAZ MT SENTIDO... --------> PQ 
+
+O QUE VOCê 
+
+
+ENCONTRA EM 1 SESSION NÃO INTERESSA,
+
+
+TRANSACTIONS SÃO 'ALL ABOUT' safely CHANGE DE DATA...
+
+
+
+
+
+(
+
+
+    tipo aqui, em que 
+
+    deletamos o user,
+
+    deletamos os seus posts,
+
+    e aí commitamos a mudança...
+)
+
+
+
+
+
+
+
+
+
+------> se você quer ABORTAR,
+
+
+rode 
+
+
+
+session.abortTransaction();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> TAMBÉM É IMPORTANTE DE ENTENDER QUE, 
+
+
+PARA ESSA TRANSACTION,
+
+
+SE ALGO DÁ ERRADO,
+
+SE ALGO 
+
+DESSE ERRADO (
+
+
+    ex: se user fosse deletado mas POSTS não,
+
+
+
+),
+
+
+A TRANSACTION SERIA/SERÁ ROLLED BACK,
+
+
+E AÍ 
+
+
+SUA 
+
+
+
+
+DATABASE ESTARÁ NO MESMO STATE EM QUE ESTAVA ANTES... (
+
+    fail together or succeed together...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+CONCEITO DE ATOMICITY --> PROFESSOR EXPLICOU QUE O MONGODB É 
+
+
+'ATOMIC EM UM NÍVEL DE DOCUMENT' --> OU SEJA,
+
+
+
+
+
+QUANDO VOCÊ WRITTA UM DOCUMENT,
+
+OU ELE É WRITTADO INTEGRALMENTE,
+
+OU 
+
+'IS NOT WRITTEN AT ALL'... --> 
+
+
+
+
+ISSO (AS TRANSACTIONS ) BASICAMENTE 
+
+TE 
+
+
+DÁ 
+
+ATOMICITY 
+
+AO LONGO  DE VÁRIAS OPERATIONS,
+
+
+VÁRIAS STEPS, 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOCÊ GANHA 'ATOMICITY' em um 'OPERATION LEVEL',
+
+e não 
+
+SÓ 
+
+
+EM UM 
+
+
+
+'DOCUMENT LEVEl'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AS TRANSACTIONS SÃO ÚTEIS EM SITUAÇÕES EM QUE VOCê TEM DOCUMENTS QUE DEPENDEM 1 DO OUTRO (ex: user e seus posts)...
+
+
+
+
+
+
+
+
+
+
+
+
+--> OBVIAMENTE AS TRANSACTIONS REQUEREM UM POUCO MAIS DE PERFORMANCE,
+
+POR ISSO VOCÊ NÃO DEVE AS UTILIZAR 'por nada'... ---->  APENAS UTILIZE ESSE RECURSO SE VOCÊ PRECISA DESSA 'CROSS-OPERATION CONSISTENCY'..

@@ -1,0 +1,1067 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> OUTRO TÍPICO USE-CASE É _____O EXATO OPOSTO:
+
+
+
+
+
+
+
+VOCÊ QUER DESCOBRIR SE 1 USER ESTÁ DENTRO DE UMA CERTA ÁREA (ou seja, você não quer encontrar TODOS OS 
+
+
+PLACES 
+
+
+EM 
+
+
+1 ÁREA,
+
+
+E SIM 
+
+
+VAI QUERER __ 
+
+
+
+'''STORE''' 
+
+
+UMA QUANTIDADE DE 
+
+
+ÁREAS NA SUA DATABASE,
+
+POTENCIALMENTE... -------> POR EXEMPLO,
+
+
+
+
+
+AS NEIGHBORHOODS DE SUA CITY... -->  AÍ SEU USER VAI 
+
+
+
+ENVIAR __ AS COORDINATES__ DE ONDE ELE ESTÁ,
+
+PQ 
+
+ELE 
+QUER 
+
+
+SE 
+
+LOCALIZAR.... -> 
+
+
+
+aí você 
+
+
+VAI
+ 
+
+
+ QUERER DESCOBRIR 'EM QUAL NEIGHBORHOOD O USER SE ENCONTRA'...
+
+
+
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+ -> OU SEJA,
+
+ É A MESMA 
+
+ QUERY 
+
+
+ DE ANTES,
+
+ MAS 
+
+
+ 'the other way around'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ---> PARA DEIXAR AS COISAS MAIS SIMPLES,
+
+
+ PROFESSOR VAI TRABALHAR COM A MESMA ÁREA DE ANTES,
+
+  DO GOLDEN GATE PARK,
+
+
+
+
+
+  MAS AGORA, PARA RODAR ESSA NOSSA QUERY,
+
+  ELE VAI A ARMAZENAR NA DATABASE...
+
+
+
+
+
+
+
+
+
+
+
+  OS 4 CORNERS ERAM ESTES:
+
+
+
+
+
+
+
+  > const p1 = [-122.45472, 37.77473 ];
+> const p2 = [ -122.45307, 37.76641 ];
+> const p3 = [ -122.5102, 37.7643];
+> const p4 = [ -122.51089, 37.77139];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AÍ VAMOS QUERER 
+
+
+
+DESCOBRIR SE 1 DETERMINADO USER ESTÁ 'DENTRO' 
+
+ dessa área/polígono,
+
+
+
+
+
+
+
+
+ E CHECAREMOS ISSO 
+
+
+ COM 
+
+
+
+
+ 'USERS'
+
+ que 
+
+
+
+
+ se encontrarão TANTO DENTRO COMO FORA DA ÁREA....
+
+
+
+
+
+
+
+
+
+
+
+
+ --> OK.... VAMOS ARMAZENAR NOSSO 
+
+
+ POLYGON LEGAL...
+
+
+
+
+
+
+
+
+
+
+ --> VAMOS ARMAZENAR ISSO NA DATABASE..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ---> 
+
+
+
+
+ PROFESSOR CRIA UMA NOVA COLLECTION, DE 'areas',
+
+
+
+
+
+
+
+
+ EM QUE ELE VAI INSERIR ESSA ÁREA AÍ....
+
+
+
+
+
+
+
+ ex:
+
+
+
+
+
+
+
+
+
+ db.areas.insertOne(
+     {
+         name: "Golden Gate Park"
+     }
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+ --> AÍ ELE ARMAZENA O 'GEOJSON OBJECt'
+  
+
+
+  de nosso POLYGON/ÁREA,
+
+
+
+
+
+
+  dentro de um field de 'area',
+
+
+
+
+
+
+
+
+
+  ....
+
+
+
+
+
+
+
+
+  ----> UM GEOJSON OBJECT É FORMADO POR :
+
+
+
+  1) 'type' (se é um 'pOINT', UM 'POLYGON', ETC)....
+
+
+
+
+
+
+
+
+  2) 'coordinates' --> podem ser TANTO APENAS 1 PAR DE COORDINATES (caso de 'point') 
+
+
+
+
+
+
+  OU ENTÃO 3-4+ coordinates (polygon)...
+
+
+
+
+
+
+
+
+
+
+
+  NOSSO INSERT FICA ASSIM:
+
+
+
+
+   db.areas.insertOne(
+     {
+         name: "Golden Gate Park",
+
+         area: {
+             type: "Polygon",
+             coordinates: [
+                 [p1, p2, p3, p4, p1]
+             ]
+         }
+     }
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> COM ESSE PLACE ADICIONADO,
+
+ DEVEOMS 
+
+
+
+
+ AVERIGUAR SE O NOSSO USER SE ENCONTRA DENTRO DESSA AREA....
+
+
+
+
+
+
+
+
+
+
+
+ -> COMO PODEMOS FAZER ISSO,
+
+ QUE OPERATORS USAMOS?
+
+
+
+
+
+
+
+
+
+
+
+
+ --> até agora, usamos os operators de :
+
+
+
+
+
+
+
+
+ $near 
+
+
+
+ $geometry 
+
+
+
+
+
+ $maxDistance
+
+
+
+
+ $minDistance
+
+
+
+
+
+ e $geoWithin (para determinar QUAIS PLACES DE NOSSA DATABASE SE ENCONTRAVAM DENTRO DE 1 POLYGon )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ----> ANTES DE RODAR ESSA QUERY,
+
+
+  exatamente como fizemos com '$near' (que determinava se um user estava ou não próximo de 1 location),
+
+
+
+
+
+
+  PRECISAMOS CRIAR UM 
+
+
+
+
+  'GEOSPATIAL INDEX'...
+(
+
+    PQ SENÃO O MONGODB NÃO NOS DEIXA RODAR A QUERY..
+)
+
+
+
+
+
+
+
+
+
+  --> vamos criar assim: 
+
+
+
+
+
+
+
+
+
+
+
+
+  db.areas.createIndex(
+      {
+          area: 
+      }
+  )
+
+
+
+
+
+
+
+
+
+
+  --> O INDEX SERÁ CRIADO NO FIELD DE 'area',
+
+
+
+  E SEU VALUE SERÁ, COMO ANTES (com $near),
+
+
+
+  DE 
+
+
+
+  '2dsphere'....
+
+
+
+
+
+  ex:
+
+
+
+
+
+
+   db.areas.createIndex(
+      {
+          area: "2dsphere"
+      }
+  )
+
+
+
+
+
+
+
+
+
+
+
+------------->  COM O INDEX ADICIONADO,
+
+
+PODEMOS 
+
+
+ESCREVER NOSSAS QUERIES...
+
+
+
+
+
+
+
+
+
+
+
+
+-> VAMOS QUERER DESCOBRIR SE NOSSO USER SE ENCONTRA DENTRO DESSE POLYONG...
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+db.areas.find(
+    {
+        $geoIntersects
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> VAMOS USAR O OPERATOR DE '$geoIntersects' 
+
+
+
+
+
+
+
+
+
+
+-> MAS O QUE ESSE OPERATOR FAZ? 
+
+
+
+
+
+
+
+
+
+--> '$geoWithin' --> NOS DEIXAVA DETERMINAR QUAIS PLACES DE NOSSA DATABASE SE ENCONTRAVAM EM CERTA ÁREA... (passada por nossa query)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> "$geoIntersects" --->  SIMPLESMENTE TE RETORNA '''TODAS AS ÁREAS QUE TEM UM COMMON POINT''''
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> não podemos usar '$geoWithin' com nossa query JUSTAMENTE PQ 
+
+
+O POLÍGONO NUNCA SERÁ UMA 'ÁREA' DENTRO DE 'USER',
+
+pq user é 
+
+um PONTO,
+
+e pontos
+ 
+
+
+ nunca são maiores do que áreas....
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -------> A PERGUNTA É:
+
+
+
+
+
+
+
+
+
+
+
+ o 'PONTO' em que o user está ___ 'INTERSECTS WITH' a area do parque?
+
+
+
+
+
+
+
+
+
+
+ -> SE A RESPOSTA É SIM,
+
+
+
+
+ VAMOS CONSEGUIR ESSA AREA/RETRIEVAR ESSA AREA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ---> 
+
+
+ escrevemos assim:
+
+
+
+
+
+
+
+
+
+ db.areas.find(
+     {
+         $geoIntersects: {
+             $geometry: {
+                 type: "Point"
+             }
+         }
+     }
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ EM "geometry',
+
+
+ NOVAMENTE,
+
+
+ PASSAREMOS UM GEOJSON OBJECT... (composto por type e coordinates) ---> 
+
+
+ AÍ EM 
+
+ COORDINATES PASSAMOS 
+
+ 
+
+
+ AS COORDENADAS DO USER,
+
+
+ que é um par em 1 array...
+
+
+
+
+
+
+ ex:
+
+
+
+
+
+
+
+
+
+ db.areas.find(
+     {{
+         $geoIntersects: {
+             $geometry: {
+                 type: "Point",
+                coordinates: [
+                    -122.4757474, 37.7689999
+                ]
+             }
+         }
+     }
+     }
+ )
+
+
+
+
+
+
+
+
+
+
+
+ -> USER ESTÁ NA ACADEMY OF SCIENCES....
+
+
+
+
+
+
+
+
+
+
+
+
+ --> OK, MAS ISSO NÃO ME RETRIEVOU NADA.... --> será que deu erro....
+
+
+
+
+
+
+
+
+
+
+ --> É PQ EU COLOQUEI 'location', em vez de 'area', no field... (field que tem a GEOJSON DATA/OBJECT)...
+
+
+
+
+
+
+
+
+
+
+
+ DEU CERTO:
+
+
+
+
+
+
+
+  db.areas.find({
+...   area: {    
+...     $geoIntersects: {
+...       $geometry: {
+...         type: 'Point',
+...         coordinates: [-122.49182600352387,
+...           37.770412230737094],
+...       },
+...     },
+...   },
+... });
+{ "_id" : ObjectId("62125c37ae75667eb0c3d0e9"), "name" : "Golden Gate Park", "area" : { "type" : "Polygon", "coordinates" : [ [ [ -122.45472, 37.77473 ], [ -122.45307, 37.76641 ], [ -122.5102, 37.7643 ], [ -122.51089, 37.77139 ], [ -122.45472, 37.77473 ] ] ] } }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> É CLARO QUE SE TIVÉSSEMOS MÚLTIPLAS ÁREAS EM QUE ESSE POINT 'insersectasse',
+
+
+
+
+
+
+NÓS __ RECEBERÍAMOS MÚLTIPLOS DOCUMENTS DE 'AREA' (
+
+
+    ex: tenho uma área para 
+
+    'ZONA SUL',
+
+    outra para 
+
+    'CENTRO HISTÓRICO' -----> ambas areas seriam retornadas, se eu colocasse 1 point que as 2 ABRANGESSEM...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ALÉM DISSO,
+
+
+VOCÊ PODE 
+
+FAZER MAIS DO QUE 
+
+
+APENAS O 'INTERSECT DE POINTS EM AREAS' --------> VOCê 
+
+
+
+PODE CHECAR ___ SE ÁREAS__ INTERSECTAM COM ÁREAS (areas dentro de areas),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+POR EXEMPLO:
+
+
+
+
+
+
+
+
+QUEREMOS ENCONTRAR QUAL NEIGHBORHOOD INCLUI O GOLDEN GATE PARK..
+
+
+
+
+
+
+
+
+
+
+
+
+-----> PARA COMPLETAR NOSSA LIÇÃO,
+
+
+VAMOS PROCURAR POR 1 POINT QUE NÃO ESTÁ DENTRO DE 'golden gate park',
+
+
+como 'adriano':
+
+
+
+
+
+
+
+
+
+
+                     db.areas.find({
+                          area: {
+                            $geoIntersects: {
+                              $geometry: {
+                                type: 'Point',
+                                coordinates: [-2.6016748434018884,
+                                  54.990021587207075],
+                              },
+                            },
+                          },
+                        });
+
+
+
+
+
+
+
+
+
+                        --> isso não retorna coisa alguma,
+
+                        pq 
+
+                        não temos NENHUMA ÁREA que esse 
+
+                        point 'INTERSECTA'...

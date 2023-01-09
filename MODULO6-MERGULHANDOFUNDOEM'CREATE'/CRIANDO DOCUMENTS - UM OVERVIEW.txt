@@ -1,0 +1,514 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, COMO PODEMOS CREATE DOCUMENTS NO 
+
+
+
+
+MONGODB?
+
+
+
+
+
+
+
+
+
+--> JÁ VIMOS ISSO,
+
+MAS BASICAMENTE 
+
+VOCÊ 
+
+TEM 
+
+
+
+
+
+O METHOD DE 'insertOne',
+
+
+
+e o 
+
+
+method de 
+
+'insertMany()'...
+
+
+
+
+
+
+
+
+
+
+
+--> É AQUELA CLÁSSICA FÓRMULA DE:
+
+
+
+
+
+
+
+
+db.collectionName.insertOne({field: "value"})
+
+
+
+
+
+
+
+
+
+
+
+
+E: 
+
+
+
+
+
+db.collectionName.insertMany(
+    
+    [
+    {field: "value"},
+      {field: "value2"}
+
+
+
+    ]
+    
+    
+    )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    --> OK... --> PODEMOS INSERIR OU 1 DOCUMENT, OU MÚLTIPLOS DOCUMENTS..
+
+
+
+
+
+
+
+
+--> VOCÊ PODE OU INSERIR 1 '_id' manualmente,
+
+
+ou aí depender do _id 
+
+
+automático 
+
+do 
+
+
+
+
+
+
+MONGODB....
+
+
+
+
+
+
+
+
+
+
+
+
+--------> E INSERTMANY FAZ A MESMA COISA,
+ 
+
+
+ MAS COM UM ARRAY/LIST DE DOCUMENTS SENDO INSERIDOS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> AGORA,
+
+
+
+ É HORA DE DIZER QUE EXISTE 1 TERCEIRO METHOD DE INSERT,
+
+
+ QUE É 
+
+
+
+
+ só 
+
+
+
+ 'insert()'.... ---> 
+
+
+
+
+
+
+
+
+
+
+ O 'insert()'
+
+
+ É UM POUCO MAIS FLEXÍVEL,
+
+
+
+
+
+
+
+
+
+ e é escrito assim:
+
+
+
+
+
+
+
+
+
+ db.collectionName.insert()
+
+
+
+
+
+
+
+
+
+
+
+ --> O INSERT É UM POUCO MAIS FLEXÍVEL pq 
+
+
+ ELE ACEITA TANTO:
+
+
+
+
+ 1) UM SINGLE DOCUMENT 
+
+
+
+ 2) UM ARRAY DE DOCUMENTS 
+
+
+
+
+
+
+
+
+
+
+ ---> MAS O PROFESSOR NÃO VAI 
+
+
+ 'BOTHER' com o dive nesse 'insert'... --------> ISSO PQ 
+
+ O 
+
+ 'insert()'
+
+
+
+
+ ERA USADO NO PASSADO.... --> JÁ 
+
+ O 
+
+
+ 'insertOne'
+
+
+
+ e o 
+
+ 'insertMany()'
+
+
+
+
+
+
+
+FORAM CRIADOS DE PROPÓSITO,
+
+TUDO PARA QUE VOCÊ TENHA QUE SER MAIS CLARO 
+
+
+
+SOBRE O QUE VOCÊ PRETENDE FAZER...
+
+
+
+
+
+
+
+
+ 
+
+
+ isso pq 
+
+
+ o 
+
+
+ 'db.collectionName.insert()'
+
+
+ NÃO É TÃO INSTANTANEAMENTE 
+ ÓBVIO (
+
+
+     se você inseriria 1 documetn ou vários...
+ ) -------> 
+
+
+
+
+ TAMBÉM 
+
+ PQ 
+
+ O 
+
+
+ 'insert()'
+
+
+ É UM POUCO MAIS ERROR-PRONE,
+
+
+
+
+
+PQ __ VOCÊ PODERIA ACABAR COM UMA SITUAÇÃO EM QUE VOCÊ ESPERAVA 
+INSERIR 
+
+
+MÚLTIPLOS DOCUMENTS,
+
+MAS ACABAVA INSERINDO APENAS 1...
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS O ONE E MANY 
+
+,
+
+
+COMO SÃO FIXADOS 
+
+A 
+
+
+APENAS 1 SINTAXE,
+
+
+
+
+
+
+VOCê 
+
+VAI GANHAR 1 ERROR 
+
+SE VOCÊ INPUTTAR ALGO INCORRETO
+
+,
+
+
+
+
+
+E TAMBÉM HÁ O FATO DE QUE ELES SÃO MAIS VISÍVEIS NO CÓDIGO....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ALÉM DE 'insertOne',
+
+
+'insertMany'
+
+
+e 
+
+'insert()',
+
+
+
+TEMOS 
+
+
+TAMBÉM 
+
+
+
+
+
+O IMPORTANTÍSSIMO 
+
+
+
+
+
+
+'mongoimport'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ELE É USADO PARA IMPORTAR DATA...
+
+
+
+
+
+
+
+
+
+sua sintaxe é como 
+
+
+
+
+
+-------------------------------------
+
+
+
+mongoimport -d carts -c carsList --drop --jsonArray 
+
+
+
+
+-------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR VAI EXPLICAR COMO ESSAS OPTIONS DO MONGOIMPORT 
+
+
+
+
+FUNCIONAM, E O QUE SÃO....
+
+
+
+
+
+
+
+
+
+
+-- >DEVEMOS DIVAR NO INSERT DE DOCUMENTS,
+
+
+E VER 
+
+BREVEMENTE OS BASICS,
+
+
+PARA 
+
+VER 
+
+ENTÃO O AVANÇADO...

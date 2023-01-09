@@ -1,0 +1,701 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> COMO AUTENTICAMOS NO STITCH?
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, PARA O AUTH,
+
+
+
+PODEMOS DIVAR NO STITCH,
+
+NO SITE DELE DNV,
+
+
+ 
+ E AÍ LÁ EM 'USERS',
+
+
+
+ no console do stitch,
+
+
+ em 
+
+
+ 'providers',
+
+
+ VOCê 
+ Vê 
+
+ DIFERENTES  
+
+ MANEIRAS DE AUTHENTICATE 1 USER:
+
+
+
+
+
+
+
+
+
+
+
+ TEMOS:
+
+
+
+
+
+
+
+
+ 0) 'ALLOW ANONYMOUS AUTHENTICATIOn' 
+
+ 1) EMAIL/PASSWORD 
+
+
+
+
+
+ 2) FACEBOOK 
+
+
+
+
+ 3) GOOGLE 
+
+
+
+ 4) API KEYS 
+
+
+
+
+
+ 5) CUSTOM AUTHENTICATION..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> VOCê ATÉ PODE ENABLAR 'ANONYMOUS AUTHENTICATION'... -----> SE VOCÊ MARCA ISSO,
+
+
+
+ SEUS USERS PODERÃO FAZER LOGIN _ ANONIMAMENTE__.... ---> E O PROFESSOR VAI MOSTRAR COMO ISSO FUNCIONA,
+
+
+
+mas vamos 
+
+ 'switch para users de verdade'
+
+
+ mais tarde...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> enablamos essa opção do 'login anonimo'...
+
+
+
+
+
+
+
+ -------> OK... --> VAMOS QUERER FAZER 'LOGIN'
+
+
+ ANONIMAMENTE... --> COMO ISSO FUNCIONA?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> MAS COMO FAZEMOS ISSO?
+
+
+
+
+
+
+
+
+
+
+ -> PRIMEIRAMENTE PRECISAMOS 
+
+
+
+
+
+ ARMAZENAR O 'CLIENT' 
+
+
+que será RETORNADO 
+
+
+
+pelo method de 
+
+
+
+'Stitch.initializeDefaultAppClient('xxxxx')',
+
+,
+
+
+
+
+
+
+
+
+
+
+
+..... por isso, escrevemos tipo assim:
+
+
+
+
+
+
+
+
+
+constructor() {
+    super();
+    const client = Stitch.initializeDefaultAppClient('aaa');
+}
+
+
+
+
+
+
+
+
+
+
+
+------> E, AGORA, PARA 
+
+A ANONYMOUS AUTH,
+
+
+
+PRECISAMOS 
+
+
+
+IMPORTAR 
+
+
+
+
+
+O OBJETO 'AnonymousCredential' lá da package de 'mongodb-stitch-browser-sdk'...
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+import { AnonymousCredential } from 'mongodb-stitch-browser-sdk';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> certo....
+
+
+
+
+
+
+
+
+
+
+
+---> isso feito,
+
+
+escrevemos assim:
+
+
+
+
+
+constructor() {
+  super();
+ const client = Stitch.initializeDefaultAppClient('application-0-acjfk');
+
+    client.auth;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VAMOS USAR ESSE 'client.auth',
+
+
+PARA 
+
+
+
+__aCESSAR__ AS FEATURES_ DE AUTENTICAÇÃO DA SDK 
+
+
+DO 
+
+
+STITCH... ----> e nesse 
+
+
+
+
+
+method,
+
+podemos 
+
+
+chamar 
+
+
+
+'.loginWithCredential()',
+
+
+
+
+
+
+
+
+
+
+
+
+
+QUE É UM METHOD QUE ACEITA/EXIGE DIFERENTES CREDENTIALS..
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+constructor() {
+  super();
+ const client = Stitch.initializeDefaultAppClient('application-0-acjfk');
+
+    client.auth.loginWithCredential()
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> isso depende dos auth methods que você vai querer usar e que VOCÊ HABILITOU NO SEU TERMINAL/CONSOLE, LÁ NO SITE DO STITCH...
+
+
+
+
+
+
+
+
+
+--> COMO NÓS HABILITAMOS SÓ  O 'ANON AUTHENTICATION',
+
+
+
+
+
+
+
+
+
+passamos 
+
+
+
+
+apenas 
+um parâmetro 
+
+de 
+
+
+'new AnonymousCredential()'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E PARA ESSE OBJETO INSTANCIADO AÍ,
+
+
+NÃO PRECISAMOS PASSAR MAIS NENHUM PARÂMETRO, PODEMOS SÓ CHAMAR ASSIM....
+
+
+
+
+
+
+
+
+
+
+PORTANTO, O CONJUNTO DE CÓDIGOS FICOU ASSIM:
+
+
+
+
+
+import { Stitch, RemoteMongoClient } from 'mongodb-stitch-browser-sdk';
+
+import { AnonymousCredential } from 'mongodb-stitch-browser-sdk';
+
+
+
+
+constructor() {
+  super();
+ const client = Stitch.initializeDefaultAppClient('application-0-acjfk');
+
+    client.auth.loginWithCredential(new AnonymousCredential())
+};
+
+
+
+
+
+  fetchData = (direction) => {
+    const mongodb = Stitch.defaultAppClient.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas');
+
+  mongodb.db('shop2').collection('products').find().asArray()
+  .then(
+    (products) => {
+          this.setState({products: products})
+    }
+  )
+  .catch(
+    (err) => {
+      this.props.onError('Fetching the produts failed. Please try again later.');
+    }
+  )
+
+
+
+
+
+
+-------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> OK... 
+
+
+
+ISSO FEITO,
+
+
+
+FICAREMOS LOGGADOS 'ANONYMOUSLY'... 
+
+
+
+
+
+
+
+
+
+
+-> QUAL SERÁ O RESULTADO, NO NOSSO APP?
+
+
+
+
+
+
+
+
+
+
+
+--> SERÁ ESSE ERROR, NO CONSOLE.LOG:
+
+
+
+
+
+
+us-east-1.aws.stitch.mongodb.com/api/client/v2.0/app/application-0-acjfk/functions/call:1  
+
+
+
+        Failed to load resource: the server responded with a status of 403 ()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS O PROFESSOR GANHOU OUTRO ERROR,
+
+
+
+
+ganhou 
+
+
+'unexpected token in JSON at position 225' --> stitch request error...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> ESSE ERRO ESTÁ 'STEMMING' LÁ 
+
+DA LINHA 
+
+
+45 ---> está vindo 
+
+
+
+do 
+
+
+
+CÓDIGO QUE TENTA FETCHEAR PRODUCTS,
+
+
+
+
+
+
+com aquele call de
+
+
+
+'fetchData',
+
+
+
+que tem aquele código do stitch...
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+ ----> OK.... EM OUTRAS PALAVRAS,
+
+
+
+ ESTAMOS AUTHENTICATED, MAS __ AINDA __ ESTAMOS RECEBENDO UM ERRO_.... ----->  E ISSO TEM RELAÇÃ COM 
+
+ AS 
+
+
+
+
+ __RULES__ QUE TEMOS QUE DEFINIR  
+
+ PARA 
+
+
+ CONSEGUIR NOSSA DATABASE (e isso tem que ser settado no próprio stitch)....
+
+
+
+
+
+
+
+
+
+-> POR DEFAULT,
+
+
+
+TUDO NO STITCH É INACESSÍVEL,
+
+TUDO É LOCKED DOWN....--> TEMOS QUE DIZER QUAL 
+
+
+'AUTHENTICATED ENTITY' (OS ANon users também são auth entities)
+
+
+
+
+É PERMITIDA, QUAIS PERMISSÕES TEM, 
+
+
+ETC... -----> e podem existir MÚLTIPLOS TIPOS DE 'AUTHENTICATED ENTITY' EM UM MESMO APP STITCH..

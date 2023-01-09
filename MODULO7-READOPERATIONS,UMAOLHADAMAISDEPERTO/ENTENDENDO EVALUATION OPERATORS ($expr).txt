@@ -1,0 +1,1963 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$expr --> é o operator de EXPRESSION....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------> ESSE OPERATOR É ÚTIL SE VOCÊ QUER __ COMPARAR '2 FIELDS'
+
+
+DENTRO DE 1 MESMO DOCUMENT...
+
+
+
+
+
+
+
+
+
+
+
+
+-------> E AÍ,
+
+
+A PARTIR DESSA COMPARISON,
+
+
+ENCONTRAR 
+
+
+
+
+TODOS OS DOCUMENTS EM QUE 
+
+
+
+ESSA COMPARISON AÍ ___ RESULTA EM CERTO VALOR/RESULTADO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> É MEIO ABSTRATO, DEVEMOS VER COMO FUNCIONA....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ok ...
+
+
+
+
+
+
+
+professor 
+
+
+
+entra na database de 'financialData'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AÍ ELE CRIA UMA COLLECTION DE 'sales',
+
+
+e aí insere várias SALES COM insertMany'...
+
+
+
+
+
+
+
+
+
+
+
+eX:
+
+
+
+
+
+
+
+
+
+
+
+
+db.sales.insertMany(
+    [
+        {volume: 100, target: 120},
+        {
+            volume: 89, target: 80
+        },
+                {
+            volume: 200, target: 177
+        }
+    ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA, COM ISSO, TEREMOS INSERIDO 3 DIFERENTES INSTANCES...
+
+
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+> db.sales.find().pretty()
+{
+        "_id" : ObjectId("620830c6171f9e71c019b2ad"),
+        "volume" : 100,
+        "target" : 120
+}
+{
+        "_id" : ObjectId("620830c6171f9e71c019b2ae"),
+        "volume" : 89,
+        "target" : 80
+}
+{
+        "_id" : ObjectId("620830c6171f9e71c019b2af"),
+        "volume" : 200,
+        "target" : 177
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA DIGAMOS QUE QUEREMOS ENCONTRAR TODOS OS DOCUMENTS NESSA COLLECTION __ EM QUE __ O 'volume'
+
+
+
+É MAIOR DO QUE O 'target'... 
+
+
+
+
+
+--> ESSE É UM TÍPICO USE-CASE EM QUE 
+
+
+'$expr'
+
+
+
+PODE NOS AJUDAR...
+
+
+
+
+
+
+
+
+
+
+--> MAS COMO USAMOS ESSE OPERATOR? 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PRIMEIRO ENCONTRAMOS NOSSO 
+
+
+
+sales,
+
+
+com 'db.sales.find()'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AÍ DENTRO DELE VAMOS DEFINIR NOSSO FILTER OBJECT....
+
+
+
+
+
+
+
+
+
+
+-> nesse filter object,
+
+
+VAMOS 
+
+
+PRIMEIRAMENTE 
+
+ESCREVER '$expr'....
+
+
+
+
+
+
+
+
+
+
+--> é o operator de expression... --> 
+
+
+
+
+E ESSE OPERATOR SEMPRE VAI EXIGIR UM 'DOCUMENT DESCREVENDO A EXPRESSIOn'..... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+eX:
+
+
+
+
+
+
+
+db.sales.find(
+    {
+        $expr: {}
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------> DENTRO DESSE OBJECT,
+
+VOCê PODE USAR ALGUNS COMPARISON OPERATORS,
+
+
+COMO '$gt'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> APENAS ALGUNS OPERATORS SÃO VALIDOS, com 
+
+'$expr'... 
+
+
+
+
+
+
+
+
+
+
+
+
+--> DENTRO DE '$gt',
+
+
+VAMOS PASSAR 1 ARRAY,
+
+E AÍ VAMOS BASICAMENTE 
+
+
+'COMPARAR TODOS ESSES FIELDS'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> A PARTE INTERESSANTE, AQUI,
+
+É QUE 
+
+
+
+NÃO VAMOS 
+
+
+INSERIR VALORES MANUALMENTE PARA VER QUAL É O MAIOR (ou seja, nada de '[5, 10]')...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> EM VEZ DISSO,
+
+O QUE FAZEMOS AQUI 
+
+
+
+É 
+
+'REFERENCIAR NAMES DE FIELDS NA NOSSA DATA'....  ------> OU  SEJA,
+
+ESPECIFICAMOS 
+
+
+'target' e 
+
+'volume',
+
+no 
+
+CASO DE NOSSAS SALES:
+
+
+
+
+
+
+
+db.sales.find(
+    {
+        $expr: { $gt: ["target", "volume"]}
+    }
+)
+
+
+
+
+
+
+
+
+
+
+^^^MAS ISSO AÍ É VÁLIDO....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA ELE VAI COMPARAR 
+
+
+
+
+'volume' 
+
+e 
+'
+target',
+
+E APENAS RETORNARÁ 
+
+OS 
+
+
+DOCUMENTS EM QUE 
+
+
+
+'volume'
+
+
+É MAIOR DO QUE 'target'....
+
+
+
+
+
+
+
+MAS AINDA ASSIM,
+
+
+
+
+
+ISSO __ NÃO FUNCIONARIA/FUNCIONA---> ISSO PQ esse write de 
+
+
+
+["volume", "target"] ainda será 
+
+tratado como um 'HARD INPUT' por parte de vocE^..... -------- > E ISSO NÃO FUNCIONARÁ, RETORNARÁ TODOS OS DOCUMENTS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE QUEREMOS REALMENTE NOS REFERIR AOS  'field names',
+
+
+
+
+SOMOS OBRIGADOS A ADICIONAR UM '$' 
+
+AO INÍCIO DE CADA KEY....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+
+db.sales.find(
+    {
+        $expr: { $gt: ["$target", "$volume"]}
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE VOCê ESCREVE ASSIM, VOC~E ESTARÁ DIZENDO: 
+
+
+
+
+'''HEY, POR FAVOR LOOK AT THE VOLUME FIELD,
+
+
+
+
+E AÍ 
+
+USE O VALOR DESSE VOLUME AÍ PARA  FICAR DE VALOR NESSA EXPRESSION...''' ------> E É CLARO QUE 
+
+
+
+ESSA SINTAXE DE '$'
+
+NÃO FUNCIONA EM TODOS OS LUGARES DO CÓDIGO...
+
+
+
+
+
+
+
+
+
+
+
+--> MAS ISSO FUNCIONA NA 'EXPRESSION QUERY'..
+
+
+
+
+
+
+
+
+
+
+
+
+--> E, MAIS TARDE,
+
+NO FRAMEWORK DE AGGREGATION MODULE,
+
+APRENDEREMOS MAIS LUGARES EM QUE PODEMOS UASR '$'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--- --> OK ESCREVEMOS ISSO AÍ....
+
+
+
+
+
+
+
+
+
+
+
+
+--_> ISSO É SUPER ÚTIL,
+
+PQ COM ESSA APPROACH DINÂMICA,
+
+
+
+
+
+
+
+NÓS TEMOS UMA MANEIRA MAIS FÁCIL DE FETCH THE DATA,
+
+
+
+
+ao passo que 
+
+ 
+
+
+ temos um fetch de datA QUE OCORRE 
+
+ QUANDO 
+
+
+ 2 KINDA RELATED FIELDS 
+
+
+ tem uma relação que quereoms checar...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -> É CLARO QUE EXISTEm approaches masi simpl,mas sso é bom...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> BEM,,,,O POREFESSSOR QUER QUE CALCULEMOS O PRIMEIRO VALOR EM NOSSO DOCUMENT...
+
+
+
+
+
+
+
+
+
+
+
+
+ --> ''' SE O VOLUME  PASSAR DE 190, A DISTANCE DO VOLUME ATÉ O TARGET DEVE SER _ATÉ 10''''...
+
+
+
+
+
+
+
+
+ COMO ESCREVEMOS ISSO^?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ continuação:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ---------> ok... agora estamos nos referindo aos VALUES DOS FIELDS,
+
+
+e não aos NAMES DE SEUS FIELDS...
+
+
+
+
+
+
+
+
+
+
+
+
+ISSO É SUPER ÚTIL, O 'EXPR',
+
+
+
+
+
+PQ TEMOS UM EASY TIME DE 'FETCHING THE DATA',
+
+em que 
+
+
+
+
+
+ALGUMA CONDITION __DENTRO __ DO __ DOCUMENT É 'met'... --> AÍ PODEMOS FAZER COM QUE 
+
+
+
+
+2 'KINDA RELATED FIELDs' podem ser alvo de uma RELATION QUE 
+
+
+
+
+
+
+EXECUTAMOS AQUI, por meio de '$expr'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------> MAS TAMBÉM HÁ UMA FORMA MAIS COMPLEXA DE EXPRESSION QUE VOCÊ PODE USAR....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> DIGAMOS QUE 
+
+
+QUEREMOS RETORNAR O DOCUMENT
+
+SÓ 
+
+
+
+
+
+
+
+
+SE 
+
+
+'''O  VOLUME É ACIMA DE 190, MAS A DIFERENÇA AO TARGET TEM DE SER 
+DE PELO MENOS 10'...
+
+
+
+
+
+
+
+
+
+
+
+ 
+ OK, MAS COMO ESCREVEMOS ISSO?
+
+
+
+
+
+
+
+
+
+
+
+
+ --> para isso,
+
+ VOCÊ PRECISA AJUSTAR A PARTE NO INTERIOR de "$gt' (ou o operator qualquer que você estiver utilizando)....
+
+
+
+
+
+
+
+
+
+
+
+
+ --> O PRIMEIRO VALUE, NO CASO, DENTRO DESSE OPERATOR '$gt', do seu array, SERÁ 1 DOCUMENT...
+
+
+
+
+
+
+
+
+
+ EX:
+
+
+
+
+
+
+ 
+
+db.sales.find(
+    {
+        $expr: {
+                    $gt: [
+                        {}
+                    ]
+
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+ESSE DOCUMENT CONTERÁ 
+
+
+
+1 OPERATOR DE "$cond',
+
+
+
+de condition,
+QUE TERÁ RELAÇÃO 
+
+
+
+
+
+
+COM SUA EXPRESSIOn....
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+ 
+
+db.sales.find(
+    {
+        $expr: {
+                    $gt: [
+                        {$cond}
+                    ]
+
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> A CONDITION TE DEIXA ESPECIFICAR 1 '''''DOCUMENT ''''
+
+
+
+
+QUE DESCREVE 
+
+
+
+
+O 
+
+
+'CONDITIONAL VALUE'
+
+que ele 
+
+vai DERIVAR DA COMPARISON...
+
+
+
+
+
+
+
+COMO ASSIM?
+
+
+
+
+
+
+
+BEM, LEMBRE-SE:
+
+
+
+
+
+
+
+1) ainda estmaos procurando por um VALUE QUE __ PODEMOS USAR COMO 1 PRIMEIRO ELEMENT no NOSSO ARRAY DE 'greater than'...
+
+e aí, nós APENAS VAMOS QUERER __ CALCULAR ESSE VALUE DINAMICAMENTE...
+
+
+
+
+
+
+
+
+
+2) para isso, dentro desse document de '$cond',
+ 
+ NÓS PRIMEIRAMENTE ESPECIFICAREMOS UMA CONDITION, com 'if'...
+
+
+
+
+
+
+
+
+
+ ex:
+
+
+
+
+
+
+
+
+
+ 
+db.sales.find(
+    {
+        $expr: {
+                    $gt: [
+                        {$cond: {if: }}
+                    ]
+
+        }
+    }
+)
+
+
+----------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+IF, NO CASO,
+
+É __ __ OUTRO__ 'COMPARISON OPERATOR'... ---> AÍ, DENTRO DO IF, VAMOS CHECAR POR 
+
+
+'$gte' (greater or equal),
+
+
+
+
+
+
+
+E AÍ 
+
+
+DENTRO DESSE OPERATOR VAMOS COLOCAR 
+
+
+
+2 VALORES, EXATAMENTE COMO ANTES (pq é uma comparison, no caso) ---> VAMOS CHECAR 
+
+
+
+
+
+SE 
+
+
+"$volume", 190 
+
+
+
+
+
+
+
+(SE VOLUME É MAIOR DO QUE 190)...
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+ 
+db.sales.find(
+    {
+        $expr: {
+                    $gt: [
+                        {$cond: {if: {$gte: ['$volume', 190]
+                        }
+                        }
+                        
+                        }
+                    ]
+
+        }
+    }
+)
+
+
+
+
+
+
+
+
+----------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+BEM.... SE ESSE 'if' FOR SATISFEITO,
+
+
+
+AÍ VAMOS QUERER RODAR UM 'then',
+
+
+
+
+pq 
+
+AÍ __ TEREMOS UM CERTO VALUE QUE VAMOS QUERER __ USAR/UTILIZAR COMO FILTER nesse field.... --> 
+
+
+
+
+
+
+
+
+
+'THEN',
+
+
+NÓS VAMOS OU __ HARDCODAR__ UM VALOR AQUI (como '190', dizendo que ),
+
+
+
+
+
+
+
+
+
+OU ENTÃO PODEMOS CALCULAR ESSE VALOR DINAMICAMENTE.... --> 
+
+
+
+
+
+
+
+PARA CALCULAR DINAMICAMENTE,
+
+
+
+PASSAMOS AINDA OUTRO DOCUMENT AO 'then'... ---> AÍ O PROFESSOR USA UM OPERATOR DE 
+
+'$subtract',
+
+
+
+QUE VOCÊ PODE USAR PARA __ SUBTRAIR/REDUZIR 2 VALUES.... ---> 
+
+
+
+
+
+
+VOCÊ PASSA 1 ARRAY DE VALUES A ESSE SUBTRACT, TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+
+db.sales.find(
+    {
+        $expr: {
+                    $gt: [
+                        {$cond: {if: {$gte: ['$volume', 190]
+                        }
+                        }
+                        
+                        },
+
+                        then: {$subtract: []}
+                    ]
+
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+BTW ---> "$subtract" e todos esses tipos de operators são 'AGGREGATION PIPELINE' operators....  -------> N SE PREOCUPE SE TUDO ISTO É COISA DEMAIS, NO MOMENTO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO TUDO FICARÁ MAIS CLARO NO MÓDULO DE 'AGGREGATION FRAMEWORK'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SUBTRACT VAI SUBTRAIR O SEGUNDO PARAMETRO QUE PASSARMOS NESSE ARRAY, DO PRIMEIRO ELEMENTO...
+
+
+
+
+
+
+
+
+
+Ex:
+
+
+
+
+
+
+
+
+
+
+
+db.sales.find(
+    {
+        $expr: {
+                    $gt: [
+                        {$cond: {if: {$gte: ['$volume', 190]
+                        }
+                        }
+                        
+                        },
+
+                        then: {$subtract: []}
+                    ]
+
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> DENTRO DESSE 'subtract',
+
+
+VAMOS QUERER SUBTRAIR '10' 
+
+
+
+LÁ DO VALOR DE 'volume'.... ( que será repreesntado por '$volume')...
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+db.sales.find(
+    {
+        $expr: {
+                    $gt: [
+                        {$cond: {if: {$gte: ['$volume', 190]
+                        }
+                        }
+                        
+                        },
+
+                        then: {$subtract: ["$volume", 10 ]}
+                    ]
+
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... ISSO SIGNIFICA QUE _ __ PARA TODOS ___ OS DOCUMENTS EM QUE VOLUME É MAIOR DO QUE 190,
+
+
+VAMOS SUBTRAIR 10 do valor desse 'volume'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, ESSE É 1 DOS CASES... --> MAS E QUANTO AO 'ELSE CASE'? -----. ou seja,
+
+e quanto àqueles casos 
+
+
+
+
+EM QUE __ O VOLUME __ NÃO É SUPERIOR A 190... -------> BEM, NESSES CASOS,
+
+
+VAMOS QUERER SIMPLESMENTE USAR 
+
+
+
+
+'$volume',
+
+
+o valor do volume normalzinho,
+
+
+SEM QUAISQUER CHANGES...
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+db.sales.find(
+    {
+        $expr: {
+                    $gt: [
+                        {$cond: {if: {$gte: ['$volume', 190]
+                        }
+                        }
+                        
+                        },
+
+                        then: {$subtract: ["$volume", 10 ]},
+
+
+
+                        else: "$volume"
+                    ]
+
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> OK.... COM ISSO, TEREMOS TERMINADO NOSSA 'CONDITION' dessa expression... --> e a condition SEMPRE SERÁ 
+
+O 
+
+
+__PRIMEIRO VALOR/PARÂMETRO DE '$expr'...
+
+
+
+
+
+
+
+
+
+--> ok.... ISSO SIGNIFICA QUE O PRIMEIRO 'VALUE' 
+
+
+SERÁ IGUAL A '$volume', ou então será igual ao '$volume - 10' (se o value for maior do que 190)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... MAS O 'VALUE' A QUE VAMOS COMPARAR ESSE 'VALUE' da primeira condition,
+
+
+
+
+O VALUE 
+
+
+AINDA SERÁ "$target',
+
+
+
+
+EXATAMENTE COMO ANTES...
+
+
+
+
+
+
+
+
+--> LEMBRE-SE DA EXPRESSÃO ORIGINAL:
+
+
+
+
+
+
+
+DIGAMOS QUE 
+
+
+QUEREMOS RETORNAR O DOCUMENT
+
+SÓ 
+
+SE 
+
+
+'''O  VOLUME É ACIMA DE 190, MAS A DIFERENÇA AO TARGET TEM DE SER 
+DE PELO MENOS 10'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EXPRESSÃO COMPLETA:
+
+
+
+
+
+
+
+db.sales.find(
+    {
+        $expr: {
+                    $gt: [
+                        {$cond: {if: {$gte: ['$volume', 190]
+                        }
+                        }
+                        
+                        },
+
+                        then: {$subtract: ["$volume", 10 ]},
+
+
+
+                        else: "$volume"
+        }}
+                    ]
+
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+VERSÃO BONITA E CORRETA DESSA EXPRESSÃO FICA ASSIM:
+
+
+
+
+
+
+
+
+
+
+db.sales.find({
+  $expr: {
+    $gt: [
+      {
+        $cond: {
+          if: { $gte: ['$volume', 190] },
+          then: { $subtract: ['$volume', 10] },
+          else: '$volume',
+        },
+      },
+      '$target',
+    ],
+  },
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> OK... ACHO QUE ENTENDI.... 
+
+
+mas é bem confuso...
+
+
+
+
+
+
+
+
+se dermos uma fuçada na expressão, fica assim:
+
+
+
+
+
+
+
+
+
+
+db.sales.find({
+  $expr: {
+    $gt: [
+      {
+        $cond: {
+          if: { $gte: ['$volume', 190] },
+          then: { $subtract: ['$volume', 30] },
+          else: '$volume',
+        },
+      },
+      '$target',
+    ],
+  },
+});
+
+
+
+
+
+
+
+
+
+                                                                                                    $gt...
+E VAI RETORNAR SÓ ESTE DOCUMENT AQUI, PQ É O ÚNICO QUE SATISFAZERÁ A condition de return ('aquele value daquela condition deve ser maior do que target')...
+
+
+
+
+ex:
+
+
+> db.sales.find({
+  $expr: {
+    $gt: [
+      {
+        $cond: {
+          if: { $gte: ['$volume', 190] },
+          then: { $subtract: ['$volume', 30] },
+          else: '$volume',
+        },
+      },
+      '$target',
+    ],
+  },
+});
+
+
+
+RETORNA:
+
+
+{ "_id" : ObjectId("620830c6171f9e71c019b2ae"), "volume" : 89, "target" : 80 }
+{ "_id" : ObjectId("620830d0171f9e71c019b2b1"), "volume" : 89, "target" : 80 }
+
+
+
+
+
+
+
+
+
+----------
+
+
+
+
+
+
+
+
+
+ESSE É UM CASE BEM COMPLEXO,
+
+
+
+MAS PODE EXISTIR....
+
+
+
+
+
+
+
+
+
+
+
+--> opreator de '$gt' e '$subtract' --> veremos isso no AGGREGATION FRAMEWORK MODULE...
+
+
+
+
+
+
+
+
+
+--> É UM COMANDO BEM FORTE, O '$expr'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR SÓ QUERIA NOS MOSTRAR COMO ELE FUNCIONA EM GERAL, E COMO DEVEMOS PENSAR SOBRE ELE....
+
+
+
+
+
+
+
+

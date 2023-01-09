@@ -1,0 +1,811 @@
+
+
+
+
+
+
+
+
+
+
+
+
+--> EXAMINAMOS 'NumberInt()' (converte DOUBLE 64 numbers em INT32.... numeros simples)
+
+
+
+
+
+e 
+
+
+'NumberLong()' (usado para INT64, integrais com MAIS DÍGITOS... LONG INT)....
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS HÁ UMA QUESTÃO ÓBVIA QUE VOCÊ PODE PERGUNTAR, AGORA:
+
+
+
+
+
+
+
+'''PQ DIABOS NÃO ARMAZENAMOS TODOS OS NUMBERS COMO STRINGS'''? 
+
+
+
+
+
+
+
+
+
+
+
+--> bem, é pq não podemos rodar cálculos sobre eles....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> para exemplificar, o professor escreve assim:
+
+
+
+
+
+
+
+
+
+
+
+
+db.accounts.insertOne(
+    {
+        name: "Max",
+        amount: "100000000000000000000000000"
+    }
+)
+
+
+
+
+
+
+
+
+--> ARMAZENAMOS NOSSO NUMBER EM TEXT,
+
+
+
+
+
+
+PQ '''NÃO TEREMOS LIMITAÇÕES'''...  --------->  claro que isso é ERRADO, estamos só teorizando..
+
+
+
+
+
+
+
+
+
+
+-----> o text será válido, claro, pq pode 
+
+
+
+
+ser do tamanho que vocÊ quer..
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... --> AÍ O PROFESSOR DELETA 
+
+
+
+ESSA 
+
+
+
+
+CONTA DE BANCO,
+
+
+PARA ENTAÕ 
+
+A READICIONAR,
+
+
+
+
+
+MAS 
+
+
+
+
+COM MENOS 'amount',
+
+
+só de '10'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+A RAZÃO 
+
+
+
+PARA O STORE DISSO COMO 'STRING' 
+
+
+
+
+SER UMA PORCARIA É QUE QUALQUER CÁLCULO COM ESSE NEGÓCIO VAI 'FAIL'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+db.accounts.updateOne(
+    {
+
+    },
+
+    {
+        $inc: {
+            amount: 10
+        }
+    } 
+)
+
+
+
+
+
+
+
+
+
+
+--> ESSE OPERATOR VAI TENTAR AUMENTAR O VALOR DE 'amount' em 10- --> MAS ISSO VAI FALHAR,
+
+
+
+
+
+VAI DAR UM ERRO DE 
+
+
+
+'CANNOT APPLY $INC TO A VALUE OF NON-NUMERIC TYPE. Your object has the field 'amount' of non-numeric type string....'
+
+
+
+
+
+
+
+
+
+
+
+-> OU SEJA,
+
+
+
+A 
+
+
+
+
+
+STRING NÃO TE DEIXA RODAR CÁLCULOS COM OPERATORS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> E ESSES CÁLCULOS SEMPRE FUNCIONAM/FUNCIONARÃO 
+
+
+COM 
+
+
+
+OS 
+
+
+
+
+NumberInt()
+
+
+e 
+
+
+NumberLong()
+
+
+------------------------
+
+
+
+
+
+
+
+
+
+
+
+E TAMBÉM FUNCIONAM COM O FORMATO DEFAULT, 'DOUBLE 64', usado pelo mongoshell....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... MAS AQUI ENCONTRAMOS UMA PARTICULARIDADE...
+
+
+
+
+
+
+
+
+--> SE VOCÊ RODA 'updateOne'
+
+
+
+EM CIMA 
+
+
+
+
+DE 1 DOCUMENT NA SUA COLLECTION QUE 
+
+
+
+
+TEM UM FIELD ARMAZENADO COMO 'LONG INT',
+
+
+
+SE VOCÊ 
+
+
+TENTAR 
+
+
+
+
+RODAR 
+
+
+
+
+'db.accounts.updateOne(
+    {
+
+    },
+
+    {
+        $inc: {amount: 10}
+    }
+)
+',
+
+
+
+
+
+
+
+
+
+ESSE OPERATOR DE '$inc'
+
+
+
+
+
+VAI FAZER COM QUE O VALOR ARMAZENADO NA SUA COLLECTION FIQUE 
+
+
+
+como 
+
+
+
+'DOUBLE 64',
+
+E NÃO MAIS COMO 
+
+'LongInt'....
+
+
+
+
+
+
+
+
+
+(
+
+
+    O VALOR SERÁ OUTPUTTADO COMO '20', se você procurar por 
+
+    esse document,
+
+
+
+    MAS 
+
+    ELE 
+
+
+    CERTAMENTE NÃO SERÁ MAIS DE TYPE 'LongInt'...
+)
+
+
+
+
+
+
+
+
+
+--> SERÁ DE TIPO 'FLOAT' mais uma vez... --> A RAZÃO PARA ISSO É QUE 
+
+
+__PROVAVELMENTE__ ___
+HAVÍAMOS 
+
+
+ESCRITO 
+
+
+
+
+'$inc: {amount: 10}' 
+
+
+
+
+
+
+
+EM VEZ DE 
+
+
+
+
+'$inc: {amount: NumberLong("10")}' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> OK.... ISSO QUER DIZER QUE O INCREMENT POR ESSE 'NORMAL NUMBER' (Que é de formato 'double 64', que é o padrão do mongodb)
+
+
+
+
+
+FEZ COM QUE O RESULTADO DESSA OPERAÇÃO 
+
+
+
+
+'amount + 20 '
+
+
+
+RESULTASSE 
+
+
+
+
+
+EM UM VALOR TIPO 
+
+
+
+20.0000000000000000000000000000000002 
+
+
+
+
+
+(
+
+    que é um double 64...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+-------> ISSO QUER DIZER QUE O VALOR É CONVERTIDO PARA UM DOUBLE/FLOAT 64....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> se queremos que o type do number fique igual,
+
+
+
+
+
+
+
+
+
+precisamos escrever o updateOne
+
+
+assim:
+
+
+
+
+
+
+
+
+
+
+db.accounts.updateOne(
+    {
+    
+    },
+    {
+        $inc: {
+            amount: NumberInt(10)
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> ISSO DÁ CERTO... --> DÁ CERTO PQ NÃO ESTAMOS TRABALHANDO COM STRINGS,
+
+E SIM 
+
+
+
+TRABALHAMOS COM ESSES 'SPECIAL NUMBER TYPES'
+
+
+providenciados pelo mongodb....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> INFELIZMENTE,
+
+QUANDO 
+
+VOCÊ OUTPUTTAR/RETRIEVAR SEUS DADOS,
+
+
+
+
+eles NÃO VÃO APARECER/TE DIZER QUE 
+
+são 
+
+'Int64' 
+
+
+ou 
+
+'Int32' 
+
+
+
+ou 
+
+'Double 64' 
+
+
+DE CARA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------> a shell não nos mostra essas informações, mas o negócio terá sido 
+
+
+
+
+inserido como o type que você escreveu, 
+
+
+
+
+
+
+
+lá na sua database...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... 
+
+
+
+
+
+
+
+
+
+A MESMA COISA FUNCIONA PARA 'NumberInt()'..
+
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+db.companies.insertOne(
+
+    {
+        value: NumberInt("1234")
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+-> DEPOIS COMPLEMENTAMOS ESSE NEGÓCIO, COM:
+
+
+
+
+
+
+
+db.companies.updateOne(
+
+    {
+        
+    }
+
+
+    {
+
+        $inc: {
+            value: NumberInt("30")
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO VAI FUNCIONAR....
+
+
+
+
+
+
+
+
+
+RESUMINDO:
+
+
+
+
+
+
+
+
+1) SEMPRE ESCREVA com "" dentro dos wrappers de 'NumberInt', 'NumberLong', 128 bits double, etc....
+
+
+
+
+
+2) sempre adicione/manipule seus valores anteriores __ AO MESMO TEMPO QUE USA WRAPPERS, para evitar a conversão do type de seu number que foi armazenado anteriormente...
+
+
+
+
+
+
+
+
+3) NÃO ARMAZENE SEUS NUMBERS COMO STRINGS, PQ ISSO VAI TE IMPEDIR DE RODAR CÁCLULOS SOBRE OS NUMBERS...

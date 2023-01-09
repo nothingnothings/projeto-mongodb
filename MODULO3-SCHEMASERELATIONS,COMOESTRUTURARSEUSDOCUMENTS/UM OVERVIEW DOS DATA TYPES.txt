@@ -1,0 +1,665 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> AGORA QUE FICOU CLARO QUE TEMOS A LIBERDADE DE ESTRUTURAR 
+
+
+NOSSO DOCUMENT, 
+
+SCHEMALESS,
+
+
+
+
+DEVEMOS 
+
+VER 
+
+OS 
+
+
+DIFERENTES DATA TYPES QUE PODEMOS SALVAR NO FIELDS EM NOSSOS DOCUMENTS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+TEXT --> BEM SIMPLES.... --> SEMPRE USA "" em volta dos valores...
+
+
+
+
+
+
+
+--> VOCÊ NÃO TEM LIMITAÇÃO NO TEXT, NENHUM LIMITE DE CARACTERES, SÓ AQUELE 'OVERALL SIZE' DE 16MB de seu document...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+BOOLEAN --> TRUE OU FALSE... --> um user é um admin ou não?
+
+
+
+
+
+
+
+
+
+
+NUMBER --> TEMOS UM PUNHADO DE DIFERENTES NUMBERS EM MONGODB:
+
+
+a) 'Integer' (int32) --> NOME DE integer 32 pq NA VERDADE O MONGODB CONHECE DIFERENTES TIPOS DE INTEGERS... ----> int32 integers SÃO integers que TEM LENGTH DE 32 bits... --> SE VOCÊ TENTA ARMAZENAR VALORES QUE SÃO _MAIORES__ DO QUE ESSA RANGE DE '32 bits', ELES VÃO 'OVERFLOW', e aí vocÊ acabará com UM NÚMERO DIFERENTE... 
+
+exemplo: número 55...
+
+
+
+b) para números mais longos, o mongodb tem uma solução para esse 'overflow', que é o 'int64' (integer 64 bits) ---> USADO PARA NÚMEROS LONGOS COMO 100000000000000000
+
+
+É O 
+
+'NumberLong(int64)'...
+
+
+
+
+
+
+
+
+
+--> NO SHELL,
+
+BTW,
+
+
+se você INSERIR UM VALOR NORMAL,
+ 
+ ele será tratado como 
+
+ um 
+
+ 'FLOAT VALUE' ----> isso acontece PQ _ O SHELL QUE USAMOS DURANTE O CURSO É BASEADO NO JAVASCRIPT,
+
+ E O JAVASCRIPT NÃO DIFERENCIA ENTRE 'INTEGER' e 'FLOAT POINT' values.... (valores com casas decimais)...
+
+
+
+
+
+
+
+
+
+
+ -----> ISSO SIGNIFICA QUE TODOS OS NUMBERS QUE VOCê ESCREVER NO SHELL SERÃO ARMAZENADOS COMO 
+
+ 'int64 values' NAS SUAS DATABASES -------> TUDO SERÁ ARMAZENADO COMO ISSO AÍ, no shell... -> veremos mais sobre isso no módulo de 'numbers' desse curso...
+
+
+
+
+
+
+
+
+ --> MAS O QUE VOCÊ DEVE TER EM MENTE é que 
+
+ O MONGODB É CAPAZ DE ARMAZENAR INTEGERS MENORES E MAIORES.... --> A SOLUÇÃO QUE VOCê 
+
+
+
+ DEFINE AQUI (int32 ou int64) 
+
+
+
+
+ DETERMINA 'QUANTO ESPAÇO SERÁ USADO' (quanto espaço será comido/alocado)....
+
+
+
+
+
+
+
+
+
+
+C) POR FIM, VOCÊ TAMBEM PODE ARMAZENAR 'DECIMALNUMBERS',
+
+
+
+
+números decimais, com casas decimais,
+
+
+como 
+
+'12.99'..
+
+
+
+
+
+
+
+
+é o 'NumberDecimal' ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> OS 3 TIPOS, PORTNATO, 
+
+
+SÃO 
+
+
+
+
+
+Integer(int32) 
+
+
+
+
+
+NumberLong(int64)
+
+
+
+
+NumberDecimal
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> O PROFESSOR JÁ DISSE QUE O DEFAULT DO SHELL É 
+
+
+
+ARMAZENAR 'floating point values'...  --> mas você também TEM ESSE TYPE ESPECIAL,
+
+
+'NumberDecimal',
+
+
+
+
+QUE É PROVIDENCIADO PELO mongodb,
+
+USADO 
+
+
+PARA 
+
+
+ARMAZENAR 
+
+
+
+'high-PRECISION' FLOATING POINT VALUES...    -----> isso pq 
+
+
+
+
+floating points NORMAIS,
+
+chamados de 
+
+''''DOUBLES''',
+
+
+
+
+
+NORMALMENTE SÃO 'ROUNDED' (
+
+
+
+
+    o que quer dizer que não são MT PRECISOS APÓS O SEU 
+
+    DECIMAL PLACE....
+) -----------> MAS 
+
+EM 
+MTOS 
+
+USE-CASES 
+
+
+
+ISSO 
+
+É ENOUGH,
+
+
+
+como para PRICES EM 1 SHOP... (precisão suficiente)..
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS SE VOCÊ ESTIVER FAZENDO CÁLCULOS CIENTÍFICOS,
+
+
+HÁ ESSE TYPE ALTAMENTE PRECISO,
+
+
+de 
+'NumberDecimal',
+
+
+
+
+que te ajuda com isso... --------------> 34 DECIMAL PLACES que 
+
+
+
+não são ROUNDED,
+
+
+
+
+E QUE SERÃO 'GUARANTEED' 
+
+
+TO BE CORRECT AND
+
+PRECISE... ----------------->  É UM LIMITE DE COMPUTAÇÃO,
+
+
+
+
+
+em que 
+
+
+VALORES TOTALMENTE CORRETOS NÃO OCORREM TODA HORA,
+
+
+
+
+
+E É PARA ISSO QUE EXISTE ESSE ROUNDING....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ALÉM DESSES BASIC VALUES,
+
+
+
+
+
+
+
+TEMOS TAMBÉM
+ O 
+
+
+
+
+
+
+ 'ObjectId()'....  -------->  ESSE É UM VALOR 
+
+
+
+
+
+
+ ,
+
+
+ OBJECT,
+
+
+ QUE 
+
+ E´
+
+ AUTOMATICAMENTE GERADO PELO MONGODB PARA TE DAR UM UNIQUEID ---> É UMA 
+
+
+
+
+ UNIQUE RANDOM STRING,
+
+
+
+ MAS É UMA RANDOM STRING QUE TAMBÉM CONTÉM UM 'TEMPORAL COMPONENT '--> ISSO SIGNIFICA QUE 
+
+
+ SE VOCÊ CRIAR 
+
+ 2 
+
+
+ DOCUMENTS,
+
+ BACK-TO-BACK,
+
+
+ vocÊ 
+
+
+
+
+AINDA TERÁ A GARANTIA 
+
+
+DE 
+
+TER 
+
+2 ELEMENTS COM IDS DIFERENTES,
+
+PQ 
+
+
+
+
+a letra 
+
+
+do 
+
+anterior, final, será distinta (tipo um TIME STAMP)...
+.
+
+
+
+
+
+
+
+
+
+
+
+
+-> HÁ TAMBÉM
+
+
+
+O DATA TYPE DE 
+
+'ISODate',
+
+
+que você pode usaR 
+
+
+
+
+
+
+
+
+PARA CONSTRUIR UMA DATE E ENTÃO A SALVAR NA DATABASE...
+
+
+
+
+ex:
+
+
+
+
+
+
+ISODate("2018-09-09")
+
+
+
+
+
+
+
+
+
+
+
+-------> É UMA DATE COM A QUAL VOCÊ PODE TRABALHAR, PARA FAZER 
+
+
+CALCULATIONS E ETC....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> HÁ TAMBÉM UM TYPE DE 'Timestamp'.--- --> É 
+
+
+MAJORITARIAMENTE USADO 
+INTERNAMENTE,
+
+
+
+
+GERALMENTE 
+
+VOCÊ DEIXA O MONGODB CRIAR ISSO PARA VOCÊ ---> É GARANTIDAMENTE 
+
+'UNIQUE' --> ISSO SIGNIFICA QUE 
+
+MESMO SE 
+
+
+VOCÊ 
+
+CRIAR 
+
+
+2 OBJECTS NO EXATO MESMO instante,
+
+ELES 
+NÃO 
+
+
+TERÃO O MESMO TIMESTAMP... (
+
+
+    isso pq 
+
+    ele 
+
+    vai 'TAKE THE CURRENT TIME'
+
+    e aí 
+
+    vai adicionar 
+
+    UM ORDINAL VALUE,
+
+
+    TUDO PARA QUE 
+
+    2 DOCUMENTS CRIADOS AO MEIO TMEPO 
+
+
+    NÃO TENHAM A MESMA TIMESTAMP...
+
+)
+
+
+
+
+
+
+
+
+
+
+--> VOCÊ TAMBÉM PODE/PODERIA DIZER QUE O 'ObjectId'
+
+
+É BASEADO NESSA LÓGICA DO TIMESTAMP...  (
+
+
+
+
+só que com a adição desse algoritmo que 'SPITS OUT A SEEMINGLY RANDOM STRING'...
+)
+
+
+
+
+
+
+
+
+
+--> VOCê PODE TAMBÉM EMBEDDAR DOCUMENTS,
+
+
+
+PQ ELES TAMBÉM SÃO CONSIDERADOS UM 'DATA TYPE.'..
+
+
+
+
+
+
+
+
+
+
+
+--> POR FIM, TEMOS OS ARRAYS, QUE TAMBÉM PODEM 
+
+SER 
+
+
+
+INSERIDOS COMO DATA TYPES...
+
+
+
+
+
+
+
+
+
+--> ARRAYS SÃO LISTAS DE VALUES,
+
+
+LISTAS DE BOOLEANS, NUMBERS, 
+
+EMBEDDED DOCUMENTS,
+ 
+ ETC ETC...
+
+
+
+
+
+
+
+
+
+
+
+ --> ESSES SÃO OS DATATYPES, TRABALHAREMOS COM ELES....
+
+
+
+
+
+
+ -> nas próximas lições,
+
+
+
+
+pegaremos um feel com esses types, também com as dates...

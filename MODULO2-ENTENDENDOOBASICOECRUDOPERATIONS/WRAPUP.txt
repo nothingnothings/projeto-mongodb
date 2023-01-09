@@ -1,0 +1,358 @@
+
+
+
+
+
+
+
+
+
+OLHAMOS DETALHADAMENTE 'DATABASES, COLLECTIONS, DOCUMENTS'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> UMA DATABASE SEGURA MÚLTIPLAS COLLECTIONS,
+
+
+EM QUE CADA COLLECTION PODE SEGURAR MÚLTIPLOS DOCUMENTS...
+
+
+
+
+
+
+
+
+
+-> DATABASES E COLLECTIONS SÃO CRIADOS 'LAZILY' ( ou seja, quando um document é inserido )
+
+
+
+
+
+
+
+
+
+--> 1 DOCUMENT NÃO PODE SER INSERIDO DIRETAMENTE EM 1 DATABASE, VOCê PRECISA 
+
+
+
+USAR UMA COLLECTION! 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ESTRUTURA DE DOCUMENTS ---> CADA DOCUMENT PRECISA DE 1 UNIQUE ID (e recebe 1 por default, por conta do mongodb, '_id')....
+
+
+
+
+
+
+
+
+
+
+--> E VOCÊ PODE TER 
+
+EMBEDDED DOCUMENTS E ARRAY FIELDS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> 1 PARTE IMPORTANTE DO TRABALHO COM UMA DATABASE É QUE VOCÊ PODE USAR CRUD OPERATIONS..
+
+
+
+
+
+
+
+
+
+
+--> MONGODB OFERECE MÚLTIPLAS CRUD OPERATIONS,
+
+PARA SINGLE-DOCUMENT E PARA BULK ACTIONS (
+
+
+    'insertOne', insertMany()'....
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> ALGUNS METHODS PRECISAM DE UM ARGUMENT,
+
+
+
+como 'insertOne' ( que precisa saber o que você planeja inserir),
+
+
+
+
+
+ao passo que outros, NÃO...
+
+(
+
+
+    como 'find()'...
+)
+
+
+
+
+
+
+
+
+
+-----> find() RETORNA UM CURSOR,
+
+E NÃO UMA LIST/ARRAY DE DOCUMENTS ---> ISSO PQ 
+
+
+
+
+
+ISSO EVITA DE MILHARES DE DOCUMENTS 
+
+
+SEREM ENVIADOS 'OVER THE WIRE' (ruim para bandwidth)....
+
+
+
+
+
+
+
+
+
+
+
+-> VOCÊ PODE USAR FILTERS PARA 'NARROW DOWN' 
+
+ 
+ QUAIS DOCUMENTS VOCê QUER ENCONTRAR/UPDATE/DELETE....
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -_> POR FIM,
+
+
+ FALANDO DO RETRIEVE DE DATA,
+
+
+
+ VOCê PODE USAR FILTERS E OPERATORS 
+ (
+
+
+
+     como '$gt' 
+
+
+     e '$lt' 
+ )
+
+
+ PARA __ LIMITAR__A QUANTIDADE DE 
+
+ DOCUMENTS QUE VOCÊ RETRIEVA...
+
+
+
+
+
+
+
+ ex:
+
+
+
+
+
+
+ db.flightData.find(
+     {
+         distance: {$gt: 100000}
+     }
+ )
+
+
+
+ -----------------------------------
+
+
+
+
+
+
+
+
+ TODOS ESSES OPERADORES ESPECIAIS COMEÇAM COM "$",
+
+ e te ajudam a LIMITAR O NÚMERO DE DOCUMENTS QUE VOCÊ RETRIEVA...
+
+
+
+
+
+
+
+
+
+
+
+
+ --> POR FIM, VOCÊ PODE USAR 'projection' PARA 
+
+
+ PEGAR 
+
+
+ A
+  DATA QUE 
+  VOCê FETCHEOU 
+
+
+  E ENTÃO __ LIMITAR__ QUAIS FIELDS__ VOCê QUER PEGAR,
+
+  E QUAIS VOCê NÃO 
+
+  QUER....
+
+
+
+
+
+
+
+  tipo assim:
+
+
+
+
+
+
+
+  db.flightData.find(
+      {},
+
+      {
+          distance: 1,
+          _id: 0
+      }
+  )
+
+
+
+
+
+
+  -------> ISSO FARÁ COM QUE __ APENAS__ DISTANCE SEJA FETCHEADA.... (até mesmo o '_id' será excluído do retrieve, por meio dessa sintaxe)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ----------------> PROJECTIONS RESTRINGEM A QUANTIDADE DE FIELDS POR DOCUMENTS...
+
+
+
+
+
+
+
+
+
+
+  -> ESSES FORAM OS BASICS...

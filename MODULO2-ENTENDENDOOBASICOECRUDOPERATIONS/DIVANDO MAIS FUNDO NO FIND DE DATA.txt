@@ -1,0 +1,498 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> OK.... CONSEGUIMOS INSERIR FLIGHTS NA DATABASE MAIS UMA VEZ,
+
+POR MEIO DO USO DE 'insertMany',
+
+
+tipo assim:
+
+
+
+
+db.flightData.insertMany([
+...   {
+...     "departureAirport": "MUC",
+...     "arrivalAirport": "SF0",
+...     "aircraft": "AIRBUS A380",
+...     "distance": 12000,
+...     "intercontinental": true
+...   },
+...   {
+...     "departureAirport": "LHR",
+...     "arrivalAirport": "TXL",
+...     "aircraft": "AIRBUS A320",
+...     "distance": 950,
+...     "intercontinental": false,
+...     "example course": true
+...   }
+... ])
+{
+        "acknowledged" : true,
+        "insertedIds" : [
+                ObjectId("61ff05eb156a623d98a99136"),
+                ObjectId("61ff05eb156a623d98a99137")
+        ]
+}
+
+
+
+
+----------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+AGORA VAMOS VER OUTRA MANEIRA DE ENCONTRAR DATA....
+
+
+
+
+
+
+---> PODEMOS FILTRAR A DATA NO FIND, TAMBÉM...
+
+
+
+
+
+
+
+
+
+
+
+
+
+PODEMOS PASSAR UM '{}' 
+
+
+a ele,
+
+que será interpretado COMO UM FILTER...
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+db.flightData.find({name: 'Max'})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> db.flightData.find({intercontinental: true})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> ok, eu já sabia disso...
+
+
+
+
+
+
+
+
+
+
+---> EM GRANDE PARTE DE APPS NÃO ESTAREMOS INTERESSADOS EM TODOS DOCUMENTS NA NOSSA COLLECTION... ---> 
+
+
+
+
+sempre vamos querer só alguns documents..
+
+
+
+
+
+
+
+
+
+
+
+--> É CLARO QUE NÃO ESTAMOS LIMITADOS A QUERIES SIMPLES COMO 
+
+
+
+
+'
+
+
+
+db.flightData.find({distance: 100000});
+
+
+
+'
+
+
+
+
+
+
+
+
+
+
+
+
+----> PODEMOS ESCREVER QUERIES MAIS COMPLEXAS, COMO DIZER ''''QUEREMOS TODOS OS DOCUMENTS QUE TENHAM 
+
+
+
+DISTANCE MAIOR DO QUE 1000000....''''' 
+
+
+
+
+
+
+
+
+
+
+-->  MAS SE QUEREMOS TER UM CHECK DE 'GREATER THAN',
+
+
+
+PRECISAMOS DE UMA SINTAXE ESPECIAL....
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO, 
+
+PRECISAMOS PASSAR OUTRO DOCUMENT/OBJECT ('{}')
+,
+
+
+
+
+
+COMO UM VALOR PARA A 'DISTANCE'... --> E AÍ VAMOS USAR UM DAQUELES_ _ '''SPECIAL OPERATORS''''
+
+
+
+PROVIDENCIADOS PELO MONGODB....
+
+
+
+
+
+
+
+
+
+
+NO CASO,
+
+
+
+COMEÇAMOS ASSIM:
+
+
+
+db.flightData.find({distance: {}});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O SPECIAL OPERATOR É 
+
+
+
+'$gt' ---> GREATER THAN...
+
+
+
+
+
+
+
+
+
+
+$gt: 10000000 
+
+
+
+
+
+
+
+
+
+
+
+
+-------> $gt -->
+
+
+
+
+db.flightData.find({distance: {$gt: 100000}});
+
+
+
+
+
+
+------------------------------
+
+
+
+
+
+
+
+
+OK..... AGORA SE COLOCARMOS ESSA QUERY, VAMOS CONSEGUIR SÓ 1 FLIGHT, QUE TENHA 
+
+UM VALOR DE 'distance' maior do 
+
+
+que 10 mil....
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+> db.flightData.find({distance: {$gt: 10000}}); 
+{ "_id" : ObjectId("61ff05eb156a623d98a99136"), "departureAirport" : "MUC", "arrivalAirport" : "SF0", "aircraft" : "AIRBUS 
+A380", "distance" : 12000, "intercontinental" : true }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> PROFESSOR  
+
+
+
+
+AÍ COLOCA MAIOR DO QUE '9 mil',
+
+para CONSEGUIR 
+
+AMBOS OS FLIGHTS....
+
+
+
+
+
+
+
+
+
+--> ALÉM DE '$gt',
+
+
+
+TEMOS TAMBÉM 
+
+
+
+'$lt' (
+
+    LOWER THAN...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR ACABA ESSA LIÇÃO COM 
+
+
+'findOne()' usado com 
+
+
+ESSA DISTANCE AÍ...
+
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+db.flightData.findOne({distance: {$gt: 900}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO VAI FAZER COM QUE
+
+
+SEJA ENCONTRADO:
+
+
+
+
+
+
+1) UM ÚNICO DOCUMENT, O PRIMEIRO A SER ENCONTRADO...
+
+
+
+2) PRIMEIRO A SER ENCONTRADO QUE SATISFAÇA O CRITÉRIO DE 'MAIOR DO QUE 900'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE QUEREMOS ACHAR _ _TODOS__ OS __ QUE SATISFAZEM ESSE CRITÉRIO,
+
+USAMOS 
+
+'find()'....
+
+
+
+--> se queremos achar só o PRIMEIRO MATCHING ELEMENT, usamos 'findOne()'...

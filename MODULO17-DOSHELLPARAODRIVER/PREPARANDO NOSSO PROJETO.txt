@@ -1,0 +1,968 @@
+
+
+
+
+
+
+
+
+
+
+
+
+--> agora vamos nos preparar para o app..
+
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR VAI USAR 
+
+UM 
+
+
+
+
+DEPLOYED ATLASDB 
+
+
+CLUSTER 
+
+
+COMO BACKEND...
+ 
+
+
+
+
+
+
+
+
+
+ --> VOCÊ PRECISA DE UMA DATABASE QUE É 'REACHABLE' 
+
+ DE QUALQUER LUGAR....
+
+
+
+
+
+
+
+
+
+
+ --> vocÊ precisa de uma database que siga best practices..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -> PROFESSOR USA O FREE CLUSTER....
+
+
+
+
+
+
+
+
+ --> NA SECURITY,
+
+ TENHA SEU USER COM READ E WRITE ACCESS...
+
+
+
+
+
+
+
+
+
+
+
+
+ --> NO SEU FRONTEND APP,
+
+
+ VOCÊ SÓ PRECISA DISSO AÍ,
+
+
+
+
+ DE 'READ E WRITE ACCESS' --> pq 
+
+
+
+
+
+ TODA A ADMINISTRÇAÃO 
+
+
+
+ E 
+
+
+ SETUP QUE 
+
+ QUEREMOS FAZER JÁ É FEITA 'UPFRONT',
+
+ no 
+
+
+ mongodb atlas.. ->  não há nenhuma config adicional que o professor 
+
+ precisa 
+
+
+
+
+ fazer inicialmente,
+
+
+
+
+
+ mas se tivermos qualquer coisa a respeito de COLLECTION VALIDATION,
+
+
+ INDEXES,
+
+ COISAS ASSIM,
+
+
+ TODAS 
+
+
+ ESSAS COISAS SERÃO 
+
+ FEITAS 
+
+
+ DE DENTRO DA SHELL.... 
+
+
+
+
+
+
+
+
+
+
+
+
+ --> ASSEGURE QUE SEU LOCAL IP ESTÁ NA 'WHITELIST',
+
+ etc etc...
+
+
+
+
+
+
+
+
+
+
+
+
+ -------> ok.... 
+
+
+
+
+
+
+
+
+
+ ---> COM ISSO,
+
+
+
+
+
+ INSTALAMOS O NODEJS... 
+
+
+
+
+
+
+
+
+
+ --> PROFESSOR PREPAROU UM FOLDER,
+
+ MAS 
+
+ DEVEOMS 
+
+ PREPARAR ISSO 
+
+
+
+
+
+
+MANUALMENTE...
+
+
+
+
+
+
+
+
+
+
+
+--> rodo 'npx create-react-app novoprojeto21' 
+
+
+
+
+
+
+
+---> isso vai criar um projeto react...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ACABEI O SETUP DO FRONTEND... 
+
+
+
+
+
+--> MAS GANHEI ALGUNS ERRORS...
+
+
+
+
+
+
+
+EXECUTO ISTO:
+
+
+PS A:\projeto6-MONGODB\MODULO17-DOSHELLPARAODRIVER\novoprojeto21> npm install --save react-router-dom
+
+
+
+
+
+
+
+
+
+
+
+aí npm start de novo....
+
+
+
+
+
+
+
+
+
+
+ESTA É A SOLUÇÃO:
+
+
+
+Redirect component has been removed from the react-router version 6. 
+
+
+For react-router-dom v6, simply replace Redirect with Navigate
+
+
+
+
+https://stackoverflow.com/questions/32128978/react-router-no-not-found-route
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Attempted import error: 'Switch' is not exported from 'react-router-dom'.
+
+Replace "Switch" with "Routes"
+
+
+
+
+
+
+
+
+---> OUTRA TROCA, PELO VISTO...
+
+
+
+
+
+
+
+
+
+
+DEU, AGORA DEVE FUNCIONAR....
+
+
+
+
+
+
+
+--> MAS GANHAMOS MAIS ERROS:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> um fix bom é desinstalar o react-router-dom 
+
+
+
+VERSÃO 6,
+
+que é o novo (cuja sintaxe é uma confusão)
+
+
+e aí 
+
+
+
+instalar 
+
+
+
+
+A VERSÃO 
+
+
+
+5.2.0,
+
+
+COM ESTE CÓDIGO:
+
+
+
+
+
+So I uninstalled the version 6 of react-router-dom:
+
+npm uninstall react-router-dom
+And installed version 5.2.0 of react-router-dom:
+
+npm install react-router-dom@5.2.0
+
+
+
+
+
+
+
+
+--> DEU CERTO.... SÓ O STYLING ESTÁ CAGADO...
+
+
+
+
+
+
+
+
+
+--> ok, consertei o styling...
+
+
+
+
+
+
+
+--> agora tenho que codar o backend...
+
+
+
+
+
+
+
+
+-_> codar o backend...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> CONFIGUREI TUDO, SIM, 
+
+MAS 
+
+
+FALTOU O 
+
+
+'app.listen()"
+
+
+LÁ 
+
+
+NO MEU 'app.js'...
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA ESTÁ FUNCIONANDO:
+
+
+
+
+
+
+
+
+
+const path = require('path');
+
+const express = require('express');
+
+const bodyParser = require('body-parser');
+
+const productRoutes = require('./routes/products');
+
+const authRoutes = require('./routes/auth');
+
+const app = express();
+
+app.use(bodyParser.json());
+
+app.use('/images', express.static(path.join('backend/images')));
+
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET,POST,PUT,PATCH,DELETE,OPTIONS'
+  );
+  res.setHeader('Acess-Control-Allow-Headers', 'Content-Type');
+  next();
+});
+
+app.use('/products', productRoutes);
+
+app.use('/', authRoutes);
+
+
+app.listen(3000);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> CLARO QUE FALTOU O 'mongodb connect'
+
+
+nesse 
+
+
+negócio...
+
+
+
+
+
+
+
+
+
+
+
+--> (
+
+    e há 2 formas de fazer isso:
+
+
+
+    ou com o MONGODB DRIVER CLÁSSICO, OU COM O MONGOOSe...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> começar pelo MONGODB DRIVER CLÁSSICO...
+
+
+
+
+
+
+
+
+
+
+
+FICOU TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+
+const path = require('path');
+
+const express = require('express');
+
+const bodyParser = require('body-parser');
+
+const productRoutes = require('./routes/products');
+
+const authRoutes = require('./routes/auth');
+
+const app = express();
+
+app.use(bodyParser.json());
+
+app.use('/images', express.static(path.join('backend/images')));
+
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET,POST,PUT,PATCH,DELETE,OPTIONS'
+  );
+  res.setHeader('Acess-Control-Allow-Headers', 'Content-Type');
+  next();
+});
+
+app.use('/products', productRoutes);
+
+app.use('/', authRoutes);
+
+
+app.listen(3000);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+E O PACKAGE.JSON:
+
+
+
+
+
+
+
+
+{
+  "name": "novoprojeto21",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.16.2",
+    "@testing-library/react": "^12.1.3",
+    "@testing-library/user-event": "^13.5.0",
+    "axios": "^0.26.0",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.2",
+    "express": "^4.17.3",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^4.4.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "5.0.0",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "start-backend": "node ./backend/app.js",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/mongodb": "^4.0.7"
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> agora basta escrever as coisas para usar o mongodb, 
+
+lá no nosso código....
+
+
+
+
+
+(
+
+    talvez criar um folder, util, com aquelas 2 funções,
+
+    a 
+
+
+    'getDb' 
+
+
+
+    e 
+
+    'connect' (algo assim)..
+)
+
+
+
+
+
+
+
+
+
+
+
+OK... O CÓDIGO DE 'util' ficou assim:
+
+
+
+
+
+
+
+const { MongoClient } = require('mongodb');
+
+const url =
+  'mongodb+srv://madblorga:papanacuas@cluster0.nhtjo.mongodb.net/test';
+// Database Name
+let dbName = 'shop';
+// Connect using MongoClient
+
+export const mongoConnect = (callback) => {
+  MongoClient.connect(url)
+    .then((client) => {
+      dbName = client.db();
+      callback();
+    })
+    .catch((err) => {
+      console.log(err);
+      throw err;
+    });
+};
+
+export const getDb = () => {
+  if (dbName) {
+    return dbName;
+  } else {
+    throw 'No Database Found!';
+  }
+};
+
+
+
+
+
+
+
+
+
+
+--> AINDA HÁ UM ERRO NO STYLING, NO BACKDROP...
+
+
+
+
+
+
+
+OK, CONSERTEI O ERRO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR EXPLICA QUE A DATA FETCHEADA DO BACKEND ESTÁ FALHANDO,
+
+POR ENQUANTO...
+
+
+
+
+
+
+
+--> ISSO ESTÁ ACONTECENDO PQ TAMBÉM PRECISAMSO 'START A NOSSA 
+
+
+NODE REST API'....
+
+
+
+
+
+
+
+
+
+
+-> professor pede que 
+
+
+rodemos 
+
+
+
+
+'npm run start:server'... ---->
+
+
+
+
+
+
+
+isso no dele, é claro...
+
+
+
+
+
+
+
+
+
+
+-> MAS VOCê PRECISA RODAR ESSES 2 SITES LOCALMENTE...
+
+
+
+
+
+
+
+
+
+
+----> AÍ O PROFESSOR OBTEM UMA 'DUMMY PRODUCT DATA',
+
+extraída 
+
+daquela data que temos lá 
+
+
+
+
+em 
+
+'products.js',
+
+
+
+
+
+HARDCODADO....
+
+
+
+
+
+
+
+
+
+--> OK... ISSO AINDA NÃO ESTÁ SENDO FETCHEADO DE UMA DATABASE....
+
+
+
+
+
+
+
+
+
+
+--> vAMOS SUBSTITUIR ISSO POR DATA DA DATABASE, É CLARO...
+
+
+
+
+
+
+
+
+
+
+
+--. OK... AGORA PODEMOS COMEÇAR.... --> VAMOS USAR O MONGODB COMO UM BACKend...
+
+
+
+
+
+
+
+
+
+
+
+-> certo...

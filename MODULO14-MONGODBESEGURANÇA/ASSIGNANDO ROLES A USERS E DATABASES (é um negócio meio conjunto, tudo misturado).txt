@@ -1,0 +1,1273 @@
+
+
+
+
+
+
+
+
+
+
+
+--> OK... VOLTAMOS AO SHELL,
+
+
+
+com 'mongo'....
+
+
+
+
+
+
+
+
+
+
+
+-> JÁ CRIAMOS O USER DE 'Arthur'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> DEVEMOS CRIAR UM NOVO USER,
+
+
+
+
+
+
+
+MAS PARA ISSO PRECISAMOS FAZER 'LOGOUT' da conta de 'Arthur',
+
+
+com 
+
+
+
+
+O QUIT DO MONGOSERVER...  ---> ISSO PQ 
+
+
+
+O 
+
+
+PROFESSOR QUER NOS MOSTRAR UMA MANEIRA ALTERNATIVA DE FAZER LOGIN...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> É O LOGIN NO PRÓPRIO STARTUP DE SUA MONGO INSTANCE,
+
+por meio de um código como 
+
+
+
+
+'mongo -u Arthur -p K4tsuhir00ht0m0' 
+
+
+
+
+
+
+
+
+
+
+------> MAS NÃO APERTE ENTER,
+
+PQ 
+
+
+ISSO VAI FALHAR... ------> ISSO VAI FALHAR JUSTAMENTE POR CAUSA 
+
+
+
+
+DO FATO DE 
+
+QUE 
+
+
+'''VOCê CRIOU ESSE USER EM 1 DATABASE ESPECÍFICA'',
+
+
+que estudamos na aula passada...
+
+
+
+
+
+
+
+
+
+
+
+
+----> E NÓS CRIAMOS NOSSO ÚNICO USER, até agora,
+
+
+
+
+NAQUELA DATABASE DE 'admin' ----> É POR ISSO QUE 
+
+
+
+PRECISAMOS ESPECIFICAR 
+
+
+
+''EM QUE DATABASE CRIAMOS ESSE USER''... -> e como criamos esse user na database de 
+
+'
+admin',
+
+
+
+
+PODEMOS FAZER ISSO 
+
+
+COM A AJUDA DE 
+
+
+
+'--authenticationDatabase admin'....
+
+
+
+
+
+
+
+
+
+
+
+OK, REPETINDO O COMANDO INTEIRO, FICAMOS COM:
+
+
+
+
+
+
+mongo -u Arthur -p K4tsuhri00ht0m0 --authenticationDatabase admin
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, MAS GANHEI 1 ERROR:
+
+
+
+PS A:\projeto6-MONGODB\MODULO14-MONGODBESEGURANÇA> mongo -u Arthur -p K4tsuhri00ht0m0 --authenticationDatabase admin
+MongoDB shell version v5.0.6
+connecting to: mongodb://127.0.0.1:27017/?authSource=admin&compressors=disabled&gssapiServiceName=mongodb
+Error: Authentication failed. :        
+connect@src/mongo/shell/mongo.js:372:17
+@(connect):2:6
+exception: connect failed
+exiting with code 1
+PS A:\projeto6-MONGODB\MODULO14-MONGODBESEGURANÇA> 
+
+
+
+
+HAVIA ERRADO A SENHA:
+
+
+
+
+
+PS A:\projeto6-MONGODB\MODULO14-MONGODBESEGURANÇA> mongo -u Arthur -p Juc@pirama1 --authenticationDatabase admin    
+MongoDB shell version v5.0.6
+connecting to: mongodb://127.0.0.1:27017/?authSource=admin&compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("e8f73fbf-56aa-448d-8926-5cb65ca5dbff") }
+MongoDB server version: 5.0.6
+================
+Warning: the "mongo" shell has been superseded by "mongosh",
+which delivers improved usability and compatibility.The "mongo" shell has been deprecated and will be removed in
+an upcoming release.
+For installation instructions, see
+https://docs.mongodb.com/mongodb-shell/install/
+================
+> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... COM ISSO TEREMOS FEITO 'LOGIN' SEM PRECISAR RODAR 
+
+
+'db.auth('username', 'suaSenha')' 
+
+
+
+
+
+
+
+
+
+
+
+
+-----------> ESSA É OUTRA MANEIRA DE FAZER 'AUTHENTICATING'... -> 
+
+E 
+
+
+a parte da 
+'database'
+
+é 
+
+MT IMPORTANTE... ----> você deve escrever '--authenticationDatabase' para que isso funcione...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> TROCAMOS PARA A DATABASE DE 'shop',
+
+
+
+e aí 
+
+
+CRÍAMOS UM NOVO USER 
+
+
+com 
+
+
+
+
+db.createUser(
+    {
+        user: 'appdev',
+        pwd: 'devapp',
+
+
+        roles: [
+
+        ]
+    }
+)
+
+
+
+
+
+
+
+
+
+
+-> VAOMS COLOCAR SÓ 1 ROLE, QUE SERÁ 'readWrite' (pq isso será um dev, geralmente devs fazem isso)....
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+>   db.createUser(
+...     {
+...         user: 'appdev',
+...         pwd: 'devapp',
+...         roles: [
+...         ]
+...     }
+... )
+Successfully added user: { "user" : "appdev", "roles" : [ ] }
+
+
+
+
+
+
+
+
+
+
+--> OPS, MAS CRIEI UM USER 
+
+
+
+SEM NENHUM ROLE...
+
+
+
+
+
+
+
+
+
+--> VOU TER QUE RODAR 'updateUser'
+
+PARA 
+
+
+ATUALIZAR ESSE USER...
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+https://docs.mongodb.com/manual/reference/method/db.updateUser/
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+db.updateUser( username, update, writeConcern )
+
+
+
+
+
+
+
+
+
+
+
+
+-> MAS ISSO NÃO ME RETORNOU COISA ALGUMA...
+
+
+
+
+
+
+
+
+-_> BEM, MAS SE EU EXECUTO ISTO:
+
+
+
+
+
+'show users',
+
+
+
+VEJO QUAIS USERS TENHO NESSA DATABASE:
+
+
+
+
+
+
+> show users
+{
+        "_id" : "shop.appdev",
+        "userId" : UUID("22e08b36-4e89-4da3-ad74-df41576bbcae"),
+        "user" : "appdev",
+        "db" : "shop",
+        "roles" : [
+                {
+                        "role" : "readWrite",
+                        "db" : "shop"
+                }
+        ],
+        "mechanisms" : [
+                "SCRAM-SHA-1",
+                "SCRAM-SHA-256"
+        ]
+}
+
+
+
+
+
+
+
+
+
+
+
+-_> PELO VISTO O ROLE JÁ FOI ADICIONADO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, MAS AGORA O PROFESSOR EXPLICA UQE PODEMOS 
+
+'AUTHENTICATE INTO THAT USER',
+
+
+
+
+se 
+
+rodarmos 
+
+
+
+
+
+db.auth()
+
+
+E ENTÃO PASSARMOS SEU USUÁRIO E SENHA..
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+db.auth('appdev', 'devapp')
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+> db.auth('appdev', 'devapp')
+1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O 1 SINALIZA QUE ESSE LOGIN FUNCIONOU...
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, AGORA DEVEMOS TENTAR TRABALHAR COM 1 COLLECTION, NESSA DATABASE/DB de 'shop' --> PARA ISSO,
+
+
+
+
+
+O PROFESSOR 
+
+
+ESCREVE 
+
+
+
+'db.products.insertOne(
+
+{
+    name: 'Book'
+}
+)
+'
+
+
+
+
+
+
+
+
+
+
+
+----> SE EU DIGITAR ENTER,
+
+RECEBO UM SUPER ERRO:
+
+
+
+uncaught exception: WriteCommandError({
+        "ok" : 0,
+        "errmsg" : "logical sessions can't have multiple authenticated users (for more details see: https://docs.mongodb.com/manual/core/authentication/#authentication-methods)",
+        "code" : 13,
+        "codeName" : "Unauthorized"
+}) :
+WriteCommandError({
+        "ok" : 0,
+        "errmsg" : "logical sessions can't have multiple authenticated users (for more details see: https://docs.mongodb.com/manual/core/authentication/#authentication-methods)",
+        "code" : 13,
+        "codeName" : "Unauthorized"
+})
+WriteC
+
+
+
+
+
+
+
+
+
+
+
+
+--> o professor ganhou um erro parecido,
+
+
+
+de 
+
+'too many users are authenticated'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO SIGNIFICA QUE 
+
+
+
+NÓS FIZEMOS 'AUTH' EM 1 NOVO USER,
+
+SIM,
+
+
+
+
+MAS 
+
+NÓS AINDA ESTÁVAMOS AUTENTICADOS 
+
+
+
+NO NOSSO 'OLD USER'...
+
+
+
+
+
+
+
+
+
+
+--> PARA CONSEGUIRMOS 'TROCAR DE USER',
+
+
+
+
+precisamso rodar 'db.logout()'
+
+
+
+
+
+NO TERMINAL...
+
+
+
+
+
+
+
+
+
+db.logout() 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> É CLARO QUE A MANEIRA MAIS RÁPIDA DE CONSERTAR ISOS,
+
+MAIS RÁPIDA DO QUE O 
+
+'logout',
+
+
+É FAZER QUIT DA MONGO SHELL 
+
+
+
+E AÍ A RESTARTAR...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS O PROFESSOR VAI QUERER 
+
+FAZER LOGIN NESSE USER 
+
+de 
+
+
+'appdev -> devapp'...
+
+
+
+
+
+
+
+
+OK.. ESCREVO ASSIM:
+
+
+
+
+
+@(shell):1:1
+> db.logout()
+{ "ok" : 1 }
+> db.auth('appdev', 'devapp') 
+1
+
+
+
+
+
+
+
+
+
+
+
+---------> SE QUEREMOS CONSEGUIR FAZER LOGIN/AUTH LA´
+
+
+
+
+
+NO STARTUP DE NOSSA INSTANCE MONGO,
+
+
+
+precisamos escrever ASSIM
+
+
+
+
+
+
+
+
+
+
+
+mongo -u appdev -p devapp --authenticationDatabase shop
+                                                    ^^^^
+
+
+
+
+
+
+
+
+
+
+
+                                                    PRECISAMOS ESPECIFICAR QUE É A DATABASE DE 'SHOP' QUE ESTAMOS TARGETTANDO....
+                                                    se professor especificar 'admin',
+                                                    RECEBEREMOS UM ERRO, pq 
+                                                    NÃO HAVÍAMOS CRIADO NOSSO USER LÁ nessa database...
+
+
+
+
+
+
+
+
+
+        
+
+        --> OK... AGORA O PROFESSOR VAI ESCREVER O INSERT DE 1 BOOK....
+
+                                                    
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+db.products.insertOne({name: 'A Book'})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+QUAL É A RAZÃO DESSE ERRO? BEM, É PORQUE 
+
+
+O PROFESSOR NÃO TROCOU, AINDA, PARA A DATABASE CERTA....
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, MAS MESMO O 'db.logout()'
+
+NÃO FEZ LOGOUT  DE TODOS NOSSOS USER logged in... ------> para consertar isso, posos FECHAR O SV E ABRIR DE NOVO.....
+
+
+
+
+
+
+ABRIR COM O NOSSO LOGIN JÁ INPUTTADO...
+
+
+ mongo -u appdev -p devapp --authenticationDatabase shop
+
+
+
+
+
+
+
+
+ --> CERTO, ISSO VAI FAZER LOGIN... --> agora 
+
+
+ basta 
+
+
+
+
+ RODAR A OPERATION DE 'insertOne' 
+
+
+
+
+
+ dentro da database 'shop', cuja estabilidade foi garantida....
+
+
+
+
+
+
+ EX: use shop 
+
+
+
+
+ db.products. insertOne({name: "A book"})
+
+
+
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("621bd8c61ab5f2427ce30498")
+}
+>
+
+
+
+
+
+
+
+
+
+
+ ------> ENTRETANTO, NO CASO DO PROFESSOR, ELE GANHOU UM ERRO AO TENTAR REALIZAR ESSA OPERAÇÃO...
+
+
+
+
+
+
+
+
+
+ --> O ERRO TERÁ SIDO 
+
+
+ ''NOT AUTHORIZED ON TEST TO EXECUTE COMMAND''
+
+
+
+ ''UNAUTHORIZED''
+
+
+
+
+
+
+
+
+
+
+
+
+ --> A RAZÃO DESSE ERRO É A DE QUE __ NÓS NÃO TROCAMOS PARA A DATABASE CORRETA,
+
+
+ PRECISAMOS TROCAR PARA A DATABASE DE 'shop'
+
+
+
+ PARA SERMOS CAPAZES DE 
+
+
+ REALIZAR ESSAS OPERAÇÕES DE readWrite 
+
+
+
+
+ COM _ ESSE _ USER DE 'devapp' que recém criamos (pq o criamos nessa database aí)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ------> OK.... QUANDO TROCARMOS PARA ESSA DATABASE 
+
+
+ e 
+
+
+
+ RODARMOS 
+
+
+ 'db.products.insertOne()',
+
+
+
+ NOSSA OPERAÇÃO SERÁ BEM SUCEDIDA...
+
+
+
+
+
+
+
+
+
+
+
+
+ --> ISSO É IMPORTANTE:
+  
+  O 
+
+
+  ROLE DE 
+
+  'readWrite'
+
+  FOI ASSIGNADO A ESSE USER,
+
+
+
+  SIM,
+
+
+
+
+
+  MAS ___ ESSE USER __ É PARTE/ FOI CRIADO 
+
+
+  NA DATABASE 
+
+
+  DE 
+
+
+  'shop',
+
+
+
+
+
+
+
+
+  esse role de 'readWrite', por default,
+
+
+  SÓ NÓS 
+
+  DEU 
+
+
+  ACESSO 
+
+
+  readWrite 
+
+
+
+  NESSA DATABASE DE 'shop'...
+
+
+
+
+
+
+
+
+
+
+
+
+  --> OK... -> É ISSO QUE O ASSIGN DE UM USER A 1 DETERMINADA 
+
+
+  DATABASE 
+
+
+  FAZ A VOCÊ,
+
+
+  'OUT-OF-THE-BOX'... --> QUALQUER ROLE QUE 
+
+  VOCê ASSIGNAR AO USER, pode ser 'restore/remove',
+
+
+  ou 'readWrite',
+
+  qualquer 
+
+
+
+  coisa que seja,
+
+
+
+
+
+  SERÁ __ VINCULADA __ A ESSA DATABASE AÍ, QUE SERÁ MANIPULADA POR ESSE USER, QUE 
+
+  SÓ TERÁ ACESSO à ELA...
+
+
+
+
+
+
+
+
+
+  --> AS ÚNICAS EXCEÇÕES SÃO:
+
+
+  1) OS ROLES de '....anyDatabase'...
+
+
+
+
+
+
+
+  2) __TALVEZ_ os roles criados lá em 'admin', na database de 'ADMIN'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ----> E É CLARO QUE ESSE SISTEMA DÁ AOS ADMINISTRADORES DA DATABASE __ UM MONTE _ DE FLEXIBILIDADE... -> 
+
+
+
+
+
+
+  ISSO PQ PODEMOS REALMENTE CRIAR 
+
+
+  USERS QUE 
+
+
+
+SÃO ASSIGNADOS àS DATABASES COM QUE 
+
+PRECISAM TRABALHAR,
+
+E AÍ 
+
+
+
+
+PODEMOS __ ASSIGNAR __a  ELES OS ROLES QUE 
+
+
+ELES REALMENTE PRECISAM ---> AÍ OS USERS 
+
+
+
+
+
+PASSAM A TER SÓ AQUELAS 'ACTIONS' daquele role que eles possuem,
+
+
+que 
+
+
+os permitirá APENAS TRABALHAR COM AQUELA/AQUELAS DATABASES 
+
+
+
+QUE ESTÃO CONTEMPLADAS NOS 'privileges' de sua role...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E ISSO É FREQUENTEMENTE 
+
+EXATAMENTE O UQE VOCÊ VAI QUERER, NO SEU APP.... --> E OS USERS 
+
+
+
+
+GERALMENTE NEM CONHECERÃO/CONHECEM AS OUTRAS 
+
+
+DATABASES,
+
+
+
+
+E EM 
+
+
+
+COMPANHIAS ENORMES,
+
+COM UM MONTE DE DATABASES,
+
+
+ESSE É TIPICAMENTE O SETUP QUE VOCê VAI QUERER TER.... --> MAS É CLARO QUE 
+
+VOCÊ 
+
+
+
+
+PODERÁ TER CENÁRIOS EM QUE 
+
+USERS 
+
+
+VAO TER DE SER CAPAZES 
+
+
+DE TRABALHAR 
+
+
+COM 
+
+
+'''2 OU MAIS DATABASES''',
+
+
+e naõ 
+
+
+SÓ 
+
+AQUELA DATABASE 
+
+
+
+'THAT HE AUTHENTICATED AGAINST''.... -> É POR ISSO QUE DEVEMOS VER COMO FAZER ISSO,
+ 
+ NA PRÓXIMA AULA...

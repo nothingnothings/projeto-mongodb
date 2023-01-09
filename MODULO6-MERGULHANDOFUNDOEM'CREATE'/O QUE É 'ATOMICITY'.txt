@@ -1,0 +1,2637 @@
+
+
+
+
+
+
+
+MONGOIMPORT É UMA TOOL ÚTIL PARA PEGAR __ A DATA QUE VOCÊ QUER 'START WITH',
+
+ou que vocÊ quer  conseguir de uma VELHA DATABASE,
+
+
+
+dentro de sua collection....
+
+
+
+
+
+
+
+AGORA QUE COBRIMOS ALGUMAS 
+
+OPTIONS INTERESSANTES PARA O 'WRITE',
+
+
+
+
+
+os inserts,
+
+
+
+
+
+
+
+
+
+
+
+COMO 
+
+
+
+
+
+
+
+
+
+'ordered: true/false'
+
+
+
+
+e 
+
+
+'writeConcern: {
+    j: true,
+    wtimeout: 200,
+    w: 1 
+}
+'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OBS::: O WRITECONCERN TAMBÉM É APLICÁVEL A 
+
+
+
+
+'DELETE REQUESTS',
+
+
+e 
+
+a 
+
+
+
+'UPDATES',
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> MAS AGORA HÁ MAIS UM CONCEITO IMPORTANTE... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> É O CONCEITO DE '''ATOMICITY''',
+
+
+
+ATOMICITY DE __ QUALQUER__ WRITE OPERATION_... ---------> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> DIGAMOS QUE TEMOS UMA OPERATION DE 'insertOne()'  (
+
+
+    APESAR DE QUE 
+
+    ESSA ATOMICITY PODE SER APLICADA A __ QUALQUER__ WRITE OPERATION...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ex:
+
+
+
+
+
+
+
+
+
+.insertOne()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NA GRANDE MAIORIA DOS CASOS
+,
+
+
+
+ESSA WRITE OPERATION VAI SUCCEED... --> MAS EXISTIRÃO 
+
+
+CASOS EM QUE 
+
+
+
+ESSA OPERATION VAI FALHAR... -->  
+
+
+
+
+
+
+
+
+
+
+PODE EXISTIR/OCORRER UM ERROR ---> E AQUI O PROFESSOR 
+
+
+
+ESTÁ FALANDO DE ERRORS QUE OCORREM ___ DURANTE_ O INSERT DO DOCUMENT... (
+
+
+
+
+ou seja,
+
+
+no momento em que 
+esse document está sendo written TO MEMORY,
+
+
+
+
+ENQUANTO ESTÁ SENDO 'HANDLED' pela storage engine...
+
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... --> IMAGINE QUE VOCê TEM UM DOCUMENT COM MÚLTIPLOS FIELDS,
+
+
+
+TAMBÉM COM UM PUNHADO DE 'EMBEDDED DOCUMENTS',
+
+
+
+
+
+
+EM QUE 
+
+
+
+___ALGUNS_ DESSES FIELDS___ ACABAM 
+
+
+
+''''DENTRO DA DATABASE'''' (são inseridos) ,
+
+
+
+acabam dentro das database files,
+
+
+
+
+
+
+AO PASSO 
+
+
+
+QUE 
+
+
+__OUTROS __ FIELDS 
+NÃO ACABAM SENDO INCLUÍDOS.... (
+
+
+
+    o que aconteceu pq 
+
+    ENQUANTO O DOCUMENT ESTAVA SENDO INSERIDO,
+
+    O SERVER TEVE UM PROBLEMA...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> EX:
+
+
+
+
+
+
+
+db.persons.insertOne(
+    {
+        name: 'Max',
+
+        age: 29,
+
+        hobbies: [
+            {
+                hobby: 'dancing'
+            },
+                {
+                hobby: 'cooking'
+            }
+        ]
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> TALVEZ 'name' e 'age'
+
+TENHAM SIDO SALVOS,
+
+
+MAS NÃO 
+
+'hobbies'... ------------> OK... --> EM CASOS 
+
+
+
+
+
+COMO ESSES,
+
+
+
+
+
+O MONGODB TE PROTEGE.... --> 
+
+
+
+
+
+
+
+
+
+
+EM CASOS COMO ESSES,
+
+
+O MONGODB VAI 
+
+
+TE GARANTIR UMA 
+
+
+
+
+''''''ATOMIC TRANSACTION''''' -------> ISSO SIGNIFICA QUE 
+
+
+
+A TRANSACTION VAI OU 
+
+
+
+'''SUCCEED AS A WHOLE'''
+
+
+
+
+
+
+
+
+OU 
+
+
+
+
+'''FAIL AS A WHOLE'''' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+.insertOne()   ----------------- SUCCESS ------> SAVED AS A WHOLE
+|
+|
+|
+|
+|
+|
+|
+|
+|
+ 
+ERROR 
+
+|
+|
+|
+|
+|
+|
+
+ROLLED BACK (
+    i.e. NOTHING is saved....
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------->>>>>> SE O INSERT _ FALHA__ DURANTE O WRITE,
+
+
+
+
+TUDO É 'ROLLED BACK'... --> TUDO É ROLLED BACK PARA ESSE DOCUMENT QUE VOCÊ INSERIU...
+
+
+
+
+
+
+
+
+
+
+
+
+E ISSO É IMPORNTANTE!!!! 
+
+
+
+
+
+
+
+--> ESSE 'ROLLBACK' em casos de falha 
+
+ACONTECE 
+
+
+__ APENAS__ 
+
+
+EM UMA 
+'PER-DOCUMENT' LEVEL ------->
+
+
+
+
+
+
+
+
+
+POR 'per-document',
+
+
+queremos dizer o 
+
+
+
+TOP-LEVEL DOCUMENT....
+
+(
+
+    ou seja,
+
+
+    SERÃO ROLLED BACK OS 
+
+
+
+    TOPMOST DOCUMENTS, OS QUE 
+
+    SEGURAM TODOS OS 'EMBEDDED DOCUMENTS',
+
+
+    todos arrays, etc etc....
+)
+
+
+
+
+
+
+
+
+
+
+
+--> ENTRETANTO, SE VOCê 
+
+
+
+USA UM 'insertMany',
+
+
+
+COM VÁRIOS DOCUMENTS SENDO INSERIDOS,
+
+
+ 
+
+ AÍ __ VOCÊ NÃO VAI CONSEGUIR ISSO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ---> ISSO QUER DIZER QUE O 'insertMany'
+
+
+
+
+
+
+,
+
+SE ACONTECER UM ERRO DURANTE SUA OPERAÇÃO,
+
+
+
+VAI 
+
+
+
+
+
+''INCLUIR ALGUNS TOPMOST DOCUMENTS,
+
+OUTROS NÃO'''....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> INSERTMANY ---> OS DOCUMENTS EM QUE HOUVE 'fail' 
+
+NÃO SERÃO ADICIONADOS,
+
+'AS A WHOLE' (serão integralmente fracassos, não serão adicionados, sofrerão rollback)
+
+
+
+
+
+E 
+
+
+OS 
+
+EM QUE HOUVE 'success' SERÃO ADICIONADOS...
+
+
+
+
+
+
+
+
+
+
+
+
+--> NA VERDADE,
+
+
+
+O EXATO COMPORTAMENTO DE 'insertMany'
+
+
+
+
+__ VAI _ DEPENDER__ DO 
+
+SET 
+
+DE 
+
+'ordered: false/true'....
+
+
+
+
+(
+
+
+    se for definido o 'true', 
+
+    A OPERATION DE 
+
+
+    'insertMany'
+
+    VAI DEIXAR DE INSERIR DOCUMENTS 
+
+    SE CONSTATAR QUE 1 DOCUMENT NA FILA FALHOU... --> com 'false',
+
+     temos 
+
+     o contrário, ele vai continuar tentando inserir o 
+
+     resto dos documents,
+
+
+     failing/succeeding de acordo com o document.... 
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS OS DOCUMENTS QUE JÁ FORAM INSERIDOS NÃO SERÃO 'ROLLED BACK', é isso que interessa...
+
+
+
+
+
+
+
+---------> NA VERDADE,
+
+
+
+SOMOS CAPAZES DE CONTROLAR 
+
+
+
+
+
+ISSO, essa ATOMICITY, 
+ 
+ NESSE 'BULK INSERT/UPDATE' level 
+
+
+ TAMBÉM.... ------------> MAS 
+
+
+
+ ISSO 
+
+
+ POSSUI RELAÇÃO COM UM CONCEITO CHAMADO DE  'TRANSACTIONS',
+
+
+
+
+ que é algo que veremos no final do curso...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> MAS EM 1 DOCUMENT LEVEL,
+
+ 
+ 
+
+ INCLUSIVE EM 'EMBEDDED DOCUMENTS' nesses documents,
+
+ você tem essa GUARANTEE 
+
+
+
+
+
+
+ DE 'ATOMIC OPERATION'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> navegue até o folder em que vocÊ 
+
+
+
+
+ tem esse arquivo...
+
+
+
+
+
+
+
+
+
+
+
+
+ --> ISSO FEITO, VOCê PODE IMPORTAR ESSE ARQUIVO DE 'tv-shows.json'
+
+
+
+
+ por meio do comando 'mongoimport'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 'mongoimport' deve estar GLOBALMENTE DISPONÍVEL,
+
+
+ PQ 
+
+ VOCÊ 
+
+
+
+ ADICIONOU 
+
+
+
+
+ ESSE 'mongodb'
+
+
+ lá 
+
+
+ no path de sua máquina...
+
+
+
+
+
+
+
+
+
+
+
+ -. O PRIMEIRO PARÂMETRO QUE VOCÊ PASSA É O NOME DO ARQUIVO QUE VOCê QUER IMPORTAR...
+
+
+
+
+
+
+
+
+
+ --> SE OVCÊ NÃO ESTIVER NO MESMO LEVEL 
+
+ DO ARQUIVO QUE VOCÊ QUER IMPORTAR,
+
+
+ VOCÊ VAI TER QUE ESPECIFICAR O FULL PATH 
+
+
+
+
+ NO SEU OS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> mas o 'mongoimport' FALHOU....
+
+
+
+
+
+
+
+
+
+
+
+
+ https://stackoverflow.com/questions/31055637/getting-mongoimport-is-not-recognized-as-an-internal-or-external-command-ope#:~:text=This%20is%20because%20you%20don,files%20to%20your%20install%20path.
+
+
+
+
+
+
+
+
+
+
+
+
+ 5
+
+In my case the mongoimport command was not available by default on the system (windows PC), so first download from the official website the additional tools provided by MongoDB, this includes mongoimport and others that you may not need.
+
+after installation copy mongoimport.exe from "C:\Program Files\MongoDB\Tools" into the bin folder "C:\Program Files\MongoDB\Server\4.4\bin"
+
+navigate using your terminal to the folder where the json file you want to import is located then run your mongoimport command.
+
+
+
+
+
+
+
+
+
+certo... complementei o folder de 'bin', portanto...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> QUANDO EXECUTEI O 'mongoimport',
+
+
+
+RECEBI ISTO:
+
+
+
+
+
+PS A:\projeto6-MONGODB\MODULO6-MERGULHANDOFUNDOEM'CREATE'> mongoimport tv.shows.json
+2022-02-10T12:01:34.947-0300    no collection specified
+2022-02-10T12:01:34.971-0300    using filename 'tv.shows' as collection
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> O PROCESSO AINDA NÃO ACABOU... 
+
+
+
+
+
+
+
+AÍ RECEBI ESTE ERROR:
+
+
+
+
+
+PS A:\projeto6-MONGODB\MODULO6-MERGULHANDOFUNDOEM'CREATE'> mongoimport tv.shows.json
+2022-02-10T12:01:34.947-0300    no collection specified
+2022-02-10T12:01:34.971-0300    using filename 'tv.shows' as collection
+2022-02-10T12:02:04.977-0300    error connecting to host: could not connect to server: server selection error: server selection timeout, current topology: { Type: Single, Servers: [{ Addr: localhost:27017, Type: Unknown, Last error: connection() error occured during connection handshake: dial 
+tcp [::1]:27017: connectex: No connection could be made because the target machine actively refused it. }, ] }
+PS A:\projeto6-MONGODB\MODULO6-MERGULHANDOFUNDOEM'CREATE'> c 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------> PROFESSOR NOS EXPLICA  
+
+
+
+QUE PODEMOS ESPECIFICAR EM QUAL DATABASE VAMOS QUERER IMPORTAR ESSA DATA... 
+
+
+
+
+
+
+
+
+
+
+
+
+basta escrever 
+
+
+
+'-d' ,
+
+
+
+e aí 
+
+
+
+O NOME DE SUA DATABASe...
+
+
+
+
+
+
+
+
+
+
+--> vamos usar uma database criada on the fly,
+
+
+
+de nome 
+
+
+'movieData'...
+
+
+
+
+
+--> DEPOIS DE ESPECIFICAR A DATABASE,
+
+VOCê DEVE ESPECIFICAR A __ COLLECTION__ EM QUE __ 
+
+ESSES DOCUMENTS DEVEM SER INSERIDOS...
+
+
+
+
+
+
+
+
+
+--_> digitamos '-c',
+
+
+
+e aí 
+
+o nome dela....
+
+
+
+
+
+
+
+
+
+
+
+
+CERTO.... ENTÃO ESPERAMOS....
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> NÃO SEI SE MEU SERVER TEM QUE ESTAR ABERTO PARA ser inserida 
+
+essa json data toda....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ok... recebi OUTRO ERROR:
+
+
+
+2022-02-10T12:05:05.968-0300    error connecting to host: could not connect to server: server selection error: server selection timeout, current topology: { Type: Single, Servers: [{ Addr: localhost:27017, Type: Unknown, Last error: connection() error occured during connection handshake: dial 
+tcp [::1]:27017: connectex: No connection could be made because the target machine actively refused it. }, ] }
+PS A:\projeto6-MONGODB\MODULO6-MERGULHANDOFUNDOEM'CREATE'> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO É PQ MEU SERVER ESTÁ FECHADO...
+
+
+
+
+
+
+
+
+--> abro-o com 'net start MongoDB' ....
+
+
+
+
+
+
+
+
+
+
+
+
+--> AÍ, QUANDO TENTO RODAR 'mongoimport',
+
+
+RECEBO ESTE ERROR:
+
+
+
+
+PS A:\projeto6-MONGODB\MODULO6-MERGULHANDOFUNDOEM'CREATE'> mongoimport tv-shows.json -d  movieData -c  movies
+2022-02-10T12:05:36.583-0300    connected to: mongodb://localhost/
+2022-02-10T12:05:36.593-0300    Failed: cannot decode array into a primitive.D
+2022-02-10T12:05:36.593-0300    0 document(s) imported successfully. 0 document(s) failed to import.
+PS A:\projeto6-MONGODB\MODULO6-MERGULHANDOFUNDOEM'CREATE'>
+
+
+
+
+
+
+
+-------------------------------------------------------
+
+
+
+
+
+
+
+
+--> MAS O PROFESSOR EXPLICA QUE 
+
+
+
+'tv-shows.json'
+
+
+
+SEGURA __ UM ARRAY DE __ DOCUMENTS... --> E NÃO SÓ 1 DOCUMENT --> É POR ISSO QUE DEVEMOS ESPECIFICAR 
+
+
+
+
+'--jsonArray',
+
+
+
+PARA 
+
+FAZER COM QUE O 
+
+
+COMANDO 
+'mongoimport' 
+
+
+
+SAIBA 
+
+
+DISSO...
+
+
+
+
+
+
+
+
+
+
+
+AGORA O NEGÓCIO FOI UM SUCESSO:
+
+
+
+
+
+
+
+
+PS A:\projeto6-MONGODB\MODULO6-MERGULHANDOFUNDOEM'CREATE'> mongoimport tv-shows.json -d  movieData -c  movies --jsonArray
+2022-02-10T12:06:52.165-0300    connected to: mongodb://localhost/
+2022-02-10T12:06:52.195-0300    240 document(s) imported successfully. 0 document(s) failed to import.
+PS A:\projeto6-MONGODB\MODULO6-MERGULHANDOFUNDOEM'CREATE'>
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> 240 DOCUMENTOS IMPORTADOS COM SUCESSO....
+
+
+
+
+
+
+
+
+
+
+
+-_> PODEMOS TESTAR, VER SE REALMENTE TEMOS TODOS ESSES DOCUMENTS NA NOSSA COLLECTION DE 'movies',
+
+em 'movieData'...
+
+
+
+
+
+
+
+
+
+--> conectamos nossa shell ao mongod,
+
+por meio de 'mongo'...
+
+
+
+
+
+
+
+
+
+
+
+--> rodo 
+
+
+
+use movieData 
+
+
+
+db.movies.find().pretty(),
+
+
+
+
+
+E DEPOIS 
+
+
+ESCREVO 
+
+'it' 
+
+
+
+PARA VER O RESTO DOS DOCUMENTS....
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+
+
+        "type" : "Scripted",
+        "language" : "English",
+        "genres" : [
+                "Drama",
+                "Science-Fiction",
+                "Thriller"
+        ],
+        "status" : "Ended",
+        "runtime" : 60,
+        "premiered" : "2014-07-20",
+        "officialSite" : null,
+        "schedule" : {
+                "time" : "22:00",
+                "days" : [
+                        "Sunday"
+                ]
+        },
+        "rating" : {
+                "average" : 5.9
+        },
+        "weight" : 87,
+        "network" : {
+                "id" : 18,
+                "name" : "Lifetime",
+                "country" : {
+                        "name" : "United States",
+                        "code" : "US",
+                        "timezone" : "America/New_York"
+                }
+        },
+        "webChannel" : null,
+        "externals" : {
+                "tvrage" : 37857,
+                "thetvdb" : 278447,
+                "imdb" : "tt3314228"
+        },
+        "image" : {
+                "medium" : "http://static.tvmaze.com/uploads/images/medium_portrait/146/366444.jpg",
+                "original" : "http://static.tvmaze.com/uploads/images/original_untouched/146/366444.jpg"
+        },
+        "summary" : "<p>Set within a dystopian future driven by a global fertility crisis, <b>The Lottery </b>reveals a world staring down the barrel of impending extinction as women have mysteriously stopped bearing children. After years of research, Dr. Alison Lennon and her team remarkably 
+fertilize 100 embryos. However, her victory is short-lived when the Director of the U.S. Fertility Commission, Darius Hayes, takes government control of the lab and informs the President of the monumental scientific breakthrough. To determine which women will carry the prized embryos to term, 
+Chief of Staff Vanessa Keller convinces the President to hold a national lottery and a battle over the control of the 100 embryos begins.</p>",    
+        "updated" : 1519024903,
+        "_links" : {
+                "self" : {
+                        "href" : "http://api.tvmaze.com/shows/50"
+                },
+                "previousepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/2045"
+                }
+        }
+}
+{
+        "_id" : ObjectId("62052a0ca2eae800f53b6c9a"),
+        "id" : 30,
+        "url" : "http://www.tvmaze.com/shows/30/american-horror-story",
+        "name" : "American Horror Story",
+        "type" : "Scripted",
+        "language" : "English",
+        "genres" : [
+                "Drama",
+                "Horror",
+                "Thriller"
+        ],
+        "status" : "Running",
+        "runtime" : 60,
+        "premiered" : "2011-10-05",
+        "officialSite" : "http://www.fxnetworks.com/shows/american-horror-story",
+        "schedule" : {
+                "time" : "22:00",
+                "days" : [
+                        "Wednesday"
+                ]
+        },
+        "rating" : {
+                "average" : 7.8
+        },
+        "weight" : 99,
+        "network" : {
+                "id" : 13,
+                "name" : "FX",
+                "country" : {
+                        "name" : "United States",
+                        "code" : "US",
+                        "timezone" : "America/New_York"
+                }
+        },
+        "webChannel" : null,
+        "externals" : {
+                "tvrage" : 28776,
+                "thetvdb" : 250487,
+                "imdb" : "tt1844624"
+        },
+        "image" : {
+                "medium" : "http://static.tvmaze.com/uploads/images/medium_portrait/163/409065.jpg",
+                "original" : "http://static.tvmaze.com/uploads/images/original_untouched/163/409065.jpg"
+        },
+        "summary" : "<p><b>American Horror Story </b>is an horror television anthology series. Each season is conceived as a self-contained miniseries, following a disparate set of characters and settings, and a storyline with its own beginning, middle, and end. While some actors appear for more than one year, they play completely different roles in each season.</p>",
+        "updated" : 1536504185,
+        "_links" : {
+                "self" : {
+                        "href" : "http://api.tvmaze.com/shows/30"
+                },
+                "previousepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/1277290"
+                },
+                "nextepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/1486732"
+                }
+        }
+}
+{
+        "_id" : ObjectId("62052a0ca2eae800f53b6c9b"),
+        "id" : 44,
+        "url" : "http://www.tvmaze.com/shows/44/scorpion",
+        "name" : "Scorpion",
+        "type" : "Scripted",
+        "language" : "English",
+        "genres" : [
+                "Drama",
+                "Action",
+                "Thriller"
+        ],
+        "status" : "Ended",
+        "runtime" : 60,
+        "premiered" : "2014-09-22",
+        "officialSite" : "http://www.cbs.com/shows/scorpion/",
+        "schedule" : {
+                "time" : "22:00",
+                "days" : [
+                        "Monday"
+                ]
+        },
+        "rating" : {
+                "average" : 7.3
+        },
+        "weight" : 98,
+        "network" : {
+                "id" : 2,
+                "name" : "CBS",
+                "country" : {
+                        "name" : "United States",
+                        "code" : "US",
+                        "timezone" : "America/New_York"
+                }
+        },
+        "webChannel" : null,
+        "externals" : {
+                "tvrage" : 40717,
+                "thetvdb" : 281630,
+                "imdb" : "tt3514324"
+        },
+        "image" : {
+                "medium" : "http://static.tvmaze.com/uploads/images/medium_portrait/128/322484.jpg",
+                "original" : "http://static.tvmaze.com/uploads/images/original_untouched/128/322484.jpg"
+        },
+        "summary" : "<p><b>Scorpion</b>, inspired by a true story, is a high-octane drama about eccentric genius Walter O'Brien and his team of brilliant misfits who comprise the last line of defense against complex, high-tech threats of the modern age. As Homeland Security's new think tank, O'Brien's \"Scorpion\" team includes Toby Curtis an expert behaviorist who can read anyone; Happy Quinn, a mechanical prodigy; and Sylvester Dodd, a statistics guru. Pooling their extensive technological knowledge to solve mind-boggling predicaments amazes federal agent Cabe Gallo, who shares a harrowing history with O'Brien. However, while this socially awkward group is comfortable with each other's humor and quirks, life outside their circle confounds them, so they rely on Paige Dineen, who has a young, gifted son, to translate the world for them. At last, these nerdy masterminds 
+have found the perfect job: a place where they can apply their exceptional brainpower to solve the nation's crises, while also helping each other learn how to fit in.</p>",
+        "updated" : 1535166626,
+        "_links" : {
+                "self" : {
+                        "href" : "http://api.tvmaze.com/shows/44"
+                },
+                "previousepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/1418984"
+                }
+        }
+}
+{
+        "_id" : ObjectId("62052a0ca2eae800f53b6c9c"),
+        "id" : 49,
+        "url" : "http://www.tvmaze.com/shows/49/brooklyn-nine-nine",
+        "name" : "Brooklyn Nine-Nine",
+        "type" : "Scripted",
+        "language" : "English",
+        "genres" : [
+                "Comedy",
+                "Action",
+                "Crime"
+        ],
+        "status" : "Running",
+        "runtime" : 30,
+        "premiered" : "2013-09-17",
+        "officialSite" : "https://www.nbc.com/brooklyn-nine-nine",
+        "schedule" : {
+                "time" : "20:30",
+                "days" : [
+                        "Sunday"
+                ]
+        },
+        "rating" : {
+                "average" : 8.2
+        },
+        "weight" : 96,
+        "network" : {
+                "id" : 1,
+                "name" : "NBC",
+                "country" : {
+                        "name" : "United States",
+                        "code" : "US",
+                        "timezone" : "America/New_York"
+                }
+        },
+        "webChannel" : null,
+        "externals" : {
+                "tvrage" : 35774,
+                "thetvdb" : 269586,
+                "imdb" : "tt2467372"
+        },
+        "image" : {
+                "medium" : "http://static.tvmaze.com/uploads/images/medium_portrait/128/321052.jpg",
+                "original" : "http://static.tvmaze.com/uploads/images/original_untouched/128/321052.jpg"
+        },
+        "summary" : "<p><b>Brooklyn Nine-Nine</b> is an ensemble comedy about a talented-but-carefree detective, a by-the-book police captain and their precinct colleagues. While based in the workplace, Brooklyn Nine-Nine is not really about the job – it's about the men and women behind the badge.</p>",
+        "updated" : 1536349942,
+        "_links" : {
+                "self" : {
+                        "href" : "http://api.tvmaze.com/shows/49"
+                },
+                "previousepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/1430061"
+                }
+        }
+}
+{
+        "_id" : ObjectId("62052a0ca2eae800f53b6c9d"),
+        "id" : 6,
+        "url" : "http://www.tvmaze.com/shows/6/the-100",
+        "name" : "The 100",
+        "type" : "Scripted",
+        "language" : "English",
+        "genres" : [
+                "Action",
+                "Adventure",
+                "Science-Fiction"
+        ],
+        "status" : "Running",
+        "runtime" : 60,
+        "premiered" : "2014-03-19",
+        "officialSite" : "http://www.cwtv.com/shows/the-100/",
+        "schedule" : {
+                "time" : "20:00",
+                "days" : [
+                        "Tuesday"
+                ]
+        },
+        "rating" : {
+                "average" : 7.9
+        },
+        "weight" : 100,
+        "network" : {
+                "id" : 5,
+                "name" : "The CW",
+                "country" : {
+                        "name" : "United States",
+                        "code" : "US",
+                        "timezone" : "America/New_York"
+                }
+        },
+        "webChannel" : null,
+        "externals" : {
+                "tvrage" : 34770,
+                "thetvdb" : 268592,
+                "imdb" : "tt2661044"
+        },
+        "image" : {
+                "medium" : "http://static.tvmaze.com/uploads/images/medium_portrait/151/377511.jpg",
+                "original" : "http://static.tvmaze.com/uploads/images/original_untouched/151/377511.jpg"
+        },
+        "summary" : "<p>Ninety-seven years ago, nuclear Armageddon decimated planet Earth, destroying civilization. The only survivors were the 400 inhabitants of 12 international space stations that were in orbit at the time. Three generations have been born in space, the survivors now number 4,000, and resources are running out on their dying \"Ark\" - the 12 stations now linked together and repurposed to keep the survivors alive. Draconian measures including capital punishment and population control are the order of the day, as the leaders of the Ark take ruthless steps to ensure their future, including secretly exiling a group of 100 juvenile prisoners to the Earth's surface to test whether it's habitable.</p>",
+        "updated" : 1535298845,
+        "_links" : {
+                "self" : {
+                        "href" : "http://api.tvmaze.com/shows/6"
+                },
+                "previousepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/1471697"
+                }
+        }
+}
+{
+        "_id" : ObjectId("62052a0ca2eae800f53b6c9e"),
+        "id" : 51,
+        "url" : "http://www.tvmaze.com/shows/51/the-knick",
+        "name" : "The Knick",
+        "type" : "Scripted",
+        "language" : "English",
+        "genres" : [
+                "Drama",
+                "Medical"
+        ],
+        "status" : "Ended",
+        "runtime" : 60,
+        "premiered" : "2014-08-08",
+        "officialSite" : "http://www.cinemax.com/the-knick/",
+        "schedule" : {
+                "time" : "22:00",
+                "days" : [
+                        "Friday"
+                ]
+        },
+        "rating" : {
+                "average" : 8.7
+        },
+        "weight" : 79,
+        "network" : {
+                "id" : 19,
+                "name" : "Cinemax",
+                "country" : {
+                        "name" : "United States",
+                        "code" : "US",
+                        "timezone" : "America/New_York"
+                }
+        },
+        "webChannel" : null,
+        "externals" : {
+                "tvrage" : 36033,
+                "thetvdb" : 279977,
+                "imdb" : "tt2937900"
+        },
+        "image" : {
+                "medium" : "http://static.tvmaze.com/uploads/images/medium_portrait/0/417.jpg",
+                "original" : "http://static.tvmaze.com/uploads/images/original_untouched/0/417.jpg"
+        },
+        "summary" : "<p>New York City, 1900: The Knickerbocker Hospital is home to groundbreaking surgeons, nurses and staff who push the boundaries of medicine in a time of astonishingly high mortality rates and zero antibiotics. The newly appointed leader of the surgery staff is the brilliant, arrogant renegade Dr. John Thackery, whose addiction to cocaine and opium is trumped only by his ambition for medical discovery and renown among his peers. Into the all-white staff and patient hospital comes the equally gifted Harvard graduate Dr. Algernon Edwards, who must fight for respect while trying to navigate the racially charged city. Trying to maintain its reputation for quality care while realizing a profit, the Knickerbocker makes an effort to attract wealthy clientele, while literally struggling to keep the lights on.</p>",
+        "updated" : 1520351460,
+        "_links" : {
+                "self" : {
+                        "href" : "http://api.tvmaze.com/shows/51"
+                },
+                "previousepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/213032"
+                }
+        }
+}
+{
+        "_id" : ObjectId("62052a0ca2eae800f53b6c9f"),
+        "id" : 52,
+        "url" : "http://www.tvmaze.com/shows/52/how-to-get-away-with-murder",
+        "name" : "How to Get Away with Murder",
+        "type" : "Scripted",
+        "language" : "English",
+        "genres" : [
+                "Drama",
+                "Thriller",
+                "Legal"
+        ],
+        "status" : "Running",
+        "runtime" : 60,
+        "premiered" : "2014-09-25",
+        "officialSite" : "http://abc.go.com/shows/how-to-get-away-with-murder",
+        "schedule" : {
+                "time" : "22:00",
+                "days" : [
+                        "Thursday"
+                ]
+        },
+        "rating" : {
+                "average" : 7.6
+        },
+        "weight" : 96,
+        "network" : {
+                "id" : 3,
+                "name" : "ABC",
+                "country" : {
+                        "name" : "United States",
+                        "code" : "US",
+                        "timezone" : "America/New_York"
+                }
+        },
+        "webChannel" : null,
+        "externals" : {
+                "tvrage" : 37307,
+                "thetvdb" : 281620,
+                "imdb" : "tt3205802"
+        },
+        "image" : {
+                "medium" : "http://static.tvmaze.com/uploads/images/medium_portrait/126/317237.jpg",
+                "original" : "http://static.tvmaze.com/uploads/images/original_untouched/126/317237.jpg"
+        },
+        "summary" : "<p>The brilliant, charismatic and seductive Professor Annalise Keating gets entangled with four law students from her class, <b>How to Get Away with Murder</b>. Little do they know that they will have to apply what they learned to real life, in this masterful, sexy, suspense-driven legal thriller.</p>",
+        "updated" : 1536238585,
+        "_links" : {
+                "self" : {
+                        "href" : "http://api.tvmaze.com/shows/52"
+                },
+                "previousepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/1387081"
+                },
+                "nextepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/1498077"
+                }
+        }
+}
+{
+        "_id" : ObjectId("62052a0ca2eae800f53b6ca0"),
+        "id" : 53,
+        "url" : "http://www.tvmaze.com/shows/53/nashville",
+        "name" : "Nashville",
+        "type" : "Scripted",
+        "language" : "English",
+        "genres" : [
+                "Drama",
+                "Music",
+                "Romance"
+        ],
+        "status" : "Ended",
+        "runtime" : 60,
+        "premiered" : "2012-10-10",
+        "officialSite" : "http://www.cmt.com/shows/nashville/",
+        "schedule" : {
+                "time" : "21:00",
+                "days" : [
+                        "Thursday"
+                ]
+        },
+        "rating" : {
+                "average" : 7.5
+        },
+        "weight" : 92,
+        "network" : {
+                "id" : 173,
+                "name" : "CMT",
+                "country" : {
+                        "name" : "United States",
+                        "code" : "US",
+                        "timezone" : "America/New_York"
+                }
+        },
+        "webChannel" : null,
+        "externals" : {
+                "tvrage" : 30808,
+                "thetvdb" : 259055,
+                "imdb" : "tt2281375"
+        },
+        "image" : {
+                "medium" : "http://static.tvmaze.com/uploads/images/medium_portrait/142/357495.jpg",
+                "original" : "http://static.tvmaze.com/uploads/images/original_untouched/142/357495.jpg"
+        },
+        "summary" : "<p><b>Nashville</b> is set against the backdrop of the city's music scene and follows Rayna Jaymes and Juliette Barnes. Both women face personal and professional challenges as they navigate their paths as artists and individuals. Surrounding them, and often complicating their lives, are their family, friends and, in some cases, lovers, as well as the up-and-coming performers and songwriters trying to get ahead in the business. Music City can mean so many things to different people. In Nashville, musicians and songwriters are at the heart of the storm driven by 
+their own ambitions. Some are fueled by their creativity and passion for fame. Others struggle to cope with the pressures of success and are doing 
+everything in their power to stay on top.</p>",
+        "updated" : 1536402567,
+        "_links" : {
+                "self" : {
+                        "href" : "http://api.tvmaze.com/shows/53"
+                },
+                "previousepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/1415712"
+                }
+        }
+}
+{
+        "_id" : ObjectId("62052a0ca2eae800f53b6ca1"),
+        "id" : 55,
+        "url" : "http://www.tvmaze.com/shows/55/red-band-society",
+        "name" : "Red Band Society",
+        "type" : "Scripted",
+        "language" : "English",
+        "genres" : [
+                "Drama",
+                "Comedy"
+        ],
+        "status" : "Ended",
+        "runtime" : 60,
+        "premiered" : "2014-09-17",
+        "officialSite" : "https://web.archive.org/web/20170615064321/http://www.fox.com/red-band-society",
+        "schedule" : {
+                "time" : "21:00",
+                "days" : [
+                        "Wednesday"
+                ]
+        },
+        "rating" : {
+                "average" : 7.4
+        },
+        "weight" : 86,
+        "network" : {
+                "id" : 4,
+                "name" : "FOX",
+                "country" : {
+                        "name" : "United States",
+                        "code" : "US",
+                        "timezone" : "America/New_York"
+                }
+        },
+        "webChannel" : null,
+        "externals" : {
+                "tvrage" : 38923,
+                "thetvdb" : 281532,
+                "imdb" : "tt3576794"
+        },
+        "image" : {
+                "medium" : "http://static.tvmaze.com/uploads/images/medium_portrait/0/441.jpg",
+                "original" : "http://static.tvmaze.com/uploads/images/original_untouched/0/441.jpg"
+        },
+        "summary" : "<p>What if a hospital was your high school, boarding school and summer camp rolled into one? What if it was the place where you fell in love for the first time and made friendships that lasted a lifetime? And what if it was all weirdly hilarious and the most fun you ever had in your entire life? This is the world of <b>Red Band Society</b>.</p>",
+        "updated" : 1518365260,
+        "_links" : {
+                "self" : {
+                        "href" : "http://api.tvmaze.com/shows/55"
+                },
+                "previousepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/117709"
+                }
+        }
+}
+{
+        "_id" : ObjectId("62052a0ca2eae800f53b6ca2"),
+        "id" : 56,
+        "url" : "http://www.tvmaze.com/shows/56/chicago-pd",
+        "name" : "Chicago P.D.",
+        "type" : "Scripted",
+        "language" : "English",
+        "genres" : [
+                "Drama",
+                "Crime"
+        ],
+        "status" : "Running",
+        "runtime" : 60,
+        "premiered" : "2014-01-08",
+        "officialSite" : "http://www.nbc.com/chicago-pd",
+        "schedule" : {
+                "time" : "22:00",
+                "days" : [
+                        "Wednesday"
+                ]
+        },
+        "rating" : {
+                "average" : 8.5
+        },
+        "weight" : 98,
+        "network" : {
+                "id" : 1,
+                "name" : "NBC",
+                "country" : {
+                        "name" : "United States",
+                        "code" : "US",
+                        "timezone" : "America/New_York"
+                }
+        },
+        "webChannel" : null,
+        "externals" : {
+                "tvrage" : 35802,
+                "thetvdb" : 269641,
+                "imdb" : "tt2805096"
+        },
+        "image" : {
+                "medium" : "http://static.tvmaze.com/uploads/images/medium_portrait/165/414753.jpg",
+                "original" : "http://static.tvmaze.com/uploads/images/original_untouched/165/414753.jpg"
+        },
+        "summary" : "<p>District 21 of the Chicago Police Department is made up of two distinctly different groups. There are the uniformed cops who patrol the beat and go head to head with the city's street crimes. And there's the Intelligence Unit, the team that combats the city's major offenses - organized crime, drug trafficking, high profile murders and beyond. These are their stories.</p>",
+        "updated" : 1536283555,
+        "_links" : {
+                "self" : {
+                        "href" : "http://api.tvmaze.com/shows/56"
+                },
+                "previousepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/1435979"
+                },
+                "nextepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/1482236"
+                }
+        }
+}
+{
+        "_id" : ObjectId("62052a0ca2eae800f53b6ca3"),
+        "id" : 54,
+        "url" : "http://www.tvmaze.com/shows/54/legends",
+        "name" : "Legends",
+        "type" : "Scripted",
+        "language" : "English",
+        "genres" : [
+                "Drama",
+                "Crime",
+                "Thriller"
+        ],
+        "status" : "Ended",
+        "runtime" : 60,
+        "premiered" : "2014-08-13",
+        "officialSite" : "http://www.tntdrama.com/shows/legends.html",
+        "schedule" : {
+                "time" : "22:00",
+                "days" : [
+                        "Monday"
+                ]
+        },
+        "rating" : {
+                "average" : 7.5
+        },
+        "weight" : 96,
+        "network" : {
+                "id" : 14,
+                "name" : "TNT",
+                "country" : {
+                        "name" : "United States",
+                        "code" : "US",
+                        "timezone" : "America/New_York"
+                }
+        },
+        "webChannel" : null,
+        "externals" : {
+                "tvrage" : 33288,
+                "thetvdb" : 265074,
+                "imdb" : "tt2402137"
+        },
+        "image" : {
+                "medium" : "http://static.tvmaze.com/uploads/images/medium_portrait/36/92018.jpg",
+                "original" : "http://static.tvmaze.com/uploads/images/original_untouched/36/92018.jpg"
+        },
+        "summary" : "<p>Sean Bean stars in <b>Legends, </b>a suspense-filled drama based on the award-winning book by master spy novelist Robert Littell. Bean plays Martin Odum, an undercover agent working for the FBI's Deep Cover Operations (DCO) division. Martin has the uncanny ability to transform himself into a completely different person for each job. But he begins to question his own identity when a mysterious stranger suggests that Martin isn't the man he believes himself to be.</p>",
+        "updated" : 1527870882,
+        "_links" : {
+                "self" : {
+                        "href" : "http://api.tvmaze.com/shows/54"
+                },
+                "previousepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/500560"
+                }
+        }
+}
+{
+        "_id" : ObjectId("62052a0ca2eae800f53b6ca4"),
+        "id" : 57,
+        "url" : "http://www.tvmaze.com/shows/57/black-ish",
+        "name" : "black-ish",
+        "type" : "Scripted",
+        "language" : "English",
+        "genres" : [
+                "Comedy",
+                "Family"
+        ],
+        "status" : "Running",
+        "runtime" : 30,
+        "premiered" : "2014-09-24",
+        "officialSite" : "http://abc.go.com/shows/blackish",
+        "schedule" : {
+                "time" : "21:00",
+                "days" : [
+                        "Tuesday"
+                ]
+        },
+        "rating" : {
+                "average" : 7.5
+        },
+        "weight" : 97,
+        "network" : {
+                "id" : 3,
+                "name" : "ABC",
+                "country" : {
+                        "name" : "United States",
+                        "code" : "US",
+                        "timezone" : "America/New_York"
+                }
+        },
+        "webChannel" : null,
+        "externals" : {
+                "tvrage" : 38317,
+                "thetvdb" : 281511,
+                "imdb" : "tt3487356"
+        },
+        "image" : {
+                "medium" : "http://static.tvmaze.com/uploads/images/medium_portrait/78/197282.jpg",
+                "original" : "http://static.tvmaze.com/uploads/images/original_untouched/78/197282.jpg"
+        },
+        "summary" : "<p>Andre 'Dre' Johnson has a great job, a beautiful wife, Rainbow, four kids, and a colonial home in the 'burbs. But has success brought too much assimilation for this black family? With a little help from his dad, Dre sets out to establish a sense of cultural identity for his family that honors their past while embracing the future.</p>",
+        "updated" : 1535547054,
+        "_links" : {
+                "self" : {
+                        "href" : "http://api.tvmaze.com/shows/57"
+                },
+                "previousepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/1446172"
+                },
+                "nextepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/1501128"
+                }
+        }
+}
+{
+        "_id" : ObjectId("62052a0ca2eae800f53b6ca5"),
+        "id" : 58,
+        "url" : "http://www.tvmaze.com/shows/58/new-girl",
+        "name" : "New Girl",
+        "type" : "Scripted",
+        "language" : "English",
+        "genres" : [
+                "Comedy",
+                "Romance"
+        ],
+        "status" : "Ended",
+        "runtime" : 30,
+        "premiered" : "2011-09-20",
+        "officialSite" : "http://www.fox.com/new-girl/",
+        "schedule" : {
+                "time" : "21:30",
+                "days" : [
+                        "Tuesday"
+                ]
+        },
+        "rating" : {
+                "average" : 7.3
+        },
+        "weight" : 97,
+        "network" : {
+                "id" : 4,
+                "name" : "FOX",
+                "country" : {
+                        "name" : "United States",
+                        "code" : "US",
+                        "timezone" : "America/New_York"
+                }
+        },
+        "webChannel" : null,
+        "externals" : {
+                "tvrage" : 28304,
+                "thetvdb" : 248682,
+                "imdb" : "tt1826940"
+        },
+        "image" : {
+                "medium" : "http://static.tvmaze.com/uploads/images/medium_portrait/145/364581.jpg",
+                "original" : "http://static.tvmaze.com/uploads/images/original_untouched/145/364581.jpg"
+        },
+        "summary" : "<p><b>New Girl</b> is a single-camera ensemble comedy starring Zooey Deschanel as Jess, an offbeat girl who - after a bad breakup - moves in with three single guys and essentially sets a bomb off in their lives.</p>",
+        "updated" : 1536150080,
+        "_links" : {
+                "self" : {
+                        "href" : "http://api.tvmaze.com/shows/58"
+                },
+                "previousepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/1430633"
+                }
+        }
+}
+{
+        "_id" : ObjectId("62052a0ca2eae800f53b6ca6"),
+        "id" : 59,
+        "url" : "http://www.tvmaze.com/shows/59/chicago-fire",
+        "name" : "Chicago Fire",
+        "type" : "Scripted",
+        "language" : "English",
+        "genres" : [
+                "Drama",
+                "Action"
+        ],
+        "status" : "Running",
+        "runtime" : 60,
+        "premiered" : "2012-10-10",
+        "officialSite" : "http://www.nbc.com/chicago-fire",
+        "schedule" : {
+                "time" : "21:00",
+                "days" : [
+                        "Wednesday"
+                ]
+        },
+        "rating" : {
+                "average" : 8.6
+        },
+        "weight" : 98,
+        "network" : {
+                "id" : 1,
+                "name" : "NBC",
+                "country" : {
+                        "name" : "United States",
+                        "code" : "US",
+                        "timezone" : "America/New_York"
+                }
+        },
+        "webChannel" : null,
+        "externals" : {
+                "tvrage" : 30748,
+                "thetvdb" : 258541,
+                "imdb" : "tt2261391"
+        },
+        "image" : {
+                "medium" : "http://static.tvmaze.com/uploads/images/medium_portrait/165/414752.jpg",
+                "original" : "http://static.tvmaze.com/uploads/images/original_untouched/165/414752.jpg"
+        },
+        "summary" : "<p>No job is more stressful, dangerous or exhilarating than those of the Firefighters, Rescue Squad and Paramedics of Chicago 
+Firehouse 51. These are the courageous men and women who forge headfirst into danger when everyone else is running the other way and whose actions 
+make the difference between life and death. These are their stories.</p>",
+        "updated" : 1536283147,
+        "_links" : {
+                "self" : {
+                        "href" : "http://api.tvmaze.com/shows/59"
+                },
+                "previousepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/1422140"
+                },
+                "nextepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/1482235"
+                }
+        }
+}
+{
+        "_id" : ObjectId("62052a0ca2eae800f53b6ca7"),
+        "id" : 60,
+        "url" : "http://www.tvmaze.com/shows/60/ncis",
+        "name" : "NCIS",
+        "type" : "Scripted",
+        "language" : "English",
+        "genres" : [
+                "Drama",
+                "Action",
+                "Crime"
+        ],
+        "status" : "Running",
+        "runtime" : 60,
+        "premiered" : "2003-09-23",
+        "officialSite" : "http://www.cbs.com/shows/ncis/",
+        "schedule" : {
+                "time" : "20:00",
+                "days" : [
+                        "Tuesday"
+                ]
+        },
+        "rating" : {
+                "average" : 8.5
+        },
+        "weight" : 99,
+        "network" : {
+                "id" : 2,
+                "name" : "CBS",
+                "country" : {
+                        "name" : "United States",
+                        "code" : "US",
+                        "timezone" : "America/New_York"
+                }
+        },
+        "webChannel" : null,
+        "externals" : {
+                "tvrage" : 4628,
+                "thetvdb" : 72108,
+                "imdb" : "tt0364845"
+        },
+        "image" : {
+                "medium" : "http://static.tvmaze.com/uploads/images/medium_portrait/141/353883.jpg",
+                "original" : "http://static.tvmaze.com/uploads/images/original_untouched/141/353883.jpg"
+        },
+        "summary" : "<p><b>NCIS</b> (Naval Criminal Investigative Service) is more than just an action drama. With liberal doses of humor, it's a show that focuses on the sometimes complex and always amusing dynamics of a team forced to work together in high-stress situations. Leroy Jethro Gibbs, a former Marine gunnery sergeant, whose skills as an investigator are unmatched, leads this troupe of colorful personalities. Rounding out the 
+team are Anthony DiNozzo, an ex-homicide detective whose instincts in the field are unparalleled and whose quick wit and humorous take on life make him a team favorite; the youthful and energetic forensic specialist Abby Sciuto, a talented scientist whose sharp mind matches her Goth style and 
+eclectic tastes; Caitlin Todd, an ex-Secret Service Agent; and Timothy McGee, an MIT graduate whose brilliance with computers far overshadows his insecurities in the field; Assisting the team is medical examiner Dr. Donald \"Ducky\" Mallard, who knows it all because he's seen it all, and he's 
+not afraid to let you know. From murder and espionage to terrorism and stolen submarines, these special agents travel the globe to investigate all 
+crimes with Navy or Marine Corps ties.</p>",
+        "updated" : 1535162204,
+        "_links" : {
+                "self" : {
+                        "href" : "http://api.tvmaze.com/shows/60"
+                },
+                "previousepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/1432093"
+                },
+                "nextepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/1494016"
+                }
+        }
+}
+{
+        "_id" : ObjectId("62052a0ca2eae800f53b6ca8"),
+        "id" : 61,
+        "url" : "http://www.tvmaze.com/shows/61/orphan-black",
+        "name" : "Orphan Black",
+        "type" : "Scripted",
+        "language" : "English",
+        "genres" : [
+                "Drama",
+                "Science-Fiction",
+                "Thriller"
+        ],
+        "status" : "Ended",
+        "runtime" : 60,
+        "premiered" : "2013-03-30",
+        "officialSite" : "http://orphanblack.space.ca/",
+        "schedule" : {
+                "time" : "22:00",
+                "days" : [
+                        "Saturday"
+                ]
+        },
+        "rating" : {
+                "average" : 8.7
+        },
+        "weight" : 93,
+        "network" : {
+                "id" : 7,
+                "name" : "Space",
+                "country" : {
+                        "name" : "Canada",
+                        "code" : "CA",
+                        "timezone" : "America/Halifax"
+                }
+        },
+        "webChannel" : null,
+        "externals" : {
+                "tvrage" : 33293,
+                "thetvdb" : 260315,
+                "imdb" : "tt2234222"
+        },
+        "image" : {
+                "medium" : "http://static.tvmaze.com/uploads/images/medium_portrait/111/277730.jpg",
+                "original" : "http://static.tvmaze.com/uploads/images/original_untouched/111/277730.jpg"
+        },
+        "summary" : "<p><b>Orphan Black</b> is about Sarah, an outsider and orphan whose life changes dramatically after witnessing the suicide of 
+a woman, \"Beth\", who looks just like her. Sarah takes her identity, her boyfriend and her money. But instead of solving her problems, the street-smart chameleon is thrust headlong into a kaleidoscopic mystery. She makes the dizzying discovery that she and the dead woman are clones... but are they the only ones? Sarah quickly finds herself caught in the middle of a deadly conspiracy, racing to find answers.</p>",
+        "updated" : 1507220233,
+        "_links" : {
+                "self" : {
+                        "href" : "http://api.tvmaze.com/shows/61"
+                },
+                "previousepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/1069560"
+                }
+        }
+}
+{
+        "_id" : ObjectId("62052a0ca2eae800f53b6ca9"),
+        "id" : 62,
+        "url" : "http://www.tvmaze.com/shows/62/the-originals",
+        "name" : "The Originals",
+        "type" : "Scripted",
+        "language" : "English",
+        "genres" : [
+                "Drama",
+                "Romance",
+                "Supernatural"
+        ],
+        "status" : "Ended",
+        "runtime" : 60,
+        "premiered" : "2013-10-03",
+        "officialSite" : "http://www.cwtv.com/shows/the-originals/",
+        "schedule" : {
+                "time" : "21:00",
+                "days" : [
+                        "Wednesday"
+                ]
+        },
+        "rating" : {
+                "average" : 8.3
+        },
+        "weight" : 99,
+        "network" : {
+                "id" : 5,
+                "name" : "The CW",
+                "country" : {
+                        "name" : "United States",
+                        "code" : "US",
+                        "timezone" : "America/New_York"
+                }
+        },
+        "webChannel" : null,
+        "externals" : {
+                "tvrage" : 34166,
+                "thetvdb" : 266883,
+                "imdb" : "tt2632424"
+        },
+        "image" : {
+                "medium" : "http://static.tvmaze.com/uploads/images/medium_portrait/156/391233.jpg",
+                "original" : "http://static.tvmaze.com/uploads/images/original_untouched/156/391233.jpg"
+        },
+        "summary" : "<p><b>The Originals</b> is a spin-off show from the supernatural drama <i>The Vampire Diaries</i>. It is based in the city of 
+New Orleans where the originals represent the original vampires. The show is primarily based around conflict between vampires, werewolves and witches in the city.</p>",
+        "updated" : 1533638834,
+        "_links" : {
+                "self" : {
+                        "href" : "http://api.tvmaze.com/shows/62"
+                },
+                "previousepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/1390043"
+                }
+        }
+}
+Type "it" for more
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK...
+
+
+
+
+
+
+
+
+PORTANTO, 
+
+
+
+O COMANDO DE '--jsonArray' funciona...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS HÁ UM COMANDO FINAL QUE O PROFESSOR QUER NOS ENSINAR,
+
+
+NESSA LINHA DE CO´DIGO...
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+mongoimport tv-shows.json -d movieData -c movies --jsonArray 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O COMANDO FINAL É '--drop'....
+
+
+
+
+
+
+
+
+
+
+DROP SIMPLESMENTE SIGNIFICA:
+
+
+
+
+''''SE ESSA COLLECTION JÁ EXISTE,
+
+
+
+
+SIMPLESMENTE __ DROPPE_ _ ESSA COLLECTION E ENTÃO A READICIONE''''... -> PQ SE VOCê NÃO ESPECIFICAR ESSE COMANDO, O 'mongoimport' VAI SIMPLESMENTE 'APPEND' os documents que vocÊ importou __ AO FINAL_ DESSA COLLECTION QUE JÁ EXISTIA....
+                                                                                                (
+                                                                                                    Às vezes pode ser o que você quer....
+                                                                                                )
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+mongoimport tv-shows.json -d movieData -c movies --jsonArray --drop
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+PS A:\projeto6-MONGODB\MODULO6-MERGULHANDOFUNDOEM'CREATE'> mongoimport tv-shows.json -d movieData -c movies --jsonArray --drop
+2022-02-10T12:12:18.436-0300    connected to: mongodb://localhost/
+2022-02-10T12:12:18.444-0300    dropping: movieData.movies
+2022-02-10T12:12:18.471-0300    240 document(s) imported successfully. 0 document(s) failed to import.
+PS A:\projeto6-MONGODB\MODULO6-MERGULHANDOFUNDOEM'CREATE'> mongo
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+OK.... ISSO DEU CERTO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> COM ISSO, O PROFESSOR CONECTA O MONGO ao nosso shell,
+
+
+e aí 
+
+
+
+
+roda 'find' com pretty,
+
+
+para ver 
+
+
+
+
+se temos esses documents lá dentro..
+
+
+
+
+
+
+
+
+
+sucesso....
+
+
+
+
+
+
+
+
+
+
+
+
+""type it FOR MORE''' --------> TEMOS MAIS DO QUE 20 RECORDS, É POR ISSO QUE ESSE NEGÓCIO APARECE....
+
+
+
+
+'
+type it for more' TEM A VER COM CURSORS, QUE VEREMOS NO PRÓXIMO MÓDULO....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NO PRÓXIMO MÓDULO USAREMOS ESSA DATA de 'tv-shows.json'...
+
+
+
+
+
+
+
+
+
+
+
+MONGOIMPORT É UMA TOOL ÚTIL PARA PEGAR __ A DATA QUE VOCÊ QUER 'START WITH',
+
+ou que vocÊ quer  conseguir de uma VELHA DATABASE,
+
+
+
+dentro de sua collection....

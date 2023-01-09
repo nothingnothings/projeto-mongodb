@@ -1,0 +1,528 @@
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR QUER USAR NOSSA CONNECTION E ENTÃO SER CAPAZ 
+
+
+
+DE 
+
+
+'STORE PRODUCTS' na nossa database, por enquanto...
+
+
+
+
+
+
+
+
+
+TEMOS NOSSO CÓDIGO DE 'POST':
+
+
+
+
+
+
+router.post('', (req, res, next) => {
+  const db = getDb();
+
+  const newProduct = {
+    name: req.body.name,
+    description: req.body.description,
+    price: parseFloat(req.body.price),
+    image: req.body.image,
+  };
+  console.log(newProduct);
+
+  db.collection('products')
+    .insertOne(newProduct)
+    .then((result) => {
+      ///result.insertedId --> vai conter o id do product que foi inserido na nossa collection...
+      res
+        .status(201)
+        .json({ message: 'Product added', productId: result.insertedId });
+    });
+});
+
+
+
+
+
+
+
+-------------------
+
+
+
+
+
+
+
+
+
+
+
+
+--------> MAS HÁ ALGO QUE ___NÃO FIZEMOS AQUI.. --> O PROFESSOR VAI QUERER ARMAZENAR 
+
+AQUELE 'PRICE' 
+
+
+
+
+COMO UM 
+
+
+128bit decimal,
+
+lá no mongodb...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> E, COMO APRENDEMOS,
+
+O 
+
+
+
+JAVASCRIPT TRABALHA COM NUMBERS 
+
+
+
+'64 BIT DOUBLE',
+
+que não são tão precisos....
+
+
+
+
+
+
+
+
+
+
+
+
+---> para isso, provavelmente precisarei de um WRAPPER lá da package de 'mongodb'..
+
+
+
+
+
+
+
+
+
+
+
+
+FIZ TIPO ISSO:
+
+
+
+
+
+
+const NumberDecimal = require('mongodb').Decimal128;
+
+
+
+
+
+
+
+
+
+AÍ USEI ESSE WRAPPER ASSIM:
+
+
+
+
+
+
+
+
+
+router.post('', (req, res, next) => {
+  const db = getDb();
+
+  const newProduct = {
+    name: req.body.name,
+    description: req.body.description,
+    // price: parseFloat(req.body.price),
+    price: NumberDecimal(parseFloat(req.body.price)), ///vai armazenar o price como um NUMBERDECIMAL na nossa database (maior precisão nos cálculos, por exemplo)...
+    image: req.body.image,
+  };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ----------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ok.... até agora, nada de novo...
+
+
+
+
+
+
+
+
+
+
+
+------> A COLLECTION DE 'PRODUCTS' ainda não existirá,
+
+antes do 
+
+
+write desse 
+
+
+'db.collection(products)' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE QUISERMOS ADICIONAR 'SCHEMA VALIDATION' 
+
+a 
+
+essa 
+
+collection,
+
+
+TEREMOS DE A CRIAR ANTECIPADAMENTE... --> E SE QUISERMOS ISSO,
+
+
+É 
+
+BEM MELHOR FAZER ESSE CREATE __ 
+
+DE __ DENTRO __ DE NOSSA SHELL (ou com o mongoose)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> DE DENTRO DA SHELL TBM PODEMOS NOS CONECTAR AO NOSSO 
+
+CLUSTER 
+
+
+
+ATLASDB...
+
+
+
+
+
+
+
+
+
+------> OK... VAMOS USAR A SHELL,
+
+AGORA...
+
+
+
+
+
+
+
+
+
+------> VAMOS USAR A SHELL PARA :
+
+
+
+
+
+
+
+
+1) DROPPAR ESSA DATABASE DE 'shop' inicial.....
+
+
+
+
+
+
+
+
+
+2) CRIAR UMA NOVA DATABASE DE SHOp,
+
+
+
+com 
+
+'db.createCollection('shop', {
+
+
+
+})
+',
+
+
+
+
+
+
+
+
+E AÍ 
+
+SETTAR 
+
+
+AQUELA 
+
+KEY DE 'validation',
+
+
+
+
+
+
+QUE 
+
+
+AÍ 
+
+
+
+NOS DEIXA SETTAR 
+
+
+
+
+O SCHEMA DA DATABASE....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> certo... para criar a collection,
+
+primeiro vamos droppar a antiga, tipo assim:
+
+
+
+
+MongoDB Enterprise atlas-gc0c6b-shard-0:PRIMARY> db.shop.drop()
+true
+MongoDB Enterprise atlas-gc0c6b-shard-0:PRIMARY> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... AÍ VAMOS QUERER CRIAR UMA COLLECTION DE 'products'..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->  MAS O PROFESSOR EXPLICA QUE NÃO VAI QUERER DEFINIR UM SCHEMA PARA 
+
+ESSA 
+
+COLLECTION,
+
+
+
+
+
+
+por isso 
+
+ele vai usar o approach lazy de 
+
+
+
+
+
+
+
+db.collection('products').insertOne()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SINTAXE DE INSERTONE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> A SINTAXE VAI DIFERIR NAS DIFERENTES LINGUAGENS DE PROGRAMAÇÃO... (php vai ser difernete),
+
+
+
+MAS 
+
+É 
+
+CLAOR QUE 
+
+
+OS METHODS SERÃO 
+
+GERALMENTE IGUAIS...
+
+
+
+
+
+
+
+
+
+
+
+---> ok... aí inserimos esse product, no biggie...
+
+
+
+
+
+
+
+--> PROFESSOR VAI FALAR SOBRE A CONVERSÃO DO NUMBER EM UM 128BIT DECIMAL,
+na próxima aula...

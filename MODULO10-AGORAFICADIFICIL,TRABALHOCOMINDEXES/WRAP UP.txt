@@ -1,0 +1,363 @@
+ 
+
+
+
+
+
+
+ ACABAMOS ESSE MÓDULO...
+
+
+
+
+
+
+
+
+
+
+ VIMOS INDEXES BEM DE PERTO....
+
+
+
+
+
+
+
+
+
+ --> INDEXES NOS DEIXAM RETRIEVAR NOSSA DATA MAIS EFICIENTEMENTE... (há algumas exceções),
+
+
+
+
+
+
+
+
+
+ MAS EM GERAL 
+
+
+
+ SPEED UP NOSSAS QUERIES....  -> BECAUSE YOUR QUERIES ONLY HAVE TO LOOK AT A SUBSET OF ALL DOCUMENTS....
+
+
+
+
+
+
+
+
+ --> TAMBÉM NOS AJUDAM COM NOSSO 'SORTING'..
+
+
+
+
+
+
+
+
+
+
+
+
+ -> PODEMOS USAR 'SINGLE-FIELD',
+
+
+
+ compound 
+
+
+
+ e 
+
+ MULTI-KEY (array) INDEXES, E TEXT INDEXES...
+
+
+
+
+
+
+
+
+
+
+ -> TAMBÉM HÁ GEOSPATIAL INDEXES, QUE VEREMOS NO MÓDULO DE GEOSPATIAL INDEXES..
+
+
+
+
+
+
+
+
+ --> INDEXES NÃO VEM DE GRAÇA,
+
+ PQ 
+
+
+ELES SEMPRE DEIXAM SEUS 'WRITES' MAIS LENTOS.... 
+
+
+
+
+
+
+
+
+
+
+--> ISSO É ALGO QUE VOCÊ SEMPRE TEM,
+
+MAS QUE VALE A PENA... --> 
+
+
+
+
+MAS VOCê DEVE TER EM MENTE ISSO,
+
+
+PQ 
+
+VOCÊ 
+NÃO VAI QUERRE 
+
+
+CRIAR INDEXES PARA TODOS OS FIELDS 
+DE 
+SEU 
+
+DOCUMENT,
+
+
+
+PQ 
+ISSO SERÁ INEFICIENTE,
+
+
+PQ 
+
+CADA 
+
+INDEX TERÁ DE SER UPDATADO COM CADA UPDATE/DELETE....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> INDEXES PODEM SER USADOS 
+
+TANTO PARA QUERIES COMO PARA 'SORTING'..
+
+
+
+
+
+
+
+
+
+--> E COMPOUND INDEXES POSSUEM ESSE 
+
+
+COMPORTAMENTO ESPECIAL,
+
+EM QUE 
+SÃO USADOS 
+
+
+de 
+
+'left to right'.... ------> 
+
+
+
+
+
+
+
+
+
+
+'name-age' (só name será capaz de ser queriado, 'name' ou 'name-age'.... --> 'age', solo, não vai usar esse compound index)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA SABER SE SUAS QUERIES E INDEXES ESTÃO FAZENDO SEU TRABALHO ADEQUADAMENTE,
+
+
+
+
+DEVEMOS USAR 
+
+'explain()',
+
+aquele method..
+
+
+
+
+
+
+
+--> TAMBÉM DEVEMOS NOS LEMBRAR DOS PARÂMETROS DELE,
+
+
+como 
+
+
+
+
+
+'queryPlanner',
+
+
+'executionStats'
+
+
+
+e 
+
+'allPlansExecution'... (mais verbose)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O OUTPUT AÍ VAI TE DAR UM OLHAR DETALHADO ACERCA DO QUE O MONGODB 
+
+FEZ,
+
+ E SOBRE COMO ELE DERIVOU ESSE PLAN QUE ACABOU USANDO.... -----> ELE TBM 
+
+ TE 
+
+ DÁ 
+ UMA 
+
+ IDEIA 
+
+ DE COMO 
+
+ VOCÊ 
+
+ DEVE 
+
+ OPTIMIZAR 
+
+ SEUS INDEXES (
+
+
+ex: cases em que 
+
+VOCÊ TEM UM LARGO GAP ENTRE 
+
+
+AS KEYS QUE ELE TEVE QUE OLHAR,
+
+E OS 
+
+DOCUMENTS QUE ELE ACTUALLY RETRIEVOU...
+
+ )
+
+
+
+
+
+
+
+
+
+
+
+ OPÇÕES DE INDEXES -> você pode os configurar:
+
+
+
+
+
+
+
+
+ -> VOCê PODE DEFINIR 'TTL' (time-to-live indexes, que são INDEXES QUE FAZEM SEU 
+ DOCUMENT EXPIRAR APÓS CERTO PERÍODO... úteis para 'sessions')....) --> SE QUISER ESSE TIPO DE INDEX, COLOQUE EM UM FIELD QUE use 'Date' COMO FORMATO/DATA TYPE...
+
+
+
+
+
+
+
+
+
+
+ --> PODEMOS USAR 'unique' INDEXES (com 'unique: true')
+
+
+
+
+OU 'partial indexes' (para fatiar as partes de nossos documents que realmente interessam, em 1 determinada query)....
+
+
+
+
+
+
+--> PARA TEXT INDEXES,
+
+WEIGHTS E 
+
+
+
+'default_language'
+
+PODEM SER ASSIGNADOS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> OK, APRENDEMOS INDEXES EFICIENTES,
+
+PARA QUERIES EFICIENTES...

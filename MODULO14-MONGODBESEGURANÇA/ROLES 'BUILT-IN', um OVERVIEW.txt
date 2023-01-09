@@ -1,0 +1,1670 @@
+
+
+
+
+
+
+
+
+
+
+
+--> NA ÚLTIMA LIÇÃO,
+
+CRIAMOS NOSSO PRIMEIRO  USER,
+
+
+
+COM 
+
+
+
+A SINTAXE de:
+
+
+
+
+
+
+
+
+
+
+use admin 
+
+
+
+
+db.createUser(
+    {
+        user: "Arthur",
+        password: "Juc@pirama1",
+        roles: [
+            "userAdminAnyDatabase"
+        ]
+    }
+)
+
+
+
+
+
+
+
+
+
+
+e depois, para login:
+
+
+
+
+
+
+use admin
+
+
+
+
+db.auth("Arthur", "Juc@pirama1") 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO FEZ COM QUE FICÁSSEMOS LOGGED IN,
+
+
+e aí 
+
+
+
+agora podemos 
+
+
+
+rodar alguns comandos (praticamente todos) 
+
+
+
+
+na nossa database....
+
+
+
+
+
+
+
+
+
+
+
+OK... PARA QUE CONSEGUISSEMOS CRIAR 
+
+ESSE USER,
+
+
+
+USAMOS 
+
+
+A 'SPECIAL LOCALHOST EXCEPTION', PARA CRIAR O NOSSO PRIMEIRO USER... -> E AÍ ASSIGNAMOS 
+
+O 
+
+
+ROLE DE 
+
+
+
+'userAdminAnyDatabase' A ESSE USER -->  E ESSE ROLE 
+
+
+
+AÍ 
+
+
+
+
+_ _ NUNCA FOI CRIADO POR NÓS__... --> EM VEZ DISSO,
+
+ELE VEIO 
+'BUILTIN' 
+com o 
+
+mongodb,
+
+junto de OUTROS BUILTIN ROLES,
+
+
+
+
+ROLES QUE 
+
+
+
+'TIPICAMENTE COBREM TODOS OS USE-CASES QUE VOCê TERÁ'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> VOCê TAMBÉM PODE CRIAR **SEUS PRÓPRIOS ROLES****,
+
+
+mas isso vai além desse curso,
+
+
+
+PQ 
+
+ISSO 
+
+
+
+É UMA TAREFA PURAMENTE ADMINISTRATIVA (admins),
+
+
+
+
+
+
+E SE VOCÊ QUER CRIAR ROLES ESPECÍFICOS,
+
+
+
+
+
+há official docs que te mostram o procedimento, que é bem simples....
+
+
+
+
+
+
+
+
+
+OK, MAS QUAIS SÃO OS BUILTIN ROLES NO MONGODB?
+
+
+
+
+
+
+
+
+
+
+
+BEM, TEMOS UM PUNHADO DELES:
+
+
+
+
+
+
+
+
+
+
+
+1) DATABASE USER --> ROLES TÍPICOS PARA __ USERS__ DE NOSSA DATABASE, PESSOAS QUE TRABALHAM COM A DATA NA NOSSA DATABASE --> AÍ 
+
+TEMOS 2 ROLES,
+
+
+
+roles de: 
+
+
+a) READ 
+
+
+B) READWRITE....
+
+
+
+
+
+
+
+
+
+
+--> ESSES ROLES SÃO BEM SELF-EXPLANATORY... --> VOCÊ OU TEM 
+
+
+UM ROLE 
+PARA 
+
+'USERS QUE SÓ PRECISAM FIND/READ DATA',
+
+
+
+ou seja,
+
+que PRECISAM SER CAPAZES DE RODAR AS QUERIES DE 
+
+'find() e findOne()',
+
+
+
+E TAMBÉM 
+
+O
+ 
+
+
+
+ AGGREGATION FRAMEWORK,
+
+
+ MAS QUE NÃO SERÃO CAPAZES 
+
+
+ DE 
+
+ DELETE/INSERT/UPDATE DATA.... -->  (esse é o caso do role de 'read', que é usado para DATA ANALYSTS)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> JÁ PARA O role de 'readWrite',
+
+ VOCê TEM 'FULL ACCESS'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -_> VOCê TAMBÉM TEM 
+
+
+ ALGUNS ROLES __ TÍPICOS __ DE 
+
+
+
+ ADMIN/DOS ADMIN,
+
+
+
+
+ tipo 
+
+
+
+
+
+
+ 2) ''DATABASE ADMIN ROLES'':
+
+
+
+
+
+
+
+ a) dbAdmin 
+
+
+
+ b) userAdmin 
+
+
+
+ c) dbOwner 
+
+
+
+
+
+
+
+
+
+
+
+
+
+ dbAdmin -----> DB ADMIN --> É, POR EXEMPLO, UM ROLE PARA PESSOAS QUE 
+
+
+
+
+ SÃO CAPAZES DE FAZER 'MANAGE DA DATABASE',
+
+
+
+ 'CRIAR COLLECTIONS'.... e coisas afins...
+
+
+
+
+
+
+
+
+
+
+ userAdmin --> userAdmin, que usamos em 'userAdminAnyDatabase',
+
+
+
+
+ É __ MAIS DIRECIONADO AO 'CREATE DE USERS',
+
+
+
+ pq é justamente o PRIMEIRO ROLE QUE VOCê ASSIGNA QUANDO ESTÁ CRIANDO USERS NA SUA DATABASE.. (para conseguir criar outros users)...
+
+
+
+
+
+
+
+
+
+
+
+
+ também temos 'dbOwner'..
+
+
+
+
+
+
+
+
+
+
+ --> ESSES ROLES TE DÃO, DE VERDADE,
+
+
+
+ ACESSO AO 'READ/WRITE' de data,
+
+
+ MAS __SOMENTE___ DENTRO _ DA 
+
+
+ DATABASE A QUE VOCê ASSIGNOU ESSE ROLE/QUE VOCê ATRIBUIU ESSE ROLE....- -> E O PROFESSOR LOGO VAI NOS MOSTRAR 
+
+
+ '''COMO ASSIGNAR ROLES A DATABASES'', em uma aula posterior...
+
+
+
+
+
+
+
+
+
+
+ 3) 'ROLES APLICÁVEIS/APLICADOS A TODAS AS DATABASES' 
+
+
+
+
+
+
+ -> esses roles são TODOS OS ROLES QUE ACABAM COM 
+
+ '...AnyDatabase'....
+
+
+
+
+
+
+
+
+ ex:
+
+
+
+ readAnyDatabase 
+
+
+
+ readWriteAnyDatabase
+
+
+
+
+ userAdminAnyDatabase 
+
+
+
+ dbAdminAnyDatabase....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -----> ISSO TE DEIXA ASSIGNAR 'ALL DATABASE' roles .... ---> VOCê PODE 
+
+
+
+ ASSIGNAR 
+
+
+
+
+
+ TODOS ESSES ROLES de 'READ/readwrite/dbadmin/userAdmin/dbOwner' 
+
+
+
+ PARA 
+
+ USERS_ _ EM MÚLTIPLAS DATABASES.... ----> ISSO SIGNIFICA QUE VOCÊ 
+
+ PDOE DAR 
+
+
+
+
+ A UM MESMO USER __ ACESSO_ _ A 2 DATABASES... 
+
+
+
+
+
+
+
+
+
+
+
+ -> 'READ ROLE PARA 2 DATABASES'....
+
+
+
+
+
+
+-> BASTA ESCREVER 1 role 
+
+
+DE CADA DATABASE, NESSE USER...
+
+
+
+
+
+
+ -> ex:
+
+
+
+        roles: [
+            "userAdminBlog",
+            "userAdminShop"
+        ]
+
+
+
+
+
+
+
+
+        TIPO ASSIM, CREIO EU..
+
+
+
+
+
+
+
+
+
+
+
+        -> PODEMOS DAR O 'read role' 
+        PARA 
+
+
+        2 DIFERNETES DATABASEs:
+
+
+
+        
+        roles: [
+            "readShop",
+            "readBlog"
+        ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> MAS É CLARO QUE 
+
+
+VAMOS TER CASES EM QUE VOCê VAI QUERER DAR A 1 CERTO USER O __ ACESSO/AUTORIZAÇÃO 
+
+
+
+
+
+A __tODAS __ AS DATABASES,
+
+E TAMBÉM 
+
+EM 
+
+'TODAS AS DATABASES FUTURAS'... -->   E AÍ, É CLARO,
+
+
+VOCÊ 
+
+NÃO VAI QUERER 
+
+
+
+
+TER QUE 
+
+'MANUALLY ADD' o role 
+
+
+de 
+
+'read'
+
+
+
+PARA TODAS SUAS DATABASES, MANUALMENTE.... -------> E É EXATAMENTE POR ISSO QUE 
+
+TEMOS 
+
+ESSES BUILTIN ROLES de 'readAnyDatabase',
+
+
+'readWriteAnyDatabase',
+
+
+
+
+
+'userAdminAnyDatabase',
+
+
+
+'dbAdminAnyDatabase'...
+
+
+
+
+
+
+
+
+
+
+--> ISSO QUER DIZER QUE TEMOS TAMBÉM TODOS ESSES ROLES QUE VIMOS ANTERIORMENTE (em 'DATABASE USER' e 'DATABASE ADMIN')...
+
+
+
+---> SERÃO TODOS ESSES ROLES AÍ,
+
+MAS __ EM UM _ SETUP ESPECIAL,
+
+QUE 
+
+
+'''SEMPRE VAI DAR ACESSO AO USER, EM TODAS AS DATABASES''...  --------> E É POR ISSO QUE 
+
+
+ 
+ USAMOS/CRIAMOS UM USER 
+
+
+
+ COM A ROLE DE 
+
+
+ 'userAdminAnyDatabase' NA ÚLTIMA AULA,
+
+
+
+
+ PQ __ QUEREMOS TER 1 USER
+
+
+ QUE 
+
+ É 
+
+ CAPAZ 
+
+
+
+
+
+ _ DE __ 'CREATE USERS'
+
+ para 
+
+ QUALQUER 
+
+ DATABASe,
+
+
+
+NÃO IMPORTA QUAL,
+  
+
+
+
+
+ DE NOSSO APP, 
+
+
+
+
+ NÃO INTERESSANDO A EXISTÊNCIA/INEXISTÊNCIA PRÉVIA DESSA DATABASE.....
+
+
+
+
+
+
+
+
+
+
+ -> OK......... 
+
+
+
+
+ É CLARO QUE FORA ESSES ROLES,
+
+
+
+ TAMBÉM 
+
+ TEMOS 
+
+
+
+ 'CLUSTER ADMINISTRATION ROLES'''  ----->
+
+
+
+
+
+
+
+
+
+
+
+
+ EX:
+
+
+
+
+
+ CLUSTER ADMIN: 
+
+
+
+
+
+
+
+
+
+ --> EXEMPLOS DE ROLES DESSE TIPO:
+
+
+
+
+
+
+
+ clusterManager,
+
+ clusterMonitor,
+
+
+ hostManager,
+
+
+ clusterAdmin...
+
+
+
+
+
+
+
+
+
+
+ -> OK, MAS O_____  QUE __ SÃO CLUSTERS?
+
+
+
+
+
+
+
+
+
+ CLUSTERS SÃO BASICAMENTE 'CONSTRUCTS',
+
+
+
+
+ CONSTRUCTS EM QUE VOCÊ TEM MÚLTIPLOS _ MONGODB__ SERVERS RODANDO JUNTOS --> ISSO É UTILIZADO NO SCALING,
+
+
+
+ É 
+
+
+ UTILIZADO PQ AÍ VOCê PODE ACTUALLY 
+
+
+ 'TER MÚLTIPLAS MÁQUINAS',
+
+
+ MÁQUINAS RODANDO SEU SERVER MONGODB 
+
+
+
+
+
+
+
+ E __ AÍ__ ARMAZENANDO SUA DATA,
+
+
+
+
+ TUDO ISSO FUNCIONANDO __ EM CONJUNTO...
+
+
+
+
+
+
+
+
+
+
+
+ -------> E FAZER O MANAGE  DESSES CLUSTERS 
+
+
+ de máquinas 
+
+ É UMA TAREFA IMPORTANTE,
+
+
+ E QUE É FEITA POR PESSOAS 'QUE SABEM O QUE ESTÃO FAZENDO'....
+
+
+
+
+
+
+
+
+
+
+
+ -> OS RIGHTS QUE SÃO ASSIGNAODS A ELE 
+
+ SÃO:
+
+
+  clusterManager,
+
+ clusterMonitor,
+
+
+ hostManager,
+
+
+ clusterAdmin...
+
+
+
+
+
+
+
+
+
+
+
+-> VOCÊ DEVE DEIXAR ELES FAZEREM SEU PRÓPRIO TRABALHO, POR MEIO DA CONCESSÃO DESSES RIGHTS ESPECÍFICOS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> VOCÊ _ TAMBÉM _ TEM 
+
+
+ROLES ESPECIAIS DE 'backup' e 'restore'... --> usado em users que SÓ SÃO RESPONSÁVEIS POR ISSo....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SÃO USADOS NOS CASOS EM QUE _ VOCê __ TEM USERS_ QUE SERÃO RESPONSÁVEIS _ APENAS POR ISSO (split de seu código)...,
+
+
+
+
+PELO BACKUP/RESTORE DE SEU SERVER.... ( e não pelo ressto) -> E ESSES SÃO ROLEES
+
+
+
+QUE 
+
+TE 
+
+DEIXAM FAZER ISSO...
+
+
+
+só deixam fazer isso, pq é sua única função/atribuição...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> ISSO FEITO,
+
+
+
+PASSMAOS AO TIPO FINAL DE ROLES,
+
+
+
+
+que eé 
+
+
+
+'Superuser'...
+
+
+
+
+
+
+
+
+
+
+
+--> EXEMPLOS DE ROLES DE 'Superuser':
+
+
+
+
+
+
+
+
+
+dbOwner(admin),
+
+
+userAdmin(admin),
+
+userAdminAnyDatabaseRoot 
+
+
+
+
+
+
+
+
+
+
+
+
+--------> SIM... ESSES SÃO OS ROLES DE 'SUPER USER'.... -> bem,
+
+ 
+
+ ESSES TAMBÉM SÃO ROLES QUE VIMOS ANTES.... (exceto 'root")...
+
+
+
+
+
+
+
+
+
+
+ A QUESTÃO/IDEIA AQUI É 
+
+ ''' SE VOCê ADICIONAR/ASSIGNAR OS ROLES 
+
+
+ DE 
+
+
+
+ 'dbOwner' ou 'userAdmin' À DATABASE 
+
+
+DE 'ADMIN'''' 
+
+
+(
+
+
+
+    e o professor vai NOS MOSTRAR COMO ASSIGNAR ROLES A  1 DATABASE... --> OU SEJA,
+
+
+    COMO ASSIGNAR ROLES A 1 USER, E AÍ A UMA DATABASE ESPECÍFICA...
+)
+
+
+
+
+
+
+
+
+
+--> SE VOCê ASSIGNAR ESSES ROLES 
+
+
+
+
+À DATABASE DE 'ADMIN',
+
+ISSO 
+
+VAI 
+
+
+'KINDOF' SER UM 
+
+
+
+SPECIAL CASE,
+
+PQ 
+
+
+
+
+A DATABASE de 'admin' 
+
+
+
+
+
+
+
+É ___ UMA 'SPECIAL DATABASe'.. ------>  ISSO SIGNIFICARÁ QUE 
+
+OS 
+
+USERS 
+
+SERÃO  CAPAZES DE 'CRAETE NEW USERS' 
+
+
+E TAMBÉM SERÃO CAPAZES DE 
+ _ MUDAR__ SEU PRÓPRIO ROLE, até mesmo TROCAR SEU PRÓPRIO NOME ------>  E É POR ISSO QUE 
+FALAMOS DE UM 
+
+'SUPER USER'  -
+
+
+
+E ESSES USERS SERÃO CAPAZES  
+
+
+
+
+
+
+
+
+--> 
+
+
+
+
+
+
+
+
+
+
+
+RESUMINDO:
+
+SE VOCÊ ADICIONA ESSES USERS A DATABASE DE 
+
+
+
+
+'admin',
+
+
+VOCê ACABA 
+
+
+
+
+COM 'SUPER USERS',
+
+
+PQ 
+
+ELES 
+
+
+SERÃO CAPAZES DE CRIAR NOVOS USERS,
+
+
+E TAMBÉM 
+
+SERÃO CAPAZES ATÉ MESMO DE MUDAR SEU PRÓPRIO ROLE....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> dbOwner --> CRIADO EM 'admin',
+
+
+
+
+-> userAdminAnyDatabase --> CRIADO EM 'admin' 
+
+
+
+--> userAdminAnyDatabaseRoot --> É UM SUPER USER...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> TODAS ESSAS HIPÓTESES LOGO ACIMA SÃO 'SUPER USERS'...
+
+
+
+
+
+
+
+
+
+
+
+
+-> ESSES USERS SÃO ESPECIAIS,
+
+podem
+ 
+ 'CRIAR QUALQUER COISA QUE DESEJAM',
+
+
+
+
+ portanto são 'OS MAIS POWERFUL' roles... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> E O ROLE MAIS FORTE É O 
+
+
+
+
+
+
+
+ 'userAdminAnyDatabaseRoot' -------> SE VOCÊ ASSIGNA ESSE ROLE A 1 USER,
+
+
+
+ ELE PODERÁ FAZER 
+
+
+ 'BASICAMENTE QUALQUER COISA '
+
+ no seu app...
+
+
+
+
+
+
+
+
+
+
+ --> BASICAMENTE,
+
+
+ ISSO 
+
+
+ SERÁ 1 USER COM OS MESMOS RIGHTS 'ALL FUCKING RIGHTS'
+
+
+ que 
+
+ usamos mais cedo no curso,
+
+
+ na nossa instância mongo.... (logo antes de começarmos a LOCK DOWN A DATABASE com '--auth'....)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ---> OK... ESSES SÃO OS 'BUILT IN ROLES'...
+
+
+
+
+
+
+ resumindo:
+
+
+
+
+
+
+
+ 1) QUANDO CRIAMOS UM USER, TEMOS QUE DECIDIR _ EM QUAL _ DATABASE__ ELE VAI OPERAR/ser auth...
+
+
+
+
+
+
+
+
+
+ 2) QUANDO O CRIAMOS, PRECISAMOS DEFINIR SEU ROLE/roles (pode ter roles que ATÉ MESMO FAZEM COM QUE ELE TENHA PERMISSÃO DE EDITAR _ OUTRAS__ COLLECTIONS, EM OUTRAS DATABASES, Mas isso é menos frequente)...
+
+
+
+
+
+
+
+
+
+ 3) há também roles de '...AnyDatabase',
+
+ QUE DEIXAM VOCÊ 
+
+
+ REALIZAR ESSA OPERAÇÃO/OPERAÇÕES em 
+ _QUALQUER_ DATABASE...
+
+
+
+
+ ex:
+
+
+
+ readAnyDatabase...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> CLUSTER ADMIN ROLES --> coisas que você deve deixar as 'pessoas sabidas' fazer...
+
+
+
+
+
+clusterManager...
+
+
+
+
+
+
+
+  
+
+  4) backup/restore roles... -> 
+
+
+
+
+
+
+
+
+
+
+
+  5) superUser --> SÃO CRIADOS QUANDO CRIAMOS USERS NA DATABASE DE 'admin'... -> te deixam CRIAR USERS e até mesmo modificar seus próprios roles....
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ---------------- DATABASE DE 'ADMIN' --> É UMA DATABASE ESPECIAL...
+
+
+
+
+
+
+
+
+
+
+  --> superUser --> é capaz de criar novos users, e também 
+
+
+  de 
+
+
+  'change their own role'...
+
+
+
+
+
+
+
+
+
+
+
+  userAdminAnyDatabaseRoot --> user poderá fazer QUALQUER COISA,
+
+
+
+
+
+
+  é o user que tem todos os rights, como se não tivesse '--auth'...
+
+
+
+
+
+
+
+
+
+
+
+
+  --> VOCÊ PODE DESCOBRIR MAIS SOBRE 'ROLES'
+
+
+  NOS DOCS OFFICIAIS 
+
+
+  DO MONGODB....
+
+
+
+
+
+
+
+
+  BUILT-IN ROLES --> fala dos diferentes roles.... ----->
+
+
+  LÁ 
+
+
+  VOCÊ 
+
+  VÊ NÃO SÓ 
+
+
+  A DESCRIPTION DOS ROLES,
+
+
+
+  MAS TAMBÉM 
+
+
+
+   AS 'ACTIONS' QUE CADA 
+
+
+   ROLE DESBLOQUEIA (
+
+       pq 
+
+       1 
+       role e´só um 
+
+
+       grupo de 'privileges',
+
+       que 
+
+
+       são apenas conjuntos de 'access e action'...
+
+
+
+
+
+
+
+   )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   -> PROFESSOR EXEMPLIFICA COM O ROLE DE 'read':
+
+
+
+
+
+
+
+ACTIONS POSSÍVEIS:
+
+
+
+
+1) COLLSTATS 
+
+
+2) DBHASH
+
+
+
+3) DBSTATS 
+
+
+
+4) FIND 
+
+
+
+5) KILLCURSORS
+ 
+
+
+
+
+ 6) listIndexes 
+
+
+
+
+ 7) listCollections...
+
+
+
+
+
+
+
+
+
+ COISA BEM PADRÃO...  -----> PODEMOS LER TODOS OS ROLES,
+
+
+ E VER O UQE 
+
+ AS 
+
+
+ PESSOAS QUE TEM 
+
+
+ CADA 
+
+ ROLE PODEM FAZER...
+
+
+
+
+
+
+
+
+
+ --> COM ISSO, 
+
+ SABEMOS 
+
+
+
+ QUAIS ROLES EXISTEM PREVIAMENTE.... -> MAS UMA COISA QUE 
+
+
+
+ AINDA NÃO ESTÁ CLARA 
+
+
+ É 
+
+
+
+ '''COMO EXATAMENTE ASSIGNO UM ROLE A 1 USER,
+
+
+ E COMO 
+
+ CONTROLO A QUAL DATABASE ESSE ROLE SE APLICA''? 
+
+
+
+
+
+
+
+
+
+
+
+
+ --> bem, para criar users escrevemos 
+
+
+
+
+
+ db.createUser(
+     {
+         user: 'Max',
+         pwd: 'password',
+         roles: [
+             "dbAdminAnyDatabase"
+         ]
+     }
+ )
+
+ ,
+
+
+
+
+
+
+
+
+
+ POR EXEMPLO.... -> MAS COMO PODEMOS ASSIGNAR ESSE ROLE A APENAS 1 DATABASE, em vez de 'anyDatabase?" 

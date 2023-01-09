@@ -1,0 +1,1127 @@
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+ --> DEVEMOS INSTALAR O MONGODB LOCALMENTE..
+
+
+
+
+
+
+
+
+ --> E AÍ VAMOS NOS CONECTAR A ELE, PARA TRABALHAR COM ELE...
+
+
+
+
+
+
+
+
+ --> MONGODB RODA NO MS,
+
+
+
+ LINUX, MAC...
+
+
+
+
+
+
+
+
+ ---> clique em 'get mongodb' 
+
+
+
+
+
+ --> INSTALE-O LOCALMETE...
+
+
+
+
+
+
+
+
+
+
+ --> NÃO PEGUE O ATLAS, E SIM O MONGODB...
+
+
+
+
+
+
+
+
+
+
+
+ --> PARA CONSEGUIR O MONGODB LOCAL,
+
+
+
+ BAIXE O 'COMMUNITY SERVER'...
+
+
+
+
+
+
+
+
+
+
+ --> JÁ O 'ENTERPRISE SERVER' 
+
+ É A SOLUÇÃO __ PAGA__,
+
+
+
+
+
+
+
+
+
+ USADA PARA APPS DE VERDADE....  ------> A VERSÃO ENTERPRISE SÓ É DIFERENTE NO ASPECTO 
+
+
+ DE AUTHENTICATIOn, ENCRYPTION, ETC ETC...
+
+
+
+
+
+
+
+
+
+
+
+
+ --> ok, baixe o negócio...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ SELECIONE A VERSÃO DEFAULT,
+
+
+
+
+ baixe,
+
+
+
+
+
+
+
+
+
+
+TUDO CERTO...
+
+
+
+
+
+
+
+
+
+
+
+
+-----------> QUANDO ACABAR, EXTRAIA O NEGÓCIO E INSTALE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> DEPOIS  ESCOLHA 'CUSTOM' --->  
+
+
+
+
+
+
+
+
+
+LÁ,
+
+VOCÊ PODE DEIXAR OS DEFAULTS,
+
+
+
+
+MAS O PROFESSOR SÓ QUER NOS INFORMAR QUE __ NO WINDOWS__ O 
+
+
+
+MONGODB É INSTALADO COMO UM 'SERVIÇO'...
+
+
+
+
+
+
+
+
+
+--> VOCÊ PODERIA DESMARCAR ISSO,
+
+MAS ISSO É 'FINE'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(
+
+
+
+    É UM POUCO DIFERNTE 
+
+
+
+    DA MANEIRA QUE O LINUX/MAC EXECUTA,
+
+    MAS FUNCIONA IGUAl...
+)
+
+
+
+
+
+
+
+
+
+
+
+--------> ok... instale no windows...
+
+
+
+
+
+
+
+
+
+
+
+
+--> O FOLDER DE 'BIN' É O MAIS IMPORTANTE....
+
+
+
+-> VAMOS TRABALHAR COM ALGUNS DELES PARA 
+
+
+
+CRIAR NOSSO SERVER MONGODB... (que vai segurar nossas databases mongodb)....
+
+
+
+
+
+
+
+
+
+
+-> TAMBÉM USAREMOS O ARQUIVO NO BIN QUE É USADO PARA  O 'IMPORT DE DATa'....
+
+
+
+
+
+
+
+
+
+--> TAMBÉM USAREMOS O 'SHELL CLIENT',
+
+
+
+
+
+
+
+
+
+___ QUE__ É UM CLIENT QUE NOS PERMITE CONECTAR AO DATABASE MONGODB E AÍ 
+
+
+
+
+
+RODAR COMANDOS NELE.... 
+
+
+(
+
+
+    e no windows,
+
+
+    ganhamos os mesmos executables no installation path...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK.... COM ESSES ARQUIVOS POSICIONADOS NO LUGAR QUE VOCÊ QUER,
+
+
+
+
+
+
+
+
+prossiga...
+
+
+
+
+
+
+
+
+
+
+
+
+----------> OK........ ISSO FEITO, VÁ NO ROOT  DE SEU OPERATING SYSTEM,  
+
+
+
+
+CRIE UM FOLDER DE NOME 'data',
+
+E AÍ 
+
+CRIE UM SUBFOLDER NESSE FOLDER, 
+
+
+com nome de 'db'... -----> ISSO VAI DEIXAR O FOLLOW ALONG MAIS FÁCIL...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> CRIADO ESSE FOLDER,
+
+
+
+
+
+
+
+
+COMEÇE SEU TERMINAL/CMD/terminal do IDE 
+
+
+
+
+
+
+
+
+
+
+
+---> E AÍ 
+
+
+
+
+
+
+VAMOS TRABALHAR COM ISSO NA MAIORIA DO CURSO.... --> VAMOS USAR O TERMINAL PARA RODAR QUERIES/commands
+ 
+
+
+
+ PARA INSERIR/RETRIEVAR DATA.... ---> MAS O PROFESSOR 
+
+
+
+
+
+ TAMBEM VAI NOS MOSTRAR COMO APLICAR OS CONHECEIMENTOS QUE ADQUIRIREMOS 
+
+
+
+
+ EM UM APP DE VERDADE...
+
+
+
+
+
+
+
+
+
+
+
+
+ --> A PRIMEIRA COISA QUE VOCÊ VAI FAZER É TENTAR EXECUTAr 'mongo'...
+
+
+
+
+
+
+
+
+
+
+
+ --> você vai ganhar um error de 
+
+
+ 'mongo: command not found'...
+
+
+
+
+
+
+
+
+
+
+
+ --> PRECISAMOS IR ATÉ O PATH DE NOSSO OS 
+
+ e 
+
+ a´i
+
+
+
+
+ ADICIONAR 
+
+
+ ISSO 
+
+
+
+
+ NO PATH...
+
+
+
+
+
+
+
+
+
+ENVIRONMENT VARIABLES
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> você vai colocar uma entry como 
+
+
+C program files MongoDB Server 4.0 bin ,
+
+
+
+
+
+
+
+OU SEJA, O FOLDER EM QUE O MONGODB FOI INSTALADO...
+
+
+
+
+
+
+
+
+
+
+
+CERTO.... FIZ ISSO.....
+
+
+
+
+
+
+
+
+
+
+-> MAS ISSO AINDA NÃO ESTÁ FUNCIONANDO NO MEU IDE...
+
+
+
+
+
+
+
+--> ok, tentei de novo, e agora funcionou.
+
+
+
+
+
+
+
+
+PS A:\projeto6-MONGODB\MODULO1-INTRODUCAO> mongo
+MongoDB shell version v5.0.6
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("4afb9651-2df6-4f93-ad0c-498165863efa") }
+MongoDB server version: 5.0.6
+================
+Warning: the "mongo" shell has been superseded by "mongosh",
+which delivers improved usability and compatibility.The "mongo" shell has been deprecated and will be removed in
+an upcoming release.
+For installation instructions, see
+https://docs.mongodb.com/mongodb-shell/install/
+================
+---
+The server generated these startup warnings when booting:
+        2022-02-04T01:13:06.892-03:00: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+---
+---
+        Enable MongoDB's free cloud-based monitoring service, which will then receive and display
+        metrics about your deployment (disk utilization, CPU, operation statistics, etc).
+
+        The monitoring data will be available on a MongoDB website with a unique URL accessible to you
+        and anyone you share the URL with. MongoDB may use this information to make product
+        improvements and to suggest MongoDB products and deployment options to you.
+
+        To enable free monitoring, run the following command: db.enableFreeMonitoring()
+        To permanently disable this reminder, run the following command: db.disableFreeMonitoring()
+---
+>
+
+
+
+------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+--------> ok... ------> NO MAC E NO LINUX,
+
+
+RECEBREMOS UM ERRO DE 'CANNOT CONNECT' 
+
+
+
+
+
+
+--> NO WINDOWS,
+
+CONSEGUIMOS CONECTAR 
+
+
+
+PQ O MONGOD  (database server) 
+
+
+
+
+
+
+
+JÁ FICA RODANDO __ COMO UM ___ BACKGROUND service,
+
+PQ JÁ CHECAMOS ISSO DURANTE A INSTALLATION...
+
+
+
+
+
+
+
+
+
+
+----> OK.... NO WINDOWS, JÁ ESTAMOS CONECTADOS...
+
+
+
+
+
+
+
+
+
+
+
+-> NO WINDOWS, PARA VER COMO PODERÍAMOS CONECTAR NOSSO NEGÓCIO DIFERENTEMENTE,
+
+
+PODEMOS FECHAR ESSE TERMINAL E AÍ PODEMOS RODAR 
+
+
+'net stop MongoDB' 
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO VAI PARAR O SERVIÇO DE CONEXÃO AO MONGODB (automático)...
+
+
+
+
+
+
+
+
+--> AGORA PODEMOS SEGUIR OS PASSOS DO MAC E DO LINUX....
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->  PARA CONSEGUIR CONECTAR AO MONGODB,
+
+
+
+
+AO NOSSO MONGODB SERVER,
+
+
+
+
+DEVEMOS 
+
+RODAR, NO TERMINAL,
+
+O COMANDO 
+
+
+'mongod'...
+
+
+
+
+
+
+
+
+
+
+
+--> O MONGOD __ VAI __ INICIAR___ NOSSO DATABASE SERVER...
+
+
+
+
+
+
+
+
+
+
+
+
+--> FIZ ISSO,
+
+
+
+E 
+
+RECEBI ESTE CÓDIGO:
+
+
+
+
+PS A:\projeto6-MONGODB\MODULO1-INTRODUCAO> mongod 
+{"t":{"$date":"2022-02-04T01:26:02.819-03:00"},"s":"I",  "c":"NETWORK",  "id":4915701, "ctx":"main","msg":"Initialized wire specification","attr":{"spec":{"incomingExternalClient":{"minWireVersion":0,"maxWireVersion":13},"incomingInternalClient":{"minWireVersion":0,"maxWireVersion":13},"outgoing":{"minWireVersion":0,"maxWireVersion":13},"isInternalClient":true}}}
+{"t":{"$date":"2022-02-04T01:26:02.822-03:00"},"s":"I",  "c":"CONTROL",  "id":23285,   "ctx":"main","msg":"Automatically disabling TLS 1.0, to force-enable TLS 1.0 specify --sslDisabledProtocols 'none'"}
+{"t":{"$date":"2022-02-04T01:26:02.823-03:00"},"s":"W",  "c":"ASIO",     "id":22601,   "ctx":"main","msg":"No TransportLayer configured during NetworkInterface startup"}
+{"t":{"$date":"2022-02-04T01:26:02.823-03:00"},"s":"I",  "c":"NETWORK",  "id":4648602, "ctx":"main","msg":"Implicit TCP FastOpen in use."}
+{"t":{"$date":"2022-02-04T01:26:02.824-03:00"},"s":"W",  "c":"ASIO",     "id":22601,   "ctx":"main","msg":"No TransportLayer configured during NetworkInterface startup"}
+{"t":{"$date":"2022-02-04T01:26:02.825-03:00"},"s":"I",  "c":"REPL",     "id":5123008, "ctx":"main","msg":"Successfully registered PrimaryOnlyService","attr":{"service":"TenantMigrationDonorService","ns":"config.tenantMigrationDonors"}}
+{"t":{"$date":"2022-02-04T01:26:02.825-03:00"},"s":"I",  "c":"REPL",     "id":5123008, "ctx":"main","msg":"Successfully registered PrimaryOnlyService","attr":{"service":"TenantMigrationRecipientService","ns":"config.tenantMigrationRecipients"}}
+{"t":{"$date":"2022-02-04T01:26:02.825-03:00"},"s":"I",  "c":"CONTROL",  "id":5945603, "ctx":"main","msg":"Multi threading initialized"}
+{"t":{"$date":"2022-02-04T01:26:02.826-03:00"},"s":"I",  "c":"CONTROL",  "id":4615611, "ctx":"initandlisten","msg":"MongoDB starting","attr":{"pid":16800,"port":27017,"dbPath":"A:/data/db/","architecture":"64-bit","host":"DESKTOP-V43A7S1"}}
+{"t":{"$date":"2022-02-04T01:26:02.826-03:00"},"s":"I",  "c":"CONTROL",  "id":23398,   "ctx":"initandlisten","msg":"Target operating system minimum version","attr":{"targetMinOS":"Windows 7/Windows Server 2008 R2"}}
+{"t":{"$date":"2022-02-04T01:26:02.826-03:00"},"s":"I",  "c":"CONTROL",  "id":23403,   "ctx":"initandlisten","msg":"Build Info","attr":{"buildInfo":{"version":"5.0.6","gitVersion":"212a8dbb47f07427dae194a9c75baec1d81d9259","modules":[],"allocator":"tcmalloc","environment":{"distmod":"windows","distarch":"x86_64","target_arch":"x86_64"}}}}
+{"t":{"$date":"2022-02-04T01:26:02.826-03:00"},"s":"I",  "c":"CONTROL",  "id":51765,   "ctx":"initandlisten","msg":"Operating System","attr":{"os":{"name":"Microsoft Windows 10","version":"10.0 (build 19041)"}}}
+{"t":{"$date":"2022-02-04T01:26:02.827-03:00"},"s":"I",  "c":"CONTROL",  "id":21951,   "ctx":"initandlisten","msg":"Options set by command line","attr":{"options":{}}}
+{"t":{"$date":"2022-02-04T01:26:02.827-03:00"},"s":"E",  "c":"CONTROL",  "id":20557,   "ctx":"initandlisten","msg":"DBException in initAndListen, terminating","attr":{"error":"NonExistentPath: Data directory A:\\data\\db\\ not found. Create the missing directory or specify another path using (1) the --dbpath command line option, or (2) by adding the 'storage.dbPath' option in the configuration file."}}
+{"t":{"$date":"2022-02-04T01:26:02.828-03:00"},"s":"I",  "c":"REPL",     "id":4784900, "ctx":"initandlisten","msg":"Stepping down 
+the ReplicationCoordinator for shutdown","attr":{"waitTimeMillis":15000}}
+{"t":{"$date":"2022-02-04T01:26:02.828-03:00"},"s":"I",  "c":"COMMAND",  "id":4784901, "ctx":"initandlisten","msg":"Shutting down 
+the MirrorMaestro"}
+{"t":{"$date":"2022-02-04T01:26:02.828-03:00"},"s":"I",  "c":"SHARDING", "id":4784902, "ctx":"initandlisten","msg":"Shutting down 
+the WaitForMajorityService"}
+{"t":{"$date":"2022-02-04T01:26:02.828-03:00"},"s":"I",  "c":"NETWORK",  "id":20562,   "ctx":"initandlisten","msg":"Shutdown: going to close listening sockets"}
+{"t":{"$date":"2022-02-04T01:26:02.828-03:00"},"s":"I",  "c":"NETWORK",  "id":4784905, "ctx":"initandlisten","msg":"Shutting down 
+the global connection pool"}
+{"t":{"$date":"2022-02-04T01:26:02.829-03:00"},"s":"I",  "c":"CONTROL",  "id":4784906, "ctx":"initandlisten","msg":"Shutting down 
+the FlowControlTicketholder"}
+{"t":{"$date":"2022-02-04T01:26:02.829-03:00"},"s":"I",  "c":"-",        "id":20520,   "ctx":"initandlisten","msg":"Stopping further Flow Control ticket acquisitions."}
+{"t":{"$date":"2022-02-04T01:26:02.829-03:00"},"s":"I",  "c":"NETWORK",  "id":4784918, "ctx":"initandlisten","msg":"Shutting down 
+the ReplicaSetMonitor"}
+{"t":{"$date":"2022-02-04T01:26:02.829-03:00"},"s":"I",  "c":"SHARDING", "id":4784921, "ctx":"initandlisten","msg":"Shutting down 
+the MigrationUtilExecutor"}
+{"t":{"$date":"2022-02-04T01:26:02.829-03:00"},"s":"I",  "c":"ASIO",     "id":22582,   "ctx":"MigrationUtil-TaskExecutor","msg":"Killing all outstanding egress activity."}
+{"t":{"$date":"2022-02-04T01:26:02.830-03:00"},"s":"I",  "c":"COMMAND",  "id":4784923, "ctx":"initandlisten","msg":"Shutting down 
+the ServiceEntryPoint"}
+{"t":{"$date":"2022-02-04T01:26:02.830-03:00"},"s":"I",  "c":"CONTROL",  "id":4784925, "ctx":"initandlisten","msg":"Shutting down 
+free monitoring"}
+{"t":{"$date":"2022-02-04T01:26:02.830-03:00"},"s":"I",  "c":"CONTROL",  "id":4784927, "ctx":"initandlisten","msg":"Shutting down 
+the HealthLog"}
+{"t":{"$date":"2022-02-04T01:26:02.830-03:00"},"s":"I",  "c":"CONTROL",  "id":4784928, "ctx":"initandlisten","msg":"Shutting down 
+the TTL monitor"}
+{"t":{"$date":"2022-02-04T01:26:02.830-03:00"},"s":"I",  "c":"CONTROL",  "id":4784929, "ctx":"initandlisten","msg":"Acquiring the 
+global lock for shutdown"}
+{"t":{"$date":"2022-02-04T01:26:02.830-03:00"},"s":"I",  "c":"-",        "id":4784931, "ctx":"initandlisten","msg":"Dropping the scope cache for shutdown"}
+{"t":{"$date":"2022-02-04T01:26:02.830-03:00"},"s":"I",  "c":"FTDC",     "id":4784926, "ctx":"initandlisten","msg":"Shutting down 
+full-time data capture"}
+{"t":{"$date":"2022-02-04T01:26:02.830-03:00"},"s":"I",  "c":"CONTROL",  "id":20565,   "ctx":"initandlisten","msg":"Now exiting"} 
+{"t":{"$date":"2022-02-04T01:26:02.831-03:00"},"s":"I",  "c":"CONTROL",  "id":23138,   "ctx":"initandlisten","msg":"Shutting down","attr":{"exitCode":100}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------>  ISSO VAI FALHAR...
+
+
+
+
+
+
+
+
+
+
+
+--> FALHOU, DIZ O PROFESSOR,
+
+
+PQ 
+
+
+
+
+
+
+NÓS PROVAVELMENTE USAMOS UM FOLDER DIFERENTE DE 
+
+
+'/data/db'...
+
+
+
+
+
+
+
+
+
+---------> OK... --> MAS EU USEI O C DRIVE... ----> E MESMO ASSIM, DEU ESSE ERRO...
+
+
+
+
+
+
+
+
+
+
+{"t":{"$date":"2022-02-04T01:26:02.827-03:00"},"s":"E",  "c":"CONTROL",  "id":20557,   "ctx":"initandlisten","msg":"DBException in initAndListen, terminating","attr":{"error":"NonExistentPath: Data directory A:\\data\\db\\ not found. Create the missing directory or specify another path using (1) the 
+--dbpath command line option, or (2) by adding the 'storage.dbPath' option in the configuration file."}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> HMMM ELE ESTÁ USANDO O DRIVE  'A' (em vez de 'C')....
+
+
+
+
+
+
+
+
+
+
+
+--> OK... CONSERTEI...
+
+
+
+
+
+
+
+
+
+--> SE VOCÊ QUISER USAR OUTRO PATH,
+
+DISTINTO DESSE PATH BOSTA,
+
+
+você pode usar 
+
+
+
+o comando 'mongod --dbpath' 
+
+
+PARA ESPECIFICAR OUTRO FOLDER EM QUE VOCê TENHA ESSE FOLDER-SUBFOLDER DE 'data/db' .... 
+
+
+
+
+
+
+
+
+
+
+
+
+------------> COM ISSO,
+
+
+
+
+O MONGODB DATABASE SERVER FICARÁ RUNNING...
+
+
+
+
+
+
+
+
+--> NO WINDOWS,
+
+DEPOIS DE REINICIAR SEU SERVER,
+
+
+SEU SERVIÇO MONGODB VAI INICIAR AUTOMATICAMENTE NO BACKGROUND,
+
+
+sem você digitar nada....
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> O PROFESSOR 
+
+
+TEM UM MÓDULO INTEIRO SOBRE ISSO..
+
+
+
+
+
+
+
+
+
+
+
+
+-> agora, com ISSO,
+
+VOCÊ DEVE __ DEIXAR__ _A JANELA _ EM QUE __ O MONGODB ESTÁ RODANDO _ ABERTA__,
+
+E AÍ __ ABRIR UMA NOVA JANELA...
+
+
+
+
+
+(
+
+
+
+    DEIXE ESSE PROCESSO 
+
+
+    RODANDO,
+
+
+
+
+SE VOCÊ QUISER TRABALHAR COM ELE --> SE VOCÊ FECHAR SUA DATABASE,
+
+
+NAÕ PODERÁ TRABALHAR MAIS COM ELA...
+
+)
+
+
+
+
+
+
+
+
+
+
+
+--> VOCÊ PODE QUITTÁ-LA COM 'control + c',
+
+
+
+
+MAS SE QUISER USÁ-LA DE NOVO,
+
+PRECISA reiniciar com 'mongod'...
+
+
+
+
+
+
+
+
+
+
+
+-> OK... NESSA NOVA JANELA,
+
+VOCÊ PODE RODAR 'mongo' -->  E 
+
+
+'MONGO' VAI FAZER COM QUE VOCê SE CONECTE __ AUTOMATICAMENTE AO 'RUNNING SERVER'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->ok, aprendemos 3 comandos:
+
+
+
+
+
+
+
+
+
+1) mongod ----> INICIA SUA DATABASE 
+
+
+
+
+2) mongod --dbpath --> deixa você definir um path distinto para '/data/db'...
+
+
+
+
+
+
+
+3) mongo ---> FAZ COM QUE VOCê SE CONECTE AO 'RUNNING SERVER', rodando localmente..
+
+
+
+
+
+
+
+
+
+
+
+
+---------> ISSO VAI SE CONECTAR AO 'RUNNING SERVER '-->  quando isso acontecer,
+
+
+
+VOCÊ ESTARÁ 
+
+
+NO 'MONGO SHELL',
+
+
+
+
+
+
+
+que é o STATE/LOCAL/AMBIENTE EM QUE VOCÊ PODE 'RODAR CÓDIGO CONTRA O MONGODB DATABASE SERVER'  ------> OU SEJA,
+
+É O AMBIENTE EM QUE 
+
+VOCÊ PODE CRIAR NOVAS databases,
+
+
+
+
+
+
+E NOVOS DOCUMENTS...
+
+
+
+
+
+
+
+
+
+--> É ISSO QUE VEREMOS NA PRÓXIMA AULA...

@@ -1,0 +1,1512 @@
+
+
+
+
+
+
+
+
+
+
+--> AGORA QUE 
+
+
+
+
+
+TEMOS DATA ARMAZENADA 
+
+
+
+
+
+
+EM 1 NOVA COLLECTION,
+
+
+
+
+
+POR meio 
+
+
+daquela nossa query antiga e 'out',
+
+
+
+
+
+tipo assim:
+
+
+
+
+
+
+
+
+ db.persons.aggregate([
+    {
+      $project: {
+        _id: 0,
+        gender: 1,
+        personAge: '$dob.age',
+        'date of birth': { $toDate: '$dob.date' },
+        fullName: {
+          $concat: [
+            { $toUpper: { $substrCP: ['$name.first', 0, 1] } },
+            {
+              $substrCP: [
+                '$name.first',
+                1,
+                { $subtract: [{ $strLenCP: '$name.first' }, 1] },
+              ],
+            },
+            ' ',
+            { $toUpper: { $substrCP: ['$name.last', 0, 1] } },
+            {
+              $substrCP: [
+                '$name.last',
+                1,
+                { $subtract: [{ $strLenCP: '$name.first' }, 1] },
+              ],
+            },
+          ],
+        },
+
+        location: {
+          type: 'Point',
+          coordinates: [
+            { $toDouble: '$location.coordinates.longitude' },
+            { $toDouble: '$location.coordinates.latitude' },
+          ],
+        },
+      },
+    },
+    {
+      $out: "geoTransformedData"
+    }
+  ]).pretty();
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> ISSO NOS DEU A 
+
+
+
+
+  COLLECTION DE 
+
+
+
+
+
+'geoTransformedData'...
+
+
+
+
+> show collections
+geoTransformedData
+persons
+transformedData   
+>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> CERTO.... E OS OBJECTS/DOCUMENTS NESSA COLLECTION FICARAM ASSIm:
+
+
+
+
+
+{
+        "_id" : ObjectId("6217d971aa1d820cd88174ee"),
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        14.0142,
+                        18.2563
+                ]
+        },
+        "personAge" : 35,
+        "date of birth" : ISODate("1983-05-20T21:26:44Z"),
+        "fullName" : "Signe Rasmu"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA DEVEMOS USAR ESSA NOVA COLLECTION,
+
+E AÍ 
+
+
+
+'CRIAR UM NOVO INDEX',
+
+
+
+
+1 NOVO 
+
+
+'GEOINDEX'
+
+
+nessa collection,
+
+
+no field de 
+
+
+
+
+
+
+'location',
+
+PARA 
+
+QUE 
+
+ENTÃO 
+
+
+
+
+
+consigamos 
+
+aCTUALLY 
+
+USAR 
+
+
+
+
+o STAGE DE '$geoNear',
+
+QUE 
+
+É UM 
+
+STAGE 
+
+ESPECIAL 
+
+DO 
+
+
+
+AGGREGATION PIPELINE....
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO,
+
+TEREMOS DE ESCREVER ASSIM:
+
+
+
+
+
+
+
+
+
+
+db.geoTransformedData.createIndex(
+    {
+        location: "2dsphere"
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> CERTO... CRÍAMOS ESSE INDEX:
+
+
+
+
+
+
+
+
+
+> db.geoTransformedData.createIndex(
+...     {
+...         location: "2dsphere"
+...     }
+... )
+{
+        "numIndexesBefore" : 1,
+        "numIndexesAfter" : 2,
+        "createdCollectionAutomatically" : false,
+        "ok" : 1
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------> AGORA PODEMOS, COM ISSO, 
+
+
+USAR ESSA COLLECTION 
+
+
+
+
+
+DE 
+
+'geoTransformedData' PARA 
+
+
+
+
+RODAR 
+
+
+'GEOLOCATION QUERIEs',
+
+
+
+e também 
+
+
+para 
+
+
+'GEOSPATIAL AGGREGATION PIPELINE STEP',
+
+
+que é O 
+
+
+
+'$geoNear'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... VAMOS COMEÇAR A USAR O PIPELINE,
+ASSIM:
+
+
+
+
+
+
+
+
+
+
+db.geoTransformedData.aggregate(
+    [
+        {
+            $geoNear
+        }
+    ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESSE É UM STAGE ESPECIAL, USADO PARA O TRABALHO COM 'GEODATA'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> $geoNear ---------> 
+
+
+
+
+
+geoNear
+
+
+
+
+TOMA UM MONTE DE INPUTS PARA SER CONFIGURADO....
+
+
+
+
+
+
+
+
+
+
+
+
+
+1o PARÂMETRO:
+
+
+
+''near'' -----> DEVEMOS DEFINIR UM 'POINT EM QUE ESTAMOS', pelo qual queremos ENCONTRAR POINTS PRÓXIMOS....
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO PQ O '$geoNear' 
+
+NOS DEIXA 
+
+SIMPLESMENTE 'FIND' 
+
+documents nas nossas collections  
+
+
+
+____ QUE __ ESTEJAM__ PRÓXIMOS DE NOSSA 'CURRENT POSITION'... ( é essa a utilização de '$geoNear')..
+
+
+
+
+
+
+
+
+
+
+
+----------> PARA ISSO,
+
+
+
+
+PRECISAMOS 
+
+
+
+'PICK' UMA LOCATION... ----> uma location que QUEREMOS QUE NOSSOS DOCUMENTS ESTEJAM PRÓXIMOS DE...
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+db.geoTransformedData.aggregate(
+    [
+        {
+            $geoNear: {
+                near: {}
+            }
+        }
+    ]
+) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS É CLARO QUE O NEAR NÃO SERÁ SÓ UM PAR DE COORDENADAS;
+
+
+ele requer que você também escreva aquele geojson object clássico,
+
+
+composto por 'type' e 'coordinates':
+
+
+
+
+
+
+
+
+
+
+db.geoTransformedData.aggregate(
+    [
+        {
+            $geoNear: {
+                near: {
+
+                        type: "Point",
+                        coordinates: [  14.0142,
+                        18.2567]
+
+
+                }
+            }
+        }
+    ]
+) 
+
+
+---------------------------------------------------
+
+
+
+
+
+
+
+
+--> MODIFIQUEI 1 DÍGITO,
+
+
+
+
+
+
+
+para que não tenha 'the exact same location'...
+
+
+
+
+
+
+
+
+
+OK.... COM ESSE PARAMETRO 'filled out',
+
+
+
+devemos 
+
+
+
+DEFINIR UM PARAMETER DE 
+
+'maxDistance',
+
+
+
+
+EM METROS,
+
+QUE 
+
+
+VAI 
+
+EXCLUIR 
+
+TODOS OS DOCUMENTS 
+
+
+QUE 
+
+
+FICAREM 
+
+
+
+EXCESSIVAMENTE DISTANTES das coordenadas em 'near'....
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOCÊ TAMBÉM PODE _ LIMITAR__  A QUANTIDADE DE RESULTS QUE VOCÊ VAI QUERER RETRIEVAR,
+
+
+
+por meio da key de 
+
+
+'num: 5' (
+
+
+
+    ou qualquer outro número....
+)
+
+
+
+
+
+
+--> ESSE 'limit' por meio de 'num' 
+
+é 
+
+
+MAIS EFICIENTE DO QUE A STEP DE '$limit',
+
+
+
+
+
+
+pq 
+
+
+
+NÃO TEREMOS DE LIMITAR ESSES DOCUMENTS RETRIEVADOS EM UM STAGE POSTERIOR,
+
+
+
+
+SENDO TUDO FEITO AQUI,
+
+SE VOCÊ ESCREVER ASSiM....
+
+
+
+
+--> vamos limitar a 10 a quantidade de documents...
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+
+
+db.geoTransformedData.aggregate(
+    [
+        {
+            $geoNear: {
+                near: {
+
+                        type: "Point",
+                        coordinates: [  14.0142,
+                        18.2567],
+
+                maxDistance: 1000,
+                num: 10
+
+
+                }
+            }
+        }
+    ]
+) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO FEITO,
+
+
+PROFESSOR 
+
+
+
+
+DIZ QUE TAMBÉM PODEMOS ADICIONAR UMA KEY de 'query',
+
+
+
+QUE É USADA PARA TAMBÉM 'FILTER FOR OTHER THINGS'...
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR EXPLCIA 
+
+
+QUE 
+
+ESSA 
+
+key de 
+
+'query'
+
+
+EXISTE __ JUSTAMENTE_ PQ 
+
+
+'
+$geoNear'
+
+
+
+
+
+SEMPRE SERÁ, OBRIGATORIAMENTE,
+
+
+A PRIMEIRA STEP EM UMA PIPELINE...  -----> ELE NÃO PODE SER 
+
+
+
+EXECUTADO COMO STEP 2 OU 3,
+
+
+
+
+PQ __ ELE __ 
+
+
+
+PRECISA/EXIGE AQUELE INDEX 
+
+
+
+
+
+,
+
+
+
+AQUELE 'GEOINDEX',
+
+
+
+
+E O 
+
+
+PRIMEIRO PIPELINE ELEMENT/STAGE __ É JUSTAMENTE 
+
+
+O ÚNICO 
+
+STAGE COM ACESSO 
+
+
+AOS INDEX... --> outros pipeline stages 
+
+
+
+APENAS FAZEM GET DO 
+
+'PREVIOUS PIPELINE STAGE'S OUTPUT',
+
+
+
+
+
+
+
+
+
+
+por isso 
+
+
+
+
+
+
+É QUE 
+
+DEVEMOS COLOCAR ELE PRIMEIRO,
+
+
+PQ 
+
+
+ELE É 
+
+
+
+'''THE ONLY ELEMENT/STEP WITH DIRECT ACCESS TO THE COLLECTION''' --> é por isso que 
+
+
+
+
+
+existe essa key de 'query' dentro de '$geoNear',
+pq 
+
+
+
+SE VOCÊ 
+
+
+
+
+TIVER ALGUM OUTRO FILTER 
+
+
+
+
+
+
+QUE __ VOCÊ QUER __ RODAR__ DIRETAMENTE NA COLLECTION,
+
+
+
+VOCê 
+
+VAI OS ESCREVER AQUI... --> e aí 
+
+,
+
+
+se você 
+
+
+
+escrever algo ali,
+
+
+
+O 
+
+
+
+
+MONGODB 
+
+
+
+
+
+
+vai 
+
+
+basicamente executar esse query aí,
+
+
+o que 
+
+
+
+deixa desnecessário o write de um "$match" POSTERIOR A 
+
+'$geoNear'....
+
+
+
+
+
+
+
+
+------> POR ISSO,
+
+
+
+
+
+O PROFESSOR 
+
+
+
+
+
+
+ESCREVE:
+
+
+
+
+
+
+
+
+query: {gender: "female"}
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> HÁ MAIS 1 FIELD  
+
+QUE PODEMOS 
+
+
+COLOCAR,
+
+
+
+
+QUE É O FIELD DE 
+
+
+
+'distanceField' ----> esse é um dos fields 
+
+
+
+
+providenciados/que interage 
+
+
+
+com o 'geoNear',
+
+
+
+
+
+
+
+QUE SERÁ POPULATED pelaA
+
+
+
+DISTANCE QUE 
+
+O 
+
+
+MONGODB CALCULOU ENTRE O POINT ESPECIFICADO EM 'near: coordinates: [xx, yy]'
+
+
+
+E O DOCUMENT QUE ELE ENCONTROU.... -----> 
+
+
+
+
+
+
+
+
+
+
+aí, em 'distanceField',
+
+
+
+você 
+
+escreve O NOME DO FIELD EM QUE VOCÊ VAI QUERER QUE 
+
+ESSE VALOR SEJA ARMAZENADO...
+
+
+
+
+
+
+
+
+
+-> professor escreve só 'distance',
+
+mas podemos escolher qualquer name..
+
+
+
+
+
+
+
+
+
+
+
+
+db.geoTransformedData.aggregate([
+  {
+    $geoNear: {
+      near: {
+        type: 'Point',
+        coordinates: [14.0142, 18.2567],
+
+
+      },
+      maxDistance: 1000,
+      num: 10,
+      query: {
+        gender: 'female',
+      },
+      distanceField: 'distance',
+    },
+  },
+]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+RODAMOS ASSIM:
+
+
+
+
+
+
+
+
+db.geoTransformedData.aggregate([
+  {
+    $geoNear: {
+      near: {
+        type: 'Point',
+        coordinates: [14.0142, 18.2567],
+      },
+      maxDistance: 1000,
+      num: 10,
+      query: {
+        gender: 'female',
+      },
+      distanceField: 'distance',
+    },
+  },
+]);
+
+
+
+
+
+
+
+
+
+
+
+
+--> E AÍ RECEBEMOS UM ERROR:
+
+
+
+
+
+Error: command failed: {
+        "ok" : 0,
+        "errmsg" : "$geoNear no longer supports the 'num' parameter. Use a $limit stage instead.",
+        "code" : 50857,
+        "codeName" : "Location50857"
+} with original command request: {
+        "aggregate" : "geoTransformedData",
+        "pipeline" : [
+                {
+
+
+
+
+
+
+
+
+
+
+
+
+    --> ok... n devemos mais usar 'num',
+
+    pq foi deprecado...
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.geoTransformedData.aggregate([
+  {
+    $geoNear: {
+      near: {
+        type: 'Point',
+        coordinates: [14.0142, 18.2567],
+      },
+      maxDistance: 1000,
+
+      query: {
+        gender: 'female',
+      },
+      distanceField: 'distance',
+    },
+  },
+
+  {
+      $limit: 10
+  }
+]).pretty()
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+
+> db.geoTransformedData.aggregate([
+...   {
+...     $geoNear: {
+...       near: {
+...         type: 'Point',
+...         coordinates: [14.0142, 18.2567],
+...       },
+...       maxDistance: 1000,
+...
+...       query: {
+...         gender: 'female',
+...       },
+...       distanceField: 'distance',
+...     },
+...   },
+...
+...   {
+...       $limit: 10
+...   }
+... ]).pretty()
+{
+        "_id" : ObjectId("6217d971aa1d820cd88174ee"),
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        14.0142,
+                        18.2563
+                ]
+        },
+        "personAge" : 35,
+        "date of birth" : ISODate("1983-05-20T21:26:44Z"),
+        "fullName" : "Signe Rasmu",
+        "distance" : 44.52753800841358
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... RODAMOS ISSO AÍ,
+
+
+
+e aí 
+
+
+
+
+GANHAMOS APENAS 1 RESULT...
+
+
+(
+
+
+    pq só 1 encaixou naqueles seus parâmetros em 
+
+    '$geoNear'...
+)
+
+
+
+
+
+
+
+
+
+-> se aumentamos os 'km',
+
+
+ganhamos mais alguns results (pq nossos parâmetros ficam menos restritos):
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_>OK, SEMPRE SE LEMBRE:
+
+
+
+
+O GEONEAR 
+
+DEVE SER O PRIMEIRO STAGE...
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+> db.geoTransformedData.aggregate([   {     $geoNear: {       near: {         type: 'Point',         coordinates: [14.0142, 18.2567],       },       maxDistance: 1000000,        query: {         gender: 'female',       },       distanceField: 'distance',  
+   },   },   {     $limit: 10   } ]).pretty()
+{
+        "_id" : ObjectId("6217d971aa1d820cd88174ee"),
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        14.0142,
+                        18.2563
+                ]
+        },
+        "personAge" : 35,
+        "date of birth" : ISODate("1983-05-20T21:26:44Z"),
+        "fullName" : "Signe Rasmu",
+        "distance" : 44.52753800841358
+}
+{
+        "_id" : ObjectId("6217d971aa1d820cd8817e96"),
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        15.3314,
+                        19.8984
+                ]
+        },
+        "personAge" : 23,
+        "date of birth" : ISODate("1995-07-20T11:46:37Z"),
+        "fullName" : "Alexis Snyder",
+        "distance" : 229346.34335031605
+}
+{
+        "_id" : ObjectId("6217d971aa1d820cd8817aab"),
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        16.1565,
+                        22.2614
+                ]
+        },
+        "personAge" : 49,
+        "date of birth" : ISODate("1969-09-08T06:17:30Z"),
+        "fullName" : "Lea Lar",
+        "distance" : 498758.4271443585
+}
+{
+        "_id" : ObjectId("6217d971aa1d820cd881879e"),
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        19.4116,
+                        19.1884
+                ]
+        },
+        "personAge" : 60,
+        "date of birth" : ISODate("1958-02-11T15:37:05Z"),
+        "fullName" : "Anna-lena Rettig",
+        "distance" : 578383.7124875067
+}
+{
+        "_id" : ObjectId("6217d971aa1d820cd88182ce"),
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        18.6758,
+                        15.1813
+                ]
+        },
+        "personAge" : 54,
+        "date of birth" : ISODate("1964-08-19T04:01:57Z"),
+        "fullName" : "Ruby Fish",
+        "distance" : 603418.148748652
+}
+{
+        "_id" : ObjectId("6217d971aa1d820cd8818811"),
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        7.819,
+                        18.656
+                ]
+        },
+        "personAge" : 62,
+        "date of birth" : ISODate("1956-03-22T15:53:12Z"),
+        "fullName" : "Maëlle Carpen",
+        "distance" : 655645.5566329386
+}
+{
+        "_id" : ObjectId("6217d971aa1d820cd8818677"),
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        15.7304,
+                        24.2327
+                ]
+        },
+        "personAge" : 60,
+        "date of birth" : ISODate("1958-02-15T16:55:20Z"),
+        "fullName" : "Viivi Saksa",
+        "distance" : 688629.2132141755
+}
+{
+        "_id" : ObjectId("6217d971aa1d820cd881843e"),
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        9.6107,
+                        23.1207
+                ]
+        },
+        "personAge" : 70,
+        "date of birth" : ISODate("1948-04-15T02:36:53Z"),
+        "fullName" : "مرسانا احمدی",
+        "distance" : 709420.4291146224
+}
+{
+        "_id" : ObjectId("6217d971aa1d820cd881812b"),
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        12.8128,
+                        11.56
+                ]
+        },
+        "personAge" : 49,
+        "date of birth" : ISODate("1969-08-01T00:46:56Z"),
+        "fullName" : "Abigail Harris",
+        "distance" : 756573.1270403619
+}
+{
+        "_id" : ObjectId("6217d971aa1d820cd8817767"),
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        14.4547,
+                        25.0576
+                ]
+        },
+        "personAge" : 31,
+        "date of birth" : ISODate("1987-07-06T15:57:23Z"),
+        "fullName" : "Laurie Rivera",
+        "distance" : 758436.4809525035
+}

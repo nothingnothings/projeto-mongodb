@@ -1,0 +1,172 @@
+
+
+
+
+
+
+
+
+--> TRABALHANDO COM A SHELL E O SERVER....
+
+
+
+
+
+--> INDO ALÉM DE 'START' E 'STOP' THE SERVER....
+
+
+
+
+
+
+
+
+
+--> NOS MÓDULOS ANTERIORES, JÁ TRABALHAMOS COM A INSTANCE DE 
+
+'mongod',
+
+
+
+e a mongoshell (que se conecta à instance),
+
+
+
+
+
+QUE É INICIADO COM O COMANDO DE 'mongo' 
+
+
+
+no terminal...
+(
+
+
+    também há os comandos '--dbpath'....
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> APRENDEMOS SBORE COMO INSTALAR ESSES NEGÓCIOS,
+
+E SOBRE COMO OS UTILIZAR..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA VAMOS APRENDER UM POUCO MAIS,
+
+
+
+APRENDER COISAS QUE PODEMOS CONFIGURAR NO MONGO SHELL,
+
+
+
+
+sobre mais options, e sobre como PENSAR SOBRE ESSAS OPTIONS..
+
+
+
+
+
+
+
+
+
+VAMOS APRENDER:
+
+
+
+
+
+
+
+
+
+1) QUE PODEMOS __ COMEÇAR O 'MONGODB SERVER' COMO 2 DIFERENTES ENTIDADES..
+
+
+
+
+
+
+-_> podemos iniciar:
+
+
+
+a) COMO UM PROCESS....
+
+
+
+
+b) como um SERVICE...
+
+
+
+
+
+
+
+
+
+--> PROFESSOR VAI MOSTRAR A DIFERENÇA ENTRE OS DOIS...
+
+
+
+
+
+
+
+
+
+
+
+
+2) DEPOIS ELE VAI NOS MOSTRAR COMO PODEMOS CONFIGURAR O MONGODB SERVER( A MANEIRA PELA QUAL ELE RODA),
+
+
+
+em 'configuring database & log path'... (também o 'MODE')...
+
+
+
+
+
+
+
+
+
+
+
+
+3) POR FIM, 
+
+
+APRENDEREMOS SOBRE COMO PODEMOS CONSERTAR ISSUES COMUNS,
+
+
+
+COMO ENCONTRAR AJUDA E CONFIGURAR O SERVER adequadamente..

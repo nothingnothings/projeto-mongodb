@@ -1,0 +1,379 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA EXEMPLIFICARMOS OS ROLES,
+
+
+
+
+
+
+
+
+
+
+
+
+
+O PROFESSOR EXPLICA:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+NÓS USAMOS ROLES JUSTAMENTE PQ TIPICAMENTE TEMOS MAIS DE 1 'TIPO' DE DATABASE USER... --------> 
+
+
+
+
+
+
+
+
+
+
+
+
+SE ESTMAOS CONSTRUINDO UM APP DE ONLINE SHOP,
+
+
+JÁ TEREMOS 
+
+
+
+
+MAIS DE 1 DATABASE USER... --> provavelmetne 
+
+teremos um 
+
+
+ADMIN/administrator,
+
+uma 
+
+pessao 
+
+de verdade,
+
+
+
+
+
+QUE PRECISA SER CAPAZ DE MANAGEAR A CONFIG DA DATABASE,
+
+
+CRIAR NOVAS COLLECTIONS,
+
+
+
+CRIAR DIFERENTES USERS,
+
+
+
+
+
+
+
+
+
+
+criar novas databases, etc.. --> e vocÊ  PODE SPLITTAR ESSAS FUNÇÕES ADMINISTRATIVAS 
+
+
+EM 
+
+MÚLTIPLOS ROLES,
+
+
+MAS 
+
+
+
+NÃO É DE TODO INCOMUM VER UNS 'SUPER ADMIN',
+
+
+
+COM 
+
+
+
+TODAS ESSAS FUNÇ~EOS... --> 
+
+
+
+
+
+MAS ESSE 
+
+ADMIN 
+
+
+
+
+
+
+NÃO PRECISA, NECESSARIAMENTE,
+
+
+
+
+
+SER 'REQUIRED' 
+
+A 
+
+
+FAZER INSERT OU FETCH DE DATA NA DATABASE... 
+
+
+
+(
+    por segurança...
+)
+
+
+
+
+
+
+
+
+
+
+
+------> DEPOIS DISSO,
+
+
+
+TEMOS 
+
+
+
+O 'DEVELOPER/YOUR APP'....
+
+
+
+
+
+
+
+
+
+
+
+-> VOCÊ É O DEVELOPER,
+
+VOCÊ É UMA PESSOA DE VERDADE,
+
+
+
+MAS É CLARO QUE VOCÊ ESTÁ ESCREVENDO UM CÓDIGO, CÓDIGO QUE 
+
+VAI NO, FINAL DAS CONTAS,
+
+FAZER FETCH/INSERT DE DATA... --> é o APP QUE SERÁ O USER --> 
+
+
+
+
+
+E O 
+
+
+APP/VOCÊ DEVERÁ 
+
+
+SER 
+
+CAPAZ DE 
+
+
+
+'DELETE/UPDATE/FETCH/INSERT'  data.. (crud operation)....
+
+
+
+
+
+
+
+
+
+
+-_> FOCAMOS NO CRUD NESSE CURSO PQ ESSE É O FOCO DOS DEVS...
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS, COMO DEVS,
+
+VOCÊ TIPICAMENTE 
+
+NÃO TERÁ DE 'CREATE USERS'
+
+
+
+ou
+
+
+'MANAGE THE DATABASE CONFIG' --> PQ ISSO NÃO É SEU TRABALHO,
+
+
+E SIM 
+
+
+DO DATABASE ADMIN....
+
+
+
+
+
+
+
+
+
+---> E O CÓDIGO DO APP _ NÃO DEVE __ SER CAPAZ DE FAZER ISSO,
+
+
+
+DE 
+
+CRIAR USERS E MANAGE THE DATABASE CONFIG,
+
+
+
+PQ EVENTUALMENTE ALGUÉM PODE ROUBAR SEU USER 
+
+E AÍ 
+FAZER COISAS RUINS COM SUA DATABASE, NO SEU NOME...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VAMOS FOCAR NA PARTE DO 'DEV' NESSE CURSO...
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS É BOM VOCê SABER COMO 
+
+AUTH 
+
+E 
+
+
+ROLES, SEGURANÇA EM GERAL,
+
+FUNCIONAM NO MONGODB...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS É CLARO QUE 
+
+
+TEMOS MAIS UM TIPO DE USER:
+
+
+
+
+
+
+
+
+--> UM DATA SCIENTIST, QUE VAI ANALISAR NOSSAS SALES... --> ESSA PESSOA TEM DE SER CAPAZ DE 
+
+
+ACESSAR NOSSA DATA,
+
+MAS NÃO PARA A ALTERAR,
+
+
+E SIM 
+
+
+APENAS PARA A LER...
+
+
+
+
+
+
+
+
+
+
+
+
+-_> NEEDS TO BE ABLE TO FETCH DATA...
+
+
+
+
+
+
+
+
+--> DOES NOT NEED TO BE ABLE TO CREATE USERS,
+
+MANAGE THE DATABASE CONFIG OR INSERT, EDIT OR DELETE DATA.

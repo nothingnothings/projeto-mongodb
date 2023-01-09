@@ -1,0 +1,412 @@
+
+
+
+
+
+
+
+
+
+
+--> PAGINATION --> ISSO É NECESSÁRIA EM UM MONTE DE APPS.... -> eu já implementei no backend,
+
+
+
+
+
+com um código assim:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+router.get('/', (req, res, next) => {
+  const db = getDb().db(); ///o '.db()' ao final garante que ESTAMOS USANDO O 'CONNECTION POOLING' do mongodb, que usa 1 mesmo CONNECTION pool PARA ENVIAR NOSSOS REQUESTS, o que é bem mais pra´tico...
+
+  console.log('test');
+
+  db.collection('products')
+    .find({})
+    .skip(5 * (req.query.page - 1))
+    .limit(5)
+    .toArray()
+    .then((products) => {
+      const resultProductsManipulated = products.map((product) => {
+        const updatedProduct = {
+          ...product,
+        };
+
+        updatedProduct.price = updatedProduct.price.toString();
+
+        return updatedProduct;
+      });
+      res.json(resultProductsManipulated);
+
+    });
+});
+
+
+
+
+
+
+
+--------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> TEMOS 2 PRODUCTS.... --> 
+
+
+
+
+
+
+PROFESSOR VAI QUERER 
+
+
+
+
+
+DISPLAYAR 
+
+5 PRODUCTS POR PAGE.... -> ELE VAI QUERER CONTROLAR ISSO POR MEIO _ DE 'QUERY PARAMETERS'...
+
+
+
+
+
+
+
+
+
+
+
+
+-----> o formato dos query params é aquele clássico 
+
+
+
+
+
+products?page=2 
+
+
+
+
+
+
+
+
+
+
+--------------------------
+
+
+
+
+
+
+
+
+-> MAS AINDA NÃO TEMOS BUTTONS...
+
+
+
+
+
+
+
+
+
+
+---> A PAGINATION É OBTIDA, COM O MONGODB,
+
+
+ATRAVÉS DE 
+
+SKIP E LIMIT....
+
+
+
+
+
+
+
+
+
+
+--> MAS HÁ UM METHOD QUE ESQUECEMOS DE EXECUTAR EM 'find'....
+
+
+
+
+
+
+
+
+--> É O 'SORT'...
+
+
+
+
+
+
+
+
+-_> PRECISAMOS DO SORT PARA SORTAR POR 'ORDEM DE ADD ASCENDENTE' (de IDS)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> PODERÍAMOS ORDENAR POR PRICE, TAMBÉM,
+
+
+TIPO 
+
+
+
+
+com 
+
+
+'
+.sort(
+    {price: -1}
+)
+
+
+
+
+
+
+
+
+
+
+
+
+---------> USAMOS O SKIP PARA SKIPPAR 
+
+
+
+
+
+A QUANTIDADE DE PAGES EM QUE ESTOU....
+
+
+
+
+
+
+
+
+É A MESMA LÓGICA QUE EU ESCREVI :
+
+
+
+
+    .skip(5 * (req.query.page - 1))
+
+
+
+
+
+
+
+---------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... --> PARA MANTER O NEGÓCIO 
+
+
+
+SER SUPER SIMPLES,
+
+
+
+
+O PROFESSOR 
+
+
+
+
+
+
+COLOCA 
+
+
+
+
+
+
+o 
+
+
+
+
+
+query parameter 
+
+
+
+lá 
+
+
+
+no call de 'get products',
+
+no frontend....
+
+
+
+
+tipo assim:
+
+
+
+
+
+
+
+
+
+  fetchData = () => {
+    axios
+      .get('http://localhost:3100/products?page=1')
+      .then((productsResponse) => {
+        console.log(productsResponse);
+        this.setState({ isLoading: false, products: productsResponse.data });
+      })
+      .catch((err) => {
+        this.setState({ isLoading: false, products: [] });
+        this.props.onError('Loading products failed. Please try again later.');
+        console.log(err);
+      });
+  };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> ISSO AÍ JÁ TEM A 'PAGINATION' incluída, basicamente....
+
+
+
+
+
+
+
+
+
+
+
+
+  --> agora a pergunta é: 
+
+
+
+como podemos fazer com que esse number seja variável?
+
+
+
+
+
+
+
+
+
+
+
+
+talvez por meio do STATE.. (colocar um 'pageNumber' no state)....
+
+
+
+
+
+
+
+
+
+
+
+--> vamos tentar implementar esses buttons...
+
+
+
+
+
+
+--> eu sou muito burro, mas consegui implementar a pagination mais uma vez...
+
+
+
+
+
+
+
+
+
+
+
+--> ok... qual é o próximo passo?

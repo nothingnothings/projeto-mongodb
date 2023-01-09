@@ -1,0 +1,462 @@
+
+
+
+
+
+
+
+
+
+
+
+--> OK, PESSOAS DE NOSSO APP são capazes agora de fazer 'login' 
+
+ANONIMAMENTE- --> ISSO SIGNIFICA QUE 
+
+
+
+
+'''TODOS OS USERS/VISITANTES DE NOSSO SITE ESTÃO LOGGED IN''' -->
+
+
+
+
+
+
+
+
+
+
+entretanto,
+
+estarão 'logged in' 
+
+
+EM UM __ NÍVEL INFERIOR
+,
+
+
+
+
+
+
+PQ NÃO VAMOS QUERER DAR A ELES ACESSO A TODOS OS RIGHTS 
+
+
+DE 
+
+
+WRITE/UPDATE/DELETE...
+
+
+
+
+
+
+
+
+
+-> VAMOS QUERER 
+
+ENABLAR APENAS O FETCH DE 'ALL PRODUCTS' armazenados na database...
+
+
+
+
+
+
+
+
+
+
+
+
+--> EM GERAL,
+
+QUANDO QUEREMOS DEIXAR QUALQUER DATA 'TO BE FETCHED',
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+ PRECISAMOS IR ATÉ O REALM/STITCH,
+
+
+
+
+ e aí ir na categoria 'rules' --->  AÍ VOCÊ TEM QUE 
+
+
+
+
+ ESCOLHER UMA COLLECTION PARA SETTAR RULES NELA..... 
+
+
+
+
+
+
+
+
+
+
+
+ --> clique em 'add collection',
+
+
+ aí 
+
+
+ DIGITE O DATABASE NAME E A COLLECTION NAME,...
+
+
+
+
+
+
+
+
+
+ -_> shop2  --> products...
+
+
+
+
+
+
+
+
+
+
+
+ --> AÍ TEMOS ALGUNS TEMPLATES:
+
+
+
+
+
+
+
+
+
+
+ 1) no TEMPLATE 
+
+
+
+
+ 2) READ E WRITE OWN DATA 
+
+
+
+ 3) USERS CAN ONLY READ ALL DATA....
+
+
+
+
+
+ 4) users can read and write their owd nadata,
+
+
+ users that belong to a sharing list can read that data...
+
+
+
+
+
+ 5) USERS CAN REAL ALL DATA, BUT ONLY WRITE THEIR OWN DATA..
+
+
+
+
+
+
+
+ O PROFESSOR ESCOLHE A OPÇÃO DE 'custom template',
+
+
+
+
+ PARA CUSTOMIZAR AS PERMISSÕES...
+
+
+
+
+
+
+
+
+
+ --> certo... bem simples...
+
+
+
+
+
+
+
+ TEMOS UM SETUP:
+
+
+
+
+
+
+
+ 1) PERMISSIONS 
+
+
+
+
+
+
+
+ 2) SCHEMA ---> é a validation de nossos documents...
+
+
+BEM ÚTIL....
+
+
+
+
+
+
+
+ 3) FILTERS 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NAS PERMISSIONS,
+
+DEFINIMOS BASICAMENTE 'DEFAULT PERMISSIONS',
+
+
+
+QUE 
+
+
+
+
+SERÃO APLICADAS A __ TODAS AS __ AUTHENTICATED ENTITIES,
+
+
+ATÉ 
+
+MESMO 
+
+NOSSOS ANON USERS.... (user genérico, sem direitos, que entrou pela primeira vez)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PODEMOS CHECAR A CAIXA DE 'read' 
+
+
+
+
+
+
+NESSE NEGÓCIO,
+ 
+ QUE 
+
+
+
+ DEIXARÁ 
+
+
+
+ TODOS OS DOCUMENTS DESSA COLLECTION SEREM 'FETCHED'/READ pelos users....
+
+
+
+
+ (
+
+
+     você pode escolher alguns FIELDS QUE PODEM SER FETCHEADOS,
+
+     OUTROS NÃO;
+
+
+     não precisa 
+
+     fetchear o documento inteiro..
+ ) 
+
+
+
+
+
+
+
+
+
+
+
+ --> se quiser fazer isso,
+
+
+
+ adicione o nome do field 
+
+
+ e aí 
+
+
+
+
+ coloque 'não quero' (desmarcado). ..
+
+
+
+
+
+
+
+
+
+
+ ---> COM ISSO, ANON USERS SERÃO CAPAZES DE FAZER READ DE TODOS OS PRODUCTS NA NOSSA DATABASE DE SHOP...
+
+
+
+
+
+
+
+
+
+
+
+
+ ---> mas mesmo com tudo isso,
+
+
+
+ ao 
+
+
+ rodarmos o frontend,
+
+
+
+ AINDA NÃO CONSEGUIMOS O RETORNO DOS PRODUCTS... 
+
+
+
+
+
+
+
+ --> mas agora salvei a mudança, devo tentar de novo...
+
+
+
+
+
+
+
+
+ ex:
+
+
+
+esse é o erro:
+
+
+
+
+
+
+
+ error: "no rule exists for namespace 'shop2.products'",
+ 
+ 
+  error_code: "NoMatchingRuleFound",…}
+
+
+
+
+
+--> coloquei 'deploy'... hora de testar mais uma vze...
+
+
+
+
+
+
+
+
+
+
+--_> agora o erro sumiu...
+
+
+
+
+
+
+
+--> só tenho que tirar esse 'loading...' (coisa do react, e não do mongodb)...
+
+
+
+
+
+
+
+
+--> certo, consertado...
+
+
+
+
+
+
+-_> professor diz que precisamos transformar a data dos 
+
+
+
+'products' lá no client (pq a data que vem diretamente do stitch ficará nos formatos do MONGODB, que são 'ObjectId()', 'Decimal128', etc etc -------> e tudo isso não é suportado nativamente no javascript... não consegue ser displayed -------> CLARO QUE ISSO DEVE TER SIDO ALTERADO COM O MONGO REALM, PQ não precisei fazer tudo isso...)
+
+
+
+
+
+
+
+
+

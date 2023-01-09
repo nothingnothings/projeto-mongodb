@@ -1,0 +1,287 @@
+
+
+
+
+
+
+
+
+
+
+
+
+--------> AGORA QUE CONSEGUIMOS FAZER FETCH E STORE DE PRODUCTS,
+
+
+
+DEVEMOS 
+
+
+
+
+
+TRABALHAR NO 'GET' DE UM __SINGLE __ PRODUCT...
+
+
+
+
+
+
+
+EU HAVIA CODADO ASSIM:
+
+
+
+
+
+
+
+
+
+
+router.get('/:id', (req, res, next) => {
+  const db = getDb().db();
+
+  db.collection('products')
+    .find({ _id: ObjectId(req.params.id) })
+    .toArray()
+    .then((products) => {
+      console.log(products);
+      const product = products[0];
+      res.status(200).json(product);
+    })
+    .catch(
+      (err) => {
+        console.log(err);
+        res.status(500).json(
+          {
+            message: 'An error has occurred.'
+          }
+        )
+      }
+    )
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> e isso estava funcionando... 
+
+
+
+
+
+
+
+
+
+
+--> MAS UMA ALTERNATIVA MELHOR A USAR 'find().toArray()"
+
+É USAR 
+
+'findOne()'...
+
+é isso que farei...
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+router.get('/:id', (req, res, next) => {
+  const db = getDb().db();
+
+  // const product = products.find((p) => p._id === req.params.id);
+
+  db.collection('products')
+    .findOne({ _id: ObjectId(req.params.id) })
+    .then((products) => {
+      console.log(products);
+      const product = products[0];
+      res.status(200).json(product);
+    })
+    .catch(
+      (err) => {
+        console.log(err);
+        res.status(500).json(
+          {
+            message: 'An error has occurred.'
+          }
+        )
+      }
+    )
+});
+
+
+
+
+
+
+
+
+------------------------------
+
+
+
+
+-> aí tiro aquela const....
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+  db.collection('products')
+    .findOne({ _id: ObjectId(req.params.id) })
+    .then((product) => {
+      res.status(200).json(product);
+    })
+    .catch(
+      (err) => {
+        console.log(err);
+        res.status(500).json(
+          {
+            message: 'An error has occurred.'
+          }
+        )
+      }
+    )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    -----> pronto...
+
+
+
+
+
+
+
+
+
+
+
+
+
+    --> OK, ESSE É EXATAMENTE O CÓDIGO QUE EU ESCREVI..
+
+
+
+
+
+
+
+
+
+
+
+
+    --> salvamos todos os arquivos e testamos...
+
+
+
+
+
+
+
+
+    --> QUANDO CLICAMOS EM ALGUM ITEM/PRODUCT,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    NÃO GANHO NADA (
+
+
+        'no product found', etc etc....
+    )
+
+
+
+
+
+
+
+
+
+
+
+    OK, CONSERTEI... ERA UM MISTYPE...
+
+
+
+
+
+
+
+
+
+
+    CERTO.... o fetch de um single product está funcionando...
+
+
+
+
+
+
+
+
+
+    --> AGORA O EDIT E DELETE DEVEM ser consertados...

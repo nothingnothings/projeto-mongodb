@@ -1,0 +1,1263 @@
+
+
+
+
+
+
+
+
+
+
+
+NA ÚLTIMA LIÇÃO,
+
+DEMOS UMA OLHADA EM '$or'....
+
+
+
+
+
+
+
+
+
+AGORA VEREMOS O '$AND'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> ASSIM COMO O $or,
+
+
+
+
+o "$and'
+
+ACEITA 
+
+
+
+UM 
+
+
+ARRAY DE DOCUMENTS COMO PARÂMETRO...
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+db.movies.find({$and: []})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> tipo assim.... --> AGORA DIGAMOS QUE QUEREMOS ENCONTRAR TODOS OS DOCUMENTS EM QUE 
+
+TEMOS UMA average (em rating) 
+
+
+
+
+
+
+
+QUE SEJA __ MAIOR DO QUE 9... -->  E, TAMBÉM, DOCUMENTS QUE TENHAM UM 
+
+
+'genre' 
+
+
+QUE SEJA DE 
+
+'DRAMA'...
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+db.movies.find({$and: [
+{
+    "rating.average": {$gt: 9}
+},
+
+{"genres": "Drama"}
+
+
+
+]}).pretty()
+
+
+
+
+
+------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... (
+
+
+    OBS: COM A SINTAXE DE '{"genres": "Drama"}',
+
+
+
+
+    buscamos 
+
+
+
+    ESSA STRING AÍ DENTRO DE NOSSO ARRAY,
+
+
+
+    MAS ESSE ARRAY PODE TER OUTROS STRINGS, SÓ 
+
+    OBRIGATORIAMENTE DEVERÁ TER ESSE 'Drama' no seu interior... (genres adicionais também são aceitos)...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+Ex:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.movies.find({$and: [
+{
+    "rating.average": {$gt: 9}
+},
+{"genres": "Drama"}
+]}).pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> ISSO DEU UM ERRO...
+
+
+
+
+
+
+
+
+
+ISSO FUNCIONOU:
+
+
+
+
+
+
+
+
+db.movies.find({$and: [
+{
+    "rating.average": {$gt: 9}
+},
+{"genres": "Drama"}
+]}).pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK....
+
+
+AGORA CONESGUIMOS 
+
+
+
+RESULTS QUE SATISFAZEM ESSES 2 CRITÉRIOS... -------> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+NA VERDADE,
+
+
+HÁ UM SHORTCUT PARA ESCREVER ISSO AÍ....
+
+
+
+
+
+
+
+
+
+
+
+-> PROFESSOR EXPLICA QUE ESSA É A SINTAXE VELHA DE '$and'...
+
+
+
+
+
+
+--> HÁ UMA SINTAXE MAIS NOVA...
+
+
+
+
+
+
+
+
+
+
+
+---> QUAL É ESSA SINTAXE?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+BEM.... O PROFESSOR PRIMEIRO DEIXA A 
+
+SINTAXE VELHA, COM UM CALL DE COUNT, SÓ PARA TER DE REFERÊNCIA:
+
+
+
+
+
+db.movies.find({$and: [
+{
+    "rating.average": {$gt: 9}
+},
+{"genres": "Drama"}
+]}).count()
+
+
+
+
+
+
+--> ISSO RETORNA '3'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... A ALTERNATIVA É QUE 
+
+
+
+NÓS 
+
+
+VAMOS ESCREVER 
+
+SÓ 
+
+
+
+'db.movies.find({})',
+
+
+
+E AÍ 
+
+USAR 
+
+SÓ 
+
+ESSE DOCUMENT/FILTER PRIMÁRIO...
+
+
+
+
+
+
+
+
+--> DENTRO DELE JÁ ESCREVEMOS NOSSAS CONDITIONS...
+
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+db.movies.find({})
+
+
+
+
+
+
+
+
+
+
+
+--> AÍ, DENTRO DESSE '{}',
+
+
+
+VAMOS 
+
+ENFIAR 
+
+
+
+
+TODAS NOSSAS CONDIÇÕES, ENUMERADAS POR ',' (vírgula)...
+
+
+
+
+
+
+
+
+
+
+
+
+TIPO ASSIM:
+
+
+
+
+
+
+
+
+db.movies.find(
+    {"rating.average": {$gt:9}, genres: "Drama" }
+).count()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO TAMBÉM FUNCIONARÁ, NO CASO... ( E É UMA SINTAXE MAIS ENXUTA)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> OK.... ESSAS 2 MANEIRAS DE 
+
+FAZER 'GET' DA DATA 
+
+
+
+
+SÃO IGUAIS... --> ISSO 
+
+
+
+
+
+
+
+
+PQ 
+
+
+
+
+O MECANISMO DE CONCATENAÇÃO __ PADRÃO__ DO MONGODB É JUSTAMENTE 
+
+
+"$and" 
+
+
+(
+
+
+    ELE SEMPRE ADICIONA "$and'
+
+
+    NAS COISAS QUE VOCÊ ESCREVE DENTRO DOS FILTERS, NATIVAMENTE....
+)
+
+
+
+
+
+
+
+
+
+
+--> AND É O 'DEFAULT CONCATENATION METHOD DO MONGODB'....
+
+
+
+
+
+
+
+
+
+
+
+--> OK, MAS ISSO CRIA A PERGUNTA:
+
+
+
+
+
+
+
+
+
+'PQ HÁ ESSA OPERATOR IDIOTA DE "$and" se 
+
+
+
+
+
+
+ESSA SINTAXE de 
+
+
+'{"exemplo": "exemplo", "exemplo2": "exemplo2"}'
+
+
+
+
+FAZ EXATAMENTE A MESMA COISA?"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> EXISTE ESSE OPERATOR AÍ 
+
+PQ __ 
+
+
+
+EXISTEM CASOS EM QUE VOCÊ TERÁ 
+
+
+__ MULTIPLE CONDITIONS 
+
+
+EM 
+
+1 
+
+MESMO 'FIELD'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> COMO EXEMPLO DISSO,
+
+
+PROFESSOR USA 'genres'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ''SE QUEREMOS ENCONTRAR O COUNT DE ITEMS 
+
+
+
+
+
+
+
+,
+
+
+
+
+ITEMS 
+
+EM QUE 
+
+
+
+'GENRES' possui 'Drama',
+
+
+
+mas em que 
+
+
+
+TAMBÉM 
+
+
+
+TEMOS 'horror' em 'genres'....
+
+
+
+
+
+
+
+
+
+
+
+---> SE QUISÉSSEMOS ESCREVER ISSO,
+
+PODERÍAMOS ESCREVER ASSIM:
+
+
+
+
+
+
+
+
+
+
+db.movies.find(
+    {genres: "Drama", genres: "Horror"}
+)
+.count()
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO FUNCIONA NO MONGODB, SIM,
+
+
+
+___ MAS NÃO VAI FUNCIONAR EM TODOS OS 'DRIVERS' que se conectam ao mongodb (eis o problema)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO PQ EM JAVASCRIPT,
+
+
+
+
+
+TER 'REPEATed NAMES',
+
+
+
+
+
+EM 1 MESMO OBJECT,
+
+
+
+
+
+__ NÃO É PERMITIDO__....
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> ou seja,
+
+você não pode escrever 
+
+
+'{
+    genres: "Drama", genres: "Horror"
+}
+
+',
+
+
+pq aí você ficará com uma KEY DUPLICADA no seu object,
+
+E ISSO NÃO É PERMITIDO, NO JAVASCRIPT....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> É POR ISSO QUE USAMOS O '$and',
+
+
+
+
+
+
+
+
+
+
+PQ __ 
+
+
+AÍ ESSE CÓDIGO FUNCIONA COM TODOS OS DRIVERS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->A  versão desse código que usa '$and'
+
+
+é 
+
+esta:
+
+
+
+
+
+
+
+
+
+
+
+
+db.movies.find(
+    {
+        $and: [
+            {
+                genres: "Drama"
+            },
+                        {
+                genres: "Horror"
+            }
+
+        ]
+    }
+).count()
+
+
+
+
+
+
+
+
+
+OK, ESSE APPROACH VAI 'WORK FINE'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ENTRETANTO, UMA COISA QUE VOCê PERCEBERÁ É QUE 
+
+
+''O NÚMERO DE DOCUMENTS RETORNADOS/CONTADOS POR 'count()'
+
+
+
+
+FICARÁ DIFERENTE,
+
+EM RELAÇAÕ À SINTAXE DE '{genres: xxx, genres: yyyy}'
+
+
+
+
+
+
+(
+
+
+
+    COM O APPROACH DE "{genres: xxx, genres: yyyy}',
+
+    VAMOS CONTAR/ACHAR 23 DOCUMENTS... já com '$and: []', 
+
+
+
+
+    VAMOS CONTAR/ACHAR 17 DOCUMENTS...
+)
+
+
+
+
+
+--> 
+
+
+
+
+
+
+
+PQ ISSO?
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> PARA ISSO,
+
+
+
+
+O PROFESSOR REESCREVE A SINTAXE QUE NÃO FUNCIONA NO JAVASCRIPT, A SINTAXE DE {
+    "genres": xxxx, "genres": yyyy
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, SE SCROLLARMOS PARA CIMA,
+
+
+VEREMOS 
+
+
+
+UMA ENTRY COM SÓ HORROR (e não com 'HORROR' e 'DRAMA', que é o que queríamos; queríamos TODOS OS DOCUMENTS QUE TENHAM TANTO 'horror' como 'thriller' nos genres...)
+
+-----------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> MAS PQ ISSO?
+
+
+
+
+
+
+
+
+
+É PQ EMBORA 
+
+
+
+
+
+
+
+
+
+NÓS NÃO RECEBAMOS UM ERRO AQUI:
+
+
+db.movies.find(
+    {genres: "Drama", genres: "Horror"}
+).pretty(),
+
+
+
+
+
+
+
+
+
+
+
+
+
+O ___ SEGUNDO 'genres',
+
+
+o genres de 'genres: "Horror" ' 
+
+
+
+
+VAI __ ESSENCIALMENTE __ SUBSTITUIR __ 
+
+
+
+
+ESSA PRIMEIRA '''KEY''' 
+
+de 
+
+
+'genres: Drama'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS PQ ISSO? 
+
+
+
+
+
+
+
+É PQ EM 'JSON DOCUMENTS',
+
+
+
+VOCÊ _ NÃO PODE TER A MESMA KEY__ MAIS DE 1 VEZ.... --> E SE VOCÊ ESPECIFICAR MAIS DE 1 VEZ A MESMA KEY,
+
+
+
+
+
+
+
+
+A SEGUNDA VEZ VAI __ OVERWRITTAR A PRIMEIRA.... --------------> 
+
+
+
+
+
+
+
+
+
+
+
+
+É POR ISSO QUE 
+
+
+
+ESCREVER ISTO AQUI:
+
+
+db.movies.find(
+    {genres: "Drama", genres: "Horror"}
+)
+
+
+
+
+É UMA BOSTA,
+
+
+
+
+PQ 
+
+
+É EQUIVALENTE A ESTA QUERY:
+
+
+
+
+db.movies.find(
+    { genres: "Horror"}
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> ISSO QUER DIZER QUE 
+
+SE VOCÊ REALMENTE QUER PROCURAR POR ESSES 2 GENRES EM CADA DOCUMENT (retornar só os documents que possuam esses 2 genres no array 'genres'),
+
+
+
+AÍ REALMENTE SOMOS OBRIGADOS A USAR 
+
+
+
+'{
+    $and: []
+}
+'
+
+
+
+
+
+
+
+
+
+
+
+
+-> E É EXATAMENTE POR ISSO QUE EXISTE UM LOGICAL OPERATOR de '$AND',
+
+
+
+mesmo 
+
+que 
+
+
+
+QUERIES __ 
+
+
+
+SEMPRE SEJAM '$anded' 
+
+
+POR DEFAULT...
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE VOCê PROCURAR POR VALUES EM 1 MESMO FIELD,
+
+
+
+
+FILTRADOS POR MÚLTIPLAS CONDIÇÕES,
+
+
+VOCÊ É OBRIGADO A USAR '$and'...

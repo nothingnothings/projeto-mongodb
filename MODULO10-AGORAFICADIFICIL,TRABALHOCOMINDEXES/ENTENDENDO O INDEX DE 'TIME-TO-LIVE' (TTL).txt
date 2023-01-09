@@ -1,0 +1,839 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... A ÚLTIMA OPÇÃO DE INDEX _ INTERESSANTE__ QUE O PROFESSOR QUER MOSTRAR A NÓS 
+
+
+
+
+
+
+
+
+
+
+É O INDEX DE 'TIME TO LIVE'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESSE É UM TIPO DE INDEX BEM LEGAL... ------> E ELE PODE SER BEM ÚTIL EM VÁRIOS TIPOS DE APPLICATION,
+
+
+
+
+
+APPS EM QUE VOCê TEM 'SELF-DESTROYING' DATA ------->  DIGAMOS 'sessions'
+
+
+
+
+
+DE USERS,
+
+
+
+EM QUE 
+
+VOCÊ VAI QUERER 
+
+
+
+'CLEAR' 
+
+
+
+
+
+
+
+
+A DATA DELES APÓS CERTA DURATION, OU QUALQUER COISA DO GÊNERO... (já fiz uma coisa parecida; storage de sessions em uma database noSQL, mas minha data não estava com essa feature de selfdestroy)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> OK.. PROFESSOR CRIA UMA NOVA COLLECTION, DE NOME 'sessions'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> DENTRO DE LÁ,
+
+PROFESSOR 
+
+
+ADIICONA 1 DOCUMENT...
+
+
+
+
+
+
+
+
+
+
+--> ESSE DOCUMENT TERÁ ESTA ESTRUTURA:
+
+
+
+
+
+{
+    "data": "asasasasas",
+    createdAt: 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+--> ele, MAIS IMPORTANTE DO QUE ISSO,
+
+VAI RECEBER ESSA KEY DE 'createdAt' ------> e essa key poderia ter outro nome, mas o comum é usar 'createdAt'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> CERTO... --> ESSA KEY, NO NOSSO CASO, VAI RECEBER UM 'new Date()' ... -> E ELE VAI 
+
+
+
+
+RECEBER A DATE ASSIM MSM, PQ ESSA SERÁ NOSSA 'CURRENT DATE/TIMESTAMP'...
+
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+db.sessions.insertOne({
+    "data": "asasasasas",
+    createdAt: new Date()
+}
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+O RESULTADO SERÁ ESTE:
+
+
+
+
+
+
+
+
+
+}
+> db.sessions.find().pretty()
+{
+        "_id" : ObjectId("620eba8cb52b190285f9e5c2"),
+        "data" : "asasasasas",
+        "createdAt" : ISODate("2022-02-17T21:13:48.715Z")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------------> OU SJEA,
+
+AGORA 
+
+
+TEMOS ESSE 'ISODate',
+
+que foi CRIADO PELO MONGODB... --> tem o current date e time...
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA O PROFESSOR VAI ADICIONAR UM INDEX DE 'time-to-live'
+
+
+
+
+
+AQUI....
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> PARA ISSO,
+
+O PROFESSOR 
+
+
+
+VAI ATÉ AS SESSIONS E VAI CRIAR UM INDEX,
+
+
+com o código 
+
+
+
+
+
+
+
+
+
+
+
+
+db.sessions.createIndex(
+    {
+        "createdAt": 1
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> ESSE INDEX SERÁ CRIADO NESSE FIELD DE 'createdAt'...
+
+
+
+
+
+
+
+
+
+
+
+
+--------> PROFESSOR EXPLICA QUE SIM, PODERÍAMOS SIMPLESMENTE 'CRIAR UM NORMAL ASCENDING INDEX' 
+
+
+nesse field,
+
+
+
+
+
+
+
+e aí, COM ISSO,
+
+
+
+ORDENAR DATES ___ DA MESMA __ FORMA QUE VOCê ORDENA TEXT/NUMBERS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS AGORA O PROFESSOR SE LIVRA DESSE INDEX com 'dropIndex',
+
+
+PQ 
+
+ELE 
+
+VAI QUERER ADICIONAR ESSE INDEX DE UMA MANEIRA UM PCO DIFERENTE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> EM VEZ DE ADICIONAR ESSE INDEX COMO ANTES,
+
+
+
+DE MODO 'ASCENDING ORDER',
+
+
+
+O PROFESSOR VAI ADICIONAR AQUELE PARÂMETRO-CONFIGURAÇÃO EXTRA,
+
+
+
+
+EM QUE 
+
+
+
+
+CONFIGURARÁ 
+
+
+
+ESSE INDEX....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> LÁ, 
+
+
+
+O PROFESSOR COLOCA A KEY DE 
+
+'expireAfterSeconds'....
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+db.sessions.createIndex(
+    {
+        "createdAt": 1
+    },
+
+    {
+        expireAfterSeconds: 
+    }
+)
+
+
+
+
+
+---------------------------
+
+
+
+
+
+
+
+
+ESSA É UMA FEATURE ESPECIAL OFERECIDA PELO MONGODB,
+
+
+E QUE __ SÓ _ FUNCIONA EM 'DATE INDEXES'/date FIELDS... ->  EM OUTROS FIELDS,
+
+
+
+ESSA OPTION SERÁ SIMPLESMENTE IGNORADA (você pode adicionar, mas será ignorada)..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> CERTO.... DENTRO DESSE NEGÓCIO,
+
+
+COLOCAMOS '10',
+
+
+
+
+
+
+
+O QUE DIRÁ 
+
+'CADA ELEMENT DEVERÁ SER REMOVIDO APÓS 10 SECONDS'..
+
+
+
+
+
+
+
+
+
+
+
+
+--------> 
+MAS SE ENTÃO 
+
+
+EXAMINARMOS NOSSA COLLECTION,
+
+
+
+com 
+
+
+
+'db.sessions.find().pretty()',
+
+
+
+
+VEREMOS
+
+
+QUE 
+
+
+
+
+NOSSO DOCUMENT DE 
+
+
+'''''
+
+
+{
+        "_id" : ObjectId("620eba8cb52b190285f9e5c2"),
+        "data" : "asasasasas",
+        "createdAt" : ISODate("2022-02-17T21:13:48.715Z")
+}
+
+
+
+''''
+
+
+
+
+
+AINDA ESTARÁ PRESENTE... UÉ MAS PQ ELE NÃO FOI DELETADO/REMOVIDO?
+
+
+
+
+
+
+
+
+
+
+--> É PQ ELE __ FOI __ ADICIONADO ___ _ANTES_ DE NÓS TERMOS DEFINIDO AQUELE INDEX (ou seja, ele é 'ANTERIOR' à 'LEI DO INDEX').... ----------> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OU SEJA, O INDEX/OS INDEXES POSSUEM UMA LIMITAÇÃO, PQ ELES NUNCA VÃO 'DELETE ELEMENTS IN HINDSIGHT' (anteriores)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS SE ADICIONARMOS UM NOVO ELEMENT,
+
+
+
+com 
+
+
+
+db.sessions.insertOne(
+    {
+        data: 'novo elemento',
+        createdAt: new Date()
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> SE FIZERMOS ISSO E ESPERARMOS 10 SEGUNDOS,
+
+
+
+
+
+
+
+NÓS VEREMOS 
+
+
+
+
+QUE 
+
+
+__ AMBOS _ OS DOCUMENTS TERÃO SIDO DELETADOS (tanto o document que foi 'criado anteriormente', como ESSE NOVO, com 'data: novo elemento')....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+A RAZÃO PARA ISSO É QUE O 'ADD' DE UM NOVO DOCUMENT BASICAMENTE __ TRIGGOU ___ O MONGODB PARA QUE 
+
+
+
+
+ESSENCIALMENTE 'RE-EVALUATE' 
+
+
+
+a collection inteira (inclusive os documents que já existiam),
+
+
+PARA 
+
+
+
+ENTÃO 
+
+
+CHECAR SE AQUELE 
+
+
+FIELD 
+
+de 'createdAt'
+
+
+
+de cada DOCUMENT __ SATISFAZ/SATISFAZEM 
+
+
+
+O CRITÉRIO DE EXPIRE AFTER 10 SECONDS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> OU SEJA,
+
+
+
+
+ELE 'RECONSIDERA' os documents existentes/expirados 
+
+
+
+
+NO MOMENTO EM QUE VOCÊ ADICIONA UM NOVO ELEMENT.... -->  ISSO É MUITO ÚTIL,
+
+
+PQ TE DEIXA 
+
+MANTER UMA COLLECTION DE DOCUMENTS QUE __ SE DESTROEM_ APÓS ___ 
+
+
+
+
+
+
+
+CERTO TIMESPAN... -> E PARA MUITOS APPS,
+
+
+
+
+ESSA FEATURE PODE SER MUITO ÚTIL.... -------> POR EXEMPLO,
+
+
+
+PARA 
+
+
+'SESSION DATA' 
+
+
+para users de seu website,
+
+
+
+OU ENTÃO 
+
+
+
+
+EM UM ONLINESHOP,
+
+EM QUE 
+
+VOCê VAI QUERER 'CLEAR THE CARt' 
+
+
+
+APÓS TER TRANSCORRIDO 1 DIA INTEIRO...  --> casos em que A DATA DEVERÁ FAZER 'CLEANUP' por si só... --> em casos como esses,
+
+
+você 
+
+
+
+NÃO VAI PRECISAR ESCREVER UM SCRIPT COMPLEXO PARA ISSO,
+
+
+
+
+
+BASTA USAR UM 'TIME-TO-LIVE' index,
+
+
+
+
+
+
+
+
+COM ESSA 'expireAfterSeconds'
+
+
+
+
+QUE ADICIONAMOS NO NOSSO INDEX...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, MAS AQUI HÁ OUTRO DETALHE IMPORTANTE: VOCÊ SÓ PODE CRIAR/DEFINIR time-to-live INDEXES 
+
+EM SINGLE 
+
+FIELD INDEXES,
+
+
+
+
+
+
+PQ ISSO NÃO VAI FUNCIONAR EM COMPOUND INDEXES (indexes mistos).... tbm, isso SÓ FUNCIONA COM FIELDS QUE POSSUAM 'DATE OBJECTS'...

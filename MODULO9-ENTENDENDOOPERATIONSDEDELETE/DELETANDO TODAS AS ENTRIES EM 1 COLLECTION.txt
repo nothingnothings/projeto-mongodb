@@ -1,0 +1,190 @@
+ 
+
+
+
+
+
+
+
+ BEM, àS VEZES VOCÊ VAI QUERER DELETAR TODAS AS ENTRIES EM UMA COLLECTION...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> 2 maneiras de fazer isso:
+
+
+
+
+
+
+
+
+
+
+
+ db.users.deleteMany({}) ----> ISSO VAI DELETAR TODOS OS DOCUMENTS.... todos matchearão...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> DELETAR TODA A COLLECTION --> escreva assim:
+
+
+
+
+
+
+
+ db.users.drop() 
+
+
+
+
+
+
+
+
+
+
+
+
+ IMPORTANTE --> VOCÊ , COMO ADMINISTRADOR,
+
+ TRABALHANDO COM O SHELL,
+
+
+
+ TALVEZ FAÇA ISSO.... ------> MAIS TARDE, QUANDO VOCÊ CONSTRUIR UM APP DE VERDADE,
+
+
+
+
+ COMO NOSSO 'from shell to driver' module,
+
+ no final do curso,
+
+
+
+
+ VOCê ___ RARAMENTE/NÃO VAI _ CHAMAR '.drop' 
+
+ DE DENTRO 
+
+
+ DO CÓDIGO DE SEU APP,
+
+
+
+ PQ RARAMENTE SEU WEBSITE/APP VAI TER ALGUMA SITUAÇÃO EM QUE VAI 'DROP' UMA COLLECTION INTEIRA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ------> ADD E DELETE COLLECTIONS É UMA COISA MAIS DO ADMIN DO app.... --> APESAR DISSO,
+
+ É BOM 
+
+ SABER COMO ISSO FUNCIONA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ db.users.drop() 
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> SE JÁ ESTIVER DELETADA A COLLECTION,
+
+
+
+
+ vamos receber 'false'....
+
+
+
+
+
+
+
+
+
+
+
+ ok.... DROP DE COLLECTIONS E DATABASES TAMBÉM SE LIVRA DA DATA NO INTERIOR 
+
+
+ DELES...
+
+
+
+
+
+
+ MAS 
+
+
+
+
+
+ 'deleteMany()' e 'deleteOne'
+
+ são os methods mais comuns que você usará,
+
+ também no seu app side code... -> e o write de queries é TUDO QUE VOCê PRECISA SABER, PARA ENCONTRAR OS DOCUMENTS QUE VOCê QUER DELETE...

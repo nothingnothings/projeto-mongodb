@@ -1,0 +1,663 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> PRECISAMOS DE UM POUCO DE TEORIA, ANTES...
+
+
+
+
+
+--> QUANDO TRABALHAMSO COM O MONGODB,
+
+
+
+
+
+
+
+PODEMOS BASICAMENTE FALAR SOBRE 
+
+
+
+
+
+
+
+
+
+'methods'
+
+
+'filters'
+
+
+
+e 
+
+'operators'...
+
+
+
+
+
+
+
+
+
+
+
+
+----> ISSO É APLICADO A TODO O MONGODB,
+
+NÃO SÓ 
+
+
+AO 'GET DE DATA'....
+
+
+
+
+
+
+
+
+
+
+
+
+--> ENTRETANTO,
+
+
+FILTERS E OPERATORS 
+
+
+SÃO 
+
+
+
+
+AINDA MAIS IMPORTANTES 
+
+
+
+
+QUANDO O ASSUNTO É 'find()' e o get de data....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NO SHELL,
+
+
+ACESSAMOS 
+
+
+
+A DATABASE COM 
+
+'db.' + alguma coisa...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+NOS MONGODB DRIVERS,
+
+ISSO PODE DIFERIR UM POUCO... ----------> VERMEOS ISSO NO MÓDULO 'from SHELL TO DRIVER', no final do curso..
+
+
+
+
+
+
+
+
+ACESSAMOS COLLECTIONS ASSIM:
+
+
+
+
+
+
+db.myCollection.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> aí podemos EXECUTAR UM METHOD,
+
+
+
+como '.find()'..
+
+
+
+
+
+
+
+
+
+--> TUDO QUE VEM DEPOIS DE 'myCollection',
+
+
+SERÁ UM METHOD....
+
+
+
+
+
+
+
+
+.find() -----------> 
+
+UM METHOD QUE EXECUTAMOS NA COLLECTION, NO CASO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> PASSAMOS UMA DATA 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+db . myCollection . find (
+
+{
+    age: 32
+}
+
+)
+
+
+
+
+
+
+
+
+
+
+
+--> ESSE PRIMEIRO ARGUMENT SEMPRE SERÁ NOSSO 'FILTER'...
+
+
+
+
+
+
+
+
+
+
+--> 
+
+
+
+
+o formato de um filter sempre será 
+
+
+
+
+
+''fieldName'' e aí o VALUE DESSE FIELDNAME....
+
+
+
+
+
+
+
+
+ex:
+
+
+ 
+ '{age : 32}' .......
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -_> VOCÊ VAI APRENDER QUE O 'VALUE' PODE SER BEM FLEXIBLE,
+
+ QUANDO O ASSUNTO É O 'FIND' DE DATA...
+
+
+
+
+
+
+
+
+
+
+ -> MAS O QUE INTERESSA É QUE ESSA É A ESTRUTURA...
+
+
+
+
+
+
+
+
+
+ ---> É ASSIM QUE FUNCIONA,
+
+
+ FIELDS E VALUES... -->  E DOCUMENTS TAMBÉM SÃO TUDO SOBRE ISSO,
+
+
+
+ KEYS E VALUES PARA ESSES FIELDS..
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> OK...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ {
+     age: 32 
+ }
+
+
+
+
+
+
+
+
+ É UM FILTER... --> ISSO PQ O FIND SEMPRE VAI ACEITAR UM 'FILTER'...
+
+
+
+
+
+
+
+
+
+
+ ELE 
+
+
+
+ PRECISA/PODE USAR UM FILTER PARA 'NARROW DOWN' 
+
+
+ o
+  set de documents que ele retorna... --> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  OK.... 
+
+
+
+  E QUANDO 
+
+  ESCREVEMOS 
+
+
+  '{
+      age: 32
+  }',
+
+
+
+
+
+
+
+
+  ESTAMOS 
+
+
+  'LOOKING FOR EQUALITY'''' ---> ESSE FILTER É BEM SIMPLES,
+
+
+
+
+
+MAS TAMBÉM 1 Q VOCÊ USARÁ UM MONTE .... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+É CLARO QUE VOCÊ PODE USAR FILTERS MAIS __ COMPLEXOS....
+
+
+
+
+
+
+
+
+ex:
+
+
+db.myCollection.find(
+
+
+
+
+    age: { $gt : 30}
+
+
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... ---> É UM DOCUMENT EM QUE O FILTER 
+
+
+
+TEM, NO FIELD,
+
+1 'OPERATOR' (special operator)... -------------> ESSE É O OPERATOR DE 
+
+'$gt'
+
+
+
+
+
+E VOCÊ SEMPRE PODE RECONHECER OPERATORS 
+
+
+POR MEIO DO 
+
+'$'
+
+
+
+
+NO INÍCIO DE SUA ESCRITA...
+
+
+
+
+
+
+
+(
+
+
+
+
+E OS 'OPERATORS'
+
+
+SÃO FIELDS ESPECIAIS,
+
+
+RESERVADOS,
+
+QUE 
+
+SÃO 
+
+
+'UNDERSTOOD'
+
+pelo mongodb...
+
+
+
+
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+--> E ESSA OPERATION AQUI, POR EXEMPLO,
+
+
+
+
+
+
+É CHAMADA DE 
+
+
+
+
+UMA 
+
+'RANGE FILTER'...
+
+
+
+
+
+
+
+db.myCollection.find({age: {$gt: 30}}) 
+
+
+
+
+
+
+
+
+
+
+
+--> É UM RANGE FILTER PQ ELE NÃO VAI 
+
+
+
+
+
+EXACTLY 
+
+
+
+
+'SEARCH FOR EQUALITY',
+
+
+E SIM 
+
+
+VAI 
+
+
+'''LOOK FOR ALL DOCUMENTS THAT HAVE AN AGE THAT IS 
+
+GREATER THAN THE VALUE'''' (maiores do que 30)....
+
+
+
+
+
+
+
+
+
+
+
+--> É ASSIM QUE ISSO FUNCIONA,
+
+
+
+
+
+
+
+
+E VAMOS APRENDER UM MONTE DE OPERATORS NESTE MÓDULO... -------> E VAMOS APRENDER DIFERENTES MANEIRAS DE OS UTILIZAR,
+
+
+
+E DIFERENTES MANEIRAS DE 'FILTER DATA',
+
+
+portanto....
+
+
+
+
+
+
+
+
+
+--> OK... ESSA É SEMPRE A ESTRUTURA QUE VOCê RECONHECERÁ..

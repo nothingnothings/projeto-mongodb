@@ -1,0 +1,1852 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, ESTAMOS CHEGANDO AO FINAL DESSA SEÇÃO DE 'arrays'...
+
+
+
+
+
+
+
+
+
+
+
+--> ANTES VIMOS O FUNCIONAMENTO DE 'filter' 
+
+SOBRE ARRAYS, NA FASE DE 'projection'....
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS É REALMENTE IMPORTANTE 
+
+
+
+
+
+
+
+
+QUE ENTENDAMOS 
+
+COMO 
+
+
+
+TRABALHAR COM ESSES DIFERENTES 
+
+
+
+ARRAY STAGES,
+
+como 
+
+
+
+'$unwind',
+
+
+E AÍ 
+
+
+
+TAMBÉM 
+
+
+
+
+OS 
+
+
+
+
+OPERATORS QUE VOCÊ PODE USAR, com arrays, 
+
+
+nas fases 
+
+de 
+
+
+'project' ou 'group'...
+
+
+
+
+
+
+
+
+
+
+
+--> OK... DIGAMOS QUE QUERMEOS  
+
+
+
+
+
+
+agora transformar nossos objects 'friend' 
+
+
+
+
+
+
+
+
+DE UM JEITO QUE SEJA OUTPUTTADO 'ONLY THE HIGHEST  
+
+
+EXAM SCORE FOR EACH PERSON'...
+
+
+
+
+
+
+
+
+e cada person tem esta estrutura:
+
+
+
+
+
+{
+        "_id" : ObjectId("6215b908ecbbf58f4c1d5e5b"),
+        "name" : "Max",
+        "hobbies" : [
+                "Sports",
+                "Cooking"
+        ],
+        "age" : 29,
+        "examScores" : [
+                {
+                        "difficulty" : 4,
+                        "score" : 57.9
+                },
+                {
+                        "difficulty" : 6,
+                        "score" : 62.1
+                },
+                {
+                        "difficulty" : 3,
+                        "score" : 88.5
+                }
+        ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> VAMOS QUERER 
+
+
+
+
+ 
+ APENAS O 'HIGHEST EXAM SCORE',
+
+
+
+
+
+
+
+ DENTRO 
+
+
+
+ DE 
+
+
+
+ 1 FIELD DE 'examScore', ou algo assim...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ----> É CLARO QUE HÁ MÚLTIPLAS MANEIRAS DE FAZER ISSO...
+
+
+
+
+
+
+ -->  O RESULTADO FINAL QUE O PROFESSOR QUER É 
+
+
+ este:
+
+
+
+
+
+
+ examScore: 88.5 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -------> PODEMOS CONSEGUIR ISSO DE DIVERSAS MANEIRAS.... -------> VAMOS QUERER 
+
+
+
+
+ USAR O 
+
+
+ APPROACH COM 
+
+
+ '$project',
+
+ que 
+
+ vai nos ajudar a MANIPULAR 
+
+
+ esse array...
+
+
+
+
+
+
+
+
+
+
+ começamos assim:
+
+
+
+
+
+
+
+
+
+
+ db.arrayCollection.aggregate(
+     {
+         $project: {
+
+             _id: 0,
+             highestScore: {
+
+             }
+         }
+     }
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -> CLARO QUE VAMOS PRECISAR DE 'unwind' para 
+
+ 'ITERATE' through the array....
+
+
+
+
+
+
+
+
+ -> LEIA ISTO:
+
+
+
+
+
+ 1 use unwind to iterate through array.
+
+2 sort array.
+3 use group to merge objects of array into one array.
+4 then project other fields.
+
+
+
+
+
+
+
+
+
+
+---> ok...
+
+
+
+
+
+
+
+faremos assim, então:
+
+
+
+
+
+
+ db.arrayCollection.aggregate([
+     {
+         $unwind: "$examScores.scores"
+     }
+
+
+
+     {
+         $project: {
+
+             _id: 0,
+             highestScore: {
+
+             }
+         }
+     }
+ ]
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> OK, AÍ USAREMOS 'sort' para SORTEAR ESSES VALUES....
+
+
+
+
+
+
+
+
+ ex:
+
+
+
+
+  db.arrayCollection.aggregate([
+     {
+         $unwind: "$examScores.scores"
+     },
+
+     {
+         $sort: { "$examScores.scores" }
+     }
+
+
+
+     {
+         $project: {
+
+             _id: 0,
+             highestScore: {
+
+             }
+         }
+     }
+ ]
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> TENTEI RODAR UMA VERSÃO DO CÓDIGO, MAS NÃO FUNCIONOU.
+
+
+
+
+
+
+
+
+
+
+
+
+ ISTO:
+
+
+
+
+
+
+ db.arrayCollection.aggregate([
+  {$unwind: "$examScores"},
+
+  {
+    $group: {
+      _id: "$name",
+
+      examScores: { $push: "$examScores.score" }
+    }
+  }
+  
+])
+
+
+
+
+
+
+
+
+
+RETORNOU ISTO:
+
+
+
+
+
+
+
+{ "_id" : "Maria", "examScores" : [ 75.1, 44.2, 61.5 ] }
+{ "_id" : "Manu", "examScores" : [ 52.1, 74.3, 53.1 ] }
+{ "_id" : "Max", "examScores" : [ 57.9, 62.1, 88.5 ] }
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> continuando....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> como QUEREMOS TER O RESTO DOS FIELDS TBM,
+
+
+EDITAMOS UM POUCO NOSSA QUERY:
+
+
+
+
+
+
+
+
+
+db.arrayCollection.aggregate([
+  {$unwind: "$examScores"},
+
+  {
+    $group: {
+      _id: "$name",
+      name: {$first: "$name"},
+      age: {$first: "$age"},
+      hobbies: {$first: "$hobbies"},
+      examScores: { $push: "$examScores.score" }
+    }
+  }
+
+])
+
+
+
+
+
+
+
+
+
+
+
+
+--> encontrei essa sintaxe no stackoverflow,
+
+
+
+e ela resultou nisso:
+
+
+
+
+
+
+{ "_id" : "Manu", "name" : "Manu", "age" : 30, "hobbies" : [ "Eating", "Data Analytics" ], "examScores" : [ 52.1, 74.3, 53.1 ] }
+{ "_id" : "Max", "name" : "Max", "age" : 29, "hobbies" : [ "Sports", "Cooking" ], "examScores" : [ 57.9, 62.1, 88.5 ] }
+{ "_id" : "Maria", "name" : "Maria", "age" : 29, "hobbies" : [ "Cooking", "Skiing" ], "examScores" : [ 75.1, 44.2, 61.5 ] } 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> CERTO.... AGORA O QUE FALTA FAZER É:
+
+
+
+
+
+
+1) SORTAR OS examScores em 'examScores'...
+
+
+
+
+
+
+2) FAZER 'PROJECT' e extrair APENAS O PRIMEIRO ELEMENTO/NÚMERO no array de examScores,
+
+e aí 
+
+
+armazenar 
+
+
+esse 
+
+elemento 
+
+
+em um field de 'examScore'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ok... vamos continuar...
+
+
+
+
+
+
+
+
+
+
+
+$sortArray --> isso solucionaria nosso problema, mas infelizmente não se encontra disponível na versão '5.0.6', e só na 5.2....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CONSEGUI SORTAR OS NEGÓCIOS.... -->
+ 
+
+
+
+ PARA FAZER ISSO FUNCIONAR, EXECUTEI 'sort'
+
+
+ __ANTES__ DE 
+
+
+
+ 'GROUP',
+
+ em vez de depois....
+
+
+
+
+ EX:
+
+
+
+
+
+
+
+
+
+
+
+
+ db.arrayCollection.aggregate([
+  { $unwind: '$examScores' },
+  {
+    $sort: {
+      "examScores": 1
+    }
+  },
+  {
+    $group: {
+      _id: '$name',
+      name: { $first: '$name' },
+      age: { $first: '$age' },
+      hobbies: { $first: '$hobbies' },
+      examScores: { $push: '$examScores.score' },
+    },
+  },
+]);
+
+
+
+
+
+
+
+
+
+RESULTADO:
+
+
+
+
+
+
+
+> db.arrayCollection.aggregate([
+...   { $unwind: '$examScores' },
+...   {
+...     $sort: {
+...       "examScores": 1
+...     }
+...   },
+...
+...   {
+...     $group: {
+...       _id: '$name',
+...       name: { $first: '$name' },
+...       age: { $first: '$age' },
+...       hobbies: { $first: '$hobbies' },
+...       examScores: { $push: '$examScores.score' },
+...     },
+...   },
+... ]);
+{ "_id" : "Manu", "name" : "Manu", "age" : 30, "hobbies" : [ "Eating", "Data Analytics" ], "examScores" : [ 74.3, 53.1, 52.1 ] }
+
+{ "_id" : "Max", "name" : "Max", "age" : 29, "hobbies" : [ "Sports", "Cooking" ], "examScores" : [ 88.5, 57.9, 62.1 ] }
+{ "_id" : "Maria", "name" : "Maria", "age" : 29, "hobbies" : [ "Cooking", "Skiing" ], "examScores" : [ 75.1, 61.5, 44.2 ] }
+
+
+
+
+
+
+
+-------------------------------------------
+
+
+
+
+
+
+
+
+
+--> só temos 1 probleminha, com isso tudo....
+
+
+
+
+
+
+
+
+--> nossos objects estão ficando sem o '_id' (ele está sendo substituído, em 'group' pelo '_id')...
+
+
+
+
+
+
+
+
+----> talvez eu consiga modificar isso, com 
+
+o  
+
+
+'$project',
+
+
+
+pq 
+
+acho que o project vai adicionar esse field.... (se eu especificar a ele que o desejo)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, MAS AGORA O PRÓXIMO PASSO É 
+
+
+
+
+
+
+''PEGAR SÓ O PRIMEIRO ELEMENT DESSES ARRAY, EM CADA DOCUMENT'...
+
+
+
+
+
+
+
+
+
+
+
+-- para isso,
+
+vamos usar '$project', a etapa final...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> MINHA QUERY FICOU TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+
+db.arrayCollection.aggregate([
+  { $unwind: '$examScores' },
+  {
+    $sort: {
+      "examScores": 1
+    }
+  },
+  {
+    $group: {
+      _id: '$name',
+      name: { $first: '$name' },
+      age: { $first: '$age' },
+      hobbies: { $first: '$hobbies' },
+      examScores: { $push: '$examScores.score' },
+    },
+  },
+  {
+    $project: {
+      _id: new ObjectId(),
+      name: 1,
+      age: 1,
+      hobbies: 1,
+      examScore: {
+        $slice: ["$examScores", 1]
+      }
+    }
+  }
+]);
+
+
+
+
+
+
+
+
+
+
+
+
+------> mas o resultado ainda ficou insatisfatório:
+
+
+
+
+
+
+
+
+{ "name" : "Maria", "age" : 29, "hobbies" : [ "Cooking", "Skiing" ], "_id" : ObjectId("6217b428c5b4c3e791204b61"), "examScore" : [ 75.1 ] }
+{ "name" : "Max", "age" : 29, "hobbies" : [ "Sports", "Cooking" ], "_id" : ObjectId("6217b428c5b4c3e791204b61"), "examScore" : [ 88.5 ] }
+{ "name" : "Manu", "age" : 30, "hobbies" : [ "Eating", "Data Analytics" ], "_id" : ObjectId("6217b428c5b4c3e791204b61"), "examScore" : [ 74.3 ] }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> eu quero TIRAR 
+
+esse
+
+value de dentro do array,
+
+e o colocar diretamente em 'examScore'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ACHEI ISSO NO STACKOVERFLOW:
+
+
+
+
+141
+
+Update:
+
+Starting from v4.4 there is a dedicated operator $first:
+
+{ $project: {
+    user: { $first: "$users" },
+    otherField: 1
+}},
+
+
+
+It's a syntax sugar to the
+
+Original answer:
+
+You can use arrayElemAt:
+
+{ $project: {
+    user: { $arrayElemAt: [ "$users", 0 ] },
+    otherField: 1
+}},
+
+
+----------------------------------
+
+
+
+
+
+
+
+
+
+---> ISSO FUNCIONOU...
+
+
+
+
+
+
+
+
+
+
+
+---> USEI ESSE OPERATOR DE 
+
+'$first'
+
+para 
+
+PEGAR O 
+
+
+PRIMEIRO ELEMENT DESSE SLICED ARRAY:
+
+
+
+
+
+
+
+
+
+
+
+
+db.arrayCollection.aggregate([
+  { $unwind: '$examScores' },
+  {
+    $sort: {
+      "examScores": 1
+    }
+  },
+  {
+    $group: {
+      _id: '$name',
+      name: { $first: '$name' },
+      age: { $first: '$age' },
+      hobbies: { $first: '$hobbies' },
+      examScores: { $push: '$examScores.score' },
+    },
+  },
+  {
+    $project: {
+      _id: new ObjectId(),
+      name: 1,
+      age: 1,
+      hobbies: 1,
+      examScore: {
+         $first: {$slice: ["$examScores", 1]}
+      }
+    }
+  }
+])
+
+
+
+
+{ "name" : "Maria", "age" : 29, "hobbies" : [ "Cooking", "Skiing" ], "_id" : ObjectId("6217b54fc5b4c3e791204b62"), "examScore" : 75.1 }
+{ "name" : "Max", "age" : 29, "hobbies" : [ "Sports", "Cooking" ], "_id" : ObjectId("6217b54fc5b4c3e791204b62"), "examScore" : 88.5 }
+{ "name" : "Manu", "age" : 30, "hobbies" : [ "Eating", "Data Analytics" ], "_id" : ObjectId("6217b54fc5b4c3e791204b62"), "examScore" : 74.3 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SUCESSO....
+
+
+
+
+
+
+
+
+
+
+
+
+--_> professor vai nos mostrar a solução que ele inventou....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA CONSEGUIR O 'HIGHEST POSSIBLE SCORE',
+
+
+
+PRECISAMOS PRIMEIRAMENTE 
+
+
+UNWINDAR 
+
+
+ESSES 
+
+DOCUMENTS,
+
+
+PARA 
+
+
+
+CONSEGUIR 
+
+com que 
+
+
+os 
+
+'{
+  score: xxx
+}
+'
+
+
+virem um TOP LEVEL ELEMENT...
+
+
+
+
+
+
+
+
+
+
+
+
+--> aí vamos SORT os 
+
+
+
+elements pelos SCORES,
+
+PARA QUE ENTÃO 
+
+
+
+CONSIGAMOS 
+
+
+
+ AGRUPAR OS 
+
+
+
+
+
+
+SCORES por person,
+
+
+e aí 
+
+
+
+
+PEGAR ´SO O FIRST SCORE 
+
+
+
+
+
+
+para aquela person...
+
+
+
+
+
+
+
+
+
+
+
+
+-> professor começa assim:
+
+
+
+
+
+
+
+
+
+
+
+
+db.friends.aggregate(
+  [
+    {
+      $unwind: "$examScores"
+    }
+  ]
+)
+
+
+
+
+
+
+
+
+
+-> AGORA VAMOS TER VÁRIAS PERSONS E SEUS SCORES...
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+> db.arrayCollection.aggregate([{$unwind: "$examScores"}]).pretty()
+{
+        "_id" : ObjectId("6215b908ecbbf58f4c1d5e59"),
+        "name" : "Maria",
+        "hobbies" : [
+                "Cooking",
+                "Skiing"
+        ],
+        "age" : 29,
+        "examScores" : {
+                "difficulty" : 3,
+                "score" : 75.1
+        }
+}
+{
+        "_id" : ObjectId("6215b908ecbbf58f4c1d5e59"),
+        "name" : "Maria",
+        "hobbies" : [
+                "Cooking",
+                "Skiing"
+        ],
+        "age" : 29,
+        "examScores" : {
+                "difficulty" : 8,
+                "score" : 44.2
+        }
+}
+{
+        "_id" : ObjectId("6215b908ecbbf58f4c1d5e59"),
+        "name" : "Maria",
+        "hobbies" : [
+                "Cooking",
+                "Skiing"
+        ],
+        "age" : 29,
+        "examScores" : {
+                "difficulty" : 6,
+                "score" : 61.5
+        }
+}
+{
+        "_id" : ObjectId("6215b908ecbbf58f4c1d5e5a"),
+        "name" : "Manu",
+        "hobbies" : [
+                "Eating",
+                "Data Analytics"
+        ],
+        "age" : 30,
+        "examScores" : {
+                "difficulty" : 7,
+                "score" : 52.1
+        }
+}
+{
+        "_id" : ObjectId("6215b908ecbbf58f4c1d5e5a"),
+        "name" : "Manu",
+        "hobbies" : [
+                "Eating",
+                "Data Analytics"
+        ],
+        "age" : 30,
+        "examScores" : {
+                "difficulty" : 2,
+                "score" : 74.3
+        }
+}
+{
+        "_id" : ObjectId("6215b908ecbbf58f4c1d5e5a"),
+        "name" : "Manu",
+        "hobbies" : [
+                "Eating",
+                "Data Analytics"
+        ],
+        "age" : 30,
+        "examScores" : {
+                "difficulty" : 5,
+                "score" : 53.1
+        }
+}
+{
+        "_id" : ObjectId("6215b908ecbbf58f4c1d5e5b"),
+        "name" : "Max",
+        "hobbies" : [
+                "Sports",
+                "Cooking"
+        ],
+        "age" : 29,
+        "examScores" : {
+                "difficulty" : 4,
+                "score" : 57.9
+        }
+}
+{
+        "_id" : ObjectId("6215b908ecbbf58f4c1d5e5b"),
+        "name" : "Max",
+        "hobbies" : [
+                "Sports",
+                "Cooking"
+        ],
+        "age" : 29,
+        "examScores" : {
+                "difficulty" : 6,
+                "score" : 62.1
+        }
+}
+{
+        "_id" : ObjectId("6215b908ecbbf58f4c1d5e5b"),
+        "name" : "Max",
+        "hobbies" : [
+                "Sports",
+                "Cooking"
+        ],
+        "age" : 29,
+        "examScores" : {
+                "difficulty" : 3,
+                "score" : 88.5
+        }
+}
+>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA VAMOS SORTAR POR NOSSOS SCORES,
+
+ 
+
+ que não vão ser 1 array mais, nesse momento, por causa de 'unwind'..
+
+
+
+
+
+
+
+
+ --> aí vamos querer escrever 
+
+
+
+
+
+
+
+
+ {
+   $sort: {examScores: -1}
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> MAS ISSO 
+
+
+
+
+
+ DEU ERRADO, PQ 
+
+
+ TEMOS 
+
+ NESTED OBJECTS...
+
+
+
+
+
+
+ --> precisamos fazer sort do EMBEDDED DOCUMENT...
+
+
+
+
+
+
+
+
+ -- por isso escrevemos 
+
+
+
+
+
+
+ {
+   $sort: {"examScores.scores": -1}
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ---> CERTO....
+
+
+
+
+
+
+
+
+
+
+ mas o professor loqueou um pouco, 
+
+
+
+
+ colocou um stage de PROJECT antes de 'sort',
+
+
+
+ e aí 
+
+
+
+
+
+ fez assim
+
+
+
+
+ {
+   $unwind: "$examScores"
+ }
+
+
+ {
+   $project: {_id: 0, name: 1, age: 1, score: "$examScores.score"} 
+ }
+
+
+{
+  $sort: {score: -1}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, ISSO VAI FUNCIONAR, E VAI FUNCIONAR SEM NOSSO WRITE DE 'group'... ---> 
+
+
+
+
+
+
+
+
+--> MAS O WRITE DE 'group'
+
+
+
+VAI SER COLOCADO AGORA...
+
+
+
+
+
+
+
+
+
+
+--> por isso,
+
+
+podemos 
+
+
+escrever 
+
+
+'{
+  $group: {}
+}
+'
+
+
+
+
+
+
+
+
+
+
+-> VAMOS QUERER GROUP POR IDS, PQ IDS NÃO SERÃO DUPLICADOS...
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+{
+  $group: {_id: "$_id",
+  
+
+  maxScore: {
+    $max: 
+  }
+  
+  
+  
+  
+  
+  
+  
+  }
+}
+
+
+
+
+
+
+
+
+--> AQUI O PROFESSOR USOU O OPERATOR DE 'max',
+
+que encontramos nos official docs....
+
+
+
+
+
+
+
+
+
+--> E AÍ ELE VAI DIZER QUE 
+
+
+
+''VAMOS QUERER PEGAR O MAXIMUM 
+
+
+COM BASE NO 
+
+
+FIELD DE SCORE''' -----> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ok, a versão do professor também funcionou...
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS ELE FALA QUE SERIA NICE 
+
+
+
+ver algo além de '_id' e 'maxScore' 
+
+
+
+nos 
+
+results,
+
+
+
+
+
+VER TAMBÉM O 'name' 
+
+
+
+
+e a age...
+
+
+
+
+
+
+
+
+
+
+
+-> aí ele realmente usa o operator de 
+
+'$first',
+
+
+
+que simplesmente 
+
+
+FAZ O MONGODB PEGAR 
+
+O 
+
+PRIMEIRO ELEMENTO QUE ELE ENCONTRAR....
+
+
+
+
+
+
+
+
+
+
+
+escrevemos:
+
+
+
+
+
+name: {$first: "$name"}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E PARA SORTEAR ESSES DOCUMENTS,
+
+
+
+
+
+
+
+
+professor 
+
+
+adiciona uma phase de 
+
+
+
+'$sort: {maxScore: -1}' .... 
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, ESSE É O NOSSO PIPELINE COMPLETO...
+
+
+
+
+
+
+
+
+
+
+
+ o do professor:
+
+
+
+
+
+
+
+
+ db.friends.aggregate(
+   [
+     {
+       $unwind: "$examScores"
+     },
+    {
+      $project: {
+        _id: 1, name: 1,
+        age: 1,
+        score: "$examScores.score"
+      }
+    },
+
+    {
+      $sort: {score: -1}
+    },
+
+    {
+      $group: {_id: "$_id", name: {$first: "$name" }, maxScore: {$max: "$score"}}
+    },
+
+    {
+      $sort: { maxScore: -1}
+    }
+
+   ]
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+ --> OK... ISSO JÁ TE MOSTRA COMO VOCÊ PODE TRABALHAR COM ARRAYS,
+
+ E USAR 
+
+
+
+ AS DIFERENTES PIPELINE PHASES PARA 
+
+
+
+
+
+ 1) SPLIT ARRAYS UP 
+
+
+ 2) PULL ARRAY VALUES OUT OF THERE 
+
+
+
+ 3) AGRUPAR VALORES EM VALORES ÚNICOS, ETC ETC...

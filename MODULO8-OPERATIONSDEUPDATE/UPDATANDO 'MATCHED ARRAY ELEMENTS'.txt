@@ -1,0 +1,1927 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... AGORA QUE TEMOS OS 'BASIC FIELD OPERATORS' bem explicados,
+
+
+
+devemos ver COMO _ PODEMOS __ TRABALHAR__ COM ARRAYS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO PQ 
+
+
+
+HÁ ALGUNS NICE OPERATORS QUE NOS AJUDAM COM O UPDATE 
+
+
+DE 'EXISTING ARRAYs' 
+
+
+em documents...
+
+
+
+
+
+
+
+
+
+--> como o array de 'hobbies'
+
+LÁ 
+
+
+
+EM NOSSOS USERS:
+
+
+{
+        "_id" : ObjectId("6206f26d302d097773cc19a6"),
+        "name" : "Anna",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "yoga",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "newAge" : null
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> ok... --------> DIGAMOS QUE QUEREMOS UPDATAR 
+
+
+TODOS OS DOCUMENTS (chris, anna, max, etc) 
+
+
+
+EM QUE 
+
+
+
+A 
+
+PERSON 
+
+
+
+
+
+TENHA 
+UM HOBBY DE 'SPORTS'
+
+
+com uma 
+
+
+frequency
+
+
+
+
+
+MAIOR OU IGUAL A 3...
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO JÁ SERVE DE PRÁTICA DOS CONHECIMENTOS ANTERIORES...
+
+
+
+
+
+
+
+---> escrevemos assim:
+
+
+
+
+
+
+
+
+db.users.updateMany(
+    {
+       $and: [ {"hobby.title": "sports"}, 
+                { "hobby.frequency": {$gte: 3}}
+       
+       ]
+    }
+)
+
+
+
+
+
+
+
+
+-----------> ACHO QUE SERÁ ASSIM, no caso...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS O PROFESSOR VAI, NA VERDADE, ESCREVER UM FIND, anteriormente...
+
+
+
+
+
+
+
+
+
+
+
+
+--> 
+
+
+
+ele escreve:
+
+
+
+
+
+
+db.users.find(
+    {
+        $and: [
+            {"hobbies.title": "Sports"}, 
+            {"hobbies.frequency": {$gte: 3}}
+        ]
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+-->OK, FOI O QUE EU ESCREVI, MAS SEM O 'updateOne'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS ISSO VAI NOS DAR UM PROBLEMINHA... ------> 
+
+
+O RETRIEVE DESSE FIND VAI NOS DAR 
+
+
+
+
+também 'Anna',
+
+
+
+QUE 
+
+
+TEM UM 
+
+
+
+hobby de 
+
+
+{
+    "title": "Sports",
+    "frequency": 2 
+}
+
+
+
+
+
+(
+    OU SEJA, ALGO INCOMPATÍVEL COM NOSSA QUERY....
+)
+
+
+
+
+
+
+
+
+--> NÓS JÁ VIMOS ESSE PROBLEMA ANTERIORMENTE... --> EU ESQUECI COMO RESOLVER ESSE PROBLEMA....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, ISSO ACONTECE PQ SE VOCÊ 
+
+
+
+
+
+TIVER 
+
+
+'1 HOBBY COM TITLE DE SPORTS'
+
+
+
+e 
+
+
+'1 HOBBY COM FREQUENCY MAIOR OU IGUAL A 3',
+
+
+
+ a condição será satisfeita (
+
+
+     e essas conditions não precisam ficar EM 1 MESMO 'HOBBY' EMBEDDED DOCUMENT..
+ )
+
+
+
+
+
+
+
+
+
+ --> QUAL É A SOLUÇÃO PARA ISSO? 
+
+
+
+
+
+
+
+
+
+ --> é usar '$elemMatch',
+ eu acho...
+
+
+
+
+
+
+-> $elemMatch 
+
+
+
+
+NOS DEIXA 
+
+
+
+
+
+DEFINIR A ESTRUTURA DE UM OBJECT DENTRO DE UM ARRAY, se me lembro bem...
+
+
+
+
+
+
+
+tipo:
+
+
+
+
+
+
+
+$elemMatch: {
+    "hobbies.title": "Sports",
+    "hobbies.frequency": {$gte: 3}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+E ESCREVERÍAMOS ASSIM:
+
+
+(ERRADO)
+
+
+
+
+
+db.users.find(
+
+    $elemMatch: {
+    "hobbies.title": "Sports",
+    "hobbies.frequency": {$gte: 3}
+}
+)
+
+
+
+
+
+
+
+
+
+
+OK... ACERTEI....ERA ISSO MESMO...
+
+
+
+
+
+
+
+
+
+--> MAS EU ESCREVI ERRADO...
+
+
+
+
+
+
+
+
+A SINTAXE CORRETA SERIA ASSIM:
+
+
+
+
+
+db.users.find(
+
+
+
+{
+    hobbies: {
+        $elemMatch: {
+            title: "Sports",
+            frequency: {$gt: 3}
+        }
+    }
+}
+)
+
+
+
+
+
+
+--> ISSO PQ ESTAMOS 'ELEMENT MATCHANDO' 
+
+
+
+
+
+o object/objects que existem DENTRO DE 'hobbies' (esse array aí)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, ESSE É O 'RIGHT QUERY'
+
+PARA __ ENCONTRAR __ OS ELEMENTS QUE QUEREMOS UPDATAR...
+
+
+
+
+
+
+
+
+
+
+----> E VAMOS INCLUIR ESSA QUERY NO NOSSO 'updateOne'..
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+db.users.updateOne(
+{
+    hobbies: {
+        $elemMatch: {
+            title: "Sports",
+            frequency: {$gt: 3}
+        }
+    }
+},
+
+
+
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK... E AGORA,
+
+DIGAMOS QUE QUEREMOS UPDATAR 
+
+
+
+
+__ESPECIFICAMENTE__ ESSE 
+
+
+DOCUMENT 
+
+
+COM title de 'sports' e frequency de '3',
+
+
+
+
+
+NESSE MEU ARRAY DE 'hobbies'..
+
+
+
+(
+
+
+
+
+
+    isso significa que nós SABEMOS 'THE OVERARCHING DOCUMENT' que 
+    queremos updatar,
+
+
+
+    mas 
+
+    VAMOS QUERER ESCREVER DE MODO QUE SEJA ATUALIZADO _ _EXATAMENTE __ ESSE 
+
+
+    DOCUMENT QUE FOI ENCONTRADO NO MEU ARRAY (o embedded document que possui 'title: Sports' e frequency maior ou igual a 3).....
+)
+
+
+
+
+
+
+
+--> COMO ESCREVEMOS ISSO? 
+
+
+
+
+
+
+
+
+
+
+--> PODEMOS FAZER ISSO,
+
+
+
+
+
+INICIALMENTE,
+
+
+POR MEIO de 
+
+
+'updateMany()'... (PQ VAMOS TER POTENCIALMENTE MÚLTIPLOS DOCUMENTS OVERALL QUE VÃO TER ESSE RESULT/esse embedded document)... ------> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AÍ COPIAMOS A QUERY,
+
+
+
+
+
+
+E DEPOIS 
+
+
+
+
+
+
+PENSAMOS NAQUILO QUE ESCREVER NO SEGUNDO PARÂMETRO...
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+db.users.updateMany(
+{
+    hobbies: {
+        $elemMatch: {
+            title: "Sports",
+            frequency: {$gt: 3}
+        }
+    }
+},
+
+
+
+{
+
+
+}
+
+
+
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------> POR DEFAULT, 
+
+SE AGORA 
+
+
+DEFINIRMOS '$set' 
+
+
+
+E ENTÃO DEFINIRMOS ALGO AQUI,
+
+
+
+
+
+
+
+tipo 
+
+
+
+
+{
+    $set: {
+
+    }
+},
+
+
+
+
+
+
+
+
+
+
+ISSO SERÁ SETTADO NO 'OVERALL DOCUMENT',
+
+
+
+e não 
+
+
+
+NO 
+
+
+
+
+
+
+DOCUMENT EMBEDDADO NO ARRAY QUE EU ENCONTREI... ------> NÃO, SE EU QUERO 
+
+
+
+
+
+UPDATAR ESSE ARRAY AÍ, UPDATAR ESSE EMBEDDED DOCUMENT ESPECÍFICO NESSE ARRAY DE 
+
+'hobbies',
+
+
+
+EU DEVO USAR UMA SINTAXE DIFERENTE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1) VAMOS COMEÇAR COM '{$set: {}}',
+
+
+
+ESSA PARTE CONTINUA CORRETA..
+
+
+
+
+
+
+2) ENTRETANTO, NÓS NÃO VAMOS QUERER UPDATAR O 'hobbies' como um todo ('$set: {hobbies:}' )
+
+
+
+--> PQ NÃO VAMOS QUERER ASSIGNAR UM 'BRAND NEW VALUE' ao nosso 'hobbies' array...
+
+
+
+
+
+
+
+
+
+3) SÓ VAMOS QUERER UPDATAR O 'element' em 'hobbies' QUE MATCHEIE AQUELE 
+
+
+
+'$elemMatch' 
+
+
+descrito por '$elemMatch'... (nossa condition)...
+
+
+
+
+
+
+
+
+
+
+4) PARA FAZER ISSO,
+
+
+PODEMOS USAR UMA DIFERENTE SINTAXE,
+
+
+
+
+QUE É AQUELE CLÁSSICO '.$' 
+
+
+
+QUE VIMOS 
+
+
+EM UM MÓDULO ANTERIOR...
+
+
+
+
+
+
+
+
+tipo 
+
+
+
+'{$set: {"hobbies.$"}}' 
+
+
+
+
+
+
+
+
+
+
+'hobbies.COISAQUEFOIREFERENCIADAANTERIORMENTE' -----------> E ISSO, NO CASO, VAI 'AUTOMATICAMENTE'
+
+
+
+SE REFERIR 
+
+AO ELEMENT MATCHEADO LÁ NO NOSSO 'filter' (ou seja, o '$elemMatch') ------> ISSO,
+
+
+NO CASO,
+
+
+
+AGE COMO UM PRONOME,
+
+
+PQ VAI RETOMAR 
+
+
+
+
+
+o nome ("$elemMatch")
+
+
+DEFINIDO LÁ ATRÁS...
+
+
+
+
+
+
+E AÍ, nesse 'hobbies.$:',
+
+
+
+PODEMOS DEFINIR UM NOVO VALUE PARA ESSE OBJECT ESPECÍFICO, NO NOSSO ARRAY DE 'hobbies'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> É POR ISSO QUE AGORA PODEMOS ESCREVER ALGO COMO:
+
+
+
+
+
+
+db.users.updateMany(
+{
+    hobbies: {
+        $elemMatch: {
+            title: "Sports",
+            frequency: {$gt: 3}
+        }
+    }
+},
+
+
+
+{
+$set: {
+    {"hobbies.$": {
+
+        {
+            title: "Sports",
+            frequency: xxxx
+        }
+
+
+
+    }}
+}
+}
+
+
+
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OU SEJA, PODEMOS MANTER QUE O 'title' é 'SPORTS',
+
+
+
+
+MAS PODEMOS/VAMOS ALTERAR O VALOR DE FREQUENCY,
+
+COLOCAR OUTRO NUMBER....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> PODERÍAMOS FAZER ISSO, SIM, MAS ISSO ___ ALTERARIA__ ESSE 
+
+
+FIELD DE 
+
+'frequency'
+
+
+
+
+EM TODOS MEUS DOCUMENTS, 
+
+
+
+
+
+
+
+
+documents que possuem diferentes valores de 'frequency' (max possui 2, manu possui 3, etc) --> todos 
+
+
+esses valores de 'frequency'
+
+
+
+
+nos seus documents seriam/serão 
+
+
+OVERWRITTADOS 
+
+
+
+
+
+
+
+PELO VALOR QUE VOCÊ SETTA EM 'frequency' agora...
+
+
+
+
+
+
+
+
+
+
+
+
+--> E COMO NÃO QUEREMOS OVERWRITTAR ESSE EMBEDDED DOCUMENT INTEIRO,
+
+
+
+PROFESSOR EXPLICA QUE 
+
+
+
+
+GERALMENTE É MELHOR __ ADICIONAR__ 1 NOVO FIELD___ 
+
+
+
+
+
+
+
+AO 'OVERARCHING DOCUMENT' que contém esse array de 'hobbies'.... --> E PODEMOS FAZER ISSO
+
+
+
+POR MEIO 
+
+
+
+
+
+do write de 
+
+
+
+"hobbies.$.algumaOutraCoisa '---------> 
+
+
+
+
+
+ESSA 'algumaOutraCoisa'
+
+
+
+
+PODE SER UM NOME, QUALQUER NOME,
+
+
+QUE SERÁ 
+
+AUTOMATICAMENTE ADDADO COMO UM NOVO FIELD,
+
+
+
+
+nesse seu overarching 'user' document...
+
+
+
+
+
+
+
+
+
+como exemplo, professor 
+
+
+
+coloca 
+
+
+
+"hobbies.$.highFrequncy',
+
+
+
+
+PARA CRIAR 1 FIELD COM ESSE NOME, NOS NOSSOS DOCUMENTS...
+.
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+db.users.updateMany(
+{
+    hobbies: {
+        $elemMatch: {
+            title: "Sports",
+            frequency: {$gt: 3}
+        }
+    }
+},
+
+
+
+{
+$set: {
+    {"hobbies.$.highFrequncy": "value"}
+}
+}
+
+
+
+
+
+)
+
+
+
+
+
+
+----------------------------------
+
+
+
+
+
+
+
+
+
+
+
+OK, DAÍ O PROFESSOR SETTA O VALUE DESSA NOVA PROPRIEDADE como 'true'....
+
+
+
+
+
+
+
+Ex:
+
+
+
+
+
+
+
+db.users.updateMany(
+  {
+    hobbies: {
+      $elemMatch: {
+        title: 'Sports',
+        frequency: { $gte: 3 },
+      },
+    },
+  },
+  {
+    $set: {
+      'hobbies.$.highFrequency': true,
+    },
+  }
+);
+
+
+
+-----------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+O QUE ISSO FARÁ É 
+
+
+'DIG INTO HOBBIES' ("$set: {"hobbies"})
+
+,
+
+
+AÍ ENCONTRARÁ
+ 
+
+
+
+
+
+
+
+
+O ELEMENT 
+
+
+
+
+
+QUE ENCONTRAMOS NA NOSSA QUERY ("$elemMatch", que é {title: "Sports", frequency: {$gte: 3}} ) -------> 
+
+
+
+
+ESSE ELEMENT QUE ENCONTRAMOS NA NOSSA QUERY É REPRESENTADO POR '.$' -------> POR FIM,
+
+
+
+
+
+
+
+
+SERÁ ACESSADO O FIELD DE 'highFrequency',
+
+
+
+
+
+que caso NÃO EXISTA,
+
+
+
+SIMPLESMENTE 
+
+
+'ACABA ADICIONADO'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> rodamos essa query 
+
+
+
+no nosso server,
+
+e aí recebemos:
+
+
+
+
+
+
+acknowledged: true,
+
+
+matchedCount; 2,
+
+
+
+
+modifiedCount: 2
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+> db.users.updateMany(
+...   {
+...     hobbies: {
+...       $elemMatch: {
+...         title: 'Sports',
+...         frequency: { $gte: 3 },
+...       },
+...     },
+...   },
+...   {
+...     $set: {
+...       'hobbies.$.highFrequency': true,
+...     },
+...   }
+... );
+{ "acknowledged" : true, "matchedCount" : 0, "modifiedCount" : 0 }
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------
+
+
+
+
+
+
+
+
+
+
+na minha versão, nenhum document foi updatado (estranho)..
+
+
+
+
+
+
+
+
+
+
+--> É PQ N TEMOS NENHUM USER COM 'sports' e 'frequency 2'
+
+
+
+
+em 1 
+
+embedded document no array de 'hobbies',
+
+
+
+EM NENHUM DOS 
+
+DOCUMENTS,
+
+COMO VOCÊ PODE OBSERVAR:
+
+
+
+
+
+
+
+
+
+
+> db.users.find().pretty()
+{
+        "_id" : ObjectId("62087cf32867f483687f8345"),
+        "name" : "Anna",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Yoga",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : 24
+}
+{
+        "_id" : ObjectId("62087cf32867f483687f8346"),
+        "name" : "CJ",
+        "hobbies" : [
+                {
+                        "title" : "Gym",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Swimming",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : 35
+}
+{
+        "_id" : ObjectId("62087cf32867f483687f8347"),
+        "name" : "Yan",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : null
+}
+{
+        "_id" : ObjectId("620880e92867f483687f8348"),
+        "name" : "TK",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3
+                },
+                {
+                        "title" : "Souji",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : null
+}
+{
+        "_id" : ObjectId("620881262867f483687f8349"),
+        "name" : "TKO",
+        "hobbies" : [
+                "1",
+                "2",
+                "3"
+        ],
+        "phone" : "800808080",
+        "age" : null
+}
+{
+        "_id" : ObjectId("620883f22867f483687f834a"),
+        "title" : "The Last Student Returns",
+        "meta" : {
+                "rating" : 9.5,
+                "aired" : 2018,
+                "runtime" : 100
+        },
+        "visitors" : 1300000,
+        "expectedVisitors" : 15500000,
+        "genre" : [
+                "action",
+                "drama"
+        ]
+}
+{
+        "_id" : ObjectId("620883f22867f483687f834b"),
+        "title" : "DEEP",
+        "meta" : {
+                "rating" : 8,
+                "aired" : 2019,
+                "runtime" : 140
+        },
+        "visitors" : 1100000,
+        "expectedVisitors" : 13000000,
+        "genre" : [
+                undefined,
+                "drama",
+                "action"
+        ]
+}
+{
+        "_id" : ObjectId("6209f1279207fe373c205a87"),
+        "name" : "Chris",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3
+                },
+                {
+                        "title" : "Souji",
+                        "frequency" : 3
+                }
+        ],
+        "age" : 30,
+        "phone" : 120212012108
+}
+>
+
+
+
+
+
+
+
+----------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, ENTÃO TROCAMOS NOSSA QUERY, PARA QUE FIQUE '2' na frequency....
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+> db.users.updateMany(   {     hobbies: {       $elemMatch: {         title: 'Sports',         frequency: { $gte: 2 },  
+     },     },   },   {     $set: {       'hobbies.$.highFrequency': true,     },   } );
+
+
+
+
+{ "acknowledged" : true, "matchedCount" : 4, "modifiedCount" : 4 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO TERÁ EDITADO 
+
+
+
+
+NOSSOS DOCUMENT DE 'user' OVERALL..
+
+
+
+
+
+
+
+
+
+
+
+--> AÍ RODAMOS A QUERY DE NOVO, PARA VER OS RESULTS:
+
+
+
+
+
+
+
+
+
+
+
+
+> db.users.find().pretty()
+{
+        "_id" : ObjectId("62087cf32867f483687f8345"),
+        "name" : "Anna",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2,
+                        "highFrequency" : true
+                },
+                {
+                        "title" : "Yoga",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : 24
+}
+{
+        "_id" : ObjectId("62087cf32867f483687f8346"),
+        "name" : "CJ",
+        "hobbies" : [
+                {
+                        "title" : "Gym",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Swimming",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : 35
+}
+{
+        "_id" : ObjectId("62087cf32867f483687f8347"),
+        "name" : "Yan",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2,
+                        "highFrequency" : true
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : null
+}
+{
+        "_id" : ObjectId("620880e92867f483687f8348"),
+        "name" : "TK",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2,
+                        "highFrequency" : true
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3
+                },
+                {
+                        "title" : "Souji",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : null
+}
+{
+        "_id" : ObjectId("620881262867f483687f8349"),
+        "name" : "TKO",
+        "hobbies" : [
+                "1",
+                "2",
+                "3"
+        ],
+        "phone" : "800808080",
+        "age" : null
+}
+{
+        "_id" : ObjectId("620883f22867f483687f834a"),
+        "title" : "The Last Student Returns",
+        "meta" : {
+                "rating" : 9.5,
+                "aired" : 2018,
+                "runtime" : 100
+        },
+        "visitors" : 1300000,
+        "expectedVisitors" : 15500000,
+        "genre" : [
+                "action",
+                "drama"
+        ]
+}
+{
+        "_id" : ObjectId("620883f22867f483687f834b"),
+        "title" : "DEEP",
+        "meta" : {
+                "rating" : 8,
+                "aired" : 2019,
+                "runtime" : 140
+        },
+        "visitors" : 1100000,
+        "expectedVisitors" : 13000000,
+        "genre" : [
+                undefined,
+                "drama",
+                "action"
+        ]
+}
+{
+        "_id" : ObjectId("6209f1279207fe373c205a87"),
+        "name" : "Chris",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2,
+                        "highFrequency" : true
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3
+                },
+                {
+                        "title" : "Souji",
+                        "frequency" : 3
+                }
+        ],
+        "age" : 30,
+        "phone" : 120212012108
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> COMO VCOê PODE VER,
+
+
+ESSE DOCUMENT DE 'sports'
+
+
+AGORA ESTÁ COM ESSA KEY DE 'highFrequency' como 'TRUE'... (sinal de que NOSSO USO de '$elemMatch' e 'hobbies.$.highFrequency' FUNCIONOU)......
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> CERTO....
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO SIGNIFICA QUE ESSE PLACEHOLDER DE '$'
+ 
+
+  
+  É UM 'GRANDE HELPER '
+
+   
+
+   QUANDO VOCÊ __ DE FATO__ TEM UMA QUERY EM QUE VOCÊ SELECIONA 
+
+
+
+
+
+
+
+
+   1 
+
+
+
+
+
+   ELEMENTO (document) ESPECÍFICO EM 1 ARRAY 
+
+
+
+   E AÍ 
+
+
+
+
+
+   QUER FAZER UPDATE DE EXATAMENTE ESSE ELEMENT 
+
+
+
+
+   NAQUELA OPERATION DE UPDATE.... -------> 
+
+
+
+
+
+
+
+
+
+
+MAS É CLARO QUE LÁ, DENTRO DE '$set: {}'
+,
+
+
+
+
+
+
+
+
+
+
+VOCÊ PODERIA TER UPDATADO __ FIELDS COMPLETAMENTE DIFERENTES DE 
+
+'highFrequency',
+
+
+
+
+
+
+
+
+VOCÊ PODERIA 
+
+
+
+UPDATAR ESSE FIELD ED 'highFrequency'
+
+
+
+
+e, ao mesmo tempo,
+'isSporty',
+
+
+OU ENTÃO O NAME OU O OVERALL DOCUMENT ---> ISSO SIGNIFICA QUE O '$set'
+
+funciona exatamente como antes,
+
+
+A ÚNICA DIFERENÇA É O USO ESPECIAL DESSE PLAECHOLDER DE '$' QUE VOCê 
+
+
+PODE USAR NO 'PATH' DE 1 FIELD PARA '''QUICKYL GET ACCESS TO THAT ARRAY ELEMENT'''...

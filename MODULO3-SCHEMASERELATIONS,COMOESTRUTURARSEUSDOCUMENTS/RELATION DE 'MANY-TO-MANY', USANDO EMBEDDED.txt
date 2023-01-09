@@ -1,0 +1,1334 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA QUE DEMOS UMA OLHADA EM 'ONE-TO-ONE' e 'ONE-TO-MANY',
+
+
+
+
+
+
+
+
+
+É HORA DE VER 
+
+
+A 'MANY-TO-MANY'....
+
+
+
+
+
+
+
+
+
+
+--> AGORA DIGAMOS QUE TEMOS O EXEMPLO 5:
+
+
+
+
+
+
+
+
+''' 1 CUSTOMER PODE TER VÁRIOS PRODUCTS (por meio de orders), 
+
+
+E UM MESMO PRODUCT PODE PERTENCER A VÁRIOS CUSTOMERS'''....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Ex:
+
+
+
+
+
+
+
+ 
+CUSTOMER A ---__> PRODUCT  1
+
+        ---> PRODUCT 2 
+
+
+
+
+
+CUSTOMER B --> PRODUCT 3 
+    |
+    |
+    |---------->
+                |
+                |
+                |
+                |
+CUSTOMER C --> PRODUCT 4 
+
+            --> PRODUCT 5
+            
+
+
+
+
+
+--------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> 1 CUSTOMER, VÁRIOS PRODUCT;
+
+
+
+1 PRODUCT, VÁRIOS CUSTOMER...
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+ --> É UMA MANY-TO-MANY RELATIONSHIP....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> PROFESSOR JÁ DIZ DE CARA:
+
+
+
+
+
+ FREQUENTEMENTE VOCÊ USARÁ 'REFERENCES' para 
+
+
+ viabilizar esse tipo de relation...
+
+
+
+
+
+
+
+
+
+
+ algo tipo:
+
+
+
+
+
+
+
+
+
+ customer:
+
+
+
+ {
+
+     name: 'max',
+
+     _id: ObjectId('aaaaaa'),
+
+     products: [
+
+         {productId: 'bbbbbbbbb', 
+         name: 'grapes'
+         },
+
+            {productId: 'ccccccc', 
+         name: 'juice'
+         },
+
+
+
+     ]
+ }
+
+
+
+
+
+
+
+
+
+ product: 
+
+
+
+ {
+
+     name: 'grapes',
+     _id: 'bbbbbbbbb',
+     customers: ['max'],
+     location: 'sector 3'
+ }
+
+
+
+
+
+
+
+
+
+ --------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -----> acho que será assim...
+
+
+
+
+
+
+
+
+
+
+
+ -_> bem, o professor vai para a database de 'shop',
+
+
+
+ e aí 
+
+
+
+
+
+ INSERE UM NOVO 'product' em uma collection de 'products'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ---> CLARO QUE AQUELE MEU EXEMPLO DE CIMA É UM EXEMPLO CRIADO POR MIM....
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> TIPICAMENTE, EM MANY-TO-MANY RELATIONS,
+
+
+
+ precisamos __DE 1 TABLE INTERMEDIÁRIA, como 'orders', ou algo assim,
+
+
+ que existirá entre as 2 tables...
+
+
+
+
+
+
+
+
+
+
+ -------> é por isso que o professor escreve 
+
+
+
+
+
+ 'db.orders.insertOne({productId:  'bbbbbbbbb', customerId: ObjectId('aaaaaa') })'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ok... COM ISSO, TEMOS UMA RELATION ENTRE O CUSTOMER E O PRODUCTID,
+
+ nesse 
+
+
+ document de 'order'.... --------> ESSE, NO CASO,
+
+ É 
+
+ O 
+
+ APPROACH DO 
+
+
+ 'SQL WORLD',
+
+
+
+
+ EM QUE 
+
+
+
+
+
+
+ TEREMOS 
+
+
+  3
+
+  TABLES,
+
+
+
+   E AÍ ESSA 'JOIN TABLE'
+
+
+
+   no meio,
+
+
+   QUE SERÁ USADA PARA JOINAR 
+
+   CUSTOMERS E 
+
+
+   PRODUCTS...
+
+
+
+
+
+
+
+
+
+
+   ---------> É CLARO QUE PODEMOS FAZER ISSO DE FORMA 'MELHOR' no mongoDb---> 
+
+
+
+
+
+   PODEMOS TRABALHAR COM APENAS 2 TABLES,
+
+
+
+
+   2 tables only, sem essa table intermediária de 'orders'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ----> é por isso que o professor DROPA ESSA COLLECTION DE 'orders',
+
+
+   e a de 'USERS' também...
+
+
+
+
+   -> RODAMOS:
+
+   > db.customers.drop()
+true
+> db.products.drop()
+true
+>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> OK... --> 
+
+
+
+
+ISSO FEITO,
+
+
+
+
+
+O PROFESSOR ADICIONA PRODUCTS NOVOS...
+
+
+
+
+
+
+db.products.insertOne({title: 'A Book', price: 12.99})
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA O PROFESSOR VAI QUERER IR ATÉ OS CUSTOMERS,
+
+
+
+
+
+
+
+ONDE VAI QUERER COLOCAR ESSA RELATION... ->
+
+
+
+
+PROFESSOR EXPLICA QUE, SIM,
+ 
+
+ VOCÊ PODERIA DIZER QUE 'O PRODUCT FOI COMPRADO',
+
+
+
+
+ MAS NA VERDADE 
+
+
+ OS 
+
+ CUSTOMERS SÃO A 'ACTIVE PERSON',
+
+
+
+ E É MAIS REALISTA 
+
+
+
+ QUE VOCÊ FETCHEARÁ AS 'ORDERS FOR A GIVEN PERSOn',
+
+
+
+ em vez de 
+
+
+
+ 'ORDERS FOR A GIVEN PRODUCT'... (
+
+     mas você pode fazer isso também,
+
+
+     é outro approach....
+ )
+
+
+
+
+
+
+--> ok, ele vai acrescentar um field de 'orders' a cada customer...
+
+
+
+
+
+
+
+
+
+
+
+ --> db.customers.updateOne( 
+     {
+
+     },
+
+
+        {
+            $set: {
+                orders: [
+                    {
+                    productId: ObjectId("61ffddfb919138fa9fce93d8"),
+                     
+                     quantity: 2
+                    }
+                ]
+            }
+        }
+
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> OK, ENTÃO EM CADA customer teremos essa key de 'orders', que segura um 
+
+ ARRAY COM 
+
+
+
+ OBJECTS 'order' (embedded documents),
+
+
+
+
+
+ E CADA 'order'
+
+
+ SUPORTA APENAS 1 PRODUCT SENDO COMPRADO,
+
+
+
+ product que terá uma quantity x...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ db.customers.findOne() --->
+
+
+
+ EX:
+
+
+
+ > db.customers.findOne()
+{
+        "_id" : ObjectId("62009cb3f9a311dfa4662386"),
+        "name" : "Max",
+        "orders" : [
+                {
+                        "productId" : ObjectId("61ffddfb919138fa9fce93d8"),
+                        "quantity" : 2
+                }
+        ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESSE É 1 'EMBEDDED DOCUMENT',
+
+
+sim,
+
+
+MAS AINDA 
+
+
+
+É UM USO DE REFERENCES,
+
+
+
+
+
+PQ 
+
+
+
+NÃO ESTAMOS EMBEDDANDO O PRODUCT INTEIRO,
+
+
+
+E SIM 
+
+
+
+
+SÓ O 'id' 
+
+
+
+e uma METADATA PARA O ORDER ('quantity') --> ISSO SIGNIFICA QUE 
+
+SÓ ESTAMOS 
+
+REFERENCIANDO A PRODUCT DATA... -----> 
+
+
+
+
+
+
+E 
+
+
+PODERÍAMOS ADICIONAR O MESMO ARRAY DE 'orders'
+
+EM 
+
+'products',
+
+SE QUISERMOS 
+
+'MATCH IT THE OTHER WAY AROUND, TOO'....
+
+
+
+
+
+
+
+
+
+
+
+
+TIPO ASSIM, ACHO:
+
+
+
+
+
+
+{ "_id" : ObjectId("61ffddfb919138fa9fce93d8"), "name" : "ACS", "price" : 12.99, "details" : null, orderId: Orders: [{orderId: ObjectId(assasaa)}] }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> OK... ESSE É UM DOS JEITOS DE CRIAR 
+
+
+RELATIONS,
+
+
+
+
+COM 
+
+
+
+
+REFERENCING, de many-to-many RELATIONS....
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> MAS VOCÊ PODERIA ARGUMENTAR QUE VOCÊ NÃO PRECISA NECESSARIAMENTE USAR 
+
+
+REFERENCES, AQUi.... --> 
+
+
+FREQUENTEMNTE 
+
+VOCÊ PRECISARÁ,
+
+mAS àS VEZES 
+
+
+
+
+
+
+
+VOCÊ PODERÁ USAR A 'EMBEDDED ALTERNATIVE'..
+.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO,
+
+
+
+O PROFESSOR 
+
+
+
+
+FAZ REPLACE DO NOSSO ARRAY DE 'orders'
+
+
+com um NOVO ARRAY DE ORDERS...
+
+
+
+
+
+
+eX:
+
+
+
+
+
+
+db.customers.updateOne(
+    {},
+
+
+    {$set: {orders: [
+
+
+            {title: "A Book",
+
+            price: 12.99,
+
+            quantity: 2
+            }
+
+
+    ]}}
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA SE OLHARMOS 
+
+
+
+NOSSA COLLECTION DE CUSTOMERS,
+
+
+TEREMOS EMBEDDED DOCUMENTS, EM 'orders',
+
+
+PQ ELES FICARÃO ASSIM:
+
+
+
+
+
+
+
+{
+        "_id" : ObjectId("62009cb3f9a311dfa4662386"),
+        "name" : "Max",
+        "orders" : [
+                {
+                       "title": "A book",
+                       "Price": 12.99,
+                       "quantity": 2,
+                       "productId": ObjectId(asasjaskas)
+                },
+
+                            {
+                       "title": "A TSHIRT",
+                       "Price": 15.99,
+                       "quantity": 3,
+                       "productId": ObjectId(asasjaskas)
+                }
+
+
+        ]
+}
+
+
+
+
+
+
+
+
+
+
+-----------------------------
+
+
+
+ESSE NÃO É UM REFERENCE-DRIVEN APPROACH,
+
+
+
+E SIM UM EMBEDDED APPROACH,
+
+
+
+PQ 
+
+EMBEDDAMOS A PRODUCT DATA __JUNTO___ COM A METADATA PARA A 'ORDER' (que 
+
+
+
+é representada por 'quantity'...)
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, MAS QUAL PODERIA SER UMA _ DESVANTAGEM DESSE APPROACH? 
+
+
+
+
+
+
+
+
+
+
+
+---> bem, SOMOS OBRIGADOS A PROCURAR O 'customer'
+
+PARA CONSEGUIRMOS RETRIEVAR AS ORDERS...
+
+
+
+
+
+
+
+
+
+
+
+
+---> OUTRA DESVANTAGEM É A 'DATA DUPLICATION' -------> ISSO PQ 
+
+
+TEREMOS 
+
+
+A MESMA DATA 
+
+
+EM 'products',
+
+
+
+
+
+em cada 1 de nossos products,
+
+
+
+
+
+
+
+
+A MESMA DATA QUE 
+
+TEREMOS 
+
+
+NESSE 
+
+
+'orders' array...
+
+
+
+
+
+
+
+
+
+
+--> ISSO QUER DIZER QUE 
+
+
+SE 
+
+
+
+
+O PRODUCT FOR ALTERADO,
+
+
+
+MUDAR O TITLE OU O PRICE,
+
+
+
+
+VAMOS TER DE ALTERAR ISSO NESSE 'CUSTOMER' DOCUMENT TAMBÉM...
+
+
+
+
+
+
+
+------> AINDA TENHA EM MENTE:
+
+ESSE 
+
+
+
+USER PODE ACABAR COMPRANDO ESSE PRODUCT __ MÚLTIPLAS VEZES (múltiplos documents de 'order' com esse product),
+
+
+
+
+E OUTROS USERS PODEM AINDA ACABAR COMPRANDO ESSE PRODUCT, TAMBÉM...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> ISSO QUER DIZER QUE ESSA DATA DE 'product' dentro de cada order 
+
+
+SERÁ ___ TROCADA__ UM MONTE, COM MT FREQUÊNCIA...
+
+
+
+
+
+
+
+
+E SE ALGUM DIA 
+
+
+
+VOCÊ PRECISAR MUDAR ESSE VALOR LÁ NO 'products',
+
+
+
+
+VOCÊ _ SERÁ FORÇADO__ A UPDATAR ESSES VALORES 
+
+
+
+EM TODOS SEUS 'customer' documents, em que esse negócio foi embeddado.... ------> PELO MENOS,
+
+
+NA TEORIA SERIA ASSIM... ----------> '''NA TEORIA'' -----> ISSO 
+
+
+PQ, NESSE USE-CASE AQUI,
+
+
+
+
+
+
+A POSSIBILIDADE/FATO DE O 'PRODUCT' poder ser altereado no futuro NÃO IMPORTA.... --> NÃO IMPORTA 
+
+
+PQ 
+
+
+AS 
+
+'orders' VIVEM NO PASSADO, FORAM FEITAS NO PASSADO,
+
+
+
+
+
+
+SÃO LOGS DE COMPRAS REALIZADAS NO PASSADO, 
+
+
+
+SNAPSHOTS --> é por isso que o price/name de cada PRODUCT_ _ NÃO PRECISA SER ALTERADO NOS CUSTOMERS... ---->
+
+
+
+
+
+
+o price será 'logged-in'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> É POR ISSO QUE ESSE É UM USE-CASE PERFEITO para 'many-to-many' relations COM 
+
+
+
+
+
+EMBEDDED DOCUMENTS....
+
+
+
+
+
+
+
+
+
+--> O OBJECTID TAMBÉM VAI CONTINUAR SENDO O MESMO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... --> SE TEMOS UM APP EM QUE 
+
+
+
+
+KINDOF 'take a snapshot' de nossa data,
+
+
+
+TALVEZ NÃO INTERESSE O DUPLICATE DESSE DATA
+
+
+
+NO FUTURO,
+
+
+
+
+pq 
+
+
+
+
+
+
+NÃO VAI INTERESSAR UMA COISA QUE JÁ FOI...
+
+
+
+
+
+
+
+
+
+
+
+
+-> ISSO DEPENDE ALTAMENTE DO SEU APP --> PARA UM SHOP,
+
+
+
+PARA UM SHOP E AS SUAS ORDERS,
+
+ISSO PODE FAZER SENTIDO....
+
+
+
+
+
+
+
+
+
+
+
+--> MAS EM OUTROS USE-CASES,
+
+
+VOCÊ ABSOLUTAMENTE __ PRECISARÁ_ DA 'THE LATEST DATA'
+
+
+EM TODOS OS LUGARES...
+
+
+
+
+
+
+
+
+
+
+--> E 
+
+DAREMOS UMA OLHADA EM USE-CASES COMO ESSES, LOGO LOGO....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS PROFESSOR NÃO QUER QUE 
+
+PENSEMOS 
+
+
+
+'''AH, ISSO É MANY-TO-MANY, CERTAMENTE USAREI REFERENCES''' --> esse pensamento é burro...
+
+
+
+
+
+
+
+
+
+EM VEZ DISSO,
+
+PENSE:
+
+
+
+
+1) COMO VOCÊ FETCHEIA SEUS DADOS 
+
+
+
+
+
+2) COM QUAL FREQUÊNCIA VOCÊ VAI MUDAR ESSA DATA ...
+
+
+
+
+
+
+3) SE VOCÊ VAI MUDARR ESSA DATA, É REALMENTE NECESSÁRIO DUPLICAR ESSA MUDANÇA EM TODAS AS PARTES DE SEU 
+
+APP? ou pode uma data errada, ficar errada, em um dos lugares do app, ser fine?
+
+
+

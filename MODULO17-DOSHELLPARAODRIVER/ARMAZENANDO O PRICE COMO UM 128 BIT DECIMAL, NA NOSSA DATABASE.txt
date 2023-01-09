@@ -1,0 +1,1036 @@
+
+
+
+
+
+
+
+
+
+ACHO QUE JÁ CONSEGUI FAZER ISSO,
+
+
+
+
+
+
+
+CONSEGUI ATRAVÉS DO WRAPPER Do 'NumberDecimal'
+
+
+usado 
+
+
+
+
+
+
+
+
+no nodejs. ---> driver docs... -> 
+
+
+
+
+DRIVER API 
+
+
+
+
+
+
+DO NODE... --> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TEMOS O CONSTRUCTOR DO 'Decimal128'.....
+
+
+
+
+
+
+
+
+
+
+-----> eu achava que podíamos escrever 
+
+
+
+assim:
+
+
+
+const NumberDecimal = require('mongodb').Decimal128;
+
+
+
+
+
+
+
+
+
+E DPS ASSIM:
+
+
+
+
+
+ price: NumberDecimal(parseFloat(req.body.price))
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> MAS ISSO ESTÁ ERRADO, PQ A ESCRITA CERTA É ASSIM:
+
+
+
+
+
+ Decimal128.fromString(req.body.price)....
+
+
+
+
+
+
+ EX:
+
+
+
+
+
+
+
+
+
+   const newProduct = {
+    name: req.body.name,
+    description: req.body.description,
+    // price: parseFloat(req.body.price),
+    price: NumberDecimal.fromString(req.body.price), ///vai armazenar o price como um NUMBERDECIMAL na nossa database (maior precisão nos cálculos, por exemplo)...
+    image: req.body.image,
+  };
+  console.log(newProduct);
+
+
+
+
+
+
+
+-----------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, ISSO FARÁ COM QUE ESSE NEGÓCIO SEJA ARMAZENADO COMO UM '128 BIT DECIMAL'
+
+lá na nossa database mongodb...
+
+
+
+
+
+
+
+
+
+
+
+--> MAS AGORA SÓ TEMOS QUE FAZER MAIS UMA COISA,
+
+
+
+
+
+
+
+
+escrever then e catch lá no 'insertOne'...
+
+
+
+
+ex:
+
+
+
+
+
+
+router.post('', (req, res, next) => {
+  const db = getDb();
+
+  const newProduct = {
+    name: req.body.name,
+    description: req.body.description,
+    // price: parseFloat(req.body.price),
+    price: NumberDecimal.fromString(req.body.price), ///vai armazenar o price como um NUMBERDECIMAL na nossa database (maior precisão nos cálculos, por exemplo)...
+    image: req.body.image,
+  };
+  console.log(newProduct);
+
+  db.collection('products')
+    .insertOne(newProduct)
+    .then((result) => {
+      ///result.insertedId --> vai conter o id do product que foi inserido na nossa collection...
+      res
+        .status(201)
+        .json({ message: 'Product added', productId: result.insertedId });
+    })
+    .catch(
+      (err) => {
+
+          res.status(40).json({message: 'Error adding the product'})
+      }
+    )
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... AÍ O PROFESSOR TESTA ESSE CÓDIGO...
+
+
+
+
+
+
+
+
+
+BEM, MAS ISSO ME DEU UM ERRO:
+
+
+
+
+    price: NumberDecimal.fromString(req.body.price), 
+
+
+
+
+
+
+
+
+
+
+
+
+
+    -> ISSO ACONTECE PQ O PRICE ALI NÃO É UMA STRING POR DEFAULT.... --> DEVE PRIMEIRO SER CONVERTIDO EM string com '.toString()'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    --> OK, MAS AÍ FICAMOS COM 2 ERRORS DIFERENTES:
+
+
+
+
+
+
+
+
+
+
+    ERRO 1)
+
+
+
+
+    
+Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    at new NodeError (node:internal/errors:371:5)
+    at ServerResponse.setHeader (node:_http_outgoing:576:11)
+    at ServerResponse.header (A:\projeto6-MONGODB\MODULO17-DOSHELLPARAODRIVER\novoprojeto21\node_modules\express\lib\response.js:776:10)
+    at ServerResponse.send (A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2 'ERRO' ---> nossos 'NumberDecimal' ESTÃO SENDO OUTPUTTADOS COMO '[Object Object]' no nosso frontend... -->
+
+
+
+
+
+TENHO QUE 
+
+REALIZAR A CONVERSÃO INVERSA QUANDO FOREM FETCHEADOS ESSES VALORES, PELO FRONTEND...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK, SUCESSO, FIZ A CONVERSÃO INVERSA:
+
+
+
+
+
+
+
+
+
+
+
+router.get('/', (req, res, next) => {
+  const db = getDb();
+
+  console.log('test');
+
+  db.collection('products')
+    .find({})
+    .toArray()
+    .then((products) => {
+      const queryPage = req.query.page;
+      const pageSize = 5;
+      let resultProducts = [...products];
+      if (queryPage) {
+        resultProducts = products.slice(
+          (queryPage - 1) * pageSize,
+          queryPage * pageSize
+        );
+      }
+
+
+
+     const resultProductsManipulated = resultProducts.map(
+        (product) => {
+
+          const updatedProduct =  {
+            ...product
+          }
+
+
+          updatedProduct.price = updatedProduct.price.toString();
+
+
+          return updatedProduct
+        }
+      )
+      // console.log(resultProducts);
+      res.json(resultProductsManipulated);
+      // res.json(products);
+    });
+});
+
+
+
+
+
+
+------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+--> professor fala do 'insertedId'.... -> SE VOLTARMOS AO NOSSO TERMINAL EM QUE ESTAMOS CONECTADOS 
+
+
+
+
+AO 
+
+
+
+'mongo shell',
+
+
+
+PODEMOS VER NOSSA COLLECTION e 
+
+observar 
+
+se nosso 
+
+
+product foi realmente adicionado....
+
+
+
+
+
+
+
+
+
+
+
+
+db.products.find({}).pretty()...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... ESSE É UM 'WORKING INSERT  THROUGH THE CLIENT'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS AGORA QUE SOMOS CAPAZES DE 'INSERT' DATA,
+
+DEVMEOS VER COMO FAZER PARA __ 'GET' data (já fiz isso),
+
+NA PRÓXIMA AULA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------> professor coloca 
+
+
+as responses dentro dos 
+
+
+then e catch blocks....
+
+
+
+
+
+
+
+
+
+
+
+
+-----> retorna o 'insertedId',
+
+etc etc... --> 
+
+
+
+
+
+
+
+
+
+
+tudo certinho....
+
+
+
+
+
+
+
+
+
+
+
+--> FAZENDO FETCH DE DATA LÁ DO SERVIDOR...
+
+
+
+
+
+
+
+Ex:
+
+
+
+
+
+
+
+
+router.get('/', (req, res, next) => {
+  const db = getDb();
+
+  console.log('test');
+
+  db.collection('products')
+    .find({})
+    .toArray()
+    .then((products) => {
+      const queryPage = req.query.page;
+      const pageSize = 5;
+      let resultProducts = [...products];
+      if (queryPage) {
+        resultProducts = products.slice(
+          (queryPage - 1) * pageSize,
+          queryPage * pageSize
+        );
+      }
+
+      const resultProductsManipulated = resultProducts.map((product) => {
+        const updatedProduct = {
+          ...product,
+        };
+
+        updatedProduct.price = updatedProduct.price.toString();
+
+        return updatedProduct;
+      });
+      // console.log(resultProducts);
+      res.json(resultProductsManipulated);
+      // res.json(products);
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> professor usou o 'find', aí 
+
+usou 
+ 
+
+ o 
+
+
+ 'toArray'..
+
+
+
+ MAS É
+
+
+ CLARO QUE AQUI FICAMOS COM UM PROBLEMA.. 
+
+
+
+
+
+
+
+
+
+ -> qual problema é esse?
+
+
+
+
+
+
+
+ --> BEM, EU NÃO VOU QUERER USAR 'Find'
+
+
+GENERICAMENTE,
+
+PQ 
+ISSO 
+
+VAI 
+
+RETORNAR 
+
+TODOS 
+
+OS PRODUCTS DE MINHA DATABASE...- -> não, em vez disso,
+
+o 
+
+que 
+quero 
+
+fazer 
+
+é 
+
+
+fetchear 
+
+
+
+
+
+COM O USO DE  'skip' E 'limit',
+
+
+
+E AÍ 
+
+EVITAR 
+
+
+DE USAR 
+
+ESSA 
+
+
+LÓGICA 
+
+DE PAGINATION QUE TENHO MAIS PARA BAIXO....
+
+
+
+
+
+
+
+FICOU TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+router.get('/', (req, res, next) => {
+  const db = getDb();
+
+  console.log('test');
+
+  db.collection('products')
+    .find({})
+    .skip(5 * (req.query.page - 1))
+    .limit(5)
+    .toArray()
+    .then((products) => {
+
+
+
+
+      
+      const resultProductsManipulated = products.map((product) => {
+        const updatedProduct = {
+          ...product,
+        };
+
+        updatedProduct.price = updatedProduct.price.toString();
+
+        return updatedProduct;
+      });
+      res.json(resultProductsManipulated);
+  
+    });
+});
+
+
+
+
+
+-------------------------
+
+
+
+
+
+
+
+
+
+CERTO, AGORA REALMENTE ESTAMOS PEGANDO ESSES PRODUCTS DA FORMA OPTIMAL...
+
+
+
+
+
+
+
+
+
+
+
+
+--> CLARO QUE PRECISAMOS USAR AQUELE '.toArray()"
+
+PARA 
+
+CONVERTER NOSSO CURSOR EM UM ARRAY....
+
+
+
+
+
+
+
+
+
+--> mas em vez de usar 'toArray()',
+
+o professor usou 
+
+o 
+
+'forEach'....
+
+
+
+
+
+
+
+
+
+
+
+
+----->
+
+
+
+
+
+
+
+
+ele escreveu tipo assim:
+
+
+
+
+
+
+
+.find(
+
+)
+.forEach(
+  (productDoc) => {
+
+
+    console.log(productDoc)
+  }
+)
+.then(
+  (result) => {
+
+
+  }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, MAS ISSO NÃO FAZ SENTIDO, PQ O PROFESSOR NÃO FEZ NADA COM ISSO..
+
+
+
+
+
+
+
+
+
+
+
+
+-----> mas o professor só vai implementar pagination BEEEEM DEPOIS....
+
+
+
+
+
+
+
+
+
+
+
+-----> 
+
+
+
+
+
+
+
+
+professor vai falar de 'toArray()', provavelmente....
+
+
+
+
+
+
+
+---> não.... ele não faz isso....
+
+
+
+
+
+
+
+
+
+em vez disso,
+
+ele cria um array vazio,
+
+
+com 
+
+
+
+'const products = []'....
+
+
+
+
+
+
+AÍ ELE USA '.forEach' 
+
+
+PARA 
+
+
+
+FAZER PUSH 
+
+
+DE 
+
+TODOS 
+
+
+OS 
+
+
+PRODUCT PARA DENTRO DESSE NEGÓCIO....
+
+
+
+
+
+
+
+
+--> ELE TBM, COMO NÓS,
+ CONVERTEU O PRICE EM UMa string, tipo assim:
+
+
+
+
+       const resultProductsManipulated = products.map((product) => {
+        const updatedProduct = {
+          ...product,
+        };
+
+        updatedProduct.price = updatedProduct.price.toString();
+
+        return updatedProduct;
+      });
+
+
+
+
+
+
+
+
+--------------------------------
+
+
+
+
+
+
+
+
+
+
+ok... até agora o que ele escreveu foi bem similar ao nosso código...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+hora da próxima aula...
+
+
+
+
+
+
+
+
+
+--> IMAGES DEVEM SER ARMAZENADAS NO 'FILE STORAGE' 
+
+
+de nosso backend... -> bloats a database...
+
+
+
+
+
+
+
+
+
+
+
+
+--> estamos repetindo o código de 'MongoClient.connect()"  (
+
+
+
+  o professor está, pq eu já RESOLVI ISSO...
+)

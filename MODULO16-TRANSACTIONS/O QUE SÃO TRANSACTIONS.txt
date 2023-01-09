@@ -1,0 +1,456 @@
+
+
+
+
+
+
+
+
+O QUE SÃO TRANSACTIONS,
+
+ENTÃO?
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, 
+
+DEVEMOS CONSIDERAR ESTE USE-CASE:
+
+
+
+
+
+
+
+
+
+
+
+TEMOS 2 COLLECTIONS,
+
+
+
+USERS E POSTS..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+USERS COLLECTION                      POSTS COLLECTION 
+ 
+{User Document }                       {Post Document}
+                                          {Post Document}
+
+
+
+
+
+
+
+
+
+
+
+
+------> OK... CADA USER É 'RELATED' A VÁRIOS POSTS,
+
+
+PQ 
+
+USERS CRIAM POSTS...
+
+
+
+
+
+
+
+--> 
+
+
+EX:
+
+
+
+
+
+USERS COLLECTION                      POSTS COLLECTION 
+ 
+{User Document }      ---related--->     {Post Document}
+                    ---related--->       {Post Document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> PODEMOS TER 
+
+
+
+ESSA REFERENCE 
+
+
+
+
+STORADA,
+
+
+TALVEZ STORADA COM 
+
+UMA 
+
+
+REFERENCE (
+
+    key armazenada no document 'post',
+
+
+    ou então no 'user',
+
+    NÃO FAZ DIFERENÇA..
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> OK... MAS AÍ __, DO NADA_,
+
+
+
+O 
+
+
+
+
+USER __ DELETA___ SUA PRÓPRIA CONTA.....- ->
+
+
+
+E QUANDO 
+
+ISSO ACONTECE,
+
+
+VAMOS QUERER 
+
+
+DELETAR
+ 
+
+
+
+ TODOS OS DOCUMENTS DE 'Post'
+
+
+
+
+ ASSIGNADOS A ELE... --> TUDO DEVE SER 
+
+
+
+ DELETADO DE 1 ÚNICA VEZ,
+
+
+ OS 
+
+
+ 'User'
+
+
+ E 
+
+ os 
+
+ 'POST'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> E ISSO PODE SER FEITO 
+
+ _ SEM TRANSACTIONS, É CLARO... -->  PODEMOS SIMPLESMNETE 
+
+
+ DELETAR 
+
+ 1 
+
+ USER
+
+
+
+,
+
+E 
+AÍ,
+
+
+
+
+LOGO ANTES DE O DELETAR,
+
+SALVAR 
+
+SEU 
+
+ID 
+
+E ENTÃO 
+
+DELETAR 
+TODOS 
+
+
+
+OS 
+
+DOCUMENTS COM AQUELE ID 
+
+ESPECÍFICO 
+
+
+armazenado em si...
+
+(
+
+    'userId: saasijasasias'
+)
+
+
+
+
+
+
+
+
+
+
+--> ISSO É PERFEITAMENTE POSSÍVEL, SIM... APAGAR OS POSTS ASSIM... -> 
+
+
+
+
+OK,
+
+MAS E SE TIVERMOS UM USE-CASE EM QUE 
+
+
+O DELETE 
+
+DO 
+
+
+
+
+_ USER__ DÁ CERTO,
+
+SIM,
+
+
+
+
+MAS 
+_DURANTE__ 
+
+
+
+
+
+O DELETE DOS POSTS,
+
+
+
+ALGO __ DÁ ERRADO__... ->  DIGAMOS QUE TEMOS, NO MOMENTO,
+
+
+
+
+
+UM 
+
+
+
+'TEMPORARY SERVER OUTAGE',
+
+
+
+OU UM NETWORK ISSUE,
+
+
+QUAQLUER COISA QUE O 
+
+SEJA... ----> QUANDO ISSO 
+
+
+
+ACONTECER,
+
+TEREMOS 
+
+1 
+
+STATE EM 
+
+QUE: 
+
+
+
+1) O USER TERÁ SIDO DELETADO....
+
+
+
+
+
+
+
+
+2) MAS OS POSTS CONTINUAM LÁ.. -> MAS O USER A QUE APONTAVAM/APONTAM __ NÃO EXISTE MAIS_>...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESSE É O EXATO USE-CASE SOLUCIONADO PELAS TRANSACTIONS... --> COM AS TRANSACTIONS,
+
+
+PODEMOS 
+
+
+BASICAMENTE DIZER AO MONGODB:
+
+
+
+
+
+
+
+'''HEY,
+ 
+
+
+ ESSAS OPERATIONS (quantas  você quiser) VÃO 
+
+
+ OU _ SUCCEED_ OU "FAIL" __ EM UM CONJUNTO'''' ->  SE ESSE 
+
+
+
+
+ NEGÓCIO, UMA PARTE 
+
+ DESSAS OPERATIONS, __ FALHA_, 
+
+
+
+
+ VOU QUERER 
+
+ 'ROLLBACK' A OPERATION/CONJUNTO DE OPERATIONS INTEIRA ( ou seja, vamos querer que SEJA REVERTIDO ATÉ MESMO O DELETE DO document de 'user' que foi deletado 
+ ANTES DOS POSTS...)
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> OU SEJA,
+
+ VOCÊ RESTORA A DATABASE AO ESTADO EM QUE 
+
+
+ ELA ESTAVA __ ANTES__ DA TRANSACTION (
+
+
+a respeito dos documents que foram afetados pela transaction...
+
+
+ )
+
+
+
+
+
+
+
+
+
+
+ --> AGORA VAMOS TESTAR AS TRANSACTIONS NO NOSSO MONGODB ATLAS,
+
+ QUE 
+
+POSSUI REPLICA SETS 
+
+
+E QUE 
+
+
+É COMPATÍVEL COM ESSA FEATURE (por ser versão 3.6+)...

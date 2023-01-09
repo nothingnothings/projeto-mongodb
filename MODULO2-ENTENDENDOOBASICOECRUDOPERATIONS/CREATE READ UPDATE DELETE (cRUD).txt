@@ -1,0 +1,529 @@
+
+
+
+
+
+
+CRUD OPERATIONS NO MONGODB...
+
+
+
+
+
+
+
+
+
+
+
+--> REVIMOS O BÁSICO SOBRE DOCUMENTS NO MONGODB...
+
+
+
+
+
+
+
+--> DEVEOMS VER COMO USAR AS CRUD OPERATIONS NO MONGDOB...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O QUE É O CRUD, PQ ELE IMPORTA? 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOCÊ PODE ESTAR CONSTRUINDO UM APP,
+
+
+OU ENTÃO 
+
+VOCÊ PODE TER UMA DATA QUE É SHIPPADA A VOCÊ COMO 1 ARQUIVO ÚNICO,
+
+E VOCÊ QUER RODAR ANALYTICS NELA...
+
+
+
+
+
+
+
+--> OU ENTAÕ VOCÊ É UM ADMIN DE UM 
+
+
+
+MONGO DATABASE...
+
+
+
+
+
+
+--> NESSES 3 CASOS VOCÊ TERÁ QUE INTERAGIR COM SUA DATABASe...
+
+
+
+
+
+
+
+
+
+
+
+
+APPLICATION                      ANALYTICS/BI TOOLS                   ADMIN 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> APPLICATION --> VOCÊ TERÁ UM APP EM QUE SEU USER INTERAGE COM 
+
+DATA..
+
+
+
+
+
+
+
+
+
+--> NESSE CASO, VOCÊ TERÁ SEU MONGODB DRIVER INSERIDO NO SEU APP....  ------> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+NO CASO DE 'ANALYTICS,
+
+
+
+
+vocÊ TALVEZ USARÁ 
+
+O 
+
+
+
+
+'BI CONNECTOR/SHELL'  oferecidos pelo MONGODB,
+
+
+
+
+(business intelligence connector),
+
+
+
+
+
+OU ENTÃO USAR O SHELL DIRETAMENTE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OU COMO ADMIN,
+
+
+COM O USO DO SHELL.... -->
+
+
+
+
+
+
+
+
+NOS 3 CASOS,
+
+VOCê VAI INTERAGIR COM O MONGODB SERVER 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> EM UM APP, VOCê VAI QUERER CRIAR ELEMENTOS, LER, UPDATAR E DELETAR (
+
+    ex: posts, entregues aos users...
+
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+ANALYTICS/BI TOOLS -->  O MÍNIMO QUE VOCÊ VAI QUERER FAZER É 'READ YOUR DATA'.
+
+
+
+
+
+
+
+
+COMO UM ADMIN,
+
+TLAVEZ VOCÊ QUEIRA FAZER TODAS ESSAS COISAS  (fix some data, ou play around com alguma data)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> CORE CRUD OPERATIONS, QUE SÃO 
+
+
+
+
+TUDO QUE VOCÊ FAZ COM SUA DATA... você só faz  isso...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOCê FAZ ISSO, NO MONGODB SERVER,
+
+COM SEUS DOCUMENTS NAS COLLECTIONS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> CRUD OPERATIONS:
+
+
+
+
+
+
+
+
+TEMOS ALGUMAS IMPORTANT QUERIES QUE DEVEMOS TER EM MENTE:
+
+
+
+
+
+
+
+
+
+
+
+
+1) CREATE --> insertOne(), insertMany()   ------> 'insertOne(data, options)' -----> HÁ ESSAS 'OPTIONS'...
+
+
+
+
+        OK... HÁ MAIS ALGUM METHOD? 
+
+
+
+
+insertMany() --> 'insertMany(data, options) ' 
+
+
+
+
+
+
+
+
+
+2) READ -->  find (filter, options) --> TE DEIXA PASSAR ALGUNS ARGUMENTS... (para encontrar documents específicos)... --> filters são mt fortes...
+
+
+
+--> as options passadas a 'find' também são várias..
+
+
+
+
+
+
+
+'findOne()' --> VAI ENCONTRAR O PRIMEIRO MATCHING DOCUMENT NA SUA QUERY --> 'findOne(filter, options)'....
+
+
+
+
+
+
+
+
+
+
+3) Update ------> updateOne(filter, data, options) ---> VAI ENCONTRAR ESSE DOCUMENT POR MEIO DESSE FILTER,
+AÍ VAI ALTERAR A DATA QUE VOCê ESPECIFICOU, CONSIDERANDO AQUELAS OPTIONS...
+
+
+
+
+
+
+
+
+updateMany(filter, data, options) ----> UPDATAMOS VÁRIOS DOCUMENTS...
+
+
+
+
+
+
+
+
+****replaceOne(filter, data, options) --> É USADO QUANDO QUEREMOS __ SUBSTITUIR__ UM DOCUMENT, INTEGRALMENTE,
+
+POR OUTRO DOCUMENT, novo....
+
+
+
+
+
+
+4) DELETE ---> 
+
+
+
+
+
+deleteOne(filter, options)
+
+
+
+
+deleteMany(filter, options)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> VEREMOS TUDO ISSO COM UM EXAMPLE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+Flight:
+
+
+
+
+
+
+
+        {
+        "departureAirport": "LHR",
+        "arrivalAirport": "TXL",
+        "aircraft": "AIRBUS A320",
+        "distance": 950,
+        "intercontinental": false,
+        "example course": true
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> DIGAMOS QUE ESTMAOS USANDO ESSA DATA EM 
+
+
+1 WEBSITE.... --> 
+
+
+
+queremos 
+
+que as pessoas que 
+
+
+trabalham em um aeroporto 
+
+
+
+DEFINEM
+ 
+
+
+
+ A INFORMAÇÃO 
+
+
+
+ DO VOO,
+
+
+
+
+
+
+
+
+
+ 'CREATE A FLIGHT' (schedule a flight)
+
+
+
+
+
+ 'UPDATE INFORMATION' (mudar destino do voo) 
+
+
+
+
+
+
+
+ 'DELETE FLIGHT' (CANCELAR VOOS)...
+
+
+
+
+
+
+
+
+ 'DISPLAY FLIGHT INFORMATION '( READ DETAILS FROM A FLIGHT, TO DISPLAY IN THE UI OF THE APPLICATION)...

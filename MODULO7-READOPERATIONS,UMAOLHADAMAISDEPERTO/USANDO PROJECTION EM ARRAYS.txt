@@ -1,0 +1,2073 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... COMO PODEOMS TRABALHAR  com 'array data',
+
+
+COM NOSSOS CURSORS?
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO,
+
+O PROFESSOR VAI RAPIDAMENTE ENCONTRAR NOSSOS MOVIES ,
+
+
+
+
+com 
+
+
+
+db.movies.find().pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AÍ ELE 
+
+
+VAI EXAMINAR SUA ESTRUTURA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> A ESTRUTURA É ESTA:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{
+        "_id" : ObjectId("62052b52d9ec2278a3f59337"),
+        "id" : 27,
+        "url" : "http://www.tvmaze.com/shows/27/berserk",
+        "name" : "Berserk",
+        "type" : "Animation",
+        "language" : "Japanese",
+        "genres" : [
+                "Anime",
+                "Fantasy",
+                "Horror"
+        ],
+        "status" : "Ended",
+        "runtime" : 25,
+        "premiered" : "1997-10-07",
+        "officialSite" : null,
+        "schedule" : {
+                "time" : "",
+                "days" : [
+                        "Tuesday"
+                ]
+        },
+        "rating" : {
+                "average" : 9.2
+        },
+        "weight" : 58,
+        "network" : {
+                "id" : 137,
+                "name" : "NTV",
+                "country" : {
+                        "name" : "Japan",
+                        "code" : "JP",
+                        "timezone" : "Asia/Tokyo"
+                }
+        },
+        "webChannel" : null,
+        "externals" : {
+                "tvrage" : 2764,
+                "thetvdb" : 73752,
+                "imdb" : "tt0318871"
+        },
+        "image" : {
+                "medium" : "http://static.tvmaze.com/uploads/images/medium_portrait/0/249.jpg",
+                "original" : "http://static.tvmaze.com/uploads/images/original_untouched/0/249.jpg"
+        },
+        "summary" : "<p><b>Berserk </b>is a 25-part anime set in a dark fantasy/horror environment whereby the series focuses on the main character guts; a lone swordman who later meets up with a group of mercenaries called the band of the hawk. The leader of this band holds a strange necklace called a behelit that will only lead to evil.</p>",
+        "updated" : 1504676900,
+        "_links" : {
+                "self" : {
+                        "href" : "http://api.tvmaze.com/shows/27"
+                },
+                "previousepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/1462"
+                }
+        }
+}
+{
+        "_id" : ObjectId("62052b52d9ec2278a3f59338"),
+        "id" : 10,
+        "url" : "http://www.tvmaze.com/shows/10/grimm",
+        "name" : "Grimm",
+        "type" : "Scripted",
+        "language" : "English",
+        "genres" : [
+                "Drama",
+                "Crime",
+                "Supernatural"
+        ],
+        "status" : "Ended",
+        "runtime" : 60,
+        "premiered" : "2011-10-28",
+        "officialSite" : "http://www.nbc.com/grimm",
+        "schedule" : {
+                "time" : "20:00",
+                "days" : [
+                        "Friday"
+                ]
+        },
+        "rating" : {
+                "average" : 8.5
+        },
+        "weight" : 95,
+        "network" : {
+                "id" : 1,
+                "name" : "NBC",
+                "country" : {
+                        "name" : "United States",
+                        "code" : "US",
+                        "timezone" : "America/New_York"
+                }
+        },
+        "webChannel" : null,
+        "externals" : {
+                "tvrage" : 28352,
+                "thetvdb" : 248736,
+                "imdb" : "tt1830617"
+        },
+        "image" : {
+                "medium" : "http://static.tvmaze.com/uploads/images/medium_portrait/69/174906.jpg",
+                "original" : "http://static.tvmaze.com/uploads/images/original_untouched/69/174906.jpg"
+        },
+        "summary" : "<p><b>Grimm </b>is a drama series inspired by the classic Grimm Brothers' Fairy Tales. After Portland homicide detective Nick Burkhardt discovers he's descended from an elite line of criminal profilers known as \"Grimms\", he increasingly finds his responsibilities as a 
+detective at odds with his new responsibilities as a Grimm.</p>",
+        "updated" : 1531998068,
+        "_links" : {
+                "self" : {
+                        "href" : "http://api.tvmaze.com/shows/10"
+                },
+                "previousepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/1009811"
+                }
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> TEMOS 2 ARRAYS,
+
+
+
+
+O ARRAY DE 'genres' 
+
+e o 
+
+
+de 
+
+'schedule'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA DIGAMOS QUE QUEREMOS ENCONTRAR TODOS OS MOVIES QUE 
+
+POSSUEM 
+
+
+UM 
+
+
+
+
+GENRE DE 'drama'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> É CLARO QUE JÁ SABEMOS COMO ESCREVER ISSO,
+
+É TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+db.movies.find(
+    {
+        "genres": "Drama"
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> ISSO VAI PROCURAR POR TODOS OS DOCUMENTS QUE POSSUAM 1 'drama' 
+
+
+NO ARRAY DE 'genres'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM... AGORA SE EU QUISER OUTPUTTAR 
+
+
+
+
+
+
+
+
+___ÚNICAMENTE__ ESSE 
+
+
+
+
+VALOR DE 
+
+
+
+'Drama',
+
+
+
+
+
+
+
+O PROFESSOR 
+
+
+DIZ QUE PODEMOS USAR PROJECTION (selecionar fields/values, e aí os inserir no document retrievado por nosso cursor de 'find')....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+mas existia também uma sintaxe mais complexa, usada para encontrar 'TODOS OS DOCUMENTS QUE POSSUAM ESSE  ARRAY, ARRAY QUE POSSUA ESSE OBJECT COM ESSE VALUE ESPECÍFICO NESSA KEY ESPECÍFICA'
+
+
+
+
+
+
+
+
+
+
+tipo 
+
+
+
+
+{
+    name: "Max",
+    hobbies: [
+
+        {
+            title: "sports",
+            frequency: 2
+        }
+    ]
+}
+
+
+
+
+
+
+
+
+
+LEMBREI... 
+
+
+
+
+
+
+A QUERY É ASSIM:
+
+
+
+
+
+
+
+db.movies.find(
+    {
+        "hobbies.title": "sports"
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------> temos que usar o PATH, portanto ('hobbies.title')...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> OK..... CONTINUANDO A AULA DO PROFESSOR....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> 
+
+
+
+
+
+
+
+TEMOS ESSE ARRAY DE GENRES,
+
+QUEREMOS ENCONTRAR TODOS OS MOVIES QUE TENHAM 1 GENRE DE 'drama'...
+
+
+
+
+
+
+
+
+
+
+db.movies.find(
+    {
+        "genres": "Drama"
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E SE EU QUERO OUTPUTTAR APENAS ESSE GENRE DE 'drama'
+
+
+
+NOS MEUS DOCUMENTS RETRIEVADOS,
+
+
+
+
+
+PDEMOS ADICIONAR PROJECTION (segundo argumento)
+
+
+
+
+
+
+
+
+
+
+E 
+
+
+AÍ ESCREVEr 
+
+
+'{
+    "genres.$": 1
+}
+'
+
+
+
+
+
+
+
+
+
+
+
+-------> 
+
+
+
+QUANDO ESCREVEMOS ESSE '.$',
+
+
+
+
+QUEREMOS DIZER 
+
+
+
+'ME DÊ THE ONE GENRE YOU FOUND''... 
+
+
+
+
+
+
+
+
+
+ESSE 
+
+
+"genres.$": 1
+
+
+
+
+
+
+
+É UMA SINTAXE ESPECIAL...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+> db.movies.find({genres: "Drama"}, {"genres.$": 1}).forEach((doc) => {printjson(doc)})        
+{ "_id" : ObjectId("62052b52d9ec2278a3f59325"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59326"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59327"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59328"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59329"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5932a"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5932b"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5932d"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5932e"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5932f"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59330"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59331"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59332"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59333"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59335"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59338"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59339"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5933a"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5933b"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5933c"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5933d"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5933e"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5933f"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59340"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59342"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59345"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59346"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59347"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59349"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5934b"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5934c"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5934d"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5934e"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5934f"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59350"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59352"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59353"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59354"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59355"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59357"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59358"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59359"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5935b"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5935d"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5935e"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5935f"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59360"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59361"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59362"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59364"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59365"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59366"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59367"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5936a"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5936b"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5936d"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59370"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59373"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59377"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59378"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59379"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5937a"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5937b"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5937c"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59380"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59382"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59384"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59385"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59386"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59387"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59388"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5938a"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5938e"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5938f"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59390"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59394"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59395"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59396"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59399"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5939d"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5939e"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593a1"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593a2"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593a7"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593a8"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593a9"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593b0"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593b2"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593b3"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593b4"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593b5"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593b7"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593b8"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593b9"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593ba"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593bb"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593bc"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593bd"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593be"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593c1"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593c2"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593c4"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593c5"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593c6"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593c7"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593c8"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593c9"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593ca"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593cd"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593ce"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593cf"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593d1"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593d2"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593d3"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593d4"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593d5"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593d6"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593d8"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593da"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593db"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593de"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593df"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593e0"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593e1"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593e2"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593e3"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593e5"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593e6"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593e7"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593e8"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593ed"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593ee"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593ef"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593f0"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593f1"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593f2"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593f5"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593f6"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593f7"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593f8"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593f9"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593fa"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593fb"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593fc"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593fe"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593ff"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59402"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59403"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59404"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59406"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5940a"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5940c"), "genres" : [ "Drama" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59410"), "genres" : [ "Drama" ] }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... TODOS ESSES ITEMS POSSUIAM MAIS DO QUE 'drama'
+
+DENTRO DO 
+
+
+
+ARRAY DE 'genres',
+
+
+MAS 
+
+
+
+
+
+ O PROFESSOR ACABOU ACHANDO _ aPENAS__ OS DOCUMENTS COM ESSE 'drama'
+
+
+
+ string 
+
+
+
+ DENTRO DO ARRAY DE 'genres' dentro de cada document..... -----> 
+
+
+
+ E AÍ, POR MEIO DE PROJECTION E ESSA BIZARRA SINTAXE DE 
+
+
+ 'genres.$": 1,
+
+
+
+
+
+
+
+
+
+
+
+ O PROFESSOR 
+
+
+
+
+ FEZ COM QUE OS DOCUMENTS 'FINDADOS/RETRIEVADOS'
+
+
+ ficassem com esta estrutura:
+
+
+
+ { "_id" : ObjectId("62052b52d9ec2278a3f59410"), "genres" : [ "Drama" ] }
+
+
+
+
+
+
+
+
+
+
+
+
+MAS O QUE É/ O QUE SIGNIFICA 
+
+
+
+"genres.$": 1' ? 
+
+
+
+
+
+
+
+O QUE ISSO FAZ?
+
+
+
+
+
+
+
+
+
+--> FAZ COM QUE APENAS O 'PRIMEIRO MATCH' 
+
+
+
+
+
+
+SEJA ENCONTRADO, PARA ESSA QUERY DE '{genres: "Drama"}'.... ----> SE O PROFESSOR ESCREVESSE UMA QUERY MAIS COMPLEXA,
+
+
+
+PARA MÚLTIPLOS GENRES,
+
+
+
+
+
+ESSA ESCRITA DE "genres.$"
+
+AINDA VAI 
+
+
+
+
+''RETORNAR THE FIRST MATCH'''....
+
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR DEMONSTRA ISSO COM UMA QUERY LEVEMENTE MODIFICADA...
+
+
+
+
+--> ele usa o ARRAY QUERY OPERATOR de '$all',
+
+para especificar que DENTRO DO ARRAY de 'genres'
+
+
+ele vai querer que existam tanto 
+
+"drama" quanto "horror"...
+
+
+
+
+
+
+EX:
+
+
+
+db.movies.find({genres: { $all: [ "Drama", "Horror" ]}}, {"genres.$": 1}).forEach((doc) => {printjson(doc)})  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ISSO VAI NOS RETORNAR ESTE RESULTADO:
+
+
+
+
+
+
+> db.movies.find({genres: { $all: [ "Drama", "Horror" ]}}, {"genres.$": 1}).forEach((doc) => {printjson(doc)}) 
+{ "_id" : ObjectId("62052b52d9ec2278a3f59327"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5932a"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5932d"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59331"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59335"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5933c"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5933d"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59345"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5936b"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593ba"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593be"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593de"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593df"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593e1"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593f6"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593fc"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59403"), "genres" : [ "Horror" ] }
+
+
+
+
+
+
+
+
+
+
+
+----------> ELE RETORNOU 'Horror' --> RETORNOU SÓ 
+
+'Horror'...
+
+
+
+
+
+
+
+
+
+
+
+--> MAS PQ ELE RETORNOU SÓ 'Horror',
+
+
+
+e não 'Drama, horror'?
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+ -_> BEM, A RAZÃO DISSO É QUE 
+
+
+
+ '$all'
+
+
+ funciona de modo 
+
+ QUE ELE VAI POR DENTRO DO 
+
+
+
+
+ ARRAY E PROCURA POR 'BOTH DRAMA AND HORROR''' --> E AÍ,
+
+
+
+
+ NO CASO,
+
+
+ A HIPÓTESE 
+
+ É 
+
+
+ CONFIRMADA NO MOMENTO QUE 
+
+
+
+
+
+ O MONGODB 
+
+
+ CONSTATA QUE 
+
+
+
+ '''nossa, olhe só,
+
+
+ nesse document há tanto drama quanto HORROR'''' --> e como horror é o ÚLTIMO ELEMENTO 
+
+
+ ANALISADO/CONSTATADO/CONFIRMADO,
+
+
+
+
+
+
+
+ELE É CONSIDERADO 'THE FIRST MATCHING ELEMENT' pelo mongodb,
+
+
+
+
+pelo 'genres.$',
+
+
+
+
+
+
+
+
+
+AO PASSO QUE 'drama'
+
+
+'''DIDNT MATCH ANYTHING'''....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> A COISA 'MAIN' AQUI, QUE VOCê DEVE TER EM MENTE,
+
+
+É QUE 
+
+
+
+'genres.$',
+
+
+
+
+
+passado 
+
+
+
+
+no SEGUNDO PARÂMETRO DE 'FIND()",
+
+
+
+vai sempre 
+
+RETURN ONLY ONE ELEMENT,
+
+
+e nunca 
+
+
+'BOTH/múltiplos'....
+
+
+
+
+
+
+
+
+
+
+'WELL, GIVE ME THE FIRST AND ONLY MATCHING GENRE THAT YOU FOUND''... --> e só esse genre aí é outputtado.... --> mas o resto dos genres, por trás das cenas, continua existindo...
+
+
+
+
+
+
+
+
+
+-> e quando você usa '$all',
+
+
+o 'FIRST MATCHING THING'
+
+
+sempre será 
+
+o ÚLTIMO ELEMENTO QUE VOCê PASSA NO ARRAY de '$all: []'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... MAS AGORA VEREMOS UMA SITUAÇÃO DIFERENTE... ----->
+
+
+
+
+
+
+
+
+
+
+
+àS VEZES TEREMOS CASES EM QUE VAMOS QUERER 'PULL OUT SOME ITEMS'
+
+
+
+de um ARRAY, EM SEU DOCUMENT,
+
+
+
+QUE ___ '''NÃO FORAM OS ITEMS QUE VOCÊ FEZ QUERY FOR'''.... ----->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+como exemplo disso,
+
+
+
+
+
+professor 
+
+escreve:
+
+
+
+
+
+
+
+
+
+
+
+db.movies.find({genres: "Drama"}).pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AÍ ELE ADICIONA UMA PROJECTION AÍ....--> 
+
+
+
+
+
+
+
+
+
+"genres.$": 1 -----> se colocarmo isso aí como segundo parâmetro, obteremos resultados como 
+
+
+{ "_id" : ObjectId("62052b52d9ec2278a3f593d3"), "genres" : [ "Drama" ] }
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> MAS E SE EU AGORA QUISESSE VER SÓ O 'Horror' string 
+
+que 
+
+existe no array...?
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, SE EU QUISER ISSO,
+
+AÍ EU VOU PRECISAR 
+
+IR NO SEGUNDO PARÂMETRO 
+
+
+
+
+
+
+E ESCREVER '$elemMatch'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> E VIMOS '$elemMatch'
+
+
+ANTERIORMENTE...
+
+
+
+
+
+
+ELE FAZ ISTO:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> É ASSIM, PORTANTO,
+
+
+COMO PODEMOS 
+
+
+USAR 
+
+'$elemMatch'
+
+
+
+EM UM ARRAY COM EMBEDDED DOCUMENTS.... -------> NÓS ESSENCIALMENTE ''''DESCREVEMOS COMO 1 SINGLE DOCUMENT DEVERÁ SE PARECER''',
+
+
+
+
+PARA ENTÃO MATCHEAR NOSSA QUERY.... --> 
+
+
+
+
+
+
+
+
+db.users.find(
+
+    {
+        hobbies: {
+            $elemMatch: {
+                    title: "Sports",
+                    frequency: {$gte: 3}
+            }
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+MAS AGORA, É CLARO, ESSE '$elemMatch: {}'
+
+
+
+
+
+
+
+
+FUNCIONA/FUNCIONARÁ EM UM CONTEXTO DE 'PROJECTION'...
+
+
+
+
+
+
+
+
+
+
+
+
+-> ELE FUNCIONA DA MESMA MANEIRA DO QUE ANTES, NA VERDADE.....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> '$elemMatch' 
+
+
+VAI 
+
+
+
+
+NOS ENCONTRAR O PRIMEIRO 'element' 
+
+
+
+
+
+
+QUE SATISFAZER UMA CERTA CONDITION...
+
+
+
+
+
+
+
+
+
+
+
+
+E AQUI NOSSA CONDITION simplesmente será 
+
+
+
+
+
+
+"$eq: "Horror" "
+
+
+
+
+
+
+
+
+
+
+
+A EQUALITY DE "Horror", 
+
+
+nesse array de "genres'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+o código fica assim, por enquanto:
+
+
+
+
+
+
+
+db.movies.find(
+    {genres: "Drama"},
+    {genres: {$elemMatch: {$eq: "Horror"}}}
+).forEach((doc) => {printjson(doc)})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> QUANDO SALVARMOS ISSO E EXECUTARMOS NOSSO CÓDIGO,
+
+
+RECEBEMOS ISTO:
+
+
+
+
+
+
+
+
+
+
+
+
+> db.movies.find(
+...     {genres: "Drama"},
+...     {genres: {$elemMatch: {$eq: "Horror"}}}
+... ).forEach((doc) => {printjson(doc)})
+{ "_id" : ObjectId("62052b52d9ec2278a3f59325") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59326") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59327"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59328") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59329") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5932a"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5932b") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5932d"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5932e") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5932f") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59330") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59331"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59332") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59333") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59335"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59338") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59339") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5933a") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5933b") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5933c"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5933d"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5933e") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5933f") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59340") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59342") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59345"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59346") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59347") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59349") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5934b") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5934c") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5934d") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5934e") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5934f") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59350") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59352") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59353") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59354") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59355") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59357") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59358") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59359") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5935b") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5935d") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5935e") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5935f") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59360") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59361") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59362") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59364") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59365") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59366") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59367") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5936a") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5936b"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5936d") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59370") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59373") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59377") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59378") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59379") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5937a") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5937b") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5937c") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59380") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59382") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59384") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59385") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59386") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59387") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59388") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5938a") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5938e") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5938f") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59390") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59394") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59395") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59396") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59399") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5939d") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5939e") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593a1") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593a2") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593a7") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593a8") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593a9") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593b0") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593b2") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593b3") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593b4") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593b5") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593b7") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593b8") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593b9") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593ba"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593bb") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593bc") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593bd") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593be"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593c1") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593c2") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593c4") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593c5") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593c6") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593c7") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593c8") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593c9") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593ca") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593cd") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593ce") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593cf") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593d1") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593d2") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593d3") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593d4") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593d5") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593d6") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593d8") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593da") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593db") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593de"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593df"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593e0") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593e1"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593e2") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593e3") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593e5") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593e6") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593e7") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593e8") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593ed") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593ee") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593ef") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593f0") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593f1") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593f2") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593f5") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593f6"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593f7") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593f8") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593f9") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593fa") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593fb") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593fc"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593fe") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593ff") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59402") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59403"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59404") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59406") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5940a") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5940c") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59410") }
+>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> OU SEJA,
+
+PARA ALGUNS OBJECTS/DOCUMENTS,
+
+
+
+RETORNAMOS ESSE 
+
+
+
+
+
+
+
+'Horror',
+
+
+
+
+
+
+
+
+MAS __ OUTROS _ NÃO TERÃO...
+
+
+
+
+
+
+
+
+
+
+--> A RAZÃO PARA ISSO SERÁ QUE 
+
+
+
+
+___ ALGUNS OBJECTs_ _TERÃO/TINHAM A 
+
+
+
+
+
+
+PRESENÇA DO genre de 'Drama'
+
+
+no array de 'genres' (1a condição satisfeita, condição de O FIND ENCONTRAR ESSE DOCUMENT, O FILTER)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ENTRETANTO,
+
+NO CASO,
+
+
+
+O 
+
+
+
+
+'genres:"
+
+
+
+
+
+
+
+
+
+VAI TENTAR APENAS 'PULL OUT'
+
+
+
+
+
+A PARTE DE 
+
+'Horror' de cada array,
+
+e NADA MAIS DO QUE ISSO...
+
+
+
+(
+
+    por conta de "$elemMatch: {$eq: "Horror"}"
+    
+
+
+
+
+
+
+
+
+
+
+
+    --> E COMO ESSE 'HORROR'
+
+    não estará incluído em todo e cada array de nosso exemplo
+    ,
+
+
+
+    ganhamos esses object SEM 'genres'
+
+
+
+
+
+
+
+
+
+
+
+    JÁ OS ITEMS QUE POSSUEM O FORMATO 
+
+
+    { "_id" : ObjectId("62052b52d9ec2278a3f59327"), "genres" : [ "Horror" ] }
+
+
+
+
+
+
+
+
+
+
+
+    -> POSSUEM TANTO O VALUE DE 'Drama'
+
+
+    NO array de 'genres',
+
+    como o valor de 'Horror'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    $elemMatch: {$eq: "Horror"}
+
+
+
+
+
+
+
+
+
+
+
+
+
+    --> ISSO TE DÁ MAIS FLEXIBILIDADE PARA CONTROLAR QUAIS ITEMS DE UM ARRAY 
+
+    SÃO DISPLAYADOS NO SEU 'RESULT SET',
+
+
+    E PARA 
+
+
+    DEFINIR '''QUAIS ITEMS DE UM ARRAY SÃO IMPORTANTES PARA SEU FILTERING'''... (no caso, 'genres')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SÃO CASOS ALTAMENTE ESPECÍFICOS:
+
+
+
+
+
+
+
+
+
+
+
+
+A) CASO EM QUE VOCÊ VAI QUERER FILTER POR ALGO EM 1 ARRAY (ou qualquer outra coisa no seu document, não precisa ser um array),
+
+
+E EM QUE VOCê VAI QUERER ENTÃO 
+'PULL OUT CERTAIN VALUES' DE 1 ARRAY,
+
+
+COM BASE EM ALGUMA CONDITION ------> VOCê PODERÁ ENTÃO ADICIONAR ESSA CONDITION COM '$elemMatch',
+
+
+ALI, 
+
+
+NO ARRAY COM QUE VOCÊ ESTÁ TRABALHANDO, NO segundo parâmetro de 'find()'....
+
+
+
+
+
+
+
+
+
+
+
+
+EXEMPLO DE FILTER COM 
+
+
+
+
+ARRAYS/COISAS DISTINTAS:
+
+
+
+
+
+
+
+
+
+
+
+
+db.movies.find({"rating.average": {$gt: 9}}, {genres: {$elemMatch: {$eq: "Horror"}}}).pretty() 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+COM ISSO, VEMOS ESTE RESULTADO:
+
+
+
+
+
+
+
+
+> db.movies.find({"rating.average": {$gt: 9}}, {genres: {$elemMatch: {$eq: "Horror"}}}).pretty() 
+{ "_id" : ObjectId("62052b52d9ec2278a3f59337"), "genres" : [ "Horror" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59377") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593c7") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593cf") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593d0") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593e9") }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593f4") }
+
+
+
+
+
+
+
+
+
+
+
+-_> no caso, VEMOS QUE APENAS 1 DOCUMENT DE NOSSA COLLECTION POSSUI UM GENRE DE 'Horror',
+
+
+e uma nota superior a 9... (rating.average)...

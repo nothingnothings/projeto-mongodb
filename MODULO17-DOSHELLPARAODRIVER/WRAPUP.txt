@@ -1,0 +1,141 @@
+
+
+
+
+
+
+
+
+--> acabamos com este módulo.....
+
+
+
+
+
+isso nos mostrou como podemos adicionar mongodb a um aplicativo básico,
+
+com o mongodb node driver (exemplo)....
+
+
+
+
+
+
+
+
+
+
+
+
+--> É ALL ABOUT SABER QUAL 
+
+
+TIPO DE CRUD OPERATIONS VAMOS QUERER 
+
+
+
+APLICAR...
+
+
+
+
+
+
+
+-> também vimos as coisas que NÃO DEVEMOS FAZER 
+
+
+no nosso mongodb node driver (
+
+
+    como o create de indexes...
+)
+
+
+
+
+
+
+
+--> o aggregate framework é usado, sim,
+
+
+
+
+no DRIVER MONGODB...
+
+
+
+
+
+
+
+
+
+
+
+--> sharding e outras features (replica sets...)
+
+
+
+
+
+
+
+
+
+
+--> também vimos que 
+
+
+
+
+é perfectly fine 
+
+
+
+ler os driver docs 
+
+
+
+
+
+
+para 
+
+
+ver coisas 
+
+
+
+
+como 
+
+
+
+'
+CREATE NUMBERDECIMAL numbers'... 
+
+
+(
+
+    ou NumberInt,
+
+
+
+
+    NumberLong,  (usado para LONG INTS)...
+     
+
+     etc etc....
+)
+
+
+
+
+
+
+
+
+
+NUMBERDECIMAL --> USADO PARA 128BIT DECIMALS...

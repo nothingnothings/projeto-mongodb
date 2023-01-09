@@ -1,0 +1,962 @@
+
+
+
+
+
+
+
+
+
+
+
+--> ENCONTRAR PLACES DENTRO DE CERTA ÁREA...
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ENCONTRAR AS LOCATIONS,
+
+
+O PROFESSOR 
+
+
+VAI 
+
+
+ATÉ 
+
+A 
+
+
+
+
+ ABA 'new places',
+
+
+
+ NO GOOGLE MAPS,
+
+
+
+ e AÍ CRIA 
+
+
+
+
+
+ NAVEGA 
+
+
+
+ ATÉ UM LOCAL DO GLOBO...
+
+
+
+
+
+
+
+
+
+
+ -> ELE VAI QUERER DESENHAR UM POLÍGONO 
+
+
+ AO REDOR DO NOSSO PARQUE...
+
+
+
+
+
+
+
+
+
+
+
+
+ PRIMEIRO PONTO DE NOSSO MARKER:  37.77473, -122.45472
+
+
+
+
+
+
+
+
+
+ PONTO 2: 37.76641, -122.45307
+
+
+
+
+
+
+
+
+
+ PONTO 3: 37.7643, -122.5102
+
+
+
+
+
+
+
+
+
+ PONTO 4: 37.77139, -122.51089
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... 
+
+
+
+
+AÍ 
+
+
+
+CRIAMOS VARIABLES 
+
+PARA 
+
+TODOS 
+
+ESSES NEGÓCIOS...
+
+
+
+
+
+
+
+
+
+
+const p1 = [-122.45472, 37.77473 ];
+
+const p2 = [ -122.45307, 37.76641 ];
+
+const p3 = [ -122.5102, 37.7643];
+
+
+const p4 = [ -122.51089, 37.77139];
+
+
+
+
+
+
+
+
+
+
+
+
+OK.... ESSES SÃO NOSSOS 4 POINTS...
+
+
+
+
+
+
+
+
+--> DIGITAMOS ISSO NO MONGOSHELL,
+
+
+PQ 
+
+ELE TBM EXECUTA JAVASCRIPT....
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+> const p1 = [-122.45472, 37.77473 ];
+> const p2 = [ -122.45307, 37.76641 ];
+> const p3 = [ -122.5102, 37.7643];
+> const p4 = [ -122.51089, 37.77139];
+
+
+
+
+
+---------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> temos alguns points DENTRO DO GOLDEN LAKE PARK,
+
+OUTROS _ FORA_....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> A ÁREA DESSES 4 POINTS É A ÁREA DO GOLDEN GATE PARK...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> queremos determinar QUAIS POINTS EXISTEM DENTRO DESSE 
+
+
+
+PARK....
+
+
+
+
+
+
+
+
+
+
+
+--> FINALMENTE PODEMOS 
+
+CRIAR NOSSA QUERY 
+
+DISSO AÍ...
+
+
+
+
+
+
+
+
+
+
+
+
+-> para isso,
+
+escrevemos 
+
+
+
+
+
+
+
+
+
+
+
+db.places.find(
+    {
+        location:
+    }
+)
+
+
+
+
+
+
+
+
+
+
+NOVAMENTE USAREMOS ESSE FIELD DE 'location' -------> MAS AGORA NÃO VAMOS USAR '$near', '$geometry' e '$maxDistance' e '$minDistance' para DESCOBRIR SE ALGO ESTÁ PERTO DE NÓS OU NÃO,
+
+
+
+
+
+
+
+
+
+
+
+E SIM 
+
+
+
+VAMOS USAR 
+
+
+
+O OPERATOR DE 
+
+
+
+'$geoWithin'...
+
+
+
+
+
+
+
+
+----->
+
+
+
+$geoWithin: {
+
+}
+
+
+
+
+
+
+
+
+
+--> É UM OPERATOR PROVIDENCIADO PELO MONGODB que SIMPLESMENTE NOS AJUDA A ENCONTRAR 
+
+TODOS 
+
+
+
+OS ELEMENTS DENTRO DE 1 CERTO FORMATO/OBJECT,
+
+
+TIPICAMENTE 
+
+
+UM 
+POLÍGONO...
+
+
+
+
+
+
+
+--> o "$geoWithin'
+
+
+
+
+SMEPRE 
+
+
+
+ACEITA UM DOCUMENT COMO VALUE.... -> DENTRO DESSE OBJECT,
+
+
+
+
+ADICIONAMOS, NOVAMENTE,
+
+
+AQUELE 
+
+
+
+operator 
+de 
+
+'$geometry',
+
+
+QUE 
+
+
+
+VAI SEGURAR UM '{}' -----> ESSE {} será um 'GEOJSON OBJECT',
+
+
+
+
+como vimos anteriormente...
+
+
+
+
+
+
+
+
+
+
+DENTRO DE GEOJSON OBJECTS,
+
+
+SEMPRE TEMOS:
+
+
+
+
+1) O 'TYPE' (que pode ser 'Point', ou  'Polygon')
+
+
+
+
+
+
+
+
+
+
+2) DEPOIS, TEMOS AS 'coordinates'..
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+$geoWithin: {
+    $geometry: {
+        type: "Polygon",
+        coordinates: [
+
+        ]
+    }
+}
+
+
+
+
+
+
+
+
+
+--> OK, AGORA PRECISAMOS ADICIONAR AS COORDINATES DESSE POLÍGONO, retângulo...
+
+
+
+
+
+
+
+
+
+
+
+
+--> OBVIAMENTE 1 'point' singular 
+
+
+
+no mapa EXIGE 2 PARÂMETROS (long e lat, nessa ordem)....
+
+
+
+
+
+
+
+
+
+--> MAS 
+
+
+
+
+1 POLYGON TIPICAMENTE PRECISARÁ 
+
+DE MAIS 
+COORDINATES... -> PARA SERMOS MAIS PRECISOS,
+
+PRECISMAOS 
+
+
+
+
+DOS 
+
+'4 corners'
+
+DO POLÍGONO...
+
+
+
+
+
+
+
+
+
+
+
+-------> É POR ISSO QUE VAMOS PRECISAR DE UM NESTED ARRAY,
+
+
+
+
+tipo assim 
+[
+    [
+
+    ]
+]
+
+
+
+
+
+
+
+
+
+
+--> E DENTRO DESSE ARRAY,
+
+NOVAMENTE ADICIONAMOS MAIS ARRAYS,
+
+
+
+EM QUE 
+
+CADA ARRAY 
+
+
+
+DESCREVE '1 par' 
+
+de long/lat  PARA CADA CORNER 
+
+
+
+
+
+DE NOSSO POLÍGONO...
+
+
+
+
+
+
+eX:
+
+
+
+[
+    [
+        p1, p2, p3, p4
+    ]
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, MAS NÃO ACABAMOS POR AQUI... --> PRECISAMOS 
+
+DE 
+
+'p1'
+ 
+
+
+ MAIS UMA VEZ,
+
+ AO FINAL...  -----> ISSO É PQ 1 POLYGON __ SEMPRE__ TEM QUE ACABAR COM O 'STARTING POINT',
+
+
+ para 
+
+
+ __fECHAR__ O POLYGON... (isso faz com que ele seja tratado como COMPLETO)...
+
+
+
+
+
+
+
+
+
+ ex:
+
+
+
+
+
+
+$geoWithin: {
+    $geometry: {
+        type: "Polygon",
+        coordinates: [
+            [
+                p1, p2, p3, p4, p1
+            ]
+        ]
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EX COMPLETO:
+
+
+
+
+
+
+
+
+
+db.places.find(
+    {
+        location: {$geoWithin: {
+    $geometry: {
+        type: "Polygon",
+        coordinates: [
+            [
+                p1, p2, p3, p4, p1
+            ]
+        ]
+    }
+         
+}
+            
+    }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.places.find(     {         location: {$geoWithin: {     $geometry: {         type: "Polygon",         coordinates: [             [
+      p1, p2, p3, p4, p1             ]         ]     }           }                  }     } ).pretty()
+{
+        "_id" : ObjectId("62125201279681a0f040fbe7"),
+        "name" : "Flowers",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -122.49182600352387,
+                        37.770412230737094
+                ]
+        }
+}
+{
+        "_id" : ObjectId("62125201279681a0f040fbe8"),
+        "name" : "Stones",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -122.48956963050625,
+                        37.76978923166615
+                ]
+        }
+}
+{
+        "_id" : ObjectId("6211d26f4bf425539a521037"),
+        "name" : "California Academy of Sciences",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -122.4757474,
+                        37.7689999
+                ]
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------> DEU CERTO.... ENCONTRAMOS TODOS OS POINTS QUE FICAM DENTRO DO PARK,
+
+
+
+
+
+QUE SÃO TODOS OS NOSSOS DOCUEMNTS,
+
+
+EXCETO O 'ADRIANO':
+
+
+
+
+
+
+
+
+
+db.places.find({}).pretty()
+{
+        "_id" : ObjectId("6211d26f4bf425539a521037"),
+        "name" : "California Academy of Sciences",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -122.4757474,
+                        37.7689999
+                ]
+        }
+}
+{
+        "_id" : ObjectId("62125201279681a0f040fbe7"),
+        "name" : "Flowers",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -122.49182600352387,
+                        37.770412230737094
+                ]
+        }
+}
+{
+        "_id" : ObjectId("62125201279681a0f040fbe8"),
+        "name" : "Stones",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -122.48956963050625,
+                        37.76978923166615
+                ]
+        }
+}
+{
+        "_id" : ObjectId("621252ab279681a0f040fbe9"),
+        "name" : "Adriano",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -2.6016748434018884,
+                        54.990021587207075
+                ]
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+-------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK.... ISSO FUNCIONOU, SURPREENDENTEMENTE...
+
+
+
+
+
+
+
+
+
+
+
+
+--> TENHO UMA PERGUNTA, POR ACASO CONSTS FICAM NA NOSSA DATABASE, MESMO QUANDO 
+
+FECHAMOS A SHELL? (acho que não)...
+
+
+
+
+-> não, não ficam...
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, É ASSIM QUE PODEMOS CHECAR SE ALGO 
+
+FICA EM CERTA ÁREA,
+
+
+COM A AJUDA DE 
+
+'$geoWithin',
+
+
+
+AÍ O OPERATOR DE 
+
+
+"$geometry',
+
+
+
+E AÍ O TYPE DE um 'polygon',
+
+
+
+
+
+E AÍ 
+
+AS COORDINATES, QUE SÃO OS CORNERS 
+
+
+
+DO 
+
+
+
+
+SEU POLYGON...
+
+
+
+
+
+(
+
+    também coloque o PRIMEIRO ELEMENTO COMO ÚLTIMO ELEMENTO, TAMBÉM,
+
+    PARA QUE O POLYGON SEJA 'FECHADO'...
+)

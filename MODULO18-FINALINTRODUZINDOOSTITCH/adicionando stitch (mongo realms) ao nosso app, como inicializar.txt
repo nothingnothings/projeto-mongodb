@@ -1,0 +1,2111 @@
+
+
+
+
+
+
+
+
+professor mostra um snippet útil de como adicionar o stitch no nosso código clientside,
+
+mas esse código já está obsoleto...
+
+
+
+
+
+
+
+
+
+https://docs.mongodb.com/realm/sdk/node/migrate/
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> 
+
+
+
+
+
+
+
+
+a primeira coisa que devemos fazer é divar no folder de 'src'
+
+
+
+E AÍ 
+
+
+
+
+
+
+
+
+entrar 
+
+
+
+
+no arquivo de 'App.js'... --> primeira coisa que o professor faz é deixar o 'isAuth' como true,
+
+
+para que já comecemos no modo de 'authorized'...
+
+
+
+
+
+
+
+
+
+
+--> mudaremos isso mais tarde..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> MESMO COM NÓS 'AUTENTICADOS',
+
+
+
+não vamos conseguir ver os products,
+
+pq 
+
+
+
+
+
+
+NÃO TEMOS ACESSO AO BACKEND/stitch..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ok, mas como podemos fetchear products com a ajuda do stitch/mongo realms?
+
+
+
+
+
+
+
+
+
+
+--> BEM, PRIMEIRAMENTE 
+
+PRECISAMOS IMPORTAR 
+
+O 
+
+STITCH NA FILE 
+
+
+
+EM QUE QUEREMOS O UTILIZAR...
+
+
+
+
+
+
+
+
+
+-> OK, MAS QUE FILE É ESSA? 
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, POR ENQUANTO O PROFESSOR VAI ATÉ O CÓDIGO DO COMPONENT 'PAGE' de 'Products.js',
+
+
+PQ 
+
+LÁ 
+
+
+É O LOCAL EM QUE TENHO AQUELE METHOD DE 'fetchData()'...
+
+
+
+
+
+
+
+
+
+---> nesse method fazíamos fetch dos documents 'product' que tínhamos na nossa database..
+
+
+
+
+
+
+
+
+
+
+
+--> PRECISAMOS USAR O STITCH PARA ESTABELECER CONTATO COM ESSA DATABASE..
+
+
+
+
+
+
+
+
+
+
+
+
+-> É POR ISSO QUE O PROFESSOR VAI ESCREVER UM IMPORT,
+
+
+
+
+ELE DIZ QUE 
+
+
+VAI IMPORTAR ALGUMAS COISAS..
+
+
+
+
+
+
+
+
+
+
+
+
+--> vai escrever assim:
+
+
+
+
+
+
+
+
+
+import { } from 'mongodb-stitch-browser-sdk'
+
+
+
+
+
+
+
+
+
+
+--> MAS COMO ISSO NÃO FUNCIONA MAIS, ESCREVEOMS ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+import { } from 'realm'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR ESCREVEU 'import { Stitch } from 'mongodb-stitch-browser-sdk',
+
+
+
+
+
+
+
+
+
+MAS É CLARO QUE ISSO NÃO EXISTE MAIS....
+
+
+
+
+
+
+
+--> hoje em dia, o código correto PROVAVELMENTE É:
+
+
+
+
+
+
+
+
+import { App } from 'realm';
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+ --> esse object basicamente nos deixa initializar tudo, e aí trablahar com o stitch --> e O PROFESSOR 
+ DIZ QUE 
+
+ ELE TAMBÉM VAI 
+
+
+
+
+ TER QUE 'DO SOME OTHER THINGS' ------> mas essas coisas, que são coisas como 'AUTHENTICATING',
+
+
+
+
+
+
+
+ não vão acontecer aqui, e sim 
+
+
+ LÁ NO ARQUIVO DE 'App.js' --> LÁ 
+
+
+
+
+
+
+TAMBÉM VAMOS IMPORTAr 'App',
+
+
+
+
+
+
+
+
+
+
+mas 
+
+
+
+
+
+
+antes disso o professor 
+
+
+
+
+
+
+VAI ADICIONAR UM 'constructor(){}' 
+
+
+
+no arquivo,
+
+
+
+
+
+
+
+
+QUE É UMA FUNCTION QUE SERÁ EXECUTADA __PRIMEIRAMENTE__ PELO JAVASCRIPT (comportamento padrão do javascript, nada relacionado ao stitch)...
+
+
+
+
+
+
+
+
+
+
+--> DENTRO DESSE CONSTRUCTOR, PROFESSOR ESCREVE:
+
+
+
+
+
+
+
+
+
+
+
+
+constructor() {
+    Stitch.initializeDefaultAppClient()
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+ENTRETANTO, EU HAVIA INSTLAADO A PACKAGE ERRADA, A CERTA É ESTA:
+
+
+
+
+
+
+
+npm install --save realm-web
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Import Dependencies & Connect to Your Realm App
+The Realm Web SDK contains everything you need to connect to a MongoDB Realm application from a browser application. In /src/App.js, add the following code to import the Web SDK.
+
+import * as Realm from "realm-web";
+
+Now uses the imported package to instantiate a new Realm.App. The app object represents your Realm app. You'll use it to authenticate and manage the users that interact with your app.
+
+// Add your App ID
+const app = new Realm.App({ id: APP_ID });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK, FICOU TIPO ASSIM, LÁ EM 'App.js':
+
+
+
+
+
+
+
+
+
+
+import * as Realm from 'realm-web';
+
+const app = new Realm.App({ id: 'MyShop' });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> esse 'app' representa nosso APP REALM/STITCH...
+
+
+
+
+
+
+
+
+
+
+
+-------> 
+
+Create React Components
+In /src/App.js, add the following components that display details about a given user and allow users to log in.
+
+
+
+
+
+
+
+// Create a component that displays the given user's details
+const UserDetail = ({ user }: { user: Realm.User }) => {
+  return (
+    <div>
+      <h1>Logged in with anonymous id: {user.id}</h1>
+    </div>
+  );
+};
+
+
+
+// Create a component that lets an anonymous user log in
+type LoginProps = {
+  setUser: (user: Realm.User) => void;
+};
+const Login = ({ setUser }: LoginProps) => {
+  const loginAnonymous = async () => {
+    const user: Realm.User = await app.logIn(Realm.Credentials.anonymous());
+    setUser(user);
+  };
+  return <button onClick={loginAnonymous}>Log In</button>;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ok, mas isso não faz sentido para mim....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> PROFESSOR NOS EXPLICA QUE PODEMOS COMEÇAR A USAR O STITCH/REALM lá no arquivo-page de 'Products.js',
+
+
+
+
+
+
+no method de 'fetchData',
+
+
+
+
+
+
+
+
+em que vamos QUERER TIRAR O CÓDIGO DE 'CONNECT AO BACKEND NODE' (código do axios),
+
+
+
+
+
+
+
+
+
+
+PARA COLOCAR UM CALL DE 
+
+
+
+'Stitch.getAppClient()'.... (ou o equivalente do mongo realm)...
+
+
+
+
+
+
+
+
+
+
+
+NA VERDADE, ESTA É A SINTAXE CORRETA:
+
+
+
+
+
+
+
+
+
+import * as Realm from 'realm-web';
+
+
+
+
+let app = new Realm.App();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> o novo app realm deverá ser a instanciação disso aí...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+The interface to the MongoDB Data Access API, containing objects like MongoDatabase, and MongoCollection, has changed. Through Stitch, passing the RemoteMongoClient.Factory and the string "mongodb-atlas" to StitchAppClient.getServiceClient() creates a remote Mongodb client. The Realm JS SDK creates a remote MongoDB client through the Realm.User.mongoClient method on the user object.
+Replace all mongoClient instantiations with Realm.User.mongoClient.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O CÓDIGO ADAPTADO DO STITCH PARA O 'REALM' É EXATAMENTE ESTE AQUI:
+
+
+
+
+
+
+import { App } from 'realm';
+
+
+const id = 'application-0-acjfk'
+
+
+
+
+const config = {
+  id
+}
+
+
+
+
+let app = new App(config);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> obs: escrevi isso lá no 'App.js',
+
+ e não na page de 'Products.js'...
+
+
+
+
+
+
+
+
+
+
+
+ --> StitchUser was previously the interface to access application users, but now it is Realm.User.
+Migrate all occurrences of StitchUser to Realm.User.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->OK, E O ACESSO À 'DATABASE API' do mongodb? 
+
+
+
+
+--> bem, isso ERA 
+
+FEITO COM 
+
+
+'StitchAppClient.getServiceClient()',
+
+
+
+
+
+
+
+MAS AGORA 
+
+
+É FEITO 
+
+
+
+
+
+com 
+
+
+
+
+
+
+
+'Realm.User.MongoClient'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ok... mas vou colocar esse código lá em 'Products.js',
+
+
+
+pq acho que 
+
+
+
+ficar em 'App.js' (frontend) não vai resolver meu problema de 'quero connect a minha database'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+VAI FICANDO TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+const id = 'application-0-acjfk'
+
+
+
+
+const config = {
+  id
+}
+
+
+
+
+let app = new Realm.App(config);
+
+
+
+
+Realm.User.mongoClient()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> ok, agora é hora de ver o vídeo do professor (pq nos livramos totalmente do código de 'SwitchAppClient.getServiceClient()' )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VAMOS QUERER EXECUTAR ''Realm.User.mongoClient()''
+
+
+
+
+
+
+lá em 'fetchData()'..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----->  AÍ O PROFESSOR MENCIONA O 'RemoteMongoClient' ,
+
+
+
+
+
+
+
+QUE É BASIACMENTE 
+
+
+
+'''UM MONGOCLIENT USADO NO BROWSER''' (quase o mongoshell, no caso)...
+
+
+
+
+
+
+
+
+
+--> ou seja,
+
+isso vai 
+adicionar um NOVO TIPO DE AUTHENTICATION NO NOSSO ESQUEMA...
+
+
+
+
+
+
+
+
+
+
+
+--> O CO´DIGO COMPLETO, NO CASO DO PROFESSOR,
+
+
+
+
+
+
+é 
+
+
+
+
+Stitch.getAppClient().getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS É CLARO QUE 
+
+
+NOSSO CÓDIGO NÃO VAI FICAR ASSIM, TEM UM FORMATO DIFERENTE, POR CONTA DO MONGO REALM...
+
+
+
+
+
+
+
+
+
+--> para criar o NOSSO __ MONGODB CLIENT NO BROWSER, COM O MONGO REALM,
+
+
+É BEM MAIS SIMPLES,
+
+
+APENAS PRECISAMOS ESCREVER 
+
+
+
+''
+
+
+Realm.User.mongoClient()
+
+
+
+'''
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, AGORA NOSSO MONGOCLIENT TERÁ SIDO INICIALIZADO PELO MONGO REALM...
+
+
+
+
+
+
+
+
+--> 
+
+
+
+
+
+
+OK... --> COMO ISSO NOS __ DÁ ACESSO __ AO MONGODB/MONGO DB CLIENT (que vai acessar a database),
+
+
+
+
+
+
+
+
+
+
+NÓS PODEMOS ARMAZENAR TUDO ISSO EM UMA CONSTANTE,
+
+
+TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+fetchData = () => {
+
+
+  const mongodb = Stitch.getAppClient().getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas')
+
+}
+
+
+
+
+
+
+
+
+
+OU ENTÃO:
+
+fetchData = () => {
+
+
+  const mongodb = Realm.User.mongoClient()
+}
+
+
+
+
+
+
+
+
+-------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ok... agora podemos USAR 
+
+
+
+
+ESSA CONSTANTE PARA TRABALHAR COM NOSSA DATABASE (work with our database)...
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO,
+
+
+simplesmente 
+
+
+
+
+
+
+escrevemos 
+
+
+
+
+
+
+
+
+
+
+'mongodb.db()'  -----> ISSO É AQUILO QUE CHAMAMOS 
+
+DE 
+
+
+
+
+'DATABASE FUNCTION' -----> e dentro 
+
+
+dessa 
+
+'function' do stitch/realm
+
+
+
+V
+AMOS PASSAR O NOME DA NOSSA DATABASE, COMO PARÂMETRO..
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+  fetchData = (direction) => {
+   
+
+   const mongodb = Realm.User.mongoClient(); ///approach novo...
+  
+
+    mongodb.db('shop2') 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    --> USAMOS A DATABASE QUE TÍNHAMOS NO ÚLTIMO MÓDULO (esse 'shop2') ----> se não tivermos uma database,
+
+
+
+
+
+    ELA SERÁ CRIADA NA HORA....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    --------> aí também colocamos '.collection('products')',
+
+
+
+    PARA SELECIONAR ESSA COLLECTION ESPECÍFICA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+    -----> OK...AGORA PODEMOS USAR TODOS OS METHODS COMUNS QUE JÁ CONHECEMOS,
+
+
+    como 
+
+
+
+
+
+
+
+
+
+    .find() 
+
+
+
+    .findOne()
+
+
+
+
+
+
+
+    .insertOne() 
+
+
+
+
+
+
+    .insertMany()
+
+
+
+
+
+
+    .deleteOne() 
+
+
+
+
+
+
+
+    .deleteMany()
+
+
+
+
+
+
+
+
+
+
+
+
+--------->  O PROFESSOR VAI ESCREVER 
+
+'.find()'
+
+
+
+
+PARA ENCONTRAR TODOS OS PRODUCTS, SEM ARGUMENTOS...
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+monogdb.db('shop').collection('products').find();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> ISSO VAI NOS DAR TODOS OS PRODUCTS --> COM ISSO,
+
+
+
+
+
+
+
+
+TEREMOS UM __ CURSOR_, COMO SE FOSSE O METHOD DE 'find' comum --> 
+
+
+
+
+
+
+ENTRETANTO, 
+
+O PROFESSOR EXPLICA QUE 
+
+
+
+
+
+VAMOS TER 'A SIMPLER TO USE OPTION, HERE' ------> 
+
+
+
+
+
+
+
+a opção mais simples é 
+
+
+'asArray' (em vze de 'toArray') ----> AÍ VAMOS DEIXAR O STITCH FAZER ISSO, esse fetch, PARA NÓS,
+
+
+STEP-BY-STEP...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> SE PRECISARMOS DE MAIS CONTROLE 
+
+
+
+NESSE FIND,
+
+
+
+
+PODEMOS 
+
+
+
+GANHAR ACESSO AO 'iterator',
+
+
+
+por meio do call de 
+
+
+
+
+
+monogdb.db('shop').collection('products').find().iterator()
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+   mongodb.db('shop2').collection('products').find().iterator
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ----> O ITERATOR, É CLARO, NOS DEIXA 'ESCREVER NOSSO PRÓPRIO LOOP', se quisermos...
+
+
+
+
+
+
+
+
+
+   EX:
+
+
+
+
+
+
+
+
+
+     mongodb.db('shop2').collection('products').find().asArray();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ----> É CLARO QUE VAMOS COLOCAR UM THEN BLOCKK NESSE CALL,
+
+
+  pq 
+
+
+  vamos ter 
+
+  retornados 
+
+
+
+  os PRODUCTS, EM 1 ARRAY...
+
+
+
+
+
+
+
+  EX:
+
+
+
+
+
+
+
+
+
+
+   
+
+  mongodb.db('shop2').collection('products').find().asArray()
+  .then(
+    (products) => {
+
+    }
+  )
+  .catch(
+    (err) => {
+      this.props.onError('Fetching the produts failed. Please try again later.');
+    }
+  )
+
+
+
+
+
+
+
+
+-------------------------
+
+
+
+
+
+
+
+OK...
+
+
+
+
+
+
+
+
+AÍ O NEGÓCIO VAI FICAR ASSIM:
+
+
+
+
+
+
+
+
+
+
+  mongodb.db('shop2').collection('products').find().asArray()
+  .then(
+    (products) => {
+          this.setState({products: products})
+    }
+  )
+  .catch(
+    (err) => {
+      this.props.onError('Fetching the produts failed. Please try again later.');
+    }
+  )
+
+
+
+
+
+
+
+-------------------------------
+
+
+
+
+
+
+
+ok, essa é a lógica 
+que vai nos permitir 
+
+
+'FETCH DATA'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ok... mas há mais um ajuste que precisamos fazer:
+
+
+
+
+
+
+
+
+precisamos deletar todos os IMPORTS E UTILIZAÇÕES DE AXIOS NO NOSSO CÓDIGO,
+
+pq 
+
+
+ele 
+
+não será mais necessário.... (agora disparamos os requests diretamente contra OS SERVIDORES 'Stitch'/realm... )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ok... mas ganhamos um error:
+
+
+
+WARNING in ./node_modules/realm/lib/utils.js 151:12-35
+Module not found: Error: Can't resolve 'react-native' in 'A:\projeto6-MONGODB\MODULO18-FINALINTRODUZINDOOSTITCH\novoprojeto22-uso-do-stitch\node_modules\realm\lib'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> isso aconteceu pq eu NÃO TENHO O REACT-NATIVE INSTALADO COM O NPM... (ué, será que não existe uma versão do realm que NÃO USA DEPENDENCY DO NATIVE?)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> parece que SOMOS OBRIGADOS A INSTALAR O NATIVE,
+
+MESMO 
+
+
+QUANDO NOSSO 
+
+
+APP É UM WEBAPP...
+
+
+
+
+
+
+
+
+
+Realm doesn't support running in the browser. If you want to use Realm for a React application, you can only use it on the backend part and not the frontend part.
+
+React Native apps are a bit different as they don't have this division within them.
+
+It is possible to use Realm in a React app. Unfortunately we don't have an example. You can swap out Postgres and use Realm instead in tutorials like https://www.freecodecamp.org/news/fullstack-react-blog-app-with-express-and-psql/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> provavelmente devemos usar o 'realm-web' em vez de 
+
+
+'realm'...
+
+
+
+
+
+
+
+
+
+
+
+--> SIM, PARECE QUE TENHO QUE USAR O 'realm-web', que é praticamente igual ao 
+
+
+
+
+'COMUM' (só 'realm'),
+
+
+
+mas 
+
+
+
+
+QUE FUNCIONA 
+
+COM O BROWSER... (react apps no browser)....
+
+
+
+
+
+
+
+
+
+
+
+--> ok, mas imediatamente ganhei um erro:
+
+
+
+
+
+
+
+TypeError: realm_web__WEBPACK_IMPORTED_MODULE_9__.User.mongoClient is not a function
+
+
+
+
+
+
+
+
+
+
+
+--> ok... instalei o react-native....
+
+
+
+--> agora verei se o negócio funciona...
+
+
+
+
+
+
+
+
+
+
+
+
+OK, FODA-SE O REALM.... É UMA PORCARIA... -> documentação é muito ruim,
+
+
+
+
+
+
+
+principalmente com webApps que só usam javascript...
+
+
+
+
+
+
+
+
+
+--> vou instalar 
+
+
+
+o package 
+
+
+
+do stitch (legacy),
+
+
+
+e foda-se..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+O CÓDIGO COMPLETO FICOU ASSIM:
+
+
+
+
+
+
+
+import React, { Component } from 'react';
+
+import axios from 'axios';
+
+import Products from '../../components/Products/Products';
+
+import Paginator from '../../components/Paginator/Paginator';
+
+
+
+
+
+
+import { Stitch, RemoteMongoClient } from 'mongodb-stitch-browser-sdk';
+
+
+
+
+
+
+class ProductsPage extends Component {
+  state = { isLoading: true, products: [], totalProducts: 0, productPage: 1 };
+
+
+
+
+
+
+  
+constructor() {
+  super();
+  Stitch.initializeDefaultAppClient('application-0-acjfk');
+};
+
+
+
+
+
+  componentDidMount() {
+
+    this.fetchData();
+
+    console.log(this.state.totalProducts);
+  }
+
+  fetchData = (direction) => {
+    const mongodb = Stitch.defaultAppClient.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas');
+
+  
+
+  mongodb.db('shop2').collection('products').find().asArray()
+  .then(
+    (products) => {
+          this.setState({products: products})
+    }
+  )
+  .catch(
+    (err) => {
+      this.props.onError('Fetching the produts failed. Please try again later.');
+    }
+  )
+
+
+
+    
+
+
+
+  
+  };
+
+  productDeleteHandler = (productId) => {
+    console.log(productId);
+    axios
+      .delete('http://localhost:3100/products/' + productId)
+      .then(
+        () => {
+        this.fetchData()
+      })
+      .catch((err) => {
+        this.props.onError(
+          'Deleting the product failed. Please try again later.'
+        );
+        console.log(err);
+      });
+  };
+
+  render() {
+    let content = <p>Loading products...</p>;
+
+    if (!this.state.isLoading && this.state.products.length > 0) {
+      content = (
+        <Paginator
+        onPrevious={this.fetchData.bind(this, 'previous')}
+        onNext={this.fetchData.bind(this, 'next')}
+        lastPage={Math.ceil(this.state.totalProducts / 5)}
+        currentPage={this.state.productPage}
+        >
+        <Products
+          products={this.state.products}
+          onDeleteProduct={this.productDeleteHandler}
+        />
+        </Paginator>
+      );
+    }
+
+    if (!this.state.isLoading && this.state.products.length === 0) {
+      content = <p>Found no products. Try again later.</p>;
+    }
+    return <main>{content}</main>;
+  }
+}
+
+export default ProductsPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, ISSO NOS DÁ/DEU ACESSO à DATABASE DO MONGODB... --> + ou -,
+
+
+PQ 
+
+
+
+AINDA 
+
+NÃO 
+
+
+TEMOS AUTHENTICATION (não temos um 'user' para ser authenticated, ainda).... 
+
+
+
+
+
+
+
+
+
+
+
+-----> PROFESSOR GANHA UM ERROR:
+
+
+
+'StitchClientError': (MustAuthneticateFirst): method called requires being authenticated...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> VOCÊ PRECISA TER AUTH USERS NO SEU APP,
+
+PQ 
+
+
+CADA USER
+
+VAI RECEBER 1 'SET' DE COISAS QUE SERÁ CAPAZ DE FAZER,
+
+
+
+AÍ SÓ ESSA INTERACTION DEVERÁ ACONTECER COM SUA DATABASE... -> E ISSO É ENTÃO SUA MANEIRA 
+DE PROTEGER 
+
+
+
+SUA DATABASE CONTRA ACESSO INDEVIDO.... -->  PQ VOCÊ PROVAVELMENTE 
+
+ESTÁ 
+
+'FINE'
+
+
+COM USERS CRIANDO PRODUCTS (pq esse é o intento do app, para o user comum ),
+
+
+
+
+
+
+MAS _ _VOCÊ 
+QUER 
+
+TER 
+
+CERTEZA 
+
+DE QUE 
+
+
+ELES NÃO PODEM 
+
+
+
+DELETAR SUAS ORDERS, POR EXEMPLO,
+
+e isso você pode fazer com o stitch....
+
+
+
+
+
+
+
+--> OK.... PRECISAMOS FAZER 'AUTHENTICATE',
+
+
+e faremos isso na próxima aula....

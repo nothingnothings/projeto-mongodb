@@ -1,0 +1,510 @@
+
+
+
+
+
+ONE-TO-MANY....
+
+
+
+-_> EXEMPLO 3... ----> é o exemplo de 'THREAD' e 'ANSWERS'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'''UMA THREAD TEM VÁRIAS ANSWERS, MAS 1 ANSWER PERTENCE APENAS A UMA ÚNICA QUESTION THREAD''...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ISSO SIGNIFICA QUE A DISPOSIÇÃO FICA ASSIM:
+
+
+
+
+
+
+
+
+
+QUESTION A ------> ANSWER 1 
+            ----> ANSWER 2 
+
+
+
+
+QUESTION B ----> ANSWER 1 
+
+
+
+
+
+QUESTION C ---> ANSWER 1 
+            ---> ANSWER 2 
+
+
+
+
+
+
+
+
+
+
+ok... eu tenho que me lembrar de como eu fazia isso...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+acho que é um MISTO entre EMBEDDED e referencing...
+
+
+
+
+
+
+
+
+
+
+
+QUESTION: 
+
+
+
+
+
+
+
+{
+    _id: ObjectId(zzzzz),
+
+    title: 'What is your problem?',
+
+    answers: [
+        {
+            answerId: ObjectId(aaaaaa);
+        },
+
+         {
+            answerId: ObjectId(bbbb);
+        },
+
+                 {
+            answerId: ObjectId(CCC);
+        }
+    ]
+}
+
+
+
+
+
+
+
+
+
+
+ANSWER: 
+
+
+
+{
+
+
+    title: "I dont't know.",
+    threadId: ObjectId(zzzzz)
+}
+
+
+
+
+
+
+
+
+-------------------------------------------
+
+
+
+
+
+
+NÃO SEI SE ISSO ESTÁ CERTO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> professor cria uma nova database, de nome 'support'....
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+ db.questionThreads.insertOne({creator: "Max", question: "How does all that work?", answers: []})
+
+
+
+
+
+
+
+
+
+
+
+ --> O PROFESSOR EXPLICA QUE 
+
+
+
+
+ PODERÍAMOS FAZER O QUE EU FIZ:
+
+
+
+
+ ESCREVER UMA COLLECTION SEPARADA PARA AS 'ANSWERS',
+
+
+ E AÍ APENAS ARMAZENAR O __ ID__ DAS QUESTIONS, AQUI...
+
+
+
+
+
+
+
+ EX:
+
+
+
+
+
+
+
+ > db.questionThreads.find()
+{ "_id" : ObjectId("62003559cc1f7323e85e8c9c"), "creator" : "Max", "question" : "How does all that work?",
+
+
+ "answers" : [ "q1a1", "q1a2" ] }
+
+
+
+
+
+
+
+
+
+
+-------> OK.... ESTAMOS SEGUINDO O APPROACH DO REFERENCING DE NOVO,
+
+
+por causa 
+
+de 
+
+vários 
+
+
+
+ids... 
+
+
+
+
+
+
+
+----> ok.... O PROFESSOR AÍ CRIA UMA COLLECTION DE ANSWERS,
+
+
+
+
+
+tipo assim:
+
+
+
+
+
+
+
+db.answers.insertMany([{_id: "q1a1", text: "It works like that."}, {_id: "q1a2", text: "Thanks!"}])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... 
+
+
+
+C
+OM ISSO,
+
+
+
+
+OS 2 ELEMENTOS TERÃO SIDO ADICIONADOS...
+ 
+
+
+
+
+
+
+
+
+ --> AÍ PODERÍAMOS FETCHEAR ESSAS ANSWERS MANUALMENTE, SIM.... -> 
+
+
+
+ RETRIEVARÍAMOS AS 
+
+
+ QUESTION THREADS,
+
+ E AÍ 
+
+
+
+ COM AS QUESTION THREADS, TERÍAMOS OS IDS 
+
+
+ Das answers...
+
+
+
+
+
+
+
+
+
+
+ --> OK.... --> SIM, PODERÍAMOS FAZER ISSO... --> E NÃO PRECISARÍAMOS RODAR MÚLTIPLAS QUERIES 
+
+
+ NESSA SEGUNDA ETAPA,
+
+ PQ 
+
+
+
+ HÁ UMA MANEIRA DE FAZER FETCH DE VÁRIOS DOCUMENTS AO MESMO TEMPO (passar um array de ids, e aí encontrar todos os products com esses ids)...
+
+
+
+
+
+
+
+
+
+
+ ---> 'HEY, GIVE ME ALL THE DOCUMENTS THAT ARE THIS, THIS AND THIS ID'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> MAS ISSO AINDA É UM EXTRA REQUEST... --> DE NOVO,
+
+
+ EMBEDDING POSSIVELMENTE 
+
+
+
+
+ SERÁ A MELHOR SOLUTION...
+
+
+
+
+
+
+
+ -
+---> PROFESSOR QUER QUE ESCREVAMOS ALGO ASSIM:
+
+
+
+
+
+
+
+
+db.questionThreads.insertOne(
+    {
+        creator: 'MAX', question: 'how does that work?',
+
+        answers: [
+            {
+                text: "Like that."
+            },
+                        {
+                text: "thanks."
+            }
+        ]
+    }
+)
+
+
+
+----------------------
+
+
+
+
+
+
+
+
+
+
+-> OK.... ESSE É O APPROACH EMBED... --> AGORA TEMOS UMA LISTA DE EMBEDDED DOCUMENTS (
+
+
+
+    one to many relations
+),
+
+
+MAS AINDA SERÃO EMBEDDED DOCUMENTS... ----> e 1 
+
+
+
+cenário 
+
+
+PARECIDO 
+
+
+SERIA 
+
+
+'POSTS' 
+
+
+E 'COMMENTS'
+
+relacionados a esses posts... ------> 1 CENÁRIO 
+
+
+
+
+COMO ESSE 
+
+FAZ SENTIDO
+
+
+
+
+DE 
+
+
+
+SER ASSIM... -> PQ FREQUENTEMENTE VOCÊ VAI QUERER 
+
+
+
+FETCHEAR AS QUESTIONS _ JUNTO__ DAS ANSWERS (
+
+    você vai querer fetchear a merged data...
+) ---------> E TIPICAMENTE 
+
+
+VOCÊ NUNCA TERÁ MILHARES DE 
+
+ANSWERS EM 1 MESMA THREAD... --------> E TAMBÉM NÃO TEMOS O PERIGO DE BLOATEAR NOSSO 
+
+
+DOCUMENT E 
+
+
+
+
+CHEGAR ÀQUELE LIMITE DE 16MB DO NOSSO DOCUMENT...
+
+
+
+
+
+
+
+--> É POR ISSO QUE ISSO É UM EXEMPLO PERFEITO DO EMBEDDING DOCUMENTS EM UMA RELATION 
+
+'one-to-many'...

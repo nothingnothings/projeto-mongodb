@@ -1,0 +1,225 @@
+
+
+RELATIONS --> OPÇÕES NO MONGODB....
+
+
+
+
+
+
+
+DEMOS UMA OLHADA NA DATA STRUCTURE GERAL...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS SEMPRE DEMOS UMA OLHADA NISSO SÓ EM 1 ÚNICA COLLECTION,,
+
+
+
+SEM RELAÇÃO COM OUTRAS COLLECTIONS..
+
+
+
+
+
+
+
+
+
+
+
+
+--> TIPICAMENTE VOCê TERÁ MÚLTIPLAS COLLECTIONS,
+
+EM QUE 
+
+OS 
+
+DOCUMENTS FICARAM 'RELATED'
+
+
+
+A OUTROS DOCUMENTS,
+
+
+EM OUTRAS COLLECTIONS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MANEIRAS DE FAZER 'RELATIONS':
+
+
+
+
+
+
+
+
+
+
+
+
+1) NESTED/EMBEDDED DOCUMENTS ---> 
+
+
+ex: temos um document 'address', dentro de cada USER, com zipcode, city, etc etc...
+
+
+
+
+
+--> É USADO PARA CASOS EM QUE QUEREMOS FACILMENTE 
+
+
+FETCHEAR ESSA DATA ESPECÍFICA A ESSE USER, 
+
+ao mesmo tempo em que o fetcheamos....
+
+
+
+
+
+EXEMPLO:
+
+
+
+{
+
+    userName: 'Max',
+    age: 29,
+    address: {
+        street: 'Second Street',
+        city: 'New York'
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2) REFERENCES... -----> VOCÊ VAI TER ALGO COMO 'cartId' dentro de um  document 'user',
+
+para o VINCULAR A 1 CART...
+
+
+(one-to-one relation)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+EXEMPLO DE REFERENCES:
+
+
+
+CUSTOMERS:
+
+{
+
+    userName: 'max'
+    favBooks: ['id1', 'id2']
+}
+
+
+
+
+
+BOOKS: 
+
+
+
+{
+    _id: 'id1',
+    name: 'Lord of the Rings 1'
+}
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO EVITA DUPLICATION, PQ QUANDO ALTERAMOS UM BOOK, NÃO VAMOS TER QUE MUDAR EM 10 DIFERENTES CUSTOMERS,
+
+E SIM 
+
+
+SÓ EM 
+
+'BOOKS', a collection de 'books'...
+
+
+
+
+
+
+-> FICAMOS COM ESSA RELATION, ATRAVÉS DE UMA REFERENCE....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> agora a pergunta é:
+
+
+
+
+QUANDO USAR CADA 1 DESSES NEGÓCIOS?

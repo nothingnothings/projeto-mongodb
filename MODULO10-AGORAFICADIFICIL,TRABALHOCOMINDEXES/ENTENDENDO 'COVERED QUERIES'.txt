@@ -1,0 +1,1005 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ESSA LIÇÃO, PROFESSOR CRIA UMA NOVA COLLECTION, DE 'customers'..
+
+
+
+
+
+
+
+
+
+
+
+
+--. AÍ ELE INSERE MANY DOCUMENTS....
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+}
+> db.customers.insertMany([{name: "Max", age: 29, salary: 3000}, {name: "Manu", age: 30, salary: 4000}])
+{
+        "acknowledged" : true,
+        "insertedIds" : [
+                ObjectId("620ec54db52b190285f9e5c3"),
+                ObjectId("620ec54db52b190285f9e5c4")
+        ]
+}
+>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... AGORA VAMOS CRIAR UM INDEX,
+
+
+por meio de 
+
+
+
+
+
+
+db.customers.createIndex()
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VAMOS CRIAR UM INDEX PARA NOSSOS 'NAMe',
+
+
+
+EM ASCENDING ORDER...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SERÁ TIPO ASSIM:
+
+
+
+
+
+
+
+db.customers.createIndex({name: 1})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> CERTO.... -> AGORA PDOEMOS RODAR UM FIND COM EXPLAIN,
+
+
+
+
+com 'executionStats',
+
+PARA VER COMO O MONGODB 
+
+
+
+
+
+VAI ENCONTRAR 'Max'..
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+db.customers.explain("executionStats").find(
+    {
+        name: "Max"
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+VEMOS ISTO, COMO RESULTADO:
+
+
+
+
+
+
+
+
+
+
+
+  "explainVersion" : "1",
+        "queryPlanner" : {
+                "namespace" : "newSessions.customers",
+                "indexFilterSet" : false,
+                "parsedQuery" : {
+                        "name" : {
+                                "$eq" : "Max"
+                        }
+                },
+                "maxIndexedOrSolutionsReached" : false,
+                "maxIndexedAndSolutionsReached" : false,
+                "maxScansToExplodeReached" : false,
+                "winningPlan" : {
+                        "stage" : "FETCH",
+                        "inputStage" : {
+                                "stage" : "IXSCAN",
+                                "keyPattern" : {
+                                        "name" : 1
+                                },
+                                "indexName" : "name_1",
+                                "isMultiKey" : false,
+                                "multiKeyPaths" : {
+                                        "name" : [ ]
+                                },
+                                "isUni
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> OU SEJA, VEMOS UM 'IXSCAN'...
+
+
+
+
+
+
+
+
+
+
+
+--> OBSERVAMOS QUE 
+
+
+
+
+
+1 KEY FOI EXAMINADA,
+
+
+
+
+
+
+
+
+E AÍ FOI USADO UM IXSCAN
+,
+
+
+
+
+PQ TEMOS 1 INDEX NESSE NAME...
+
+
+
+
+
+
+
+
+
+
+
+--> 1 DOCUMENT FOI RETORNADO ('nReturned: 1'),
+
+
+
+
+
+
+E 
+
+
+
+
+VEMOS QUE ELE:
+
+
+
+
+
+
+
+
+   "totalKeysExamined" : 1,
+                "totalDocsExamined" : 1,
+
+
+
+
+
+
+
+
+
+
+
+
+
+                --> olhou 1 key NO INDEX,
+
+
+
+
+
+
+                E AÍ RETORNOU APENAS 1 DOCUMENT...
+
+
+
+
+
+
+
+
+
+
+
+
+    --> E O PROFESSOR EXPLICOU, NA ÚLTIMA AULA,
+
+
+    QUE 
+
+
+    ESSE 
+
+
+    'totalDocsExamined'
+
+
+
+    PODE ATÉ CONSTAR COMO '0',
+
+
+    àS VEZES... --> ok, mas a pergunta é:
+
+
+
+
+
+
+    '''QUANDO E COMO ISSO FICARÁ COMO 0? ''''
+
+
+
+
+
+
+
+
+
+
+    -> é uma boa pergunta, pq 
+
+    NÓS REALMENTE TEMOS QUE FAZER 'GET' DESSE DOCUMENT,
+
+
+    NO FINAL DAS CONTAS... --> e o index, como estudamos anteriormente,
+
+
+
+
+    APENAS __ POSSUI 1 'POINTER' ao document, e nada mais do que isso...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    --> BEM.... O PROFESSOR NOS EXPLICA, AGORA, QUE 
+
+
+
+
+
+
+
+
+
+
+    O __ INDEX__ NÃO É TÃO SIMPLES ASSIM.... -----------> ELE NÃO TEM 
+
+
+    APENAS 
+
+    1 'POINTER AO DOCUMENT',
+
+
+
+
+
+    ELE TEM 
+
+
+    TAMBÉM 
+
+
+
+
+
+    1 'VALUE',
+
+
+
+    QUE É PRECISAMENTE O 'INDEXED VALUE'... ------> NESSE CASO,
+
+
+
+
+
+
+
+
+    O 'indexed value '
+
+
+    SERÁ 
+
+
+
+
+    'Max' e 'Manu', respectivamente (ou seja, OS VALUES DO FIELD em que temos o INDEX)...
+
+
+
+
+
+
+
+
+
+
+
+
+    -> ISSO É VISTO EM:
+
+
+
+            "indexBounds" : {
+                                        "name" : [
+                                                "[\"Max\", \"Max\"]"
+                                        ]
+                                },
+
+
+
+                                 
+
+
+
+
+
+
+
+
+
+
+----> OK.. ISSO SIGNIFICA QUE EM CADA INDEX TEMOS:
+
+
+
+
+
+
+
+
+1) O POINTER AO DOCUMENT ATRIBUÍDO A ESSE FIELD, DESSE INDEX....
+
+
+
+
+
+
+2) O VALUE __ DESSE FIELD, NESSE DOCUMENT...
+
+
+
+
+
+
+
+
+
+
+
+
+----> CERTO, MAS QUAL É A UTILIDADE DISSO?
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> BEM, PODEMOS FAZER 'REACH' 
+
+
+
+
+A UMA 
+
+
+'COVERED QUERY'
+
+SE VOCÊ 
+
+
+ACTUALLY FIZESSE 'find' 
+
+por '{name: "max"}' 
+
+
+
+
+
+
+
+E AÍ __ TAMBÉM __ _ADICIONASSE 'PROJECTION' ( segundo parâmetro do FIND),
+
+
+
+
+
+PARA RETORNAR _______________APENAS______________ O NAME,
+
+
+
+
+
+SEM RETORNAR O '_id' (ou seja, RETORNAR APENAS UMA PARTE DO DOCUMENT)....
+
+
+
+
+
+
+
+
+
+
+
+
+TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.customers.explain("executionStats").find({name: "Max"}, {_id: 0, name: 1})
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------------------------
+
+
+
+OU SEJA,
+
+VAMOS RETORNAR O NAME,
+
+
+
+
+
+E NENHUM OUTRO FIELD...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O EFEITO DISSO NO RESULTADO DE 'explain' é claro:
+
+
+
+
+
+
+
+
+
+
+
+
+  "executionStats" : {
+                "executionSuccess" : true,
+                "nReturned" : 1,
+                "executionTimeMillis" : 0,
+                "totalKeysExamined" : 1,
+                "totalDocsExamined" : 0,
+                "executionStages" : {
+                        "stage" : "PROJECTION_COVERED",
+                        "nReturned" : 1,
+                        "executionTimeMillisEstimate" : 0,
+                        "works" : 2,
+                        "advanced" : 1,
+                        "needTime" : 0,
+                        "needYield" : 0,
+                        "saveState" : 0,
+                        "restoreState" : 0,
+                        "isEOF" : 1,
+                        "transformBy" : {
+                                "_id" : 0,
+                                "name" : 1
+                        },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    -------> 'PROJECTION_COVERED' -> isso sinaliza que 
+
+
+    REALIZAMOS UMA 
+
+
+
+
+    'COVERED QUERY'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    ------->  ok... essencialmente o que fizemos aqui 
+
+    é 
+
+
+
+    '''I ONLY WANNA RETURN THE FIELDS WHICH ARE ALSO THE INDEXED FIELD/FIELDS'' (nesse caso, 'name')....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    -->  como resultado disso, você VERÁ QUE __ NENHUM DOCUMENT FOI ACTUALLY __ EXAMINADO_....
+
+
+
+
+
+
+
+
+     "executionStats" : {
+                "executionSuccess" : true,
+                "nReturned" : 1,
+                "executionTimeMillis" : 0,
+                "totalKeysExamined" : 1,
+                "totalDocsExamined" : 0,
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO SIGNIFICA, EM OUTRAS PALAVRAS,
+
+
+
+
+QUE 
+
+
+O RESULTADO DE SUA QUERY FOI DERIVADO/EXTRAÍDO __ EXCLUSIVAMENTE DE SEUS 'index'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> ELE RETORNOU 1 DOCUMENT, MAS CONSEGUIU FAZER ISSO _ INTEIRAMENTE_ DE DENTRO DE SEU INDEX...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OBS::: VOCê NEM SEMPRE SERÁ CAPAZ DE 'REACH THIS STATE' ... -> SEUS APPS RARAMENTE TERÃO ESSA OPÇÃO..
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS SE VOCÊ CONSEGUIR FAZER SEU APP FUNCIONAR COM ISSO,
+
+
+
+será mt bom..
+
+
+
+
+
+
+
+
+
+
+
+---> se você TEM UMA QUERY EM QUE VOCê PODE OPTIMIZAR SEU INDEX PARA ISSO,
+
+PARA ATINGIR 
+
+
+ESSE 
+
+STATE DE 'COVERED QUERY' (é chamado assim, PQ 
+
+
+
+A QUERY___ É 'FULLY COVERED' PELO INDEX....
+
+)
+
+
+
+
+
+
+
+
+--> SE VOCÊ TIVER ISSO,
+
+
+VOCÊ TERÁ UMA QUERY EXTREMAMENTE 
+
+PODEROSA E EFICIENTE, PQ VOCÊ VAI SKIPPAR AQUELE STAGE DE 'reaching out' 
+À COLLECTION PARA 
+
+FAZER GET DOS DOCUMENTS --> e isso obviamente ACELERA 
+
+SUA QUERY.... ---------> 
+
+
+
+
+
+
+
+
+SE VOCê CONSEGUIR FAZER ISSO FUNCIONAR,
+
+VOCê TERÁ UMA SOLUÇÃO __ SUPER RÁPIDA___....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> É CLARO QUE NÃO FAZ SENTIDO CRIAR DEZENAS DE INDEXES SÓ PARA 'cover all possible queries',
+
+
+PQ AÍ VOCê TERÁ UM PROBLEMA COM O 
+
+
+
+'WRITING DE FILES', 
+
+
+mais uma vez, e assim por diante (
+
+    pq aí você terá que fazer write em 30 index lists diferentes, quando for fazer write de 1 arquivo na sua collection...
+) --> e isso TAMBÉM OCUPA ESPAÇO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS SE VOCê TIVER UMA OPORTUNIDADE, E SE VOCê TIVER UMA QUERY QUE VOCê TIPICAMENTE RODA,
+
+
+
+E SE NESSA QUERY VOCÊ SÓ TIPICAMENTE RETORNA 2 FIELDS (o '_id' e seu field desejado),
+
+
+
+
+
+
+
+
+TALVEZ SEJA WORTH 
+
+
+ARMAZENAR ESSES VALORES EM 1 ÚNICO FIELD (isso é possível),
+
+
+
+OU ENTÃO,
+
+SE 
+
+
+
+VOCÊ ESTÁ LIDANDO COM 2 FIELDS,
+
+
+
+
+ARMAZENAR ESSES 2 FIELDS EM UM 'COMPOUND INDEX' (index misto),
+
+PQ 
+
+ISSO 
+
+
+AÍ VAI TE PERMITIR 
+
+
+
+
+
+'FULLY COVER THE QUERY' lá de dentro dos seus index (sem recorrer ao fetch nos documents, À segunda etapa de 'IXSCAN'..)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E ISSO É BEM LEGAL DE SE SABER,
+
+QUE EXISTE ESSE STATE de 'PROJECTION_COVERED' (covered query),
+
+
+
+
+
+QUE 
+
+àS VEZES PODE SER ALCANÇADO NOS SEUS APPS....

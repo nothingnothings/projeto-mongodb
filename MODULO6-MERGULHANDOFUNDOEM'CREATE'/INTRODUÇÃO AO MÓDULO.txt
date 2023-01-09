@@ -1,0 +1,217 @@
+
+
+
+
+
+
+
+
+
+UMA OLHADA MAIS DE PERTO NO 'CREATE' E 'IMPORT' DE DOCUMENTS....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> agora que vimos os core basics e fundamentals do mongodb,
+
+e como a data que vocÊ armazena 
+
+
+
+lá 
+
+
+
+
+
+
+
+
+SE PARECE,
+ E COMO VOCÊ TRABALHA COM ESSA DATA,
+
+
+ É 
+
+ HORA DE VER 
+
+
+
+
+ AS CRUD 
+
+ OPERATIONS MAIS DE PERTO....
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ---> JÁ VIMOS COMO PODEMOS INSERIR,
+
+ FIND,
+
+
+ READ 
+
+
+ DOCUMENTS,
+
+
+
+ MAS AGORA 
+
+ É
+  
+
+  HORA 
+
+
+
+
+
+
+  DE PEGAR UM POUCO MAIS DE INFO,
+
+
+
+
+  COMEÇANDO PELO 'CREATE' 
+
+
+  do crud....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> OK...
+
+
+
+  O QUE APRENDEREMOS NESSE MÓDULO? 
+
+
+
+--> PROFESSOR NÃO VAI NOS ENTEDIAR 
+
+
+
+MOSTRANDO OS INSERT METHODS DE NOVO....
+
+
+
+
+
+
+
+--> O PROFESSOR VAI NOS MOSTRÁ-LOS, MAS VAI 
+
+
+DIZER TAMBÉM 
+
+
+O QUE ELES FAZEM, E COMO PODEMOS OS CONFIGURAR....
+
+
+
+
+
+
+
+
+
+
+
+
+
+  1) VEREMOS OS DOCUMENT CREATION METHODS... 
+
+
+
+
+
+
+
+
+
+
+
+
+  2) VEREMOS ALGO RELACIONADO AO CREATE DE DOCUMENTS, QUE É O 'IMPORT' DE DOCUMENTS...
+
+
+
+(
+
+IMPORT AN EXISTING SET OF DATA INTO A DATABASE....
+
+
+--> PQ ISSO É UMA OPERAÇÃO COMUM,
+ 
+
+EM QUE 
+
+
+VOCÊ NÃO TEM SIMPLESMENTE UMA 
+
+
+APPLICATION  
+
+QUE 
+
+VAI INSERT NEW DOCUMENTS,
+
+MAS QUE 
+
+VOCê 
+
+JÁ TEM UM SET DE DATA,
+
+PROVAVELMENTE ORIGINÁRIO DE UMA OUTRA DATABASE,
+
+
+
+NÃO INTERESSA DE ONDE VEM,
+
+
+E AÍ VOCÊ QUER FAZER 
+
+ESSA DATA ENTRAR 
+
+NO MONGODB....
+
+
+)
+
+
+
+

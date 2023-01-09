@@ -1,0 +1,1045 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ESTUDAR O INSERT,
+
+
+O PROFESSOR 
+CRIOU UMA 
+
+DATABASE 
+
+NOVA....
+
+
+
+
+
+
+
+
+
+--> iniciamos nosso 
+
+
+
+mongod 
+
+como um 
+
+RUNNING SERVICE,
+
+
+com 
+
+
+
+
+net start MongoDB...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+CERTO... 
+
+AÍ CRIE UMA NOVA DATABASE...
+
+
+
+
+--> escreva 'use xxxxx' (nome da database),
+
+e aí 
+
+
+
+
+CRIE UMA NOVA COLLECTION NESSA DATABASE... --> PARA ISSO, INSIRA UMA NOVA PERSON NESSA COLLECTION...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.persons.insertOne(
+    {
+
+    }
+)
+
+
+
+
+
+
+
+
+--> COMPLEMENTE ESSE DOCUMENT...
+
+
+
+
+
+
+
+
+
+
+db.persons.insertOne(
+    {
+
+    }
+)
+
+
+
+
+
+
+
+
+
+NOSSO CÓDIGO FICARÁ ASSIM:
+
+
+
+
+
+
+db.persons.insertOne(
+    {
+                name: "Max",
+                age: 30,
+                hobbies: [
+                    "Sports",
+                    "Cooking"
+                ]
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... 
+
+AÍ 
+
+
+
+
+
+
+
+
+RECEBEMOS:
+
+
+
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("620460d7ecccc90a67dbdfd9")
+}
+> 
+
+
+
+
+
+
+
+
+--> ESSE NEGÓCIO DIZ QUE 
+
+O 
+
+
+ID FOI GERADO, NESSE DOCUMENT,
+
+COM SUCESSO..
+
+
+
+
+
+
+
+
+
+
+
+
+---> 
+
+
+AÍ O PROFESSOR ADICIONA UMA NOVA PERSON, TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.persons.insertOne(
+    {
+                name: "Manu",
+                age: 40,
+                hobbies: [
+                    "Sports",
+                    "Cooking"
+                ]
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AÍ O PROFESSOR ESCREVE UM INSERTMANY...
+
+
+
+
+
+
+
+
+
+--> PRECISAMOS PASSAR UM ARRAY COMO PARÂMETRO,
+
+COM 
+
+
+VÁRIOS OBJECTS/DOCUMENTS NO INTERIOR...
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.persons.insertMany(
+    [
+
+        {
+
+        },
+
+        {
+
+        }
+    ]
+)
+
+
+
+
+
+
+
+
+
+
+
+--> É CLARO QUE EXISTE UMA MANEIRA 
+
+
+
+DE FAZER O 
+
+
+
+
+'insertMany'
+
+
+
+
+
+
+ACEITAR _ UMA DATA__ DEPOIS DA vírgula do primeiro parâmetro,
+
+
+
+MAS ISSO É ALGO QUE O PROFESSOR MOSTRARÁ DEPOIS...
+
+
+
+
+
+
+
+
+
+
+
+--> MAS SE VOCÊ QUER INSERIR MÚLTIPLOS DOCUMENTS,
+
+BASTA PASSAR 1 LISTA DELEES...
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+db.persons.insertMany(
+    [
+
+        {
+
+                name: "Anna",
+                age: 29,
+                hobbies: [
+                    "hobby1",
+                    "hobby2",
+                    "hobby3"
+                ]
+        },
+
+    ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> MESMO COM SÓ UM ÚNICO DOCUMENT NESSE ARRAY,
+
+
+O CÓDIGO DE INSERTMANY AINDA FUNCIONARÁ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> MAS A IDEIA CENTRAL POR TRÁS DE 'INSERTMANy'
+
+
+
+
+É INSERIR VÁRIAS COISAS,
+
+EM VEZ DE SÓ UMA...
+
+
+
+
+
+
+
+
+
+
+
+------> OK....
+
+
+
+
+
+
+
+
+
+
+---------> MAIS ALGUMA COISA....?
+
+
+
+
+
+
+
+
+
+
+
+
+O PROFESSOR INSERE MÚLTIPLAS PERSONS,
+
+COM ESTE CÓDIGO:
+
+
+
+
+
+
+
+
+db.persons.insertMany(
+    [
+
+        {
+
+                name: "Anna",
+                age: 29,
+                hobbies: [
+                    "hobby1",
+                    "hobby2",
+                    "hobby3"
+                ]
+        },
+         {
+
+                name: "Axel",
+                age: 29,
+                hobbies: [
+                    "hobby1",
+                    "hobby2",
+                    "hobby3"
+                ]
+        } 
+
+
+    ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> COMO O PROFESSOR HAVIA MENCIONADO,
+
+HÁ TMABÉM 
+
+
+O METHOD DE 'db.persons.insert({})'...
+
+
+
+
+
+
+
+
+
+
+
+--> ELE ESCREVE ASSIM:
+
+
+
+
+
+
+db.persons.insert({name: "Phil", age: 35})
+
+
+
+
+
+
+
+
+
+
+
+
+--> ELE GANHA 
+UM RESULTADO DE 
+
+
+'
+
+
+WriteResult({"nInserted": 1})
+
+
+
+
+
+
+'
+
+
+
+
+
+
+
+
+
+
+-> É UM RESULTADO 1 POUCO DIFERENTE,
+
+
+MAS O QUE INTERESSA É 
+
+QUE 
+
+
+
+
+O 
+
+
+
+
+
+__ID __ FOI ADICIONADO, SIM,
+
+
+SÓ ESSE OUTPUT AÍ NÃO NOS INFORMA DISSO....
+
+
+
+
+
+
+
+
+
+
+
+
+--> JÁ O OUTPUT DE insertOne
+
+
+
+e 
+
+
+'insertMany'
+
+
+
+SEMPRE VAI NOS DIZER OS INSERTED UNIQUE IDS 
+
+
+
+nos documents... (
+
+
+    uma vantagem dessas sintaxes, no caso, pq 
+
+
+    o output imediatamente 
+
+    nos dá esses ids;
+
+    não precisamos queriar a database manualmente para encontrar esses ids...
+)
+
+
+
+
+
+
+
+
+
+
+
+--> E ISSO É UMA VERDADEIRA VANTAGEM,
+
+
+PQ SE VOCÊ ESTÁ CONSTRUINDO UM APLICATIVO EM QUE VOCÊ INSERE ALGO NA SUA DATABASE,
+
+
+VOCê FREQUENTEMENTE VAI QUERER 
+
+
+
+
+'GET THAT ID BACK',
+
+
+conesguir esse id de volta dessa 
+
+INSERT OPERATION,
+
+
+E AÍ IMEDIATAMENTE A UTILIZAR NO SEU APP,
+
+
+PARA RODAR COISAS COMO 
+
+
+'db.persons.find({_id: ObjectId(xxxxx)})' 
+
+
+
+
+
+
+
+
+
+
+
+
+--> POR EXEMPLO,
+
+
+
+SE VOCê ESTIVER ESCREVENDO UM APP EM QUE 
+
+AS PESSOAS PODEM IMEDIATAMENTE DELETAR _ OS _ OBJECTS QUE ELAS CRIARAM NA SUA DATABASE,
+
+
+VOCÊ 
+
+
+
+
+IMEDIATAMENTE TERÁ NECESSIDADE DESSE ID PARA DELETAR 
+
+ESSE OBJECT,
+
+NA SUA UI/FRONTEND APP,
+
+
+
+
+
+
+
+
+E ESSE RETURN 
+
+
+
+DE 'insertedIds' 
+
+
+
+
+
+TE _ _AJUDA_, 
+
+
+
+PQ A INSERT OPERATION JÁ VAI TE CONTAR SOBRE O ID DO NEGÓCIO QUE FOI CRIADO...
+
+
+
+
+
+
+
+
+
+
+
+--> SE VOCÊ NÃO USAr 'insertOne'
+
+
+ou 'insertMany',
+
+VOCÊ 
+
+
+
+
+
+É OBRIGADO A RODAR UM FIND __CLUNKY__ LOGO APÓS A INSERT OPERATION,
+
+
+PARA AÍ RETRIEVAR 
+
+
+O 
+
+
+_ID 
+
+
+
+das coisas que foram adicionadas...
+
+
+
+
+
+
+
+
+
+
+--> E É POR ISSO QUE 
+
+
+
+
+o 
+
+
+
+'insertedIds'
+
+
+visto quando 
+
+NÓS 
+
+
+
+
+INSERIMOS DOCUMENTS NÃO É UMA COISA BANAL,
+
+É UM NICE BENEFIT, QUE VOCê DEVE USAR...
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+> db.persons.insertOne(
+...     {
+...                 name: "Manu",
+...                 age: 40,
+...                 hobbies: [
+...                     "Sports",
+...                     "Cooking"
+...                 ]
+...     }
+... )
+
+
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("6204612ade45f9124c2cd8b6")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... OUTRA RAZÃO PARA NÃO USAR O 'insert()'...
+
+
+
+
+
+
+
+
+
+
+
+
+-> A ÚNICA MORAL É QUE ELE PODE SER USADO TANTO PARA A SINGLE PERSON,
+
+COMO PARA MÚLTIPLAS PERSONS....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> certo.... mais alguma coisa?
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, SE TENTAMOS 
+
+INSERIR UM ARRAY/MANY 
+
+
+com 
+
+esse 'insert()',
+
+
+COM UM CÓDIGO COMO:
+
+
+
+
+
+
+
+
+
+
+db.persons.insert(
+ [
+        {
+                name: "Anna",
+                age: 29,
+                hobbies: [
+                    "hobby1",
+                    "hobby2",
+                    "hobby3"
+                ]
+        },
+         {
+                name: "Axel",
+                age: 29,
+                hobbies: [
+                    "hobby1",
+                    "hobby2",
+                    "hobby3"
+                ]
+        } 
+    ]
+
+)
+
+
+
+
+
+
+
+
+
+RECEBEMOS UM RESULT COMO ESTE:
+
+
+
+
+
+
+
+
+
+
+
+
+> db.persons.insert(
+...  [
+...         {
+...                 name: "Anna",
+...                 age: 29,
+...                 hobbies: [
+...                     "hobby1",
+...                     "hobby2",
+...                     "hobby3"
+...                 ]
+...         },
+...          {
+...                 name: "Axel",
+...                 age: 29,
+...                 hobbies: [
+...                     "hobby1",
+...                     "hobby2",
+...                     "hobby3"
+...                 ]
+...         }
+...     ]
+...
+... )
+BulkWriteResult({
+        "writeErrors" : [ ],
+        "writeConcernErrors" : [ ],
+        "nInserted" : 2,
+        "nUpserted" : 0,
+        "nMatched" : 0,
+        "nModified" : 0,
+        "nRemoved" : 0,
+        "upserted" : [ ]
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ganhamos, portanto, um 'BulkWriteResult'...
+
+
+
+
+
+
+
+
+
+
+
+
+---> ISSO AINDA NÃO NOS DIZ O ID,
+
+
+E 
+
+
+GANHAMOS RESULTS INÚTEIS COMO 
+
+
+
+'nRemoved' (número de elementos removidos, que sempre será de 0)...
+
+
+
+
+
+
+
+
+
+
+
+
+-------> É POR ISSO QUE O INSERTONE E INSERTMANY SÃO BEM MAIS 
+
+
+
+
+ÚTEIS,
+
+tanto 
+em questão de utilidade,
+
+como de segurança....

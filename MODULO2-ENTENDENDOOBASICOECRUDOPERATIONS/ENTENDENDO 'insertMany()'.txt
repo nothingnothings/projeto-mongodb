@@ -1,0 +1,258 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> VIMOS COMO PODEMOS 'insert, update, delete, find'
+
+
+coisas,
+
+
+na última lição...
+
+
+
+
+
+
+
+
+
+
+--> NOVAMENTE,
+
+TEMOS AQUELE ARQUIVO DE FLIGHTS, QUE TÍNHAMOS ANTES....
+
+
+
+
+
+
+
+
+
+
+
+[
+    {
+        "departureAirport": "MUC",
+        "arrivalAirport": "SF0",
+        "aircraft": "AIRBUS A380",
+        "distance": 12000,
+        "intercontinental": true
+    },
+        {
+        "departureAirport": "LHR",
+        "arrivalAirport": "TXL",
+        "aircraft": "AIRBUS A320",
+        "distance": 950,
+        "intercontinental": false,
+        "example course": true
+    }
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ELE SEGURA UM ARRAY DE JSON DOCUMENTS ({})
+
+
+
+
+
+
+--> E AGORA QUEREMOS USAR ESSE ARRAY INTEIRO....
+
+
+
+
+
+
+
+
+
+--> O QUE FAREMOS, AGORA, É USAR O 
+
+
+
+'db.flightData.insertMany()'....
+
+
+
+
+
+
+
+
+
+
+--> INSERTMANY TE DEIXA, COMO O NOME SUGERE,
+
+INSERIR MANY DOCUMENTS.... -------> 
+
+
+
+E ISSO, NO CASO,
+
+
+NÃO É FEITO COM ALGO ESTÚPIDO COMO UM 
+
+PASS DE VÁRIOS OBJETOS, SEPARADOS POR ','
+,
+
+
+E SIM 
+
+É FEITO 
+
+
+
+
+pelo 
+
+
+pass 
+
+
+DE UM 
+
+
+ARRAY COM VÁRIOS OBJECTS....
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+db.flightData.insertMany(
+
+    
+
+[
+    {
+        "departureAirport": "MUC",
+        "arrivalAirport": "SF0",
+        "aircraft": "AIRBUS A380",
+        "distance": 12000,
+        "intercontinental": true
+    },
+        {
+        "departureAirport": "LHR",
+        "arrivalAirport": "TXL",
+        "aircraft": "AIRBUS A320",
+        "distance": 950,
+        "intercontinental": false,
+        "example course": true
+    }
+]
+
+
+
+
+)
+
+
+
+
+
+
+
+
+---------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> OK.... deu certo....
+
+
+
+
+{
+        "acknowledged" : true,
+        "insertedIds" : [
+                ObjectId("61ff05eb156a623d98a99136"),
+                ObjectId("61ff05eb156a623d98a99137")
+        ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> 2 ids diferentes, para 2 elementos diferentes...
+
+
+
+
+
+
+
+
+--> OK, AGORA VIMOS INSERT ONE  E INSERT MANY..
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA HÁ OUTRA COISA QUE ELE QUER NOS MOSTRAR, RELATIVA AO FIND DE DATA....

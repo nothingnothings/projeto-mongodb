@@ -1,0 +1,1300 @@
+
+
+
+
+
+OK ... APRNDEMOS UM MONTE SOBRE SCHEMAS E RELATIONS, POR ISSO DEVEMOS PRATICAR....
+
+
+
+
+
+
+
+
+
+--> PROFESSOR QUER QUE 
+
+
+
+PENSEMOS SOBRE A ESTRUTURAÇÃO DE DATA 
+
+
+
+
+
+
+DE UM APP, AGORA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> TEREMOS:
+
+
+
+
+
+
+1) UM USER COMUM -----> NOSSO APP SERÁ UM 'server-side rendered views', ou um SPA, um mobile app... (qualquer coisa)...
+
+
+
+
+
+
+
+2) UM 'APP SERVER' ----> A ELE ENVIAREMOS UM MONTE DE REQUESTS DIFERENTS....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> COMO VAMOS CRIAR UM BLOG,
+
+OS USUÁRIOS DEVERÃO SER CAPAZES DE CRIAR 1 POST, EDITAR 1 POST, DELETAR POST, FETCHEAR POSTS E FETCHEAR 1 ÚNICO POST.... -----> POR FIM, 
+
+
+NOSSO CÓDIGO PERMITE O POST DE 'comments'....  ( podemos salvar comments, e aí podemos FETCHEAR ESSES COMMENTS, PARA OS DISPLAYAR.... )
+
+
+
+
+
+
+
+
+
+
+
+3) UM 'APP SERVER' --> É O SERVER COM NOSSO CÓDIGO ESCRITO COM PHP,
+
+
+
+NODEJS, '.net'...
+
+
+
+
+
+
+
+
+
+
+
+--------> OK.... NOSSO CÓDIGO ESTÁ SENDO EXECUTADO..
+
+
+
+
+
+
+
+
+
+--> NÃO É UM CURSO DE WEB DESIGN...
+
+
+
+
+
+
+
+-> NÃO VAMOS ESCREVER CÓDIGO, AQUI... --> e sim só vamos estruturar nossa database... 
+
+
+
+
+
+
+
+--> VAMOS VER COMO 1 DUMMY REQUEST 
+
+
+É ENVIADO AO NOSSO APP....
+
+
+
+
+
+
+
+
+
+
+--> NOSSO CÓDIGO EM 'APP SERVER' 
+
+
+
+VAI SEMPRE USAR O 'MONGODB DRIVER' ( QUE PODE ser de qualquer linguagem, php, .net, nodejs, c#, etc)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AQUI USAREMOS O SHELL NO LUGAR DO MONGODB DRIVER,
+
+
+MAS AINDA VAMOS CONSEGUIR ENVIAR UMA QUERY AO SERVER,
+
+
+
+por meio disso..
+.
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NOSSO OBJETIVO É CRIAR UM SCHEMA,
+
+
+
+IDENTIFICAR AS CORE ENTITIES QUE TEMOS NESSE MUNDO,
+
+E AÍ COMO OS SCHEMAS PARA ESSAS ENTITIES 
+
+
+
+
+
+
+
+PODEM SE PARECER,
+
+
+COMO 
+
+
+
+FICARÃO 'RELATED',
+
+E COMO 
+
+
+
+
+
+NÓS VAMOS 'MODEL' ESSAS RELATIONS...
+
+
+
+
+
+--> E AÍ VAMOS PLAY AROUND COM ALGUMAS QUERIES,
+PARA VER como
+
+
+
+
+
+
+O MONGODB DRIVER INTERAGIRÁ 
+
+COM NOSSO APP...
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR PEDE QUE 
+
+
+
+
+DESENHEMOS 
+
+
+
+AS 
+
+
+
+ESTRUTURAS/ENTITIES....
+
+
+
+
+
+
+
+
+
+-> NO NOSSO BLOG,
+
+TEREMOS:
+
+
+
+
+
+
+
+
+
+
+
+
+1) USERS...
+
+
+
+
+
+2) POSTS...
+
+
+
+
+
+
+
+3) COMMENTS.... (embeddados dentro dos posts, provavelmente)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> CADA USER PROVAVELMENTE TERÁ 'many posts' (
+
+
+
+
+
+    relation de 
+
+
+    'one-to-many'...
+
+)
+
+
+
+
+
+
+
+
+
+
+
+--> CADA POST TERÁ 'comments' --> 'one-to-many'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> PERGUNTA:
+
+
+
+os posts vão mudar com muita frequência?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> COMO SERÁ COMPOSTO 1 'user'?
+
+
+
+
+
+
+
+
+
+
+-> PROVAVELMENTE SERÁ FORMADO ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+User:
+
+
+
+
+{
+
+
+    name: 'Max',
+
+
+    age: 29,
+
+
+    posts: [
+        'p1',
+
+        'p2',
+
+        'p3'
+    ]
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+NOSSOS POSTS, POR SUA VEZ,
+
+
+PROVAVELMENTE FICARÃO ASSIM:
+
+
+
+
+
+
+
+
+
+POST:
+
+
+{
+
+
+    title: 'What is your problem?',
+    text: 'aaaaaaaaaaaaaaaaaaaaa',
+    _id: 'p1',
+    tags: 'Sandwich',
+    comments: [
+        {
+            commentId: 'c1',
+            text: 'I dont know.'
+        },
+                {
+            commentId: 'c2',
+            text: 'you dont know.'
+        },
+                        {
+            commentId: 'c3',
+            text: 'we dont know.'
+        }
+
+    ]
+}
+
+
+
+
+
+
+
+
+--------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+O USER VAI TER _'id',
+
+
+
+por isso editamos assim:
+
+
+
+
+
+{
+
+
+    name: 'Max',
+    _id: ObjectId(aaaaa),
+    age: 29,
+    email: example@test.com
+
+    posts: [
+        'p1',
+
+        'p2',
+
+        'p3'
+    ]
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+POST:
+
+
+
+
+
+
+
+
+
+
+{
+
+
+    title: 'What is your problem?',
+    text: 'aaaaaaaaaaaaaaaaaaaaa',
+    _id: 'p1',
+    tags: 'Sandwich',
+    comments: [
+        {
+            commentId: 'c1',
+            text: 'I dont know.'
+        },
+                {
+            commentId: 'c2',
+            text: 'you dont know.'
+        },
+                        {
+            commentId: 'c3',
+            text: 'we dont know.'
+        }
+
+    ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> já o comment precisa ter '_id' e 'text'... (mas eu embeddei esses 'comments' dentro de meus 'post')...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS COMO ESSAS ENTITIES VÃO SE 'RELATE'?
+
+
+
+
+
+
+
+
+
+
+
+-_> BEM, 1 USER PODERÁ 'CREATE A POST'... ---> E TAMBÉM PODE, PORTANTO, 'edit/delete' posts..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> 1 USER __ TAMBÉM __ PODE '''comment''' um post... (
+
+
+    ou seja,
+
+
+    1 user 
+
+
+    TAMBÉM PODE ADICIONAR 
+
+
+
+    COMMENTS A 1 POST...
+) 
+
+(
+
+
+OU SEJA,
+
+
+
+
+CADA POST PODE TER 
+
+MÚLTIPLOS COMMENTS,
+
+
+EM QUE 
+
+CADA COMMENT 
+
+
+TAMBÉM SABE 
+
+QUAL USER 'created' aquele comment....
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> nos 'comments', talvez seja possível usar REFERENCING (
+
+    colocar 'userId', 
+
+
+
+    para referenciar o user...
+
+) ---> faremos isso se os comments NÃO PODEM SER EDITADOS... (evitar o duplicate e o manual update de nossa data)...
+
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+{
+
+
+    title: 'What is your problem?',
+    text: 'aaaaaaaaaaaaaaaaaaaaa',
+    _id: 'p1',
+    tags: 'Sandwich',
+    comments: [
+        {
+            commentId: 'c1',
+            text: 'I dont know.',
+            userId: ObjectId('aaaaaaaa')
+        },
+                {
+            commentId: 'c2',
+            text: 'you dont know.'
+                userId: ObjectId('aaaaaaaa')
+
+        },
+                        {
+            commentId: 'c3',
+            text: 'we dont know.'
+                userId: ObjectId('aaaaaaaa')
+        }
+
+    ]
+}
+
+
+
+
+---------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+HÁ MTAS OPÇÕES QUE PODERÍAMOS SEGUIR...
+
+
+
+
+
+
+
+
+
+
+
+--> PODERÍAMOS 'EMBED' tudo... --> 
+
+
+
+
+
+
+
+
+
+
+PODERÍAMOS COLOCAR TUDO EM 1 COLLECTION SÓ,
+
+
+
+
+
+
+COMO A COLLECTION DE 'posts':
+
+
+
+
+
+
+
+
+
+
+
+DENTRO DESSE 'posts',
+
+
+
+
+
+
+
+
+
+
+DE CADA OBJECT 'post',
+
+
+poderíamos ter 
+
+
+1 propriedade 'user' ---> 
+
+
+
+
+
+
+
+
+
+
+
+ESSE 'user'
+
+PODERÁ SER UM EMBEDDED DOCUMENT,
+
+que 
+
+
+SEGURARÁ 
+
+
+
+A USER DATA,
+
+MAS TAMBÉM 
+
+SEGURARÁ 
+
+
+
+
+
+
+
+OS IDS DOS COMMENTS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+{
+
+
+    title: 'What is your problem?',
+    text: 'aaaaaaaaaaaaaaaaaaaaa',
+    _id: 'p1',
+    tags: 'Sandwich',
+    user: {
+        
+        
+            
+    name: 'Max',
+    _id: ObjectId(aaaaa),
+    age: 29,
+    email: example@test.com
+        comments: [
+        {
+            commentId: 'c1',
+
+        },
+                {
+            commentId: 'c2',
+        },
+                        {
+            commentId: 'c3',
+        }
+
+    ]
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> PODERÍAMOS USAR REFERENCING NESSE 'comments', ou então embedding...
+
+
+
+
+
+
+
+
+
+---> POR MEIO DESSE APPROACH, FICARÍAMOS SÓ COM 
+
+
+
+1 única collection, a de 'posts'..
+
+
+
+
+
+
+
+
+
+
+
+
+---> POSTS, COM EMBEDDED USERS EM 1 SINGLE POST,
+
+
+
+
+
+embedded users e 
+embedded COMMENTS....
+
+
+
+
+
+
+
+
+
+
+
+
+--> A PERGUNTA É:
+
+
+
+
+
+
+
+
+
+'''ESSE APPROACH É BOM???''''
+
+
+
+
+
+
+
+
+
+BEM, PARTES DESSE APPROACH SÃO BOAS... -------> PROFESSOR 
+
+
+
+
+
+GOSTA  DO EMBED DE 'comments'
+
+
+DENTRO DO USER....
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> ISSO PQ _ O PROFESSOR __ QUER _ QUE 
+
+
+CADA 'comment'
+
+
+seja 
+
+
+RELACIONADO AO USER QUE OS CRIOU... ------> ALÉM DISSO,
+
+OS 
+
+
+COMMENTS SÃO UMA RELATION DE 'ONE-TO-MANY'.... (
+
+
+
+    PQ 1 POST PODE TER MANY COMMENTS,
+
+
+MAS 1 COMMENT SEMPRE 
+
+PERTENCERÁ 
+
+A APENAS 1 POST... -----> 1 post também nunca terá MILHOES DE COMMENTS,
+
+
+
+
+E NÓS FREQUENTEMENTE 
+
+VAMOS QUERER FETCHEAR 
+
+
+NOSSO POST COM 
+
+
+OS COMMENTS ANEXADOS A ELE..;
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> É POR ISSO QUE O NEST DOS COMMENTS 
+
+
+NOS NOSSOS POSTS é uma boa solution....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... MAS E O NEST DO USER 
+
+
+
+
+
+NO POST,
+
+isso é uma boa ideia?
+
+
+
+
+
+
+
+
+
+--> PROFESSOR ACHA QUE NÃO.... --> NESTING DO USER NÃO É BOM----> 
+
+
+
+PQ SE NESTEARMOS UM USER AQUI,
+
+
+
+
+
+VAMOS __ TER UM PROBLEMÃO.... -------> PROBLEMÃO PQ 
+
+
+
+
+1 USER _ PODERÁ_ _ CRIAR 
+
+
+MÚLTIPLOS POSTS...--> ISSO SIGNIFICA QUE 
+
+
+SE 
+
+
+
+A USER DATA EVENTUALMENTE FOR ALTERADA (ex: email mudou),
+
+
+
+
+
+
+AÍ _ NÓS __ SEREMOS OBRIGADOS A EDITAR ESSE 'USER' em _ TODOS _OS POST DOCUMENTS... (
+
+    mt ruim.... ---> mt duplicate data...
+)
+
+
+
+
+
+
+
+
+
+
+-> E APESAR DE ISSO NÃO ACONTECER DIARIAMENTE,
+
+
+
+
+
+O USER PODE REALMENTE PODE MUDAR SUA PROFILE,
+
+
+O QUE 
+
+
+FAZ COM QUE ISSO SEJA RUIM...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> É POR ISSO QUE O PROFESSOR É FÃ DE CRIAR 2 COLLECTIONS, AQUI...
+
+
+
+
+
+
+
+
+
+
+--> 1 COLLECTION PARA OS USERS,
+
+
+
+E OUTRA PARA OS 'POSTS'...
+
+
+
+
+
+
+(
+
+
+    exatamente como eu fiz...
+)
+
+
+
+
+
+
+
+
+
+
+
+--> NÃO VAMOS TER UMA COLLECTION de 'comments',
+
+
+
+
+
+
+MAS PROVAVELMENTE VAMOS COLOCAR OS 'comments' DENTRO DE CADA 'post'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> VAMOS TER POSTS E USERS,
+
+
+
+E VAMOS USAR ESSAS COLLECTIONS COM ALGUNS EMBEDDED DOCUMENTS (os comments, nos posts)...
+
+
+
+
+
+
+
+
+
+--> TAMBÉM VAMOS USAR EMBEDDING NA NOSSA PROPRIEDADE 'tags'... --> pq tags são arrays de strings...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--_> OK... ESSA É A SOLUÇÃO DO PROFESSOR...
+
+
+
+
+
+
+
+
+
+
+
+-> DEVEMOS VOLTAR À SHELL E BRINCAR UM POUCO COM ESSA CONFGURAÇÃO...

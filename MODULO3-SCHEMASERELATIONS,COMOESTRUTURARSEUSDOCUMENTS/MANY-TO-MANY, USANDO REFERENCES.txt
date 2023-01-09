@@ -1,0 +1,662 @@
+ 
+
+
+
+
+
+
+
+
+
+ NA ÚLTIMA LIÇÃO, DEMOS UMA OLHADA EM UMA RELAÇÃO 
+
+
+
+ 'MANY-TO-MANY'
+
+
+ usando 
+
+ EMBEDDED DOCUMENTS...
+
+
+
+
+
+
+ ex:
+
+
+ 
+
+
+{
+        "_id" : ObjectId("62009cb3f9a311dfa4662386"),
+        "name" : "Max",
+        "orders" : [
+                {
+                       "title": "A book",
+                       "Price": 12.99,
+                       "quantity": 2,
+                       "productId": ObjectId(asasjaskas)
+                },
+
+                            {
+                       "title": "A TSHIRT",
+                       "Price": 15.99,
+                       "quantity": 3,
+                       "productId": ObjectId(asasjaskas)
+                }
+
+
+        ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> NESSA RELATION, 
+
+
+O CHANGE DE DATA PODE NÃO SER 'TÃO BAD', mesmo 
+
+
+com duplicates __ ERRADOS_.... (caso de 'orders', por exemplo... snapshots )... --> isso significa que Às VEZES O EMBEDDING DE DOCUMENTS PODE SER FINE, MESMO COM MANY-TO-MANY RELATIONs...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS AGORA VAMOS VER UM EXEMPLO, O EXEMPLO 6,
+
+EM QUE O 'SPLITTING IT UP' 
+
+DE NOSSO CÓDIGO,
+
+
+POR MEIO DE 
+
+'REFERENCES',
+
+
+
+TALVEZ SEJA MELHOR...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> É O EXEMPLO DOS 'BOOKS' E DOS 'AUTHORS'...
+
+
+
+
+
+
+
+
+
+"""1 BOOK TEM VARIOS AUTHORS, 1 AUTHOR PODE PERTENCER A VARIOS BOOKS''...
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+ 
+AUTHOR A ---__> BOOK  1
+
+        ---> BOOK 2 
+
+
+
+
+
+AUTHOR B --> BOOK 3 
+    |
+    |
+    |---------->
+                |
+                |
+                |
+                |
+AUTHOR C --> BOOK 4 
+
+            --> BOOK 5
+            
+
+
+
+
+
+-----------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+--. é uma typical many-to-many relation....
+
+
+
+
+
+
+
+----------> ok... PARA ISSO,
+
+
+
+
+
+
+O PROFESSOR VAI ESCREVER ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ele cria uma database de 'bookRegistry'....
+
+
+
+
+mongod --> mongo --> use bookRegistry --> 
+
+
+
+
+
+
+
+
+
+AÍ CRIAMOS UMA 
+
+
+
+
+COLLECTION DE 'books'...
+
+
+
+
+
+
+--> VAMOS COMEÇAR PELA 'EMBEDDED APPROACH':
+
+
+
+
+
+db.books.insertOne({name: 'My favorite Book', authors: [{name: 'Max Schwarz', age: 29}, {name: 'MANU', age: 25}]})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> OK, ESSE É O APPROACH DO EMBEDDED DOCUMENTS...
+
+
+
+
+
+
+
+
+
+-> MAS NÓS TAMBÉM TIPICAMENTE TEREMOS UMA COLLECTION DE 'AUTHORS'....
+
+
+
+
+
+
+
+
+
+
+
+
+db.authors.insertMany(
+    [
+        {name: 'Max Schwarz', age: 29, address: {street: "main"}}, 
+        
+        {name: "MANU", age: 25, address: {street: "treet"}}
+        
+        ]
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... 
+
+
+
+
+
+
+
+
+
+AÍ NOSSA AUTHOR DATA VAI FICAR ASSim:
+
+
+
+
+> db.authors.find().pretty()
+{
+        "_id" : ObjectId("6201de9b45f645f6267d108e"),
+        "name" : "Max Schwarz",
+        "age" : 20,
+        "address" : {
+                "street" : "main"
+        }
+}
+{
+        "_id" : ObjectId("6201de9b45f645f6267d108f"),
+        "name" : "Manu lore",
+        "age" : 30,
+        "address" : {
+                "street" : "treet"
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------> JÁ A COLLECTION DE BOOKS VAI FICAR ASSIM:
+
+
+
+
+
+> db.books.find().pretty()
+{
+        "_id" : ObjectId("6201de0b45f645f6267d108d"),
+        "name" : "My favorite Book",
+        "authors" : [
+                {
+                        "name" : "Max Schwarz",
+                        "age" : 29
+                },
+                {
+                        "name" : "MANU",
+                        "age" : 25
+                }
+        ]
+}
+
+
+
+
+
+
+
+
+---------------------------------------
+
+
+
+
+
+
+
+
+
+OK.... EM CADA BOOK temos a data de quais authors estão relacionados com essa publicação...
+.
+
+
+
+
+
+
+-> O PROBLEMA ACONTECE SE __ ALGUM __ DOS 'AUTHOR'
+
+
+FOR ALTERADO... ----> TALVEZ O PROFESSOR FICOU MAIS VELHO (mudou a age),
+
+
+
+ou então SE MOVEU (mudou o address)... ---> AÍ,
+
+
+SE ISSO ACONTECER,
+
+
+SEREMOS/SERÍAMOS FORÇADOS 
+
+A 
+
+ALTERAR TAMBÉM OS 'BOOK' documents,
+
+
+
+pq eles tem 
+
+
+
+duplicate data.... ---------> E ISSO TAM´BEM 
+
+
+
+
+ACONTECE 
+
+SE O PROFESSOR SE CASAR, PQ AÍ O NOME VAI MUDAR.... --> UMA SNAPSHOT NÃO BASTA,
+
+
+PQ VAMOS QUERER A 'LATEST DATA',
+
+nesse caso....
+
+
+
+
+
+
+
+
+
+
+
+
+----------> A AGE TBM DEVE SER 'UP TO DATE',
+
+para todos os future books...- -> É POR ISSO QUE, NESSE CASO,
+
+
+
+
+
+SERIA BEM MELHOR USAR REFERENCES,
+
+
+como 
+
+
+
+
+'authorId '-------- >
+
+
+
+
+
+
+A ALTERNATIVA SERIA 
+
+
+
+
+
+
+FAZER COM QUE SE  A AGE mudar lá em 'authors',
+
+
+
+
+fazer 
+
+
+
+UM UPDATE 
+
+LÁ EM BOOks (
+
+    'find all the books where this author is an author'....
+) -----> E ISSO AÍ É UM MONTE DE TRABALOH,
+
+
+E UM MONTE DE REQUESTS DE READ E WRITE ----> E ISSO É RUIM TANTO DE UMA LÓGICA 
+
+
+
+
+
+DE 'PERFORMANCE' (pq temos que writar um monte na database),
+
+
+
+E 
+
+TAMBÉM É 
+
+
+'ERROR-PRONE' ( pq poderemos estar 'overlooking' algum document que precisamos updatar...
+
+
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> É POR ISSO QUE ESSE APPROACH NÃO SERVE PARA ESSE PEDAÇO DE NOSSO APP ---> 
+
+
+NESSE NOSSO CASO, SE UMA DATA MUDAR EM 1 LUGAR, ELA DEVERÁ MUDAR EM TODOS OS LUGARES...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> TALVEZ SEJA OK SE AS CHANGES FOREM ___ MT INFREQUENTES__>. ---- > mas a age vai mudar 1 vez ao ano, pelo menos (
+
+    e outra data pode mudar com frequência maior ainda...
+) -----> frequência 'baixa' significa frequência REALMENTE BAIXA...------> 
+
+
+
+
+
+
+
+frequência baixa nos deixa escapar com esse approach de embedded documents,
+
+mas frequência alta...---> usar isso, o embed de documents, quando há frequência alta de mudanças... --> isso não é uma boa ideia... -----> É POR ISSO QUE 
+
+
+
+EM VEZ DE USAR 
+
+
+
+
+
+EMBEDDED DOCUMENTS,
+
+
+
+DEVEMOS USAR O APPROACH DE 'referencing'....
+
+
+
+
+
+
+
+
+
+
+
+
+--> escrever nossos documents tipo assim:
+
+
+
+
+BOOK:
+
+{
+
+authors: [
+    {authorId: ObjectId(aaaaa) },
+
+    {authorId: ObjectId(bbbbbb)}
+]
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> SIM.... ESSA É A SOLUÇÃO/MELHOR APPROACH, PARA ESSA SITUAÇÃO.... 
+
+
+
+
+
+
+
+
+
+
+--> aGORA SE FETCHEARMOS TODOS OS BOOKS,
+
+SIM,
+
+
+VAMOS PRECISAR MERGEAR A DATA DESSES BOOKS MANUALMENTE COM A 'AUTHOR DATA',
+
+
+
+mas o ponto positivo é que A AUTHOR DATA SERÁ GARANTIDAMENTE 'UP TO DATE'.... --> E SE MUDARMOS A AUTHOR DATA,
+
+
+NÃO TEREMOS DE FAZER ISSO EM CENTENAS, MILHARES DE DOCUMENTS...

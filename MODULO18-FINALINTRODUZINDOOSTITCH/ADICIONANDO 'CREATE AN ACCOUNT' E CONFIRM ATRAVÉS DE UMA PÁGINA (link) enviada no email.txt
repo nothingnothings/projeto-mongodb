@@ -1,0 +1,2002 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... JÁ HABILITAMOS 
+
+
+
+O APPROACH DE LOGIN 'USER-PASSWORD'  
+
+
+
+
+
+
+
+NO NOSSO APP 
+
+MONGODB STITCH...
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA DEVEMOS ADICIONAR 
+
+
+
+
+
+
+A LÓGICA DE USER AUTH --> 
+
+
+QUERMEOS 
+
+
+ADICIONAR 
+
+
+
+FUNCIOANLIDADE 
+
+
+PARA 
+
+
+'SIGN' USERS UP' 
+
+
+
+E 
+
+'LOG USERS IN'...
+
+
+
+
+
+
+
+
+
+
+
+
+-------->
+
+
+
+
+
+VAMOS ATÉ O CÓDIGO DO 'APP.JS',
+
+
+PQ 
+
+É 
+
+LÁ QUE TEMOS 
+
+
+
+O CÓDIGO PARA FAZER TANTO 'SIGNUP' COMO 'LOGIN'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> LÁ VAMOS PRECISAR IMPORTAR MAIS ALGUMAS COISAS DO BROWSER SDK 
+
+
+
+DO STITCH... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> LÁ NÃO VAMOS MAIS USAR o 'AnonymousCredential'....  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> em vez disso,
+
+
+VAMOS USAR A PACKAGE 
+
+
+
+
+
+IMPORTANTE DE 
+
+
+
+
+'UserPasswordAuthProviderClient'....
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+import { Stitch, 
+  
+  // AnonymousCredential ////usado para fazer AUTH DE __ 'ANON USERS' no seu app ( ou seja, users 'SEM CONTA', nenhuma conta necessária)...
+
+
+  UserPasswordAuthProviderClient ///usado para fazer auth de USERS COM 'USER + PASSWORD'... --> usado no REGISTERING DE USERS....
+
+
+} 
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --------> OK.... --> PRIMEIRAMENTE,
+
+  LÁ 
+
+
+  EM 
+
+
+  'AuthHandler',
+
+
+
+
+
+
+
+
+
+
+  em que 
+
+
+
+
+  CHECAMOS A VALIDADE DO USER,
+
+
+
+
+  VAMOS 
+
+
+
+  USAR 
+
+
+
+  __ O 'STITCH CLIENT' --------> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ANTES (Até agora) 
+
+
+  O STITCH CLIENT ERA INICIALIZADO NO CONSTRUCTOR,
+
+  TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+
+  constructor() {
+      super();
+      const client = Stitch.initializeDefaultAppClient('asashjihasi');
+      client.auth.loginWithCredential(new AnonymousCredential())
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+  --------> EM VEZ DISSO,
+
+
+  PROFESSOR EXPLICA QUE PODEOMS ARMAZENAR ESSE client do stitch em UMA PROPRIEDADE DESSA 
+
+
+  CLASS/COMPONENT 'App' ....
+
+
+
+
+
+
+
+
+
+
+  --. tipo assim:
+
+
+
+  
+
+  constructor() {
+      super();
+        this.client = Stitch.initializeDefaultAppClient('asashjihasi');
+      this.client.auth.loginWithCredential(new AnonymousCredential())
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+  EX:
+
+
+
+
+
+
+
+    constructor() { ///usado para o AUTH padrão, de 'user + password', contas normais, com email....
+    super();
+      this.client = Stitch.initializeDefaultAppClient('asashjihasi');  /// adicionamos esse client como PROPRIEDADE DESSA NOSSA CLASSE, PARA QUE SEJA POSSÍVEL O UTILIZAR EM OUTRAS FUNCTIONS DE NOSSA CLASS, e não só no constructor...
+    this.client.auth.loginWithCredential(new AnonymousCredential())
+}
+
+
+
+
+
+
+
+
+
+
+
+---> OK, AGORA PODEMOS USAR ESSE CLIENT EM __ OUTROS METHODS DE NOSSA CLASS,
+
+E NÃO SÓ NO CONSTRUCTOR....
+
+
+
+
+
+
+
+
+
+
+------> ok.... 
+
+
+
+
+
+
+
+
+
+
+
+--> AÍ O PROFESSOR VAI QUERER,
+
+
+DENTRO DE 'authHandler',
+
+
+
+R
+ODAR 
+
+
+
+
+
+
+'this.client.auth.getProviderClient()' 
+
+
+
+
+
+
+
+
+
+
+TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+
+  authHandler = (event, authData) => {
+    event.preventDefault();
+
+
+
+    if (authData.email.trim() === '' || authData.password.trim() === '') {
+      return;
+    }
+
+
+
+    this.client.auth.getProviderClient(UserPasswordAuthProviderClient)
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        --> PASSAMOS A ESSE CALL DE 'this.client.auth.getProviderClient()'
+
+
+
+
+        O PARÂMETRO DE 'UserPasswordAuthProviderClient',
+
+
+
+
+        ESSE CLIENT AÍ, ESPECIAL, DE NOSSO AUTH 'user+password'...
+
+
+
+
+
+
+
+
+        ----> MAS É CLARO QUE NÃO VAMOS SÓ CHAMAR 
+
+        'UserPasswordAuthProviderClient'... --> 
+
+
+
+        VAMOS PEGAR O METHOD '.factory' 
+
+        dentro dele, tipo assim:
+
+
+
+
+
+
+
+
+        
+  authHandler = (event, authData) => {
+    event.preventDefault();
+
+
+
+    if (authData.email.trim() === '' || authData.password.trim() === '') {
+      return;
+    }
+
+
+
+    this.client.auth.getProviderClient(UserPasswordAuthProviderClient.factory)
+
+        }
+
+
+
+
+
+
+
+-----------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    this.client.auth.getProviderClient(UserPasswordAuthProviderClient.factory)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO VAI BASICAMENTE 
+
+
+
+'''INICIALIZAR NOSSA FUNCIONALIDADE 
+
+
+
+DE USER-PASSWORD AUTH-PROVIDER''' --> 
+
+
+
+
+
+
+
+
+
+
+
+O PROFESSOR ARMAZENA ESSE 'CLIENT' 
+
+
+EM UMA 
+
+CONSTANTE,
+
+DE NOME 
+
+
+
+
+'emailPassClient'...
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+  authHandler = (event, authData) => {
+    event.preventDefault();
+
+
+
+    if (authData.email.trim() === '' || authData.password.trim() === '') {
+      return;
+    }
+
+
+
+  const emailPassClient = this.client.auth.getProviderClient(UserPasswordAuthProviderClient.factory)
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AÍ PODEMOS USAR ESSE 'emailPassClient',
+
+
+QUE SIMPLESMENTE 
+
+ARMAZENA 
+
+O RESULTADO DESSA INICIALIZAÇÃO AÍ,
+
+
+
+
+
+
+
+
+PARA AÍ CHAMAR 
+
+
+
+
+
+O METHOD 
+
+DE 
+
+
+
+'registerWithEmail()' ------->  AÍ O PROFESSOR TEM DE PASSAR 
+
+O 
+
+
+EMAIL E O PASSWORD 
+
+
+QUE 
+
+O 
+
+
+USER 
+
+
+JÁ NOS PASSOU....
+
+
+
+
+
+
+
+
+ESCREVEMOS ASSMI:
+
+
+
+
+
+
+
+
+
+  authHandler = (event, authData) => {
+    event.preventDefault();
+
+
+
+    if (authData.email.trim() === '' || authData.password.trim() === '') {
+      return;
+    }
+
+
+
+      const emailPassClient = this.client.auth.getProviderClient(
+        UserPasswordAuthProviderClient.factory
+      )
+
+
+
+    emailPassClient.registerWithEmail(authData.email, authData.password);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> ISSO VAI 'SIGN USERS up' ,
+
+
+com o STITCH...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E, DE NOVO, ESSAS CONTAS SERÃO ARMAZENADAS __ PELO STITCH/NO STITCH (ou seja, não vão ser armazenados em collections na nossa database, e sim DENTRO DO PRÓPRIO STITCH...)
+
+
+
+
+
+
+
+
+
+
+
+
+--> AÍ PODEMOS 
+
+
+
+ESCREVER UMA PROMISE, COM THEN E CATCH,
+
+
+
+
+EM QUE 
+
+
+CHECAMOS 
+
+
+
+SE FOMOS BEM SUCEDIDOS OU NÃO....
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+  authHandler = (event, authData) => {
+    event.preventDefault();
+
+
+
+    if (authData.email.trim() === '' || authData.password.trim() === '') {
+      return;
+    }
+
+
+
+      const emailPassClient = this.client.auth.getProviderClient(
+        UserPasswordAuthProviderClient.factory
+      )
+
+
+
+    emailPassClient.registerWithEmail(authData.email, authData.password)
+    .then(
+        result => {
+            console.log(result);
+        }
+    )
+    .catch(
+        err => {
+            this.errorHandler(err.response.data.message);
+            console.log(err);
+            this.setState({isAuth: false})
+        }
+    )
+
+
+
+
+------------------------
+
+
+
+
+
+
+AGORA DEVEMOS CHECAR SE ISSO FUNCIONA,
+
+
+SE RECEBEMOS ALGUM RESULT COM TUDO ISSO....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> OK.... 
+
+
+
+
+
+
+
+-> AGORA PRECISAMOS COLOCAR UM EMAIL DE VERDADE,
+
+PARA QUE 
+
+ELE 
+
+
+
+O ALCANCE...
+
+
+
+
+
+
+
+
+
+---> coloco um email meu....
+
+
+
+
+
+
+
+
+
+
+-> NO THEN BLOCK N RECEBEMOS COISA ALGUMA,
+
+
+
+pq 
+
+
+
+o negócio realmente n retorna nada....
+
+
+
+
+
+
+
+
+
+-> BEM, EU GANHEI UM ERROR,
+
+
+
+ERRO 409 (cannot read data)...
+
+
+
+
+
+
+
+
+
+AGORA VI O ERROR:
+
+
+error: "name already in use", error_code: "AccountNameInUse",…}
+error: "name already in use"
+error_code: "AccountNameInUse"
+link: "https://realm.mongodb.com/groups/605e201af9f3ec30eb653394/apps/6226ce0f5206caf9890917c8/logs?co_id=6228ecde7bb49ea311e2cb4c"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ok, tenho que usar outro email....
+
+
+
+
+
+
+
+
+
+--> agora deu certo, aparentemente..
+
+
+
+
+
+
+
+
+
+--> BEM, EU REALMENTE RECEBI 1 EMAIL,
+
+EMAIL COM 1 LINK...
+
+
+
+EX:
+
+
+
+
+Click on this link to confirm your email: Confirm Email
+
+
+
+
+
+
+
+
+
+
+
+
+-----> CLICAMOS NESSE LINK,
+
+
+
+
+
+
+E AÍ __ PARECE_ QUE VOLTAMOS IMEDIATAMENTE À PAGE EM QUE ESTÁVAMOS ANTES... --> MAS SE CHECARMOS 
+
+
+
+
+OS DEVTOOLS,
+
+VEREMOS 
+
+A MENSAGEM 
+
+
+
+'Account confirmed'....
+
+
+
+
+
+
+
+
+
+
+
+bem, se examinamos esse link, vemos:
+
+
+
+
+
+
+
+
+
+
+http://localhost:3000/confirm-account?token=7798d135a0d223c78f9a92a4058ec9a2ddacd65d9fb67d38cb10b82edb5ceab6b7078a2cfc6c0f79c04446262e51586fe055e2ef9d8a955e21ad2fdb01a12670&amp;tokenId=6228ed33efdd37dce88f5b8a"
+
+
+
+
+
+
+
+
+
+
+
+-> É UM LINK ATÉ NOSSA PAGE DE 'CONFIRM-ACCOUNT',
+
+
+mas com uma TOKEN __ _BEEEEEM LONGA__ anexada como query param...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, MAS O QUE TEMOS NESSA PAGE DE CONFIRMaccount? 
+
+
+
+
+
+
+
+
+
+O que o professor escreveu lá?
+
+
+
+
+
+
+
+
+
+
+
+ESCREVEU ISTO:
+
+
+
+
+
+
+
+
+
+
+
+import React, { Component } from 'react';
+
+import './ConfirmAccount.css';
+
+class AuthPage extends Component {
+  componentDidMount() {
+    const queryUrl = window.location.search;
+    const queryParams = new URLSearchParams(queryUrl);
+    const token = queryParams.get('token');
+    const tokenId = queryParams.get('tokenId');
+    console.log('Account confirmed');
+    this.props.history.replace('/');
+  }
+
+  render() {
+    return (
+      <main className="confirm-account-page">
+        <p>Confirming Account...</p>
+      </main>
+    );
+  }
+}
+
+export default AuthPage;
+
+
+
+
+
+
+
+
+
+
+
+
+TEMOS AQUELA LINHA, ESCRITA PELO PROFESSOR:
+
+
+
+
+
+    console.log('Account confirmed');
+
+
+
+
+
+
+
+
+
+--> E ESSAS 2 LINHAS INICIAIS:
+
+
+    const queryUrl = window.location.search;
+    const queryParams = new URLSearchParams(queryUrl);
+
+
+
+
+
+--> são ELAS QUE PEGAM A INFORMAÇÃO DE NOSSA URL...
+
+
+
+
+
+
+
+
+
+
+--> QUE ENTAÕ É PARSEADA:
+
+
+    const token = queryParams.get('token');
+    const tokenId = queryParams.get('tokenId');
+
+
+
+
+
+
+
+
+
+
+
+--> OK, MAS FORA ESSE 'GET' AÍ,
+
+
+
+E ESSE 
+
+STORE NESSAS CONSTANTES,
+
+O PROFESSOR N FEZ MAIS COISA ALGUMA...
+
+
+
+
+
+
+
+
+
+-> NOSSA TAREFA É AGORA FAZER UM 
+
+'SEND' 
+
+DESSA CONTA DO USER
+
+
+AO 
+
+'backend' do stitch...  (para que seja confirmado o document 'user', e para que 
+
+SEJA ARMAZENADO NOSSO PASSWORD, ou o binomio user-password.... )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO,
+
+
+
+NÃO VAMOS RODAR NENHUMA QUERY DE 'db.db().collection.insertOne()'
+
+
+
+ou algo do gênero,
+
+
+JUSTAMENTE PQ 
+
+
+
+ESSA INFO DO USER NÃO VAI SER ARMAZENADA 
+
+
+NA DATABASE MONGODB ATLAS EM SI,
+
+e sim 
+
+
+SERÁ ARMAZENADA __ NO STITCH__....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA CONSEGUIR FAZER ESSE 'CHECK DA CONTA' (com o password e tals) 
+
+
+
+
+NO STITCH,
+
+
+
+SOMOS OBRIGADOS A 
+
+
+
+
+
+IMPORTAR 
+
+o 
+
+'Stitch'
+
+
+
+nessa page de 
+
+'ConfirmAccount',
+
+
+
+
+
+
+
+PARA ENTÃO EXECUTAR METHODS ESPECÍFICOS.....
+
+
+
+
+
+
+
+eX:
+
+
+
+
+
+
+
+
+
+import { Stitch } from 'mongodb-stitch-browser-sdk'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> TAMBÉM VAMOS PRECISAR DO 
+
+
+'UserPasswordAuthProviderClient'...
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+import React, { Component } from 'react';
+
+import './ConfirmAccount.css';
+
+import {
+  Stitch,
+  UserPasswordAuthProviderClient,
+} from 'mongodb-stitch-browser-sdk'; ///vai armazenar nosso 'confirmed user' LÁ NO PRÓPRIO STITCH (E não na nossa database mongodb atlas)....
+
+class AuthPage extends Component {
+  componentDidMount() {
+    const queryUrl = window.location.search;
+    const queryParams = new URLSearchParams(queryUrl);
+    const token = queryParams.get('token');
+    const tokenId = queryParams.get('tokenId');
+    console.log('Account confirmed');
+    this.props.history.replace('/');
+  }
+
+  render() {
+    return (
+      <main className="confirm-account-page">
+        <p>Confirming Account...</p>
+      </main>
+    );
+  }
+}
+
+export default AuthPage;
+
+
+
+
+
+
+
+
+
+
+-----------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ok... isso feito,
+
+
+vamos 
+
+
+
+chamar 
+
+
+
+
+Stitch.defaultAppClient,
+
+
+
+
+
+
+
+
+E AÍ CHAMAR O 
+
+
+
+'.auth',
+
+
+
+
+
+
+
+
+
+
+.... DENTRO DO 'aUTH',
+
+
+
+VAMOS CHAMAR 
+
+
+'getProviderClient' 
+
+
+
+
+
+e aí 
+
+PASSAR 
+
+O 
+
+
+'UserPasswordAuthProviderClient.factory'
+
+
+
+
+(
+
+
+    OU SEJA,
+
+    É EXATAMENTE A COISA QUE FIZEMOS ANTES, LÁ NA PAGE DE 'App.js',
+
+
+    em que fizemos o 'CREATE INICIAL' de nosso user.... (send da page com o email de confirm, etc)...
+)
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+  componentDidMount() {
+    const queryUrl = window.location.search;
+    const queryParams = new URLSearchParams(queryUrl);
+    const token = queryParams.get('token');
+    const tokenId = queryParams.get('tokenId');
+    Stitch.defaultAppClient.getProviderClient(UserPasswordAuthProviderClient.factory)
+    console.log('Account confirmed');
+    this.props.history.replace('/');
+  }
+
+
+
+
+
+
+  ----------------------------------
+
+
+
+
+
+
+
+
+
+
+
+  --> AÍ ARMAZENAREMOS 
+
+
+  ESSE CLIENT DO STITCH-browserside 
+
+
+
+
+
+
+  __ DENTRO _ DE UMA CONSTNATE,
+
+
+
+
+
+
+
+
+  COM AQUELE MESMO NOME DE 
+
+
+  '
+  emailPassClient'...
+
+
+
+
+
+
+
+
+
+  eX:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  componentDidMount() {
+    const queryUrl = window.location.search;
+    const queryParams = new URLSearchParams(queryUrl);
+    const token = queryParams.get('token');
+    const tokenId = queryParams.get('tokenId');
+   const emailPassClient = Stitch.defaultAppClient.getProviderClient(UserPasswordAuthProviderClient.factory)
+    console.log('Account confirmed');
+    this.props.history.replace('/');
+  }
+
+
+
+
+-------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+--> AÍ PODEMOS USAR ESSE 'emailPassClient' 
+
+
+
+
+
+
+
+
+
+
+PARA ENTÃO CHAMAR 
+
+O METHOD DE
+
+
+'ConfirmUser',
+
+
+
+QUE AINDA NÃO USAMOS...
+
+
+
+
+
+
+
+
+
+
+
+ESCREVEMOS TIPO:
+
+
+
+
+
+
+
+
+
+
+emailPassClient.confirmUser()
+
+
+
+
+
+
+
+
+
+
+-----> PARA CONFIRMAR ESSE USER,
+
+
+
+
+precisamos de 
+
+
+2 PARÂMETROS:
+
+
+
+
+
+
+1) token 
+
+
+
+2) 'tokenId'....
+
+
+
+
+
+
+
+
+
+
+
+--> ESSES 2 PARÂMETROS JÁ FORAM PARSEADOS DE NOSSA URL,
+
+
+COM OS CÓDIGOS 
+
+
+
+
+
+
+    const token = queryParams.get('token');
+    const tokenId = queryParams.get('tokenId');
+
+
+
+
+
+
+
+
+
+
+(E ISSO É PADRONIZADO, SEMPRE FICARÁ NA URL QUE O STITCH TE ENVIA POR EMAIL)...
+
+
+
+
+ex:
+
+
+
+?token=7798d135a0d223c78f9a92a4058ec9a2ddacd65d9fb67d38cb10b82edb5ceab6b7078a2cfc6c0f79c04446262e51586fe055e2ef9d8a955e21ad2fdb01a12670&amp;
+
+
+tokenId=6228ed33efdd37dce88f5b8a
+
+
+
+
+
+
+
+
+
+---------------------------
+
+
+
+
+
+
+
+
+
+
+POR TRÁS DAS CENAS,
+
+
+O 
+
+
+
+MONGODB STITCH 
+
+VAI 
+
+
+
+________VALIDAR___ SE ESSE TOKEN E ESSE TOKENID FORAM AQUELES 
+
+
+
+
+MENCIONADOS NO EMAIL QUE FOI ENVIADO A ESSE USER.... -> E SE TUDO ISSO MATCHEIA,
+
+ELE CONFIRMA O USER....
+
+
+
+
+
+
+
+
+
+
+---> POR FIM,
+
+
+
+
+
+esse client vai nos retornar uma PROMISE,
+
+
+
+
+
+
+
+QUE PODE FALHAR/SER BEM SUCEDIDA...
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+  componentDidMount() {
+    const queryUrl = window.location.search;
+    const queryParams = new URLSearchParams(queryUrl);
+    const token = queryParams.get('token');
+    const tokenId = queryParams.get('tokenId');
+   const emailPassClient = Stitch.defaultAppClient.getProviderClient(UserPasswordAuthProviderClient.factory)
+
+   emailPassClient.confirmUser(token,
+   tokenId)
+   .then(
+
+   )
+   .catch(
+       (err) => {
+           console.log(err)
+       }
+   )
+    console.log('Account confirmed');
+    this.props.history.replace('/');
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> SE ESSE NEGÓCIO FOR BEM SUCEDIDO,
+
+VAMOS QUERER REDIRECIONAR O USER À STARTING PAGE....
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+  componentDidMount() {
+    const queryUrl = window.location.search;
+    const queryParams = new URLSearchParams(queryUrl);
+    const token = queryParams.get('token');
+    const tokenId = queryParams.get('tokenId');
+   const emailPassClient = Stitch.defaultAppClient.getProviderClient(UserPasswordAuthProviderClient.factory)
+
+   emailPassClient.confirmUser(token,
+   tokenId)
+   .then(
+           console.log('Account confirmed');
+    this.props.history.replace('/');
+   )
+   .catch(
+       (err) => {
+           console.log(err)
+       }
+   )
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, COM TUDO ISSO SALVO,
+
+
+
+CLIQUE 
+
+
+
+NO EMAIL 
+
+DO LINK,
+
+
+
+AÍ O NEGÓCIO ABRIRÁ
+ 
+
+
+
+
+
+ E AÍ 
+
+
+
+
+
+
+ se tentarmos CRIAR UMA ACCOUNT COM UM EMAIL QUE JÁ EXISTE, O STITCH VAI NOS MANDAR UM ERRO,
+
+ MOSTRANDO QUE ISSO FUNCIONOU..
+
+
+
+
+
+
+
+
+
+
+ EX:
+
+
+
+
+
+
+
+
+
+
+
+ import React, { Component } from 'react';
+
+import './ConfirmAccount.css';
+
+import {
+  Stitch,
+  UserPasswordAuthProviderClient,
+} from 'mongodb-stitch-browser-sdk'; ///vai armazenar nosso 'confirmed user' LÁ NO PRÓPRIO STITCH (E não na nossa database mongodb atlas)....
+
+class AuthPage extends Component {
+  componentDidMount() {
+    const queryUrl = window.location.search;
+    const queryParams = new URLSearchParams(queryUrl);
+    const token = queryParams.get('token');
+    const tokenId = queryParams.get('tokenId');
+    console.log('Account confirmed');
+
+    const client = Stitch.defaultAppClient.auth.getProviderClient(
+      UserPasswordAuthProviderClient.factory
+    );
+
+    client
+      .confirmUser(token, tokenId)
+      .then(() => {
+        console.log('user confirmed');
+        this.props.history.replace('/');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  render() {
+    return (
+      <main className="confirm-account-page">
+        <p>Confirming Account...</p>
+      </main>
+    );
+  }
+}
+
+export default AuthPage;
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+{"error":"name already in use","error_code":"AccountNameInUse","link":"https://realm.mongodb.com/groups/605e201af9f3ec30eb653394/apps/6226ce0f5206caf9890917c8/logs?co_id=6228f1c55281020fbb4e8fa2"}
+
+
+
+
+
+
+
+
+
+--> AGORA É HORA DE ADICIONAR 'USER LOGIN'
+
+
+ao nosso app...

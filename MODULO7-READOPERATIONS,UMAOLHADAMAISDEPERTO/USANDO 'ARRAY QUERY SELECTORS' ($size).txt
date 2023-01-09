@@ -1,0 +1,561 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> DEPOIS DAQUELE CONSELHO ÚTIL DE 
+
+
+
+
+
+
+"hobbies.title",
+
+
+
+
+
+
+
+uso dessa sintaxe de PATH 
+
+
+
+
+com 
+
+
+
+
+
+UM CONJUTNO DE EMBEDDED DOCUMENTS EM 1 ARRAY,
+
+
+tipo aqui:
+
+
+{
+        "_id" : ObjectId("62087cf32867f483687f8345"),
+        "name" : "Anna",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Yoga",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : 24
+}
+
+
+
+
+
+
+
+
+
+
+
+, com essa query:
+
+
+
+
+
+
+
+db.users.find(
+    {
+        "hobbies.title": "Sports"
+    }
+)
+
+
+
+
+(
+
+    ENCONTRA TODOS OS USERS QUE POSSUAM, NESSE ARRAY DE EMBEDDED DOCUMENTS 'HOBBY',
+
+    1 key de 'title' com value de 'Sports"....
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA DEVEMOS 
+
+DAR 
+
+
+UMA OLHADA EM QUERY SELECTORS ÚTEIS de array,
+
+
+
+
+
+
+que podem nos ajudar aa encontrar a query correta...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$size --> É BEM straightforward....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> professor 
+
+
+
+DÁ UMA OLHADA EM TODOS NOSSOS USERS....
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+> db.users.find({}).pretty()
+{
+        "_id" : ObjectId("62087cf32867f483687f8345"),
+        "name" : "Anna",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Yoga",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : 24
+}
+{
+        "_id" : ObjectId("62087cf32867f483687f8346"),
+        "name" : "CJ",
+        "hobbies" : [
+                {
+                        "title" : "Gym",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Swimming",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : 35
+}
+{
+        "_id" : ObjectId("62087cf32867f483687f8347"),
+        "name" : "Yan",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : null
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> TODOS OS USERS POSSUEM 3 HOBBIES....
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA VAMOS ADICIONAR UM NOVO USER, COM INSERTONE,
+
+que terá 3 HOBBIES (distinção)...
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+db.users.insertOne(
+    {
+        "_id" : ObjectId("62087cf32867f483687f8347"),
+        "name" : "TK",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3
+                },
+                          {
+                        "title" : "Souji",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : null
+}
+)
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+> db.users.find({}).pretty()
+{
+        "_id" : ObjectId("62087cf32867f483687f8345"),
+        "name" : "Anna",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Yoga",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : 24
+}
+{
+        "_id" : ObjectId("62087cf32867f483687f8346"),
+        "name" : "CJ",
+        "hobbies" : [
+                {
+                        "title" : "Gym",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Swimming",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : 35
+}
+{
+        "_id" : ObjectId("62087cf32867f483687f8347"),
+        "name" : "Yan",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : null
+}
+{
+        "_id" : ObjectId("620880e92867f483687f8348"),
+        "name" : "TK",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3
+                },
+                {
+                        "title" : "Souji",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : null
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------
+
+
+
+
+
+
+
+
+MAS O PROFESSOR LOQUEIA AINDA MAIS,
+
+
+
+PQ 
+
+
+
+DECIDE COLOCAR 1 USER QUE NÃO TEM EMBEDDED DOCUMENTS NO ARRAY,
+
+E SIM SIMPLES STRINGS...
+
+
+
+
+
+
+
+
+
+
+
+--> OK... AGORA O PROFESSOR QUER ENCONTRAR TODOS OS USERS COM APENAS 3 
+
+HOBBIES.... --> 
+
+
+
+
+SERÁ APENAS 'TK' E 'TKO',
+
+
+
+PQ ´SO ELES 
+
+TEM 
+
+3 HOBBIES (3 embedded documents e 3 strings, respectivamente)..
+
+
+
+
+
+
+
+
+
+A SINTAXE SERÁ ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+
+db.users.find({hobbies: {$size: 3 }}).pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... MAS A COISA IMPORTANTE DE '$size'
+
+É QUE 
+
+O NÚMERO QUE VOCÊ PASSA DEVE, OBRIGATORIAMENTE, SER 1 NÚMERO FIXO... --> VOCÊ NÃO PODE DIZER '''ME DÊ ALGO 
+
+
+
+
+COM MAIS DE 2 ITEMS'''- --> SE VOCê 
+
+
+PRECISA 
+
+
+
+
+ESCREVER UMA QUERY ASSIM,
+
+
+
+MAIS GENÉRICA,
+
+
+
+VOCÊ TERÁ DE ESCREVER 
+
+
+
+
+
+
+UMA QUERY DIFERENTE,
+
+PQ 
+
+O 
+
+
+
+MONGODB AINDA NÃO SUPORTA ESSA SINTAXE... ------> VOCÊ SÓ PODE PROCURAR POR EXACT MATCHES COM o "$SIZE'.'...

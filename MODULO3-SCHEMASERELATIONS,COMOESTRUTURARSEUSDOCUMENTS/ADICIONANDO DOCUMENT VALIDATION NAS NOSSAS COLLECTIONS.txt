@@ -1,0 +1,2648 @@
+
+
+
+
+
+
+
+
+
+
+QUEREMOS ADICIONAR VALIDATION....
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO, VAMOS USAR O EXEMPLO DE 'POSTS' ( com user e comments)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> OK... MAS COMO PODEMOS ADICIONAR VALIDATION NO MONGODB,
+
+
+COM O MONGO SHELL?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> UMA MANEIRA BEM FÁCIL DE adicionar validation é quando você 
+
+
+
+__ ADICIONA UMA COLLECTION PELA PRIMEIRA VEZ....
+
+
+(
+
+
+    OU SEJA,
+
+    QUANDO VOCÊ CRIA UMA COLLECTIOn..
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> E NÓS APRENDEMOS QUE UMA COLLECTION É CRIADA AUTOMATICAMENTE SEMPRE QUE 
+
+
+TENTAMOS INSERIR 1 DOCUMENT NELA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> É POR ISSO QUE AQUI O PROFESSOR VAI QUERER DROPPAR 
+
+
+
+
+A COLLECTION DE 'posts',
+
+
+
+tipo assim:
+
+
+
+
+
+
+
+
+
+
+db.posts.drop()
+
+
+
+
+
+
+> db.posts.drop()
+true
+>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA DEVEMOS CRIAR NOSSA COLLECTION DE MANEIRA DIFERNTE....
+
+
+
+
+
+
+
+
+
+
+
+--> NÃO VAMOS CRIAR NOSSA COLLECTION IMPLICITAMENTE, COMO FAZÍAMOS COM COISAS COMO 
+
+'db.posts.insertOne({...})',
+
+
+
+
+
+MAS EXPLICITAMENTE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO,
+
+
+
+
+TEMOS O COMANDO DE 'db.createCollection'.... ----------> 
+
+
+
+
+
+
+
+NÓS NUNCA HAVÍAMOS O UTILIZADO...
+
+
+
+
+
+
+
+
+
+
+
+
+--> NÃO USAMOS ATÉ AGORA PQ 
+
+essa 
+
+
+'LAZY CREATION',
+
+
+creation em que 
+
+
+
+digitamos e criamos nossa collection por meio de código como 
+
+
+'db.posts.insertOne()',
+
+ 
+
+
+
+
+
+
+ É OK/SUFICIENTE... -----------> MAS SE VOCÊ PRECISA CRIAR SUA COLLECTION DE UMA MANEIRA ESPECIAL,
+
+
+ AÍ VOCÊ 
+
+
+ PRECISA USAR ESSE COMANDO DE 
+
+
+ 'db.createCollection()'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ---> O PRIMEIRO PARÂMETRO É O NOME DA COLLECTION... -> COLOCAREMOS 'posts'...
+
+
+
+
+
+
+
+
+
+
+
+ ex:
+
+
+
+
+
+
+
+
+
+
+ db.createCollection('posts') 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+T
+ --> O SEGUNDO PARÂMETRO É UM DOCUMENT/OBJECT EM QUE VOCê PODE 
+
+
+
+ ''''CONFIGURE''' ESSA COLLECTION (será que é aqui que adicionamos TIMESTAMPS?)
+
+
+
+
+
+
+
+
+
+
+
+
+ --> 1 IMPORTANTE PEDAÇO DE CONFIG NESSE 
+
+
+
+
+
+ objeto é a key de 'validator'....
+
+
+
+
+
+
+
+
+ ex:
+
+
+
+
+
+
+
+
+ db.createCollection("posts", {validator: })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -------> ESSA KEY__ VAI OBRIGATORIAMENTE SEGURAR UM OBJECT COMO VALOR.... --> 
+
+
+ DENTRO DESSE OBJECT,
+
+ VOCê VAI DEFINIR JUSTAMENTE UM 'SCHEMA',
+
+
+
+
+
+ schema 
+
+
+
+que será CONSIDERADO PARA TODAS TENTATIVAS DE INSERT/UPDATE futuras...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+ db.createCollection("posts", {validator: {}})
+
+
+
+
+
+
+
+
+
+
+
+----------------------------------
+
+
+
+
+
+
+OK, MAS COMO VOCÊ DEFINE ESSE SCHEMA OBRIGATO´RIO?
+
+
+
+
+
+
+
+
+
+
+
+VOCÊ DEVE USAR O operador de '$jsonSchema'...
+
+
+
+
+
+
+
+
+
+
+-> AÍ, DENTRO DESSE OPERATOR, VAMOS TER UM __ OBJECT__... -> É NESSE OBJECT QUE VAMOS DEFINIR NOSSO SCHEMA...
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ db.createCollection("posts", {validator: {$jsonSchema: { }}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AQUI ESTAMOS DIZENDO   ' HEY, NOSSO VALIDATOR É O JSONSCHEMA''.... --> HISTORICAMENTE,
+
+
+EXISTIAM OUTROS VALIDATORS,
+
+
+MAS HOJE EM DIA É MT RECOMENDADO USAR O JSONSCHEMA... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AÍ DENTRO DESSE NESTED DOCUMENT VOCÊ VAI DEFINIR SEU SCHEAM...
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+
+
+ db.createCollection("posts", {validator: {$jsonSchema: { 
+
+
+
+
+
+ }}})
+
+
+
+
+
+
+
+---------------------------------
+
+
+
+
+AÍ DENTRO DISSO VOCÊ PODE DEFINIR 
+
+
+
+
+
+1 SCHEMA PARA 'CADA DOCUMENT QUE É ADICIONADO À COLLECTION''' --->  
+
+
+
+
+
+
+
+
+
+
+COMO EXEMPLO, O PROFESSOR ESCREVE 'bsonType: "object" ' 
+
+
+
+
+
+
+
+
+
+
+--> ISSO SIGNIFICA QUE 
+
+
+TUDO QUE 
+
+
+
+
+É/SERÁ ADICIONADO 
+
+
+A NOSSA COLLECTION DEVERÁ 
+
+
+SER 
+
+
+
+1 'VALID DOCUMENT'...
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+ db.createCollection("posts", {validator: {$jsonSchema: { bsonType: "object"
+
+
+
+
+
+ }}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.createCollection("posts", {validator: {$jsonSchema: {bsonType: "object"}}})
+
+
+
+
+
+
+
+
+---------------------------------------
+
+
+
+
+
+
+
+
+
+MAIS INTERESSANTE DO QUE ISSO,
+
+
+
+
+
+PODEMOS DEFINIR UMA KEY DE 'required',
+
+
+ 
+
+
+
+ QUE __ SERÁ UM ARRAY... ----> 
+
+
+
+
+
+ DENTRO DESSE ARRAY, PODEMOS DEFINIR NOMES DE FIELDS, DENTRO DO DOCUMENT (que será parte da collection)
+
+
+ QUE 
+
+ SERÃO ABSOLUTELY REQUIRED... --> E SE TENTARMOS ADICIONAR 
+
+
+
+ 1 DOCUMENT QUE NÃO TEM ESSES FIELDS,
+
+
+ VAMOS RECEBER __ OU UM WARNING,
+
+ OU UM ERROR... (dependendo de nossa configuração de 'validationAction')...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -----> CERTO... PROFESSOR ESCREVE ASSim:
+
+
+
+
+
+ 
+
+ db.createCollection("posts", {validator: {$jsonSchema: { bsonType: "object",
+
+
+
+ required: [
+     "title", "text"
+ ]
+
+
+
+
+
+ }}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... AGORA, EM CADA 'POST',
+
+
+devemos ter necessariamente 
+
+
+
+'title' e 'text',
+
+esses 2 fields...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> NÃO COLOCAMOS 'tags',
+
+
+pq não vamos querer que elas sejam required (já mostra 1 pouco da flexibilidade do mongodb)...
+
+
+
+
+
+--> TAMBÉM COLOCAMOS 'creator',
+
+pq ele deverá ser required....
+
+
+
+
+
+
+
+
+ 
+
+ db.createCollection("posts", {validator: {$jsonSchema: { bsonType: "object",
+
+
+
+ required: [
+     "title", "text", "creator"
+ ]
+
+
+
+
+
+ }}})
+
+
+
+
+--------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+-> COLOCAMOS TAMBÉM 'comments',
+
+pq eles serão required tbm...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ db.createCollection("posts", {validator: {$jsonSchema: { bsonType: "object",
+
+
+
+ required: [
+     "title", "text", "creator", "comments"
+ ]
+
+
+
+
+
+ }}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... ESSES FIELDS SERÃO NECESSÁRIOS em cada document na nossa collection...
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA PODEMOS IR UM POUCO ALÉM,
+
+E COMEÇAR 
+
+A 
+
+TRABALHAR NAS NOSSAS 'properties' (por isso 
+
+o professor adiciona uma key extra, de 'properties:')
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+ db.createCollection("posts", {validator: {$jsonSchema: { bsonType: "object",
+
+
+
+ required: [
+     "title", "text", "creator", "comments"
+ ],
+
+
+ properties: 
+
+
+
+
+
+ }}})
+
+
+
+
+
+
+
+
+------------------------------------
+
+
+
+
+
+
+
+
+--> professor passa a usar o visual studio code....
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+
+ db.createCollection("posts", {validator: {$jsonSchema: { bsonType: "object",
+
+
+
+ required: [
+     "title", "text", "creator", "comments"
+ ],
+
+
+ properties: 
+
+
+
+
+
+ }}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> OK, ESTAMOS ADICIONANDO UM VALIDATOR PARA A COLLECTION INTEIRA....
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+db.createCollection('posts', {
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['title', 'text', 'creator', 'comments'],
+
+
+
+      properties: 
+    },
+  },
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> EM 'PROPERTIES',
+
+
+
+PODEMOS DEFINIR OUTRO OBJECT,
+
+
+
+
+EM QUE 
+
+
+VAMOS DEFINIR 
+
+
+
+
+
+
+
+'''FOR EVERY PROPERTY OF EVERY DOCUMENT,
+
+HOW IT SHOULD LOOK LIKE''''
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> POR EXEMPLO,
+
+
+
+
+VAMOS ESCREVER 
+
+'title: {
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+db.createCollection('posts', {
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['title', 'text', 'creator', 'comments'],
+
+
+
+      properties: {
+
+        title: {
+
+        },
+        text: {
+
+        },
+
+        creator: {
+
+        },
+        comments: {
+          
+        }
+      }
+    },
+  },
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> OK... AGORA PODEMOS DEFINIR O 'title' com ainda mais detalhes... 
+
+
+
+
+
+
+
+
+
+
+
+
+--> PODEMOS DIZER MAIS DO QUE 'required'( pq já está como REQUIRED)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> PARA INÍCIO DE CONVERSA,
+
+PODEMOS DEFINIR O 'bsonType'
+
+
+
+como sendo de 'STRING' (vamos armazenar text nele)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+COMEÇAMOS TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+
+db.createCollection('posts', {
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['title', 'text', 'creator', 'comments'],
+
+
+
+      properties: {
+
+            title: {
+
+              bsonType: "string"
+        },
+        text: {
+          bsonType: "string"
+        },
+
+        creator: {
+          bsonType: ObjectId
+        },
+        comments: {
+          
+        }
+      }
+    },
+  },
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> OK... PODEMOS TAMBEM ADICIONAR 
+
+
+
+
+uma key de 'description' em title,
+
+
+
+
+dizendo 
+
+
+
+
+'description: "Must be a string and is required'...
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+db.createCollection('posts', {
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['title', 'text', 'creator', 'comments'],
+
+
+
+      properties: {
+
+            title: {
+                
+              bsonType: "string"
+              description: 'must be a string, and is required'
+        },
+        text: {
+          bsonType: "string"
+        },
+
+        creator: {
+          bsonType: ObjectId
+        },
+        comments: {
+          
+        }
+      }
+    },
+  },
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> JÁ O 'bsonType'
+
+
+DE 'creator'
+
+
+
+DEVERÁ SER DO TYPE 
+
+'objectId'...   (escreva como uma STRING, esse é o formato aceito pelo mongodb)...
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+db.createCollection('posts', {
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['title', 'text', 'creator', 'comments'],
+
+
+
+      properties: {
+
+            title: {
+                
+              bsonType: "string"
+              description: 'must be a string, and is required'
+        },
+        text: {
+          bsonType: "string"
+        },
+
+        creator: {
+          bsonType: 'objectId'
+        },
+        comments: {
+          
+        }
+      }
+    },
+  },
+});
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+
+db.createCollection('posts', {
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['title', 'text', 'creator', 'comments'],
+
+
+
+      properties: {
+
+            title: {
+
+              bsonType: "string",
+              description: 'must be a string, and is required'
+        },
+        text: {
+          bsonType: "string",
+          description: 'must be a string, and is required'
+        },
+
+        creator: {
+          bsonType: 'objectId', ///essa é a escrita aceita pelo mongodb para esse tpye....
+          description: 'must be an objectId , and is required'
+        },
+        comments: {
+          
+        }
+      }
+    },
+  },
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> JÁ NOS COMMENTS TEREMOS UM TYPE DE 'array',
+
+
+
+pq 
+
+
+
+
+VAMOS TER VÁRIOS OBJECTS (embedded documents) dentro dele...
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+db.createCollection('posts', {
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['title', 'text', 'creator', 'comments'],
+
+
+
+      properties: {
+
+            title: {
+
+              bsonType: "string",
+              description: 'must be a string, and is required'
+        },
+        text: {
+          bsonType: "string",
+          description: 'must be a string, and is required'
+        },
+
+        creator: {
+          bsonType: 'objectId', ///essa é a escrita aceita pelo mongodb para esse tpye....
+          description: 'must be an objectId , and is required'
+        },
+        comments: {
+        bsonType: "Array',
+        description: "must be an array of objects/documents, and is required"
+        }
+      }
+    },
+  },
+});
+
+
+
+--------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK... MAS TEREMOS OBJECTS DENTRO DESSE 'comments',
+
+
+
+
+
+... COMO ESCREVEMOS ISSO NESSA MARCAÇÃO? 
+
+
+
+
+
+
+
+
+
+
+
+
+-_ >para isso,
+
+o professor escreve uma key de 
+
+'items: {
+
+}',
+
+
+EM QUE DEFINIRÁ COMO 
+
+OS OBJECTS/ITEMS VÃO SE PARECER, DENTRO DESSE ARRAY DE 'comments'....
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR DEFINIE O 'bsonType'
+
+COMO 'object' (pq eles não serão strings, os comments)....
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+db.createCollection('posts', {
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['title', 'text', 'creator', 'comments'],
+
+
+
+      properties: {
+
+            title: {
+
+              bsonType: "string",
+              description: 'must be a string, and is required'
+        },
+        text: {
+          bsonType: "string",
+          description: 'must be a string, and is required'
+        },
+
+        creator: {
+          bsonType: 'objectId', ///essa é a escrita aceita pelo mongodb para esse tpye....
+          description: 'must be an objectId , and is required'
+        },
+        comments: {
+        bsonType: "array',
+        description: "must be an array of objects/documents, and is required",
+        items: {
+            bsonType: "object"
+        }
+
+        }
+      }
+    },
+  },
+});
+
+
+------------------------------------
+
+
+
+
+
+
+
+
+--> BEM... PARA DEFINIR QUAL DEVE SER A ESTRUTURA DE CADA 'OBJECT'/document nesse 'items',
+
+
+
+
+
+
+
+devemos DEFINIR UMA PROPRIEDADE de 'properties',
+
+
+
+
+EM QUE 
+
+
+
+
+aí 
+
+DEFINIMOS QUE ESSES DOCUMENTS/OBJECTS TERÃO 
+
+
+
+
+uma propriedade/key de 'text',
+
+
+
+
+que será 
+
+de 
+
+bsonType 'string',
+
+
+
+com uma description de 'must be a string and is required'...
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+db.createCollection('posts', {
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['title', 'text', 'creator', 'comments'],
+
+
+
+      properties: {
+
+            title: {
+
+              bsonType: "string",
+              description: 'must be a string, and is required'
+        },
+        text: {
+          bsonType: "string",
+          description: 'must be a string, and is required'
+        },
+
+        creator: {
+          bsonType: 'objectId', ///essa é a escrita aceita pelo mongodb para esse tpye....
+          description: 'must be an objectId , and is required'
+        },
+        comments: {
+        bsonType: "array',
+        description: "must be an array of objects/documents, and is required",
+        items: {
+            bsonType: "object",
+
+            properties: {
+                text: {
+                    bsonType: "text",
+                    description: "must be a string and is required."
+                }
+            }
+        }
+
+        }
+      }
+    },
+  },
+});
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+db.createCollection('posts', {
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['title', 'text', 'creator', 'comments'],
+
+      properties: {
+        title: {
+          bsonType: 'string',
+          description: 'must be a string, and is required',
+        },
+        text: {
+          bsonType: 'string',
+          description: 'must be a string, and is required',
+        },
+
+        creator: {
+          bsonType: 'objectId', ///essa é a escrita aceita pelo mongodb para esse tpye....
+          description: 'must be an objectId , and is required',
+        },
+        comments: {
+          bsonType: 'array',
+          description: 'must be an array of objects/documents, and is required',
+          items: {
+            bsonType: 'object',
+
+            properties: {
+              text: {
+                bsonType: 'string',
+                description: 'must be a string and is required.',
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, MAS AQUI TEMOS UM ERRO.... --> PARA QUE ESSE 'text' property em cada 
+
+
+
+
+
+OBJECT de 'comment' SEJA OBRIGATÓRIO,
+
+
+
+PRECISAMOS DEFINIR UMA KEY DE 'required: ["text"]'..
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+db.createCollection('posts', {
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['title', 'text', 'creator', 'comments'],
+
+      properties: {
+        title: {
+          bsonType: 'string',
+          description: 'must be a string, and is required',
+        },
+        text: {
+          bsonType: 'string',
+          description: 'must be a string, and is required',
+        },
+
+        creator: {
+          bsonType: 'objectId', ///essa é a escrita aceita pelo mongodb para esse tpye....
+          description: 'must be an objectId , and is required',
+        },
+        comments: {
+          bsonType: 'array',
+          description: 'must be an array of objects/documents, and is required',
+          items: {
+            bsonType: 'object',
+            required: ["text"],
+            properties: {
+              text: {
+                bsonType: 'string',
+                description: 'must be a string and is required.',
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> TAMBÉM PRECISAMOS COLOCAR O 'author' como required...
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+db.createCollection('posts', {
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['title', 'text', 'creator', 'comments'],
+
+      properties: {
+        title: {
+          bsonType: 'string',
+          description: 'must be a string, and is required',
+        },
+        text: {
+          bsonType: 'string',
+          description: 'must be a string, and is required',
+        },
+
+        creator: {
+          bsonType: 'objectId', ///essa é a escrita aceita pelo mongodb para esse tpye....
+          description: 'must be an objectId , and is required',
+        },
+        comments: {
+          bsonType: 'array',
+          description: 'must be an array of objects/documents, and is required',
+          items: {
+            bsonType: 'object',
+            required: ["text", "author"],
+            properties: {
+              text: {
+                bsonType: 'string',
+                description: 'must be a string and is required.',
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+});
+
+
+
+
+
+
+
+
+--> E AÍ DEFINIMOS O 'author' COMO 1 DOS FIELDS NESSE OBJECT, TAMBÉM....
+
+
+
+
+
+
+
+eX:
+
+
+
+
+
+
+
+
+db.createCollection('posts', {
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['title', 'text', 'creator', 'comments'],
+
+      properties: {
+        title: {
+          bsonType: 'string',
+          description: 'must be a string, and is required',
+        },
+        text: {
+          bsonType: 'string',
+          description: 'must be a string, and is required',
+        },
+
+        creator: {
+          bsonType: 'objectId', ///essa é a escrita aceita pelo mongodb para esse tpye....
+          description: 'must be an objectId , and is required',
+        },
+        comments: {
+          bsonType: 'array',
+          description: 'must be an array of objects/documents, and is required',
+          items: {
+            bsonType: 'object',
+            required: ["text", "author"],
+            properties: {
+              text: {
+                bsonType: 'string',
+                description: 'must be a string and is required.',
+              },
+
+              author: {
+                  bsonType: objectId, 
+                  description: 'must be a objectId and is required'
+              }
+            },
+          },
+        },
+      },
+    },
+  },
+});
+
+
+---------------------------
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+
+db.createCollection('posts', {
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['title', 'text', 'creator', 'comments'],
+
+      properties: {
+        title: {
+          bsonType: 'string',
+          description: 'must be a string, and is required',
+        },
+        text: {
+          bsonType: 'string',
+          description: 'must be a string, and is required',
+        },
+
+        creator: {
+          bsonType: 'objectId', ///essa é a escrita aceita pelo mongodb para esse tpye....
+          description: 'must be an objectId , and is required',
+        },
+        comments: {
+          bsonType: 'array',
+          description: 'must be an array of objects/documents, and is required',
+          items: {
+            bsonType: 'object',
+            required: ["text", "author"],
+            properties: {
+              text: {
+                bsonType: 'string',
+                description: 'must be a string and is required.',
+              },
+              author: {
+                bsonType: objectId, 
+                description: 'must be an objectId and is required'
+            }
+            },
+          },
+        },
+      },
+    },
+  },
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> COM ISSO, DEFINIMOS UM SIMPLES SCHEMA 
+
+PARA VALIDATE THE INCOMING DATA FOR THE POSTS COLLECTION...
+
+
+
+
+
+
+
+
+
+--> COPIAMOS ESSE COMANDO IMENSO E COLAMOS NA SHELL...
+
+
+
+
+
+
+
+
+
+
+
+--> GANHAMOS UM ERROR: 
+
+'objectId' is not defined (pq eu esqueci o '')...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+
+db.createCollection('posts', {
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['title', 'text', 'creator', 'comments'],
+
+      properties: {
+        title: {
+          bsonType: 'string',
+          description: 'must be a string, and is required',
+        },
+        text: {
+          bsonType: 'string',
+          description: 'must be a string, and is required',
+        },
+
+        creator: {
+          bsonType: 'objectId', ///essa é a escrita aceita pelo mongodb para esse tpye....
+          description: 'must be an objectId , and is required',
+        },
+        comments: {
+          bsonType: 'array',
+          description: 'must be an array of objects/documents, and is required',
+          items: {
+            bsonType: 'object',
+            required: ["text", "author"],
+            properties: {
+              text: {
+                bsonType: 'string',
+                description: 'must be a string and is required.',
+              },
+              author: {
+                bsonType: 'objectId', 
+                description: 'must be an objectId and is required'
+            }
+            },
+          },
+        },
+      },
+    },
+  },
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> CERTO, AÍ VAMOS GANHAR:
+
+
+{ "ok" : 1 }
+
+
+
+
+
+
+
+
+
+
+--> NO TERMINAL.... -> isso significa que 
+
+
+
+NOSSO SCHEMA FOI APLICADO à COLLECTION DE 'posts'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+devemos inserir um document com a estrutura correta,
+
+
+
+por isso o professor copia 
+
+
+
+
+o código de insert do post que ele havia feito antes....
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+db.posts.insertOne({
+    title: 'AAAA',
+    text: 'BBBB',
+    tags: [
+        "new", "tech"
+    ],
+    creator: ObjectId("6202b5b500850b5389a7f56c"),
+    comments: [
+        {
+            text: "AAAA",
+            author: ObjectId("6202b5b500850b5389a7f56c")
+        }
+    ]
+}
+)
+
+
+
+
+
+
+
+
+
+
+
+
+OK.... ISSO FOI SUCCEEDED...
+
+
+
+
+
+
+
+
+
+
+
+-> MAS AGORA VAMOS TENTAR 
+
+INSERIR ALGO COM UM 
+
+VALOR INVÁLIDO, COm 'number' no lugar de 'string', lá em 'title'...
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+db.posts.insertOne({
+    title: 1234,
+    text: 'BBBB',
+    tags: [
+        "new", "tech"
+    ],
+    creator: ObjectId("6202b5b500850b5389a7f56c"),
+    comments: [
+        {
+            text: "AAAA",
+            author: ObjectId("6202b5b500850b5389a7f56c")
+        }
+    ]
+}
+)
+
+
+
+
+
+
+
+
+
+
+
+-> OK... MAS ISSO NÃO FUNCIONOU.... ----> meu post ainda está sendo adicionado....
+
+
+
+
+
+
+
+
+
+
+
+
+
+BEM, MAS A VALIDATION BÁSICA ESTÁ FUNCIONANDO:
+
+
+
+
+
+
+
+
+> db.posts.insertOne({example: 'aaa'})
+WriteError({
+        "index" : 0,
+        "code" : 121,
+        "errmsg" : "Document failed validation",
+        "op" : {
+                "_id" : ObjectId("6202c50145b9f1ef2d626907"),
+                "example" : "aaa"
+        },
+        "errInfo" : {
+                "failingDocumentId" : ObjectId("6202c50145b9f1ef2d626907"),
+                "details" : {
+                        "operatorName" : "$jsonSchema",
+                        "schemaRulesNotSatisfied" : [
+                                {
+                                        "operatorName" : "required",
+                                        "specifiedAs" : {
+                                                "required" : [
+                                                        "title",
+                                                        "text",
+                                                        "creator",
+                                                        "comments"
+                                                ]
+                                        },
+                                        "missingProperties" : [
+                                                "comments",
+                                                "creator",
+                                                "text",
+                                                "title"
+                                        ]
+                                }
+                        ]
+                }
+        }
+}) :
+WriteError({
+        "index" : 0,
+        "code" : 121,
+        "errmsg" : "Document failed validation",
+        "op" : {
+                "_id" : ObjectId("6202c50145b9f1ef2d626907"),
+                "example" : "aaa"
+        },
+        "errInfo" : {
+                "failingDocumentId" : ObjectId("6202c50145b9f1ef2d626907"),
+                "details" : {
+                        "operatorName" : "$jsonSchema",
+                        "schemaRulesNotSatisfied" : [
+                                {
+                                        "operatorName" : "required",
+                                        "specifiedAs" : {
+                                                "required" : [
+                                                        "title",
+                                                        "text",
+                                                        "creator",
+                                                        "comments"
+                                                ]
+                                        },
+                                        "missingProperties" : [
+                                                "comments",
+                                                "creator",
+                                                "text",
+                                                "title"
+                                        ]
+                                }
+                        ]
+                }
+        }
+})
+WriteError@src/mongo/shell/bulk_api.js:465:48
+mergeBatchResults@src/mongo/shell/bulk_api.js:871:49
+executeBatch@src/mongo/shell/bulk_api.js:940:13
+Bulk/this.execute@src/mongo/shell/bulk_api.js:1182:21
+DBCollection.prototype.insertOne@src/mongo/shell/crud_api.js:264:9
+@(shell):1:1
+>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+AGORA O NEGÓCIO REALMENTE ME DEU ERRO:
+
+
+
+
+
+
+
+
+
+
+> db.posts.insertOne({     title: 1234,     text: 'BBBB',     tags: [         "new", "tech"     ],     creator: ObjectId("6202b5b500850b5389a7f56c"),     comments: [         {             text: "AAAA",             author: ObjectId("6202b5b500850b5389a7f56c")         }     ] } )
+WriteError({
+        "index" : 0,
+        "code" : 121,
+        "errmsg" : "Document failed validation",
+        "op" : {
+                "_id" : ObjectId("6202c52245b9f1ef2d626908"),
+                "title" : 1234,
+                "text" : "BBBB",
+                "tags" : [
+                        "new",
+                        "tech"
+                ],
+                "creator" : ObjectId("6202b5b500850b5389a7f56c"),
+                "comments" : [
+                        {
+                                "text" : "AAAA",
+                                "author" : ObjectId("6202b5b500850b5389a7f56c")
+                        }
+                ]
+        },
+        "errInfo" : {
+                "failingDocumentId" : ObjectId("6202c52245b9f1ef2d626908"),
+                "details" : {
+                        "operatorName" : "$jsonSchema",
+                        "schemaRulesNotSatisfied" : [
+                                {
+                                        "operatorName" : "properties",
+                                        "propertiesNotSatisfied" : [
+                                                {
+                                                        "propertyName" : "title",
+                                                        "details" : [
+                                                                {
+                                                                        "operatorName" : "bsonType",
+                                                                        "specifiedAs" : {
+                                                                                "bsonType" : "string"
+                                                                        },
+                                                                        "reason" : "type did not match",
+                                                                        "consideredValue" : 1234,
+                                                                        "consideredType" : "double"
+                                                                }
+                                                        ]
+                                                }
+                                        ]
+                                }
+                        ]
+                }
+        }
+}) :
+WriteError({
+        "index" : 0,
+        "code" : 121,
+        "errmsg" : "Document failed validation",
+        "op" : {
+                "_id" : ObjectId("6202c52245b9f1ef2d626908"),
+                "title" : 1234,
+                "text" : "BBBB",
+                "tags" : [
+                        "new",
+                        "tech"
+                ],
+                "creator" : ObjectId("6202b5b500850b5389a7f56c"),
+                "comments" : [
+                        {
+                                "text" : "AAAA",
+                                "author" : ObjectId("6202b5b500850b5389a7f56c")
+                        }
+                ]
+        },
+        "errInfo" : {
+                "failingDocumentId" : ObjectId("6202c52245b9f1ef2d626908"),
+                "details" : {
+                        "operatorName" : "$jsonSchema",
+                        "schemaRulesNotSatisfied" : [
+                                {
+                                        "operatorName" : "properties",
+                                        "propertiesNotSatisfied" : [
+                                                {
+                                                        "propertyName" : "title",
+                                                        "details" : [
+                                                                {
+                                                                        "operatorName" : "bsonType",
+                                                                        "specifiedAs" : {
+                                                                                "bsonType" : "string"
+                                                                        },
+                                                                        "reason" : "type did not match",
+                                                                        "consideredValue" : 1234,
+                                                                        "consideredType" : "double"
+                                                                }
+                                                        ]
+                                                }
+                                        ]
+                                }
+                        ]
+                }
+        }
+})
+WriteError@src/mongo/shell/bulk_api.js:465:48
+mergeBatchResults@src/mongo/shell/bulk_api.js:871:49
+executeBatch@src/mongo/shell/bulk_api.js:940:13
+Bulk/this.execute@src/mongo/shell/bulk_api.js:1182:21
+DBCollection.prototype.insertOne@src/mongo/shell/crud_api.js:264:9
+@(shell):1:1

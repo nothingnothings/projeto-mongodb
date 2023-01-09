@@ -1,0 +1,940 @@
+
+
+
+
+
+
+
+
+
+
+
+--> COM NOSSO CLUSTER 
+
+
+ATIVADO,
+
+
+PODEMOS TRABALHAR COM ELE....
+
+(
+    vou usar 
+
+    aquele 
+
+    meu cluster mongodb que já tenho,
+
+
+
+
+    aquele 
+
+    da conta 
+
+    arthur.panazolo@acad.pucrs.br...
+)
+
+
+
+
+
+
+
+
+
+
+
+--> NO CLUSTER TEMOS VÁRIAS OPTIONS:
+
+
+
+
+
+
+1 ) EDIT CONFIGURATION 
+
+
+
+2) COMMAND LINE TOOLS 
+
+
+
+3) MIGRATE DATA TO THIS CLUSTER 
+
+
+
+4) DOWNLOAD LOGS 
+
+
+
+5) TEST FAILOVER 
+
+
+
+
+6) PAUSE CLUSTER 
+
+
+
+7) TERMINATE
+
+
+
+
+
+
+
+
+
+
+
+----> TAMBÉM TEMOS METRICS,
+
+QUE 
+
+NOS DÃO 1 MONTE DE INFO SOBRE NOSSOS
+
+
+
+CLUSTERS,
+
+
+MOSTRAM A VELOCIDADE DAS READS,
+
+ETC ETC..
+
+
+
+
+
+
+
+
+
+
+
+--> VOCê PODE VER 
+
+
+
+AS 'COLLECTIONS' E OUTRAS COISAS (Algumas options só existem na versão paga)...
+
+
+
+
+
+
+
+
+
+
+-_> PARA SE CONECTAR AO CLUSTER, CLIQUE EM 'CONNECTG' -->  AÍ VEREMOS 
+
+
+OS 
+
+IP ADDRESSES QUE SERÃO CAPAZES 
+
+DE 
+
+SE 
+
+CONECTAR (
+
+
+    mas é a mesma lista do IP WHITELIST... -->  AÍ DEVEMOS 
+
+
+    'ESCOLHER A MANEIRA DO CONNECT'...
+
+
+
+
+
+
+
+
+
+
+
+    -----> TEMOS VÁRIAS OPTIONS :
+
+
+)
+
+
+
+
+
+
+VÁRIAS OPTIONS DE CONNECT:
+
+
+
+
+
+
+
+
+
+
+
+1) CONNECT WITH MONGO SHELL (um mongshell com TLS/SSL SUPPORT É NECESSÁRIO)....
+
+
+
+
+
+
+
+2) CONNECT COM SEU APP --> '''consiga uma connection string e aí veja EXEMPLOS DE DRIVER CONNECTION''...
+
+
+
+
+
+3) CONECTE COM MONGODB COMPASS --> já usamos..
+
+
+
+
+
+
+
+4) CONNECT COM SUA 'BUSINESS INTELLIGENCE TOOl'....
+
+
+
+
+
+
+
+
+
+
+--> BAIXE A SHELL, 
+
+ETC ETC.. 
+
+
+
+
+
+
+
+--> CONECTE  A SHELL 
+
+
+
+
+à DATABASE MONGODB ATLAS 
+
+
+COM O COMANDO/FORMULA:
+
+
+
+
+
+
+
+
+
+
+mongo "mongodb+srv://cluster0-ntrwp.mongodb.net/test" --username max
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOCÊ TAMBÉM VAI PRECISAR DO SEU PASSWORD,
+
+
+é claro...
+
+
+
+
+
+
+
+
+
+
+--> QUITE SUA RUNNING SHELL E MONGODINSTANCE...
+
+
+
+
+
+
+
+
+
+
+--> AÍ 
+
+ESCREVA:
+
+
+
+
+
+
+
+mongo "mongodb+srv://cluster0-ntrwp.mongodb.net/test" --username max
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O TRECHO 
+
+
+
+'''  "mongodb+srv://cluster0-ntrwp.mongodb.net/test"  ''' 
+
+
+ASSEGURA QUE O 
+
+MONGO N VAI TENTAR SE CONECTAR A UMA 'LOCALLY RUNNING MONGODB SERVER' (Que é o comportamento default),
+
+
+
+
+E SIM 
+QUE 
+
+
+VAI 
+
+TENTAR 
+
+
+
+
+ALCANÇAR UMA DATABASE 
+
+NESSE 
+
+SERVER/URL de 
+
+
+
+''
+"mongodb+srv://cluster0-ntrwp.mongodb.net/test"
+
+'
+'' 
+
+
+(NO CASO DO PROFESSOR)...
+
+
+
+
+
+
+
+
+
+
+--> E O '/test' É JUSTAMENTE A DATABASE A QUE VOCÊ VAI QUERER CONECTAR; PODE COLOCAR OUTRAS..
+
+
+
+
+
+
+
+
+
+
+
+AÍ COLOQUE  SEU '--username',
+
+
+
+E AÍ 
+
+PROVAVELMENTE 
+
+O SHELL VAI PEDIR SEU PASSWORD... --> 
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+mongo "mongodb+srv://cluster0.nhtjo.mongodb.net/test" --username madblorga
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... FUNCIONOU.... O PASSWORD É 'papanacuas'...
+
+
+
+
+
+
+
+
+
+--> mas ganhei um erro, de whitelist:
+
+
+
+
+
+
+
+*** You have failed to connect to a MongoDB Atlas cluster. Please ensure that your IP allowlist allows connections from your network.
+Error: can't connect to new replica set primary [cluster0-shard-00-01.nhtjo.mongodb.net:27017], err: Location8000: bad auth : Authentication failed. :
+connect@src/mongo/shell/mongo.js:372:17
+@(connect):2:6
+exception: connect failed
+exiting with code 1
+PS A:\projeto6-MONGODB\MODULO15-PERFORMANCE,TOLERANCIADEFALHASEDEPLOYMENT> 
+
+
+
+
+
+
+
+
+
+
+
+
+--> tenho que dar whitelist desse meu IP novo...
+
+
+
+
+
+
+
+
+--> entro no site do mongo e faço isso...
+
+
+
+
+
+
+
+201.21.235.130/32
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA A AUTHENTICATION FALHOU... --> e não lembro da senha....
+
+
+
+
+
+
+
+
+
+
+
+
+--> CONSEGUI....
+
+
+
+
+
+
+Ex:
+
+
+
+
+
+MongoDB shell version v5.0.6
+connecting to: mongodb://cluster0-shard-00-01.nhtjo.mongodb.net:27017,cluster0-shard-00-00.nhtjo.mongodb.net:27017,cluster0-shard-00-02.nhtjo.mongodb.net:27017/test?authSource=admin&compressors=disabled&gssapiServiceName=mongodb&replicaSet=atlas-gc0c6b-shard-0&ssl=true     
+{"t":{"$date":"2022-03-02T04:08:04.281Z"},"s":"W",  "c":"NETWORK",  "id":23019,   "ctx":"ReplicaSetMonitor-TaskExecutor","msg":"DNS resolution while connecting to peer was slow","attr":{"peer":"cluster0-shard-00-01.nhtjo.mongodb.net:27017","durationMillis":1008}}
+{"t":{"$date":"2022-03-02T04:08:04.474Z"},"s":"W",  "c":"NETWORK",  "id":23019,   "ctx":"ReplicaSetMonitor-TaskExecutor","msg":"DNS resolution while connecting to peer was slow","attr":{"peer":"cluster0-shard-00-02.nhtjo.mongodb.net:27017","durationMillis":1201}}
+{"t":{"$date":"2022-03-02T04:08:04.658Z"},"s":"W",  "c":"NETWORK",  "id":23019,   "ctx":"ReplicaSetMonitor-TaskExecutor","msg":"DNS resolution while connecting to peer was slow","attr":{"peer":"cluster0-shard-00-00.nhtjo.mongodb.net:27017","durationMillis":1385}}
+Implicit session: session { "id" : UUID("4d34dff6-c95f-40b0-9408-36f62a81d29d") }
+MongoDB server version: 5.0.6
+================
+Warning: the "mongo" shell has been superseded by "mongosh",
+which delivers improved usability and compatibility.The "mongo" shell has been deprecated and will be removed in
+an upcoming release.
+For installation instructions, see
+https://docs.mongodb.com/mongodb-shell/install/
+================
+MongoDB Enterprise atlas-gc0c6b-shard-0:PRIMARY> 
+
+
+
+
+
+
+
+
+
+------------------
+
+
+
+
+
+
+
+CERTO....
+
+
+
+
+
+
+
+
+AGORA DEU CERTO, APARENTEMENTE..
+
+
+
+
+
+
+
+
+
+-----> ESTAMOS CONECTADOS À CLOUD, AO MONGODB DATABASE NA CLOUD...
+
+
+
+
+
+
+
+
+
+MongoDB Enterprise atlas-gc0c6b-shard-0:PRIMARY> 
+
+
+
+
+
+
+
+
+
+
+
+
+-> E TODOS NOSSOS COMANDOS FUNCIONAM....
+
+
+
+
+
+
+
+MongoDB Enterprise atlas-gc0c6b-shard-0:PRIMARY> db.products.find({}).pretty()
+{
+        "_id" : ObjectId("619ae5f3aa434dc610188d65"),
+        "title" : "AAAAAAA",
+        "price" : 212121,
+        "description" : "AAA",
+        "imageUrl" : "images\\1637541363034-foto.jpg",
+        "userId" : ObjectId("619326d1482ffb8a77b2cfcb"),
+        "__v" : 0
+}
+{
+        "_id" : ObjectId("619ae60daa434dc610188d6c"),
+        "title" : "BBBBBB",
+        "price" : 25151515,
+        "description" : "assasas",
+        "imageUrl" : "images\\1637541389056-Deep_Striker_Sentinel.jpg",
+        "userId" : ObjectId("619326d1482ffb8a77b2cfcb"),
+        "__v" : 0
+}
+{
+        "_id" : ObjectId("619ae61daa434dc610188d73"),
+        "title" : "CCCCCCC",
+        "price" : 6808012,
+        "description" : "assaas",
+        "imageUrl" : "images\\1637541405454-zone-andreyev-8-940x508.jpg",
+        "userId" : ObjectId("619326d1482ffb8a77b2cfcb"),
+        "__v" : 0
+}
+{
+        "_id" : ObjectId("619b22bf8555fdebec788e0d"),
+        "title" : "ASJOJASOJASOASJ",
+        "price" : 122121221,
+        "description" : "aasasasasa",
+        "imageUrl" : "images\\1637556927456-COMPROVANTE.png",
+        "userId" : ObjectId("619326d1482ffb8a77b2cfcb"),
+        "__v" : 0
+}
+{
+        "_id" : ObjectId("619b22f3f9398021b8b005c9"),
+        "title" : "ASASASIASHJISHJA",
+        "price" : 2121212,
+        "description" : "asasasas",
+        "imageUrl" : "images\\1637556978729-documento1.jpg",
+        "userId" : ObjectId("619326d1482ffb8a77b2cfcb"),
+        "__v" : 0
+}
+{
+        "_id" : ObjectId("619b2357f9398021b8b005d6"),
+        "title" : "AAAAA",
+        "price" : 2121211,
+        "description" : "ccasc",
+        "imageUrl" : "images\\1637557078581-COMPROVANTE.png",
+        "userId" : ObjectId("619326d1482ffb8a77b2cfcb"),
+        "__v" : 0
+}
+{
+        "_id" : ObjectId("619b2399e79b31ff73f4b770"),
+        "title" : "AAAAAe3",
+        "price" : 2121211,
+        "description" : "ccasc",
+        "imageUrl" : "images\\1637557145375-FRENTE.jpg",
+        "userId" : ObjectId("619326d1482ffb8a77b2cfcb"),
+        "__v" : 0
+}
+{
+        "_id" : ObjectId("619b23f4636daa702991abfd"),
+        "title" : "ASASASASSSASASAS55125",
+        "price" : 2.2222222222222222e+21,
+        "description" : "asasasas",
+        "imageUrl" : "images\\1637557236177-Deep_Striker_Sentinel.jpg",
+        "userId" : ObjectId("619326d1482ffb8a77b2cfcb"),
+        "__v" : 0
+}
+{
+        "_id" : ObjectId("619c6150112c093b3df42da9"),
+        "title" : "CCCCCC",
+        "price" : 21212121,
+        "description" : "asasasas",
+        "imageUrl" : "images\\1637638480495-atestado.jpg",
+        "userId" : ObjectId("619326d1482ffb8a77b2cfcb"),
+        "__v" : 0
+}
+{
+        "_id" : ObjectId("619c61a3112c093b3df42dda"),
+        "title" : "AOJASOJAOSA",
+        "price" : 21212111,
+        "description" : "assaaas",
+        "imageUrl" : "images\\1637638563465-LIXO.png",
+        "userId" : ObjectId("619326d1482ffb8a77b2cfcb"),
+        "__v" : 0
+}
+{
+        "_id" : ObjectId("619c61c6112c093b3df42df9"),
+        "title" : "CCCCCCCCC",
+        "price" : 211221112672123,
+        "description" : "dsdsdssd",
+        "imageUrl" : "images\\1637638598237-malha feita tricô.png",
+        "userId" : ObjectId("619326d1482ffb8a77b2cfcb"),
+        "__v" : 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E ISSO REALMENTE FUNCIONA...
+
+
+
+
+
+
+
+
+
+
+
+
+MongoDB Enterprise atlas-gc0c6b-shard-0:PRIMARY> db.products.find({price: {$gt: 20000000}}).pretty()
+{
+        "_id" : ObjectId("619ae60daa434dc610188d6c"),
+        "title" : "BBBBBB",
+        "price" : 25151515,
+        "description" : "assasas",
+        "imageUrl" : "images\\1637541389056-Deep_Striker_Sentinel.jpg",
+        "userId" : ObjectId("619326d1482ffb8a77b2cfcb"),
+        "__v" : 0
+}
+{
+        "_id" : ObjectId("619b22bf8555fdebec788e0d"),
+        "title" : "ASJOJASOJASOASJ",
+        "price" : 122121221,
+        "description" : "aasasasasa",
+        "imageUrl" : "images\\1637556927456-COMPROVANTE.png",
+        "userId" : ObjectId("619326d1482ffb8a77b2cfcb"),
+        "__v" : 0
+}
+{
+        "_id" : ObjectId("619b23f4636daa702991abfd"),
+        "title" : "ASASASASSSASASAS55125",
+        "price" : 2.2222222222222222e+21,
+        "description" : "asasasas",
+        "imageUrl" : "images\\1637557236177-Deep_Striker_Sentinel.jpg",
+        "userId" : ObjectId("619326d1482ffb8a77b2cfcb"),
+        "__v" : 0
+}
+{
+        "_id" : ObjectId("619c6150112c093b3df42da9"),
+        "title" : "CCCCCC",
+        "price" : 21212121,
+        "description" : "asasasas",
+        "imageUrl" : "images\\1637638480495-atestado.jpg",
+        "userId" : ObjectId("619326d1482ffb8a77b2cfcb"),
+        "__v" : 0
+}
+{
+        "_id" : ObjectId("619c61a3112c093b3df42dda"),
+        "title" : "AOJASOJAOSA",
+        "price" : 21212111,
+        "description" : "assaaas",
+        "imageUrl" : "images\\1637638563465-LIXO.png",
+        "userId" : ObjectId("619326d1482ffb8a77b2cfcb"),
+        "__v" : 0
+}
+{
+        "_id" : ObjectId("619c61c6112c093b3df42df9"),
+        "title" : "CCCCCCCCC",
+        "price" : 211221112672123,
+        "description" : "dsdsdssd",
+        "imageUrl" : "images\\1637638598237-malha feita tricô.png",
+        "userId" : ObjectId("619326d1482ffb8a77b2cfcb"),
+        "__v" : 0
+}
+MongoDB Enterprise atlas-gc0c6b-shard-0:PRIMARY> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> PODEMOS ATÉ INSERIR NOVOS PRODUCTS:
+
+
+
+
+ex:
+
+
+MongoDB Enterprise atlas-gc0c6b-shard-0:PRIMARY> db.products.insertOne({title: "A Book", price: 12.99})
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("621eef349f2e0b49916afe29")
+}
+
+
+
+
+
+
+MongoDB Enterprise atlas-gc0c6b-shard-0:PRIMARY> db.products.find({}).pretty()                         
+{
+        "_id" : ObjectId("619ae5f3aa434dc610188d65"),
+        "title" : "AAAAAAA",
+        "price" : 212121,
+        "description" : "AAA",
+        "imageUrl" : "images\\1637541363034-foto.jpg",
+        "userId" : ObjectId("619326d1482ffb8a77b2cfcb"),
+        "__v" : 0
+}
+{
+        "_id" : ObjectId("619ae60daa434dc610188d6c"),
+        "title" : "BBBBBB",
+        "price" : 25151515,
+        "description" : "assasas",
+        "imageUrl" : "images\\1637541389056-Deep_Striker_Sentinel.jpg",
+        "userId" : ObjectId("619326d1482ffb8a77b2cfcb"),
+        "__v" : 0
+}
+{
+        "_id" : ObjectId("619ae61daa434dc610188d73"),
+        "title" : "CCCCCCC",
+        "price" : 6808012,
+        "description" : "assaas",
+        "imageUrl" : "images\\1637541405454-zone-andreyev-8-940x508.jpg",
+        "userId" : ObjectId("619326d1482ffb8a77b2cfcb"),
+        "__v" : 0
+}
+{
+        "_id" : ObjectId("619b22bf8555fdebec788e0d"),
+        "title" : "ASJOJASOJASOASJ",
+        "price" : 122121221,
+        "description" : "aasasasasa",
+        "imageUrl" : "images\\1637556927456-COMPROVANTE.png",
+        "userId" : ObjectId("619326d1482ffb8a77b2cfcb"),
+        "__v" : 0
+}
+{
+        "_id" : ObjectId("619b22f3f9398021b8b005c9"),
+        "title" : "ASASASIASHJISHJA",
+        "price" : 2121212,
+        "description" : "asasasas",
+        "imageUrl" : "images\\1637556978729-documento1.jpg",
+        "userId" : ObjectId("619326d1482ffb8a77b2cfcb"),
+        "__v" : 0
+}
+{
+        "_id" : ObjectId("619b2357f9398021b8b005d6"),
+        "title" : "AAAAA",
+        "price" : 2121211,
+        "description" : "ccasc",
+        "imageUrl" : "images\\1637557078581-COMPROVANTE.png",
+        "userId" : ObjectId("619326d1482ffb8a77b2cfcb"),
+        "__v" : 0
+}
+{
+        "_id" : ObjectId("619b2399e79b31ff73f4b770"),
+        "title" : "AAAAAe3",
+        "price" : 2121211,
+        "description" : "ccasc",
+        "imageUrl" : "images\\1637557145375-FRENTE.jpg",
+        "userId" : ObjectId("619326d1482ffb8a77b2cfcb"),
+        "__v" : 0
+}
+{
+        "_id" : ObjectId("619b23f4636daa702991abfd"),
+        "title" : "ASASASASSSASASAS55125",
+        "price" : 2.2222222222222222e+21,
+        "description" : "asasasas",
+        "imageUrl" : "images\\1637557236177-Deep_Striker_Sentinel.jpg",
+        "userId" : ObjectId("619326d1482ffb8a77b2cfcb"),
+        "__v" : 0
+}
+{
+        "_id" : ObjectId("619c6150112c093b3df42da9"),
+        "title" : "CCCCCC",
+        "price" : 21212121,
+        "description" : "asasasas",
+        "imageUrl" : "images\\1637638480495-atestado.jpg",
+        "userId" : ObjectId("619326d1482ffb8a77b2cfcb"),
+        "__v" : 0
+}
+{
+        "_id" : ObjectId("619c61a3112c093b3df42dda"),
+        "title" : "AOJASOJAOSA",
+        "price" : 21212111,
+        "description" : "assaaas",
+        "imageUrl" : "images\\1637638563465-LIXO.png",
+        "userId" : ObjectId("619326d1482ffb8a77b2cfcb"),
+        "__v" : 0
+}
+{
+        "_id" : ObjectId("619c61c6112c093b3df42df9"),
+        "title" : "CCCCCCCCC",
+        "price" : 211221112672123,
+        "description" : "dsdsdssd",
+        "imageUrl" : "images\\1637638598237-malha feita tricô.png",
+        "userId" : ObjectId("619326d1482ffb8a77b2cfcb"),
+        "__v" : 0
+}
+{
+        "_id" : ObjectId("621eef349f2e0b49916afe29"),
+        "title" : "A Book",
+        "price" : 12.99
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> TUDO QUE APRENDEMOS SOBRE O LOCAL SERVER FUNCIONA NESSE SERVER DO MONGODB ATLAS... --> como está na cloud, e não no localhsot,
+
+
+PODEMOS O UTILIZAR DE QUALQUER LUGAR,
+
+E NÃO SÓ DE SUA LOCAL MACHINE..

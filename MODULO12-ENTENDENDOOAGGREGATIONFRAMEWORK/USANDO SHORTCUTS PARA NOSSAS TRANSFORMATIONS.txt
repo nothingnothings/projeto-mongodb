@@ -1,0 +1,213 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE VOCê SÓ PRECISA 
+DE UMA 
+
+CONVERSION SIMPLES,
+
+EM QUE 
+
+VOCÊ NÃO ESPECIFICA 
+
+AQUELES 
+
+
+
+COISOS ESPECIAIS DE 
+
+'onError'
+
+
+e 
+
+
+'onNull',
+
+
+
+
+
+
+
+
+
+
+AÍ VOCÊ PODE 
+
+
+SÓ USAR 
+
+
+UM SHORTCUT,
+
+TIPO 
+
+
+
+'$toDate',
+
+
+
+'$toInt'
+
+
+'toDouble' 
+
+
+
+'$toString' 
+
+
+
+
+
+'$toDecimal' 
+
+
+
+
+
+
+
+'$toLong' 
+
+
+
+
+
+
+
+
+
+----> ESSES SÃO SHORTCUTS SE VOCê PRECISA FAZER UMA TRANSFORMATION ESPECÍFICA...
+
+
+
+
+
+
+
+
+
+
+FICA TIPO ASSIM:
+
+
+
+
+
+      'date of birth': { $toDate:"$dob.date"},
+
+
+
+
+
+
+
+
+
+
+
+
+      tipo assim:
+
+
+
+
+
+
+        db.persons.aggregate([
+    {
+      $project: {
+        _id: 0,
+        gender: 1,
+        personAge: '$dob.age',
+        'date of birth': { $toDate:"$dob.date"},
+        fullName: {
+          $concat: [
+            { $toUpper: { $substrCP: ['$name.first', 0, 1] } },
+            {
+              $substrCP: [
+                '$name.first',
+                1,
+                { $subtract: [{ $strLenCP: '$name.first' }, 1] },
+              ],
+            },
+            ' ',
+            { $toUpper: { $substrCP: ['$name.last', 0, 1] } },
+            {
+              $substrCP: [
+                '$name.last',
+                1,
+                { $subtract: [{ $strLenCP: '$name.first' }, 1] },
+              ],
+            },
+          ],
+        },
+
+        location: {
+          type: 'Point',
+          coordinates: [
+            { $toDouble: '$location.coordinates.longitude' },
+            { $toDouble: '$location.coordinates.latitude' },
+          ],
+        },
+      },
+    },
+  ]).pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> E SE VOCÊ QUER USAR OS SHORTCUTS COM 'onError' e 'onNUll',
+
+
+  É UM POUCO MAIS DIFÍCIL,
+
+  PQ 
+
+
+  VOCÊ TEM QUE CHECAR OS DOCS PARA VERIFICAR
+
+
+  SE 
+
+  OS 
+
+
+  VALORES DEFAULT DE 'onError' e 'onNull' sãO 'ALRIGHT' para você...

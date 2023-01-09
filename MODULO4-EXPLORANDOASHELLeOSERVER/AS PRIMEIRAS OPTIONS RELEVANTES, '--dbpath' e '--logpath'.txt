@@ -1,0 +1,1323 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> OK.... HÁ UM MONTE DE COISAS QUE PODEMOS CONFIGURAR....
+
+
+
+EX:
+
+
+
+
+PS A:\projeto6-MONGODB\MODULO4-EXPLORANDOASHELLeOSERVER> mongod --help
+Options:
+  --networkMessageCompressors arg (=snappy,zstd,zlib)
+                                        Comma-separated list of compressors to 
+                                        use for network messages
+
+General options:
+  -h [ --help ]                         Show this usage information
+  --version                             Show version information
+  -f [ --config ] arg                   Configuration file specifying 
+                                        additional options
+  --configExpand arg                    Process expansion directives in config 
+                                        file (none, exec, rest)
+  --port arg                            Specify port number - 27017 by default
+  --ipv6                                Enable IPv6 support (disabled by
+                                        default)
+  --listenBacklog arg (=2147483647)     Set socket listen backlog size
+  --maxConns arg (=1000000)             Max number of simultaneous connections
+  --pidfilepath arg                     Full path to pidfile (if not set, no
+                                        pidfile is created)
+  --timeZoneInfo arg                    Full path to time zone info directory,
+                                        e.g. /usr/share/zoneinfo
+  -v [ --verbose ] [=arg(=v)]           Be more verbose (include multiple times
+                                        for more verbosity e.g. -vvvvv)
+  --quiet                               Quieter output
+  --logpath arg                         Log file to send write to instead of
+                                        stdout - has to be a file, not
+                                        directory
+  --logappend                           Append to logpath instead of
+                                        over-writing
+  --logRotate arg                       Set the log rotation behavior
+                                        (rename|reopen)
+  --timeStampFormat arg                 Desired format for timestamps in log
+                                        messages. One of iso8601-utc or
+                                        iso8601-local
+  --setParameter arg                    Set a configurable parameter
+  --bind_ip arg                         Comma separated list of ip addresses to
+                                        listen on - localhost by default
+  --bind_ip_all                         Bind to all ip addresses
+  --noauth                              Run without security
+  --transitionToAuth                    For rolling access control upgrade.
+                                        Attempt to authenticate over outgoing
+                                        connections and proceed regardless of
+                                        success. Accept incoming connections
+                                        with or without authentication.
+  --slowms arg (=100)                   Value of slow for profile and console
+                                        log
+  --slowOpSampleRate arg (=1)           Fraction of slow ops to include in the
+                                        profile and console log
+  --profileFilter arg                   Query predicate to control which
+                                        operations are logged and profiled
+  --auth                                Run with security
+  --clusterIpSourceAllowlist arg        Network CIDR specification of permitted
+                                        origin for `__system` access
+  --profile arg                         0=off 1=slow, 2=all
+  --cpu                                 Periodically show cpu and iowait
+                                        utilization
+  --sysinfo                             Print some diagnostic system
+                                        information
+  --noscripting                         Disable scripting engine
+  --notablescan                         Do not allow table scans
+  --keyFile arg                         Private key for cluster authentication
+  --clusterAuthMode arg                 Authentication mode used for cluster
+                                        authentication. Alternatives are 
+                                        (keyFile|sendKeyFile|sendX509|x509)
+
+Replication options:
+  --oplogSize arg                       Size to use (in MB) for replication op
+                                        log. default is 5% of disk space (i.e.
+                                        large is good)
+
+Replica set options:
+  --replSet arg                         arg is <setname>[/<optionalseedhostlist
+                                        >]
+  --enableMajorityReadConcern [=arg(=1)] (=1)
+                                        Enables majority readConcern.
+                                        enableMajorityReadConcern=false is no
+                                        longer supported
+
+Sharding options:
+  --configsvr                           Declare this is a config db of a
+                                        cluster; default port 27019; default
+                                        dir /data/configdb
+  --shardsvr                            Declare this is a shard db of a
+                                        cluster; default port 27018
+
+Storage options:
+  --storageEngine arg                   What storage engine to use - defaults
+                                        to wiredTiger if no data files present
+  --dbpath arg                          Directory for datafiles - defaults to
+                                        \data\db\ which is A:\data\db\ based on
+                                        the current working drive
+  --directoryperdb                      Each database will be stored in a
+                                        separate directory
+  --syncdelay arg (=60)                 Seconds between disk syncs
+  --journalCommitInterval arg (=100)    how often to group/batch commit (ms)
+  --upgrade                             Upgrade db if needed
+  --repair                              Run repair on all dbs
+  --journal                             Enable journaling
+  --nojournal                           Disable journaling (journaling is on by
+                                        default for 64 bit)
+  --oplogMinRetentionHours arg (=0)     Minimum number of hours to preserve in
+                                        the oplog. Default is 0 (turned off).
+                                        Fractions are allowed (e.g. 1.5 hours)
+
+TLS Options:
+  --tlsOnNormalPorts                    Use TLS on configured ports
+  --tlsMode arg                         Set the TLS operation mode
+                                        (disabled|allowTLS|preferTLS|requireTLS
+                                        )
+  --tlsCertificateKeyFile arg           Certificate and key file for TLS
+  --tlsCertificateKeyFilePassword arg   Password to unlock key in the TLS
+                                        certificate key file
+  --tlsClusterFile arg                  Key file for internal TLS
+                                        authentication
+  --tlsClusterPassword arg              Internal authentication key file
+                                        password
+  --tlsCAFile arg                       Certificate Authority file for TLS
+  --tlsClusterCAFile arg                CA used for verifying remotes during
+                                        inbound connections
+  --tlsCRLFile arg                      Certificate Revocation List file for
+                                        TLS
+  --tlsDisabledProtocols arg            Comma separated list of TLS protocols
+                                        to disable [TLS1_0,TLS1_1,TLS1_2,TLS1_3
+                                        ]
+  --tlsAllowConnectionsWithoutCertificates
+                                        Allow client to connect without
+                                        presenting a certificate
+  --tlsAllowInvalidHostnames            Allow server certificates to provide
+                                        non-matching hostnames
+  --tlsAllowInvalidCertificates         Allow connections to servers with
+                                        invalid certificates
+  --tlsFIPSMode                         Activate FIPS 140-2 mode at startup
+  --tlsCertificateSelector arg          TLS Certificate in system store
+  --tlsClusterCertificateSelector arg   SSL/TLS Certificate in system store for
+                                        internal TLS authentication
+  --tlsLogVersions arg                  Comma separated list of TLS protocols
+                                        to log on connect [TLS1_0,TLS1_1,TLS1_2
+                                        ,TLS1_3]
+
+AWS IAM Options:
+  --awsIamSessionToken arg              AWS Session Token for temporary
+                                        credentials
+
+Windows Service Control Manager options:
+  --install                             Install Windows service
+  --remove                              Remove Windows service
+  --reinstall                           Reinstall Windows service (equivalent
+                                        to --remove followed by --install)
+  --serviceName arg                     Windows service name
+  --serviceDisplayName arg              Windows service display name
+  --serviceDescription arg              Windows service description
+  --serviceUser arg                     Account for service execution
+  --servicePassword arg                 Password used to authenticate
+                                        serviceUser
+
+WiredTiger options:
+  --wiredTigerCacheSizeGB arg           Maximum amount of memory to allocate
+                                        for cache; Defaults to 1/2 of physical
+                                        RAM
+  --zstdDefaultCompressionLevel arg (=6)
+                                        Default compression level for zstandard
+                                        compressor
+  --wiredTigerJournalCompressor arg (=snappy)
+                                        Use a compressor for log records
+                                        [none|snappy|zlib|zstd]
+  --wiredTigerDirectoryForIndexes       Put indexes and data in different
+                                        directories
+  --wiredTigerCollectionBlockCompressor arg (=snappy)
+                                        Block compression algorithm for
+                                        collection data [none|snappy|zlib|zstd]
+  --wiredTigerIndexPrefixCompression arg (=1)
+                                        Use prefix compression on row-store
+                                        leaf pages
+
+Free Monitoring Options:
+  --enableFreeMonitoring arg            Enable Cloud Free Monitoring
+                                        (on|runtime|off)
+  --freeMonitoringTag arg               Cloud Free Monitoring Tags
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> MAS O QUE É INTERESSANTE PARA NÓS CONFIGURARMOS? 
+
+
+
+
+
+
+
+
+
+
+  --quiet --> te deixa CONFIGURAR A MANEIRA PELA QUAL AS COISAS FICAM 'LOGGED' PELO SEU SERVER... (
+
+é usado para fazer o server falar MENOS...
+
+  )
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  --> NOS DOCS, LEMOS ISTO:
+
+
+
+
+  --help, -h
+Returns information on the options and use of mongod.
+
+
+
+
+--version
+Returns the mongod release number.
+
+
+
+
+--config <filename>, -f <filename>
+Specifies a configuration file for runtime configuration options. 
+The configuration file is the preferred method for runtime configuration of mongod. 
+The options are equivalent to the command-line configuration options. 
+
+See Configuration File Options for more information.
+
+Ensure the configuration file uses ASCII encoding. The mongod instance does not support configuration files with non-ASCII encoding, including UTF-8.
+
+
+
+
+
+( OU SEJA, POR MEIO DESSA OPTION, RODAMOS UM ARQUIVO 'config', que poderá ter 
+
+
+TODAS AS OPTIONS/FLAGS SETTADAS NO NOSSO TERMINAL, MAS DENTRO DESSE FILE...) --> e esse é o method preferido de runtime configuration do mongod...
+
+
+
+
+
+
+
+
+--configExpand <none|rest|exec>
+Default: none
+
+New in version 4.2.
+
+Enables using Expansion Directives in configuration files. Expansion directives allow you to set externally sourced values for configuration file options.
+
+
+
+
+
+
+
+--> não sei o que é isso....
+
+
+
+
+
+
+--configExpand supports the following expansion directives:
+
+Value
+Description
+none
+Default. mongod does not expand expansion directives. mongod fails to start if any configuration file settings use expansion directives.
+rest
+mongod expands __rest expansion directives when parsing the configuration file.
+exec
+mongod expands __exec expansion directives when parsing the configuration file.
+
+
+
+
+
+
+-----------------------------------------
+
+
+
+
+
+You can specify multiple expansion directives as a comma-separated list, e.g. rest, exec. 
+
+If the configuration file contains expansion directives not specified to --configExpand, 
+the mongod returns an error and terminates.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---verbose -> AUMENTA O NÚMERO DE OUTPUTS/REPOSTING DE STATS... ---> 
+
+
+você pode ir aumentando a verbosity 
+
+
+por meio de '-vvvvvvv' (quanto mais 'v', mais verbose)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--quiet --> 
+
+Runs mongod in a quiet mode that attempts to limit the amount of output.
+
+This option suppresses:
+
+output from database commands
+replication activity
+connection accepted events
+connection closed events
+
+
+
+
+
+
+
+
+
+
+
+
+--port <port>
+Default:
+
+27017 if mongod is not a shard member or a config server member
+27018 if mongod is a shard member
+27019 if mongod is a config server member
+
+
+
+
+The TCP port on which the MongoDB instance listens for client connections.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--bind_ip <hostnames|ipaddresses|Unix domain socket paths>
+
+
+
+Default: localhost
+
+NOTE
+Starting in MongoDB 3.6, mongod bind to localhost by default. See Default Bind to Localhost.
+
+The hostnames and/or IP addresses and/or full Unix domain socket paths on which mongod should listen for client connections. You may attach mongod to any interface. To bind to multiple addresses, enter a list of comma-separated values.
+
+EXAMPLE
+localhost,/tmp/mongod.sock
+You can specify both IPv4 and IPv6 addresses, or hostnames that resolve to an IPv4 or IPv6 address.
+
+EXAMPLE
+localhost, 2001:0DB8:e132:ba26:0d5c:2774:e7f9:d513
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------
+
+
+
+
+
+
+--bind_ip_all
+
+
+
+
+If specified, the mongod instance binds to all IPv4 addresses (i.e. 0.0.0.0). If mongod starts with --ipv6, --bind_ip_all also binds to all IPv6 addresses (i.e. ::).
+
+mongod only supports IPv6 if started with --ipv6. Specifying --bind_ip_all alone does not enable IPv6 support.
+
+
+
+
+
+
+
+
+
+
+
+
+--logpath <path>
+
+
+
+Sends all diagnostic logging information to a log file instead of to standard output or to the host's syslog system. MongoDB creates the log file at the path you specify.
+
+By default, MongoDB will move any existing log file rather than overwrite it. To instead append to the log file, set the --logappend option.
+
+
+
+
+
+
+
+
+
+
+--maxConns <number>
+The maximum number of simultaneous connections that mongod will accept. This setting has no effect 
+f it is higher than your operating system's configured maximum connection tracking threshold.
+
+Do not assign too low of a value to this option, or you will 
+encounter errors during normal application operation.
+
+
+
+
+
+
+
+--syslog
+Sends all logging output to the host's syslog system rather than to standard output or
+ to a log file (--logpath).
+
+The --syslog option is not supported on Windows.
+
+
+
+
+
+
+--syslogFacility <string>
+Default: user
+
+Specifies the facility level used when logging messages to syslog.
+
+ The value you specify must be supported by your operating system's implementation of syslog.
+  To use this option, you must enable the --syslog option.
+
+
+
+
+
+--logappend
+Appends new entries to the end of the existing log file when the mongod
+ instance restarts. Without this option, mongod will back up the existing log and
+  create a new file.
+
+
+
+
+
+
+
+
+
+
+
+
+--timeStampFormat <string>
+Default: iso8601-local
+
+The time format for timestamps in log messages. Specify one of the following values:
+
+
+Value
+Description
+
+
+iso8601-utc
+Displays timestamps in Coordinated Universal Time (UTC) in the ISO-8601 format. For example, for New York at the start of the Epoch: 1970-01-01T00:00:00.000Z
+
+iso8601-local
+Displays timestamps in local time in the ISO-8601 format. For example, for New York at the start of the Epoch: 1969-12-31T19:00:00.000-05:00
+
+
+
+
+
+
+
+
+--traceExceptions
+For internal diagnostic use only.
+
+
+
+
+
+
+
+-----------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+--keyFile <file>
+Specifies the path to a key file that stores the shared secret that MongoDB instances use to authenticate to each other in a sharded cluster or replica set. --keyFile implies --auth. See Internal/Membership Authentication for more information.
+
+Starting in MongoDB 4.2, keyfiles for internal membership authentication use YAML format to allow for multiple keys in a keyfile. The YAML format accepts content of:
+
+a single key string (same as in earlier versions),
+multiple key strings (each string must be enclosed in quotes), or
+sequence of key strings.
+The YAML format is compatible with the existing single-key keyfiles that use the text file format.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK.. LI ALGUMAS DAS OPTIONS, MAS SÃO BEM COMPLEXAS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR NOS EXPLICA QUE AGORA SÃO INTERESSANTES A NÓS AS OPTIONS 
+
+
+
+'--logpath arg' 
+
+
+
+e 
+
+'--dbpath arg'....
+
+
+
+
+
+
+
+
+
+
+
+--> ESSES 2 PATHS TE DEIXAM 
+
+
+
+CONFIGURAR:
+
+
+
+1) ONDE SUA DATA ACABA STORED (no caso de 'dbpath').... -> PQ O MONGODB VAI REALMENTE ARMAZENAR SUA DATA EM FILES DE VERDADE, NO SEU SERVIDOR... (E o dbpath é onde esses arquivos viverão)....
+
+
+
+
+
+
+
+2) JÁ O 'logpath' é interessante pq FALA DO FOLDER EM QUE SEUS LOGS SÃO ARMAZENADOs... --> NOS LOGS VEMOS INFORMAÇÕES SOBRE A SCHEMA VALIDATION, POR EXEMPLO, SE VOCÊ SETTOU 'validationAction' como 'warning', lá com 'createCollection("posts", {})'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... LOGPATH E DBPATH PODEM SER SETTADOS...
+
+
+
+
+
+
+
+
+
+
+
+MAS COMO PODEMOS SETTAR ISSO AÍ?
+
+
+
+
+
+
+
+
+--> BEM, O PROFESSOR VAI ATÉ O FOLDER 
+do 'mongodb',
+
+
+
+
+EM QUE TEMOS AQUELE FOLDER de 'bin'...
+
+
+
+
+
+
+
+
+
+
+--> DENTRO DESSE FOLDER do mongodb,
+
+
+O PROFESSOR CRIA UM NOVO PATH/FOLDER, DE NOME 'db'...
+
+
+
+
+
+
+
+
+
+
+LÁ DENTRO DESSE FOLDER DE 'mongodb'
+
+JÁ TEMOS UM FOLDER DE 'log',
+
+
+MAS MESMO ASSIM CRIAMOS UM FOLDER DE 'logs',
+
+
+só para acompanhar o professor....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ok, folder de 'logs' para OS LOGS,
+
+
+e o folder de 
+
+
+'db' PARA MINHAS FILES....
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> O DEFAULT SETTING PARA O MONGOD, no caso, 
+
+É USAR 
+
+
+
+
+
+
+'MY ROOT FOLDER', e aí o 
+
+
+
+
+
+FOLDER DE 'data/db'.... (Esse é o default)...
+
+
+
+
+
+
+
+
+
+
+
+--> MAS PODEMOS CONFIGURAR O MONGOD PARA QUE ELE 
+
+ARMAZENE OS FILES DO STORAGE EM OUTRO FOLDER, COMO ESSE NOSSO FOLDER DE 'db', agora...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VAMOS FAZER ESSAS 2 COISAS, AGORA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PRECISAMOS DO PATH DESSE FOLDER DE 'db'...
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA PARA INICIAR NOSSO MONGOD SERVER COM ESSAS FLAGS
+,
+
+
+
+
+
+
+
+
+
+escrevemos assim:
+
+
+
+
+
+
+
+
+
+
+mongod --dbpath C:\Program Files\MongoDB\Server\5.0\db
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO FALHOU....
+
+
+
+
+
+TENHO QUE CONSTRUIR MEU PATH DE MANEIRA DIFERENTE..
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ainda não está funcionando...
+
+
+
+
+
+
+
+
+
+
+CONSEGUI FAZER FUNCIONAR.... --> É PQ AGORA ME LIGUEI QUE ESTOU USANDO O DRIVE DE 'A' PARA EXECUTAR ESSE MEU SERVER..
+
+
+
+
+
+
+-> lá em 'A',
+fiz com que os arquivos de minha database ficam armazenados em 
+
+
+'/mongodb/db'....
+
+
+
+
+
+
+
+
+
+
+
+--> FIZ ISSO POR MEIO DESTE COMANDO:
+
+
+
+
+
+
+
+
+PS A:\projeto6-MONGODB\MODULO4-EXPLORANDOASHELLeOSERVER> mongod --dbpath /mongodb/db  
+{"t":{"$date":"2022-02-09T01:11:28.446-03:00"},"s":"I",  "c":"CONTROL",  "id":23285,   "ctx":"-","msg":"Automatically disabling TLS 1.0, to force-enable TLS 1.0 specify --sslDisabledProtocols 'none'"}
+{"t":{"$date":"2022-02-09T01:11:28.795-03:00"},"s":"I",  "c":"NETWORK",  "id":4915701, "ctx":"main","msg":"Initialized wire specification","attr":{"spec":{"incomingExternalClient":{"minWireVersion":0,"maxWireVersion":13},"incomingInternalClient":{"minWireVersion":0,"maxWireVersion":13},"outgoing":{"minWireVersion":0,"maxWireVersion":13},"isInternalClient":true}}}
+{"t":{"$date":"2022-02-09T01:11:28.795-03:00"},"s":"W",  "c":"ASIO",     "id":22601,   "ctx":"main","msg":"No TransportLayer configured during NetworkInterface startup"}
+{"t":{"$date":"2022-02-09T01:11:28.796-03:00"},"s":"I",  "c":"NETWORK",  "id":4648602, "ctx":"main","msg":"Implicit TCP FastOpen in use."}
+{"t":{"$date":"2022-02-09T01:11:28.797-03:00"},"s":"W",  "c":"ASIO",     "id":22601,   "ctx":"main","msg":"No TransportLayer configured during NetworkInterface startup"}
+{"t":{"$date":"2022-02-09T01:11:28.797-03:00"},"s":"I",  "c":"REPL",     "id":5123008, "ctx":"main","msg":"Successfully registered PrimaryOnlyService","attr":{"service":"TenantMigrationDonorService","ns":"config.tenantMigrationDonors"}}
+{"t":{"$date":"2022-02-09T01:11:28.797-03:00"},"s":"I",  "c":"REPL",     "id":5123008, "ctx":"main","msg":"Successfully registered PrimaryOnlyService","attr":{"service":"TenantMigrationRecipientService","ns":"config.tenantMigrationRecipients"}}
+{"t":{"$date":"2022-02-09T01:11:28.798-03:00"},"s":"I",  "c":"CONTROL",  "id":5945603, "ctx":"main","msg":"Multi 
+threading initialized"}
+{"t":{"$date":"2022-02-09T01:11:28.799-03:00"},"s":"I",  "c":"CONTROL",  "id":4615611, "ctx":"initandlisten","msg":"MongoDB starting","attr":{"pid":9644,"port":27017,"dbPath":"/mongodb/db","architecture":"64-bit","host":"DESKTOP-V43A7S1"}}
+{"t":{"$date":"2022-02-09T01:11:28.799-03:00"},"s":"I",  "c":"CONTROL",  "id":23398,   "ctx":"initandlisten","msg":"Target operating system minimum version","attr":{"targetMinOS":"Windows 7/Windows Server 2008 R2"}}
+{"t":{"$date":"2022-02-09T01:11:28.799-03:00"},"s":"I",  "c":"CONTROL",  "id":23403,   "ctx":"initandlisten","msg":"Build Info","attr":{"buildInfo":{"version":"5.0.6","gitVersion":"212a8dbb47f07427dae194a9c75baec1d81d9259","modules":[],"allocator":"tcmalloc","environment":{"distmod":"windows","distarch":"x86_64","target_arch":"x86_64"}}}}
+{"t":{"$date":"2022-02-09T01:11:28.799-03:00"},"s":"I",  "c":"CONTROL",  "id":51765,   "ctx":"initandlisten","msg":"Operating System","attr":{"os":{"name":"Microsoft Windows 10","version":"10.0 (build 19041)"}}}
+{"t":{"$date":"2022-02-09T01:11:28.799-03:00"},"s":"I",  "c":"CONTROL",  "id":21951,   "ctx":"initandlisten","msg":"Options set by command line","attr":{"options":{"storage":{"dbPath":"/mongodb/db"}}}}
+{"t":{"$date":"2022-02-09T01:11:28.801-03:00"},"s":"I",  "c":"STORAGE",  "id":22315,   "ctx":"initandlisten","msg":"Opening WiredTiger","attr":{"config":"create,cache_size=7643M,session_max=33000,eviction=(threads_min=4,threads_max=4),config_base=false,statistics=(fast),log=(enabled=true,archive=true,path=journal,compressor=snappy),builtin_extension_config=(zstd=(compression_level=6)),file_manager=(close_idle_time=600,close_scan_interval=10,close_handle_minimum=250),statistics_log=(wait=0),verbose=[recovery_progress,checkpoint_progress,compact_progress],"}}  
+{"t":{"$date":"2022-02-09T01:11:28.828-03:00"},"s":"I",  "c":"STORAGE",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":"[1644379888:827650][9644:140713435157840], txn-recover: [WT_VERB_RECOVERY_ALL] Set global recovery timestamp: (0, 0)"}}
+{"t":{"$date":"2022-02-09T01:11:28.828-03:00"},"s":"I",  "c":"STORAGE",  "id":22430,   "ctx":"initandlisten","msg":"WiredTiger message","attr":{"message":"[1644379888:827650][9644:140713435157840], txn-recover: [WT_VERB_RECOVERY_ALL] Set global oldest timestamp: (0, 0)"}}
+{"t":{"$date":"2022-02-09T01:11:28.832-03:00"},"s":"I",  "c":"STORAGE",  "id":4795906, "ctx":"initandlisten","msg":"WiredTiger opened","attr":{"durationMillis":31}}
+{"t":{"$date":"2022-02-09T01:11:28.832-03:00"},"s":"I",  "c":"RECOVERY", "id":23987,   "ctx":"initandlisten","msg":"WiredTiger recoveryTimestamp","attr":{"recoveryTimestamp":{"$timestamp":{"t":0,"i":0}}}}
+{"t":{"$date":"2022-02-09T01:11:28.838-03:00"},"s":"I",  "c":"STORAGE",  "id":4366408, "ctx":"initandlisten","msg":"No table logging settings modifications are required for existing WiredTiger tables","attr":{"loggingEnabled":true}}
+{"t":{"$date":"2022-02-09T01:11:28.838-03:00"},"s":"I",  "c":"STORAGE",  "id":22262,   "ctx":"initandlisten","msg":"Timestamp monitor starting"}
+{"t":{"$date":"2022-02-09T01:11:28.842-03:00"},"s":"W",  "c":"CONTROL",  "id":22120,   "ctx":"initandlisten","msg":"Access control is not enabled for the database. Read and write access to data and configuration is unrestricted","tags":["startupWarnings"]}
+{"t":{"$date":"2022-02-09T01:11:28.843-03:00"},"s":"W",  "c":"CONTROL",  "id":22140,   "ctx":"initandlisten","msg":"This server is bound to localhost. Remote systems will be unable to connect to this server. Start the server with --bind_ip <address> to specify which IP addresses it should serve responses from, or with --bind_ip_all to bind to all interfaces. If this behavior is desired, start the server with --bind_ip 127.0.0.1 to disable this warning","tags":["startupWarnings"]}
+{"t":{"$date":"2022-02-09T01:11:28.843-03:00"},"s":"I",  "c":"STORAGE",  "id":20320,   "ctx":"initandlisten","msg":"createCollection","attr":{"namespace":"admin.system.version","uuidDisposition":"provided","uuid":{"uuid":{"$uuid":"2c189349-ff5d-4da9-a8ee-38cbb522fa04"}},"options":{"uuid":{"$uuid":"2c189349-ff5d-4da9-a8ee-38cbb522fa04"}}}}
+{"t":{"$date":"2022-02-09T01:11:28.848-03:00"},"s":"I",  "c":"INDEX",    "id":20345,   "ctx":"initandlisten","msg":"Index build: done building","attr":{"buildUUID":null,"namespace":"admin.system.version","index":"_id_","commitTimestamp":null}}
+{"t":{"$date":"2022-02-09T01:11:28.848-03:00"},"s":"I",  "c":"REPL",     "id":20459,   "ctx":"initandlisten","msg":"Setting featureCompatibilityVersion","attr":{"newVersion":"5.0"}}
+{"t":{"$date":"2022-02-09T01:11:28.848-03:00"},"s":"I",  "c":"NETWORK",  "id":4915702, "ctx":"initandlisten","msg":"Updated wire specification","attr":{"oldSpec":{"incomingExternalClient":{"minWireVersion":0,"maxWireVersion":13},"incomingInternalClient":{"minWireVersion":0,"maxWireVersion":13},"outgoing":{"minWireVersion":0,"maxWireVersion":13},"isInternalClient":true},"newSpec":{"incomingExternalClient":{"minWireVersion":0,"maxWireVersion":13},"incomingInternalClient":{"minWireVersion":13,"maxWireVersion":13},"outgoing":{"minWireVersion":13,"maxWireVersion":13},"isInternalClient":true}}}
+{"t":{"$date":"2022-02-09T01:11:28.849-03:00"},"s":"I",  "c":"NETWORK",  "id":4915702, "ctx":"initandlisten","msg":"Updated wire specification","attr":{"oldSpec":{"incomingExternalClient":{"minWireVersion":0,"maxWireVersion":13},"incomingInternalClient":{"minWireVersion":13,"maxWireVersion":13},"outgoing":{"minWireVersion":13,"maxWireVersion":13},"isInternalClient":true},"newSpec":{"incomingExternalClient":{"minWireVersion":0,"maxWireVersion":13},"incomingInternalClient":{"minWireVersion":13,"maxWireVersion":13},"outgoing":{"minWireVersion":13,"maxWireVersion":13},"isInternalClient":true}}}
+{"t":{"$date":"2022-02-09T01:11:28.849-03:00"},"s":"I",  "c":"STORAGE",  "id":5071100, "ctx":"initandlisten","msg":"Clearing temp directory"}
+{"t":{"$date":"2022-02-09T01:11:28.850-03:00"},"s":"I",  "c":"CONTROL",  "id":20536,   "ctx":"initandlisten","msg":"Flow Control is enabled on this deployment"}
+{"t":{"$date":"2022-02-09T01:11:29.029-03:00"},"s":"W",  "c":"FTDC",     "id":23718,   "ctx":"initandlisten","msg":"Failed to initialize Performance Counters for FTDC","attr":{"error":{"code":179,"codeName":"WindowsPdhError","errmsg":"PdhAddEnglishCounterW failed with 'O objeto especificado não foi encontrado no computador.'"}}}
+{"t":{"$date":"2022-02-09T01:11:29.030-03:00"},"s":"I",  "c":"FTDC",     "id":20625,   "ctx":"initandlisten","msg":"Initializing full-time diagnostic data capture","attr":{"dataDirectory":"/mongodb/db/diagnostic.data"}}       
+{"t":{"$date":"2022-02-09T01:11:29.030-03:00"},"s":"I",  "c":"STORAGE",  "id":20320,   "ctx":"initandlisten","msg":"createCollection","attr":{"namespace":"local.startup_log","uuidDisposition":"generated","uuid":{"uuid":{"$uuid":"69966459-8b67-4a2c-a186-d20c40f9b736"}},"options":{"capped":true,"size":10485760}}}
+{"t":{"$date":"2022-02-09T01:11:29.035-03:00"},"s":"I",  "c":"INDEX",    "id":20345,   "ctx":"initandlisten","msg":"Index build: done building","attr":{"buildUUID":null,"namespace":"local.startup_log","index":"_id_","commitTimestamp":null}}
+{"t":{"$date":"2022-02-09T01:11:29.036-03:00"},"s":"I",  "c":"REPL",     "id":6015317, "ctx":"initandlisten","msg":"Setting new configuration state","attr":{"newState":"ConfigReplicationDisabled","oldState":"ConfigPreStart"}} 
+{"t":{"$date":"2022-02-09T01:11:29.037-03:00"},"s":"I",  "c":"CONTROL",  "id":20712,   "ctx":"LogicalSessionCacheReap","msg":"Sessions collection is not set up; waiting until next sessions reap interval","attr":{"error":"NamespaceNotFound: config.system.sessions does not exist"}}
+{"t":{"$date":"2022-02-09T01:11:29.037-03:00"},"s":"I",  "c":"STORAGE",  "id":20320,   "ctx":"LogicalSessionCacheRefresh","msg":"createCollection","attr":{"namespace":"config.system.sessions","uuidDisposition":"generated","uuid":{"uuid":{"$uuid":"b5f51080-8c17-4731-9a22-f292d306306e"}},"options":{}}}
+{"t":{"$date":"2022-02-09T01:11:29.037-03:00"},"s":"I",  "c":"NETWORK",  "id":23015,   "ctx":"listener","msg":"Listening on","attr":{"address":"127.0.0.1"}}
+{"t":{"$date":"2022-02-09T01:11:29.037-03:00"},"s":"I",  "c":"NETWORK",  "id":23016,   "ctx":"listener","msg":"Waiting for connections","attr":{"port":27017,"ssl":"off"}}
+{"t":{"$date":"2022-02-09T01:11:29.044-03:00"},"s":"I",  "c":"INDEX",    "id":20345,   "ctx":"LogicalSessionCacheRefresh","msg":"Index build: done building","attr":{"buildUUID":null,"namespace":"config.system.sessions","index":"_id_","commitTimestamp":null}}
+{"t":{"$date":"2022-02-09T01:11:29.044-03:00"},"s":"I",  "c":"INDEX",    "id":20345,   "ctx":"LogicalSessionCacheRefresh","msg":"Index build: done building","attr":{"buildUUID":null,"namespace":"config.system.sessions","index":"lsidTTLIndex","commitTimestamp":null}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------. QUANTO AO '--logpath',
+
+acredito que o PRINCÍPIO É O MESMO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+mongod --dbpath /mongodb/db   --logpath /mongodb/logs
+
+
+
+
+---------------------------------------
+
+
+
+
+
+OK, MAS ISSO AÍ ESTÁ INCOMPLETO... -> INCOMPLETO PQ O '--logpath' 
+
+
+PRECISA MAIS DO QUE SÓ O FOLDER PATH; PRECISA TAMBÉM DO 
+
+'PATH AO LOG FILE'...
+
+
+
+
+--> é por isso que nomeamos um arquivo de 'log.log'...
+
+
+
+
+
+
+
+
+
+
+
+-_> BEM, MAS CONTINUO RECEBENDO UM ERROR:
+
+
+
+
+
+
+
+PS A:\projeto6-MONGODB\MODULO4-EXPLORANDOASHELLeOSERVER> mongod --dbpath /mongodb/db   --logpath /mongodb/logs/log.log
+{"t":{"$date":"2022-02-09T04:14:49.077Z"},"s":"F",  "c":"CONTROL",  "id":20574,   "ctx":"-","msg":"Error during global initialization","attr":{"error":{"code":38,"codeName":"FileNotOpen","errmsg":"Can't initialize rotatable log file :: caused by :: Failed to open A:/mongodb/logs/log.log"}}}
+PS A:\projeto6-MONGODB\MODULO4-EXPLORANDOASHELLeOSERVER> mongod --dbpath /mongodb/db   --logpath /mongodb/logs/log.log
+{"t":{"$date":"2022-02-09T04:15:02.048Z"},"s":"F",  "c":"CONTROL",  "id":20574,   "ctx":"-","msg":"Error during global initialization","attr":{"error":{"code":38,"codeName":"FileNotOpen","errmsg":"Can't initialize rotatable log file :: caused by :: Failed to open A:/mongodb/logs/log.log"}}}
+PS A:\projeto6-MONGODB\MODULO4-EXPLORANDOASHELLeOSERVER> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK, AGORA FIZ DAR CERTO (antes estava com um path errado):
+
+
+
+
+
+
+
+
+PS A:\projeto6-MONGODB\MODULO4-EXPLORANDOASHELLeOSERVER> mongod --dbpath /mongodb/db   --logpath /mongodb/db/logs/log.log
+{"t":{"$date":"2022-02-09T04:17:25.999Z"},"s":"I",  "c":"CONTROL",  "id":20697,   "ctx":"-","msg":"Renamed existing log file","attr":{"oldLogPath":"A:/mongodb/db/logs/log.log","newLogPath":"A:/mongodb/db/logs/log.log.2022-02-09T04-17-25"}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA NOSSO OUTPUT NO TERMINAL FICARÁ BEM MENOR,
+
+
+PQ 
+
+
+
+
+O OUTPUT DE VERDADE TERÁ SIDO OUTPUTTADO NESSE NOSSO ARQUIVO 'log.log',
+
+
+lá em 
+
+
+
+
+'mongodb/db/logs'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA TODO O OUTPUT ACABA SALVO NESSE ARQUIVO ---> ISSO É ÚTIL PQ 
+
+
+VOCÊ PODE CHECAR TODOS OS ERRORS DE ONTEM,
+
+
+
+
+
+CHECAR TUDO BEM CERTINHO..
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR LOGO DE CARA ENTCONTRA UM WARNING:
+
+
+
+
+{"t":{"$date":"2022-02-09T01:17:26.530-03:00"},"s":"W",  "c":"CONTROL",  "id":22120,   "ctx":"initandlisten","msg":"Access control is not enabled for the database. Read and write access to data and configuration is unrestricted","tags":["startupWarnings"]}
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> ISSO QUER DIZER QUE NOSSO AUTHENTICATION AINDA NÃO ESTÁ SETTADO, AINDA NÃO ESTÁ BOM (temos acesso ilimitado a nossa database...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... LOGPATH PODE SER ÚTIL PARA 'PERSISTENT ERROR SEARCHING',
+
+
+
+PERSISTENT AUDITING DO SEU SERVER...
+
+
+
+
+
+
+(
+
+
+    é assim que podemos settar um CUSTOM PATH PARA SEUS DATABASE FILES,
+    E PARA 
+    SEUS LOGS... 
+)

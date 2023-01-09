@@ -1,0 +1,1584 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR SE CONECTA A UMA INSTANCE 
+
+MONGOD,
+
+
+
+com mongo...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR EXPLCIA QUE CONTINAUREMOS 
+
+
+
+TRABALHANDO COM 
+
+
+A DATA 
+
+DE USERS.....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... É O DATA SET DE USERS, COM UM PUNHADO DE USERS NO INTERIOR...
+
+
+
+
+
+
+
+
+
+
+
+COMO O MÓDULO É SOBRE 
+
+
+
+
+
+UPDATING,
+
+
+VAMOS COMEÇAR 
+
+
+
+
+
+
+COM ISSO.. E COMEÇAREMOS COM 1 
+
+'USER'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+NOSSO USER ESTÁ ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+
+> db.users.find({}).pretty()
+{
+        "_id" : ObjectId("62087cf32867f483687f8345"),
+        "name" : "Anna",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Yoga",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : 24
+}
+{
+        "_id" : ObjectId("62087cf32867f483687f8346"),
+        "name" : "CJ",
+        "hobbies" : [
+                {
+                        "title" : "Gym",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Swimming",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : 35
+}
+{
+        "_id" : ObjectId("62087cf32867f483687f8347"),
+        "name" : "Yan",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : null
+}
+{
+        "_id" : ObjectId("620880e92867f483687f8348"),
+        "name" : "TK",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3
+                },
+                {
+                        "title" : "Souji",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : null
+}
+{
+        "_id" : ObjectId("620881262867f483687f8349"),
+        "name" : "TKO",
+        "hobbies" : [
+                "1",
+                "2",
+                "3"
+        ],
+        "phone" : "800808080",
+        "age" : null
+}
+{
+        "_id" : ObjectId("620883f22867f483687f834a"),
+        "title" : "The Last Student Returns",
+        "meta" : {
+                "rating" : 9.5,
+                "aired" : 2018,
+                "runtime" : 100
+        },
+        "visitors" : 1300000,
+        "expectedVisitors" : 15500000,
+        "genre" : [
+                "action",
+                "drama"
+        ]
+}
+{
+        "_id" : ObjectId("620883f22867f483687f834b"),
+        "title" : "DEEP",
+        "meta" : {
+                "rating" : 8,
+                "aired" : 2019,
+                "runtime" : 140
+        },
+        "visitors" : 1100000,
+        "expectedVisitors" : 13000000,
+        "genre" : [
+                undefined,
+                "drama",
+                "action"
+        ]
+}
+
+
+
+
+
+
+
+
+
+
+-----------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ADICIONAMOS UM NOVO USER,
+
+'Chris'...
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+{
+
+        "name" : "Chris",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3
+                },
+                {
+                        "title" : "Souji",
+                        "frequency" : 3
+                }
+        ],
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NESSE DOCUMENT:
+
+
+
+
+
+
+
+
+1) NÃO TEMOS 'age',
+
+
+
+
+
+2) NÃO TEMOS 'phone' (com o número)...
+
+
+
+
+
+
+
+
+
+
+
+
+-> OK, PRECISAMOS DEFINIR ESSAS PROPRIEDADES, COM VALORES ALEATÓRIOS, DENTRO DESSE DOCUMETN..
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO,
+
+PRECISAMOS DO SEGUNDO PARÂMETRO DE 'updateOne',
+
+
+
+E TAMBÉM 
+
+
+
+PRECISAMOS de '$set'
+
+sendo usado nesse segundo parâmetro..
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+> db.users.insertOne({
+...
+...     "name" : "Chris",
+...     "hobbies" : [
+...             {
+...                     "title" : "Sports",
+...                     "frequency" : 2
+...             },
+...             {
+...                     "title" : "Cleaning",
+...                     "frequency" : 3
+...             },
+...             {
+...                     "title" : "Souji",
+...                     "frequency" : 3
+...             }
+...     ]
+... }
+... )
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("6209f1279207fe373c205a87")
+}
+>
+> db.users.updateOne(
+... {
+...         "name": "Chris",
+... }, {
+...         $set: {
+...                 "phone": 120212012108,
+...                 "age": 30
+...         }
+...
+... }
+... )
+{ "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> OK, SUCESSO....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> É CLARO QUE VOCÊ VAI QUERER ESCREVER UM FRONTEND,
+
+
+NÃO VAI QUERER UPDATAR TUDO LÁ DO SHELL,
+
+
+ISSO PQ 
+
+VOCÊ PROVAVELMENTE VAI QUERER CONSTRUIR UM BLOG, BLOG EM QUE 
+
+
+SEUS USERS PODEM EDITAR SEU BLOG POST... (E quando eles clicarem 'save',
+
+
+VOCÊ VAI QUERER REFLETIR ESSE 'save'
+
+LÁ NA SUA DATABASE....
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ENTÃO,
+
+COMO PODEMOS UPDATAR 'chris' --> 
+
+
+
+
+UMA OPERAÇÕA DE UPDATE SEMPRE ENVOLVE 2 PEDAÇOS DE INFORMAÇÃO:
+
+
+
+
+
+
+
+
+
+1) PREICSAMOS IDENTIFICAR O DOCUMENT QUE PRECISA SER ALTERADO...
+
+
+
+
+
+
+
+
+
+
+2) DEVEMOS ESPECIFICAr/DEFINIR _ COMO ESSE DOCUMENT DEVE MUDAR...
+
+
+
+
+
+
+
+
+
+
+
+-> PARA 'IDENTIFICATION',
+
+podemos usar 
+
+QUALQUER FILTEr 
+
+
+
+
+
+QUE TAMBE´M É USADO NO 'FIND' DE DOCUMENTS... (pq eles funcionam aqui)... ------> ISSO SIGNIFICA QUE 
+
+VOCê NÃO PRECISA 
+
+
+
+procurar o chris pelo nome... ----> 
+
+
+
+
+
+
+
+
+ISSO TUDO É POSSÍVEL... -> E VOCÊ PODE UPDATAR MAIS DE 1 DOCUMENT POR VEZ,
+ 
+ NA VERDADE...
+
+
+
+
+
+
+
+
+ --> SE QUEREMOS UPDATAR CHRIS, ESCREVEMOS:
+
+
+ > db.users.updateOne(
+... {
+...         "name": "Chris",
+... }, {
+...         $set: {
+...                 "phone": 120212012108,
+...                 "age": 30
+...         }
+...
+... }
+... )
+
+
+
+
+
+
+
+
+
+
+-------> ok.... SE QUEREMOS UPDATAR O 'CHRIS',
+
+
+
+
+
+PROFESSOR ESCREVE 
+
+
+'.updateOne()',
+
+coisa normal...
+
+
+
+
+
+
+
+
+
+--> E, LÁ NAS PERSONS, PODEMOS USAR 'updateOne'....
+
+
+
+
+
+
+
+
+--> OS NOMES SÃO BEM ÓBVIOS... --> UPDTEONE SIMPLESMNETE PEGA 
+
+
+
+O PRIMEIRO DOCUMENT QUE 
+
+
+
+
+MATCHEIA 
+
+SUA FILTERING CRITEIRA,
+
+E AÍ UPDATA ISSO.. UPDATEIA ISSO MESMO se múltiplos documents 
+
+
+
+
+MATCHEARIAM/MATCHEIAM SEU DOCUMENT...
+
+
+
+
+
+
+
+
+--> updateMany() --> ESSE É O CONTRÁRIO, PQ PEGA SEU CRITÉRIO/METHOD 
+E 
+
+
+
+
+UPDATA ___ TODOS OS DOCUMENTS QUE 'MATCH IT'..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> OK... PROFESSOR COLOCA UM '_id', para promover a xuxa...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+O PRIMEIRO ARGUMENTO É 'O QUE ENCONTRAR'...
+
+
+
+
+
+
+
+-> JÁ O SEGUNDO ARGUMENTO SERÁ 'COMO UPDATAR'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NO SEGUNDO ARGUMETNO,
+
+
+VOCê TEM UMA VARIEDADE DE 
+
+
+UPDATE OPERATORS...
+
+
+
+
+
+
+
+
+--> PODEM SER ENCONTRADOS NOS OFFICIAL DOCS...
+
+
+
+
+
+
+
+
+
+--> ELE VAI NOS MOSTRAR OS OPERATORS MAIS IMPORTANTES NESSE MÓDULO...
+
+
+
+
+
+
+
+
+
+
+
+
+--> FIELD OPERATORS SÃO IMPORTANTES, E PROFESSOR OS EXPLICARÁ....
+
+
+
+
+
+
+
+
+
+
+--> PARA OS UTILIZAR,
+
+
+escrevemos '$set' ------> 
+
+
+E JÁ VIMOS ISSO ANTERIOEMNTE NO CURSO......
+
+
+
+
+
+
+
+
+
+
+
+
+-> '$set'
+
+
+
+
+
+
+
+
+SIMPLESMENTE ACEITA 1 DOCUMENT EM QUE VOCÊ DESCREVE ALGUNS FIELDS QUE DEVEM SER CHANGED/ADDED 
+
+
+A UM EXISTING DOCUMENT... ---> AQUI VAMOS DIZER QUE QUERMOS 
+
+
+
+
+
+
+
+
+
+
+ALTERAR 'HOBBIES' ----> o hobbies já existe,
+
+
+E É UM ARRAY.... --> 
+
+
+
+
+E TEMOS OPERATORS ESPECÍFICOS para arrays, no caso..
+.
+
+
+
+
+
+
+
+
+MAS SE QUEREMOS OVERWRITTAR 'hobbies' (que é o que o professor quer fazer, aqui),
+
+
+
+
+AÍ ELE 
+
+PODE 
+
+
+
+USAR 
+
+
+'$set: {hobbies: []}',
+
+
+
+
+DEFININDO UM NOVO VALOR DE ARRAY PARA 'hobbies'.. (overwrittaR)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> ok... professor quer updatar um field, um punhado de fields...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.persons.updateOne({_id: Object("aaaaaaaa")}, {$set: {}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> '$set' EXIGE 1 DOCUMENT EM QUE VOCê ESPECIFICA QUAIS FIELDS DEVEM SER CHANGED/ADDED
+
+
+
+
+
+
+ao document existente...
+
+
+
+
+
+
+
+
+
+
+
+--> professor quer ALTERAR O ARRAY DE 'HOBBIES',
+
+
+QUE JÁ EXISTE...
+
+
+
+
+
+
+
+
+
+
+
+
+--> E TEMOS MÚLTIPLOS OPERATORS DE 'update' 
+
+
+
+QUE SÃO USADOS COM ARRAYS...
+
+
+
+
+(específicos ao trabalho com arrays)...
+
+
+
+
+
+
+
+
+
+
+
+
+---> MAS SE QUEREMOS SÓ 'COMPLETAMENTE OVERWRITAR OS HOBBIES',
+
+
+
+que é o que queremos fazer aqui,
+
+
+
+
+
+AÍ PODEMOS USAR 
+
+
+'hobbies: []' com o '$set',
+
+  
+
+  E AÍ 
+
+  DEFINIR QUAL DEVERÁ SER O NOVO ARRAY DE 'hobbies'...
+
+
+
+
+
+
+
+  TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+  db.persons.updateOne({_id: Object("aaaaaaaa")}, {$set: {hobbies: ["1", "2", "3" ]}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS ISSO NÃO VAI ADICIONAR ESSES ELMENTOS AO ARRAY DE HOBBIES QUE JÁ EXISTIA,
+
+
+
+E SIM 
+
+VAI _ OVERWRITTAR__ ESSE ARRAY, com esse novo array, de '1','2','3'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... --> MAS AÍ O PROFESSOR VAI QUERER SER MAIS 
+
+
+
+ESPECÍFICO,
+
+
+QUER ESCREVER:
+
+
+
+
+
+
+
+  db.persons.updateOne({_id: Object("aaaaaaaa")}, {$set: {hobbies: [{title: "sports", frequency: 5},
+
+
+  {title: "souji", frequency: 5},
+
+
+  {title: "unten", frequency: 5}
+  
+  
+  ]
+  
+  
+  
+  
+  
+  
+  }})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> SE APERTARMOS ENTER,
+
+
+VEREMOS ESTE FEEDBACK:
+
+
+
+
+
+
+
+
+
+
+{
+        "acknowledged: true",
+        "matchedCount": 1,
+
+        "modifiedCount": 1
+}
+
+
+
+
+
+
+
+
+
+
+
+--> OU SEJA,
+
+ACHOU 1 MATCHING DOCUMENT PARA ESSE NOSSO FILTER,
+
+
+E AÍ 
+
+
+
+MODIFICOU EXATAMENTE 1 DOCUMENT (modifiedCount: 1)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS AGORA, SE EXECUTARMOS ESSE EXATO MESMO COMANDO,
+
+
+
+MAIS UMA VEZ,
+
+
+receberemos isto:
+
+{
+        "acknowledged: true",
+        "matchedCount": 1,
+
+        "modifiedCount": 0
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+O FATO DE modifiedCount
+
+
+
+estar como '0' SIGNIFICA QUE NADA MUDOU,
+
+PQ VOCê ESPECIFICOU ALGO COM ESSE OPERATOR QUE É EXATAMENTE A 
+
+
+
+MESMA COISA QUE ANTES.....
+
+
+
+
+
+
+
+
+
+
+
+
+----> certo... isso tudo faz sentido....
+
+
+
+
+
+
+
+
+
+
+-> MAS SE DEPOIS FIZERMOS FIND DE TODOS OS USERS,
+
+
+
+
+com 
+
+
+
+db.users.find({}).pretty,
+
+
+
+
+VEREMOS QUE 
+
+
+O
+ 
+
+
+ __cHRIs__ AINDA TERÁ O MESMO NAME QUE TINHA ANTES,
+
+
+ E TAMBÉM 
+
+ O SEU "_id'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> ISSO SIGNIFICA QUE 
+
+ '$set'
+
+
+ NÃO VAI OVERWRITTAR OS EXISTING VALUES,
+
+ E SIM 
+
+ SÓ 
+
+
+
+ 
+
+
+
+ VAI 
+
+ 'DEFINES SOME CHANGES 
+
+
+ QUE O MONGODB FAZ EVALUATE'''' --> E SE ESSAS CHANGES __ FAZEM SENTIDO_,
+
+
+
+
+ O
+  MONGODB _ ALTERA O 'EXISTING DOCUMENT' por meio do add/overwrite 
+
+
+
+  DOS FIELDS 
+ 
+   QUE VOCê ESPECIFICOU... --> E TODOS OS FIELDS 
+
+
+
+   QUE VOCê NÃO ESPECIFICOU __ SÃO DEIXADOS COMO ESTAVAM,
+
+   NÃO SÃO TOCADOS...
+
+
+
+
+
+
+
+
+
+
+
+--> ENTRETANTO,
+
+VOCê ___ PODE__ REMOVER FIELDS COM 1 UPDATE,
+
+SE VOCÊ QUISER... -------> PROFESSOR MOSTRARÁ ISSO NESSE MÓDULO..
+(
+
+
+
+
+        se você quiser remover fields,
+
+        use a sintaxe clássica de 
+
+
+
+        db.updateOne({...},   {suaKeyNova: "seuValorNovo"});
+
+
+
+
+
+
+
+
+
+
+
+        -> OU SEJA,
+
+
+        NÃO USE O OPERATOR DE '$set',
+
+        
+
+        E AÍ ESCREVA TUDO 'SOLTO' NESSE SEGUNDO PARÂMETRO,
+
+
+        O QUE FARÁ COM QUE ESSE SEGUNDO PARÂMETRO SEJA CONSIDERADO O NOVO 'DOCUMENT',
+
+
+
+        no lugar do antigo....
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOCê PODE USAR TAMBÉM
+
+
+
+'db.users.updateMany({})'....
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+--> VAMOS PROCURAR POR 
+
+
+
+
+
+
+
+USERS EM QUE 
+
+'hobbies.title' 
+
+
+
+
+
+SEJA EQUIVALENTE A 'sports'...
+
+
+
+
+
+(embedded documents em 1 array)...
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+db.users.updateMany(
+        {
+                "hobbies.title": "Sports"
+        }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> CLARO QUE FALTA 
+
+
+O 
+
+
+SEGUNDO PARÂMETRO,
+
+
+
+
+
+EM QUE 
+
+
+
+
+
+
+
+
+VAMOS QUERER ADICIONAR UM NOVO FIELD,
+
+
+que dirá 
+
+
+'isSporty: true',
+
+
+
+
+
+
+
+
+
+OU SEJA,
+
+DEFINIMOS UM BOOLEAN VALUE NESSA PROPRIEDADE... (qeu será um ponto em comum em todos esses documents)..
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+db.users.updateMany(
+        {
+                "hobbies.title": "Sports"
+        },
+
+
+        {
+                $set: {
+                        "isSporty": true
+                }
+        }
+)
+
+
+
+
+
+
+-----------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------> UPDATEMANY É BEM ÚTIL, COMO VOCÊ PODE OBSERVAR...
+
+
+
+
+
+
+
+-> O FILTER CONTINUA O MESMO, PQ VAMOS QUERER COLOCAR ESSA PROPRIEDADE COM ESSE BOOLEAN EM TODOS OS DOCUMENTS QUE 
+
+
+TENHAM ESSa propriedade de 'title' como 'sports', dentro dos objects dentro do array de 'hobbies'...
+
+
+
+
+
+
+
+
+
+--------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK.... --> ISSO DEU CERTO.... --> TUDO ISSO FOI SETTADO COM A AJUDA DE 'updateMany',
+
+
+
+
+
+
+
+
+
+
+E ESSES FORAM O 'updateOne',
+
+
+'updateMany()'
+
+
+
+
+e 
+
+
+
+
+'$set' operator...

@@ -1,0 +1,298 @@
+
+
+
+
+
+
+
+
+
+
+
+
+DENTRO DA SHELL,
+
+VOCÊ PODE RODAR 'show dbs'
+
+para ver as diferentes databases que você tem no seu server...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> eu adicionei algumas, como 
+
+'shop' 
+
+
+e 
+
+
+
+
+'exemplos'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> OK... MAS AQUI, UM PROBLEMA.... --> 
+
+MINHA DATABASE FICOU VAZIA.... ---> TALVEZ SEJA PQ 
+
+
+
+EU __ TROQUEI_ DE PORTA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> É VERDADE....
+
+
+
+
+
+
+
+--> SE VOCÊ TROCA DE PORTA E MANTÉM O SERVER RODANDO, VOCê ESTÁ COM __OUTRO__ SERVER, NA VERDADE....
+
+
+
+
+
+
+
+
+
+-> ARQUIVOS '.wt' (wiredTiger)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> PODEMOS TROCAR PARA UMA DATABASE, NO CASO,
+
+
+POR MEIO 
+
+
+
+
+
+DO COMANDO 
+
+'
+use nomeDaSuaDatabase'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> ok.... acho que estou entendendo...
+.
+
+
+
+
+
+
+
+
+
+--> 'use' VAI DEFINIR QUAL DATABASE VOCÊ VAI QUERER USAR (até mesmo se essa database ainda não existe)...
+
+
+
+
+
+
+
+
+
+
+
+--> depois escreva 
+
+'
+db.NOMEDACOLLECTIONQUEVOCÊQUER' 
+
+
+
+
+,
+
+para então 
+
+
+rodar comandos como 'insertOne',
+
+para 
+
+CRIAR
+
+
+ 
+
+
+
+
+ESSA DATABASE...
+
+
+
+
+
+
+
+
+
+--> SE VOCÊ NÃO FAZ INSERT DE UM DOCUMENT EM UMA DATABASE QUE AINDA NÃO EXISTE,
+
+
+ELA NÃO VAI APARECER QUANDO VOCÊ CHAMAR 'show dbs'... (pq ela só vai existir se você forçar o insert de documents nela)....
+
+
+
+
+
+
+
+
+
+ESCREVI ASSIM:
+
+
+
+> db.users.insertOne({name: 'Max'})
+
+
+
+
+
+
+
+
+
+
+
+
+-> ISSO VAI INSERIR esse document de 'name: max' 
+
+DENTRO 
+
+DE 
+
+UMA COLLECTION DE NAME 'users',
+
+DENTRO DESSA 
+
+
+
+DATABASE DE 'flights'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> PROFESSOR DIZ QUE VAI QUERER CRIAR UMA COLLECTION DE 'FLIGHT DATA'...
+
+
+
+
+
+
+
+--> A COISA QUE ESCREVMEOS AO FINAL SÃO 'QUERY COMMANDS', que podem ser desde 'retrieve' até o create de data.. ( documents)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> AQUI NÃO ESTAREMOS CRIANDO UM OBJETO JAVASCRIPT, E SIM UM _ JSON _ DOCUMENT...
+
+
+
+
+
+
+
+
+--> E JSON DOCUMENTS TAMBÉM SÃO DELIMITADOS POR '{}'...
+
+
+
+
+
+
+
+
+
+
+--> DENTRO DESSE DOCUMETN TEMOS KEY-VALUE PAIRs...
+
+
+
+VEREMOS ISSO NA PRÓXIAM AULA...

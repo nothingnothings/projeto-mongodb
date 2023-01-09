@@ -1,0 +1,263 @@
+
+
+
+
+
+
+
+OK, ADICIONAMOS AUTHENTICATION...
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS SE VOLTARMOS AS NOSSAS RULES 
+
+DO 
+
+STITCH,
+
+
+
+
+
+TEMOS AQUELAS RULES GENÉRICAS EM QUE TODO MUNDO É CPAAZ DE 'READ' E 'WRITE' --> 
+
+
+
+
+
+MAS AGORA NÃO VAMOS MAIS QUERER ISSO...
+
+
+
+
+
+
+
+--> 'EVERYONE' significa LOGGED IN USERS EM GERAL....
+
+
+
+
+
+---> E COMO O PROFESSOR DESABILITOU 
+
+
+
+OS 'ANONYMOUS USERS',
+
+ISSO SÓ PODE SIGNIFICAR 
+
+
+
+OS 
+
+USERS QUE 
+
+LOGGARAM COM EMAIL-PASSWORD....
+
+
+
+
+
+
+--> ISSO QUER DIZER QUE 
+
+
+AINDA QUE 
+
+
+DIGA 'DEFAULT' 
+
+
+
+nessa page do 
+
+
+
+stitch,
+
+ISSO NÃO QUER DIZER QUE 
+
+
+
+
+TODOS __ OS USERS_ SÃO CAPAZES DE 'READ/WRITE'...  (e sim 
+
+
+
+só 
+
+
+os 
+
+
+users QUE ESTÃO 'LOGGED IN'... )
+
+
+
+
+
+
+
+
+
+
+
+
+-_> PARA PROVAR ISSO A NÓS,
+
+o professor volta ao 
+
+'App.js'
+
+
+E DEFINE 
+
+
+O 
+
+
+'isAuth' como TRUE,
+
+PARA 
+
+QUE 
+
+COMECEMOS 
+
+COMO 
+
+
+
+
+
+
+
+in 'authenticated mode' --> 
+
+
+
+
+E ISSO VAI 
+
+
+
+
+RECARREGAR E NOS MOSTRAR TODOS OS PRODUCTS.... ----> MAS SE 
+
+
+
+
+DELETARMOS 
+
+NOSSO LOCALSTORAGE 
+
+
+E 
+
+
+AÍ 
+
+
+
+
+RECARREGARMOS ---> GANHAREMOS UM ERROR :
+
+
+'
+MUST AUTHENTICATE BEFORE '--> isso 
+
+
+
+NOS PROVA 
+
+QUE 
+
+
+__APENAS__ AUTH __ USERS___ 
+
+CONSEGUEM __ 
+
+
+ACESSAR__ NOSSA DATABASE, por meio  do stitch... ----> 
+
+
+
+
+
+
+
+
+
+E SE O USER 
+
+NÃO É AUTH,
+
+
+
+
+ele fica com 'isAuth: false',
+
+o que 
+
+VAI SEMPRE 
+
+
+
+O OBRIGAR A ETNRAR NA PAGE DE 'auth'....
+
+
+
+
+
+
+
+
+
+
+
+--> PODEMOS VER QUE 
+
+SÓ 
+
+OS 
+
+USERS QUE ESTÃO 'LOGGED IN' 
+
+conseguem 
+
+
+
+
+
+
+FAZER READ/WRITE DE NOSSOS PRODUCTS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, COM ISSO EVITAMOS DE ESCREVER NOSSO PRÓPRIO BACKEND, O QUE NOS SALVA BASTANTE TRABALHO 
+
+E 
+
+
+
+TEMPO...

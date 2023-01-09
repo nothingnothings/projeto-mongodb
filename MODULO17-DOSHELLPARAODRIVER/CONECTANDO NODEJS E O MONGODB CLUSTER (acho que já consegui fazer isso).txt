@@ -1,0 +1,884 @@
+
+
+
+
+
+
+
+
+
+
+--> agora basta testar meu código...
+
+
+
+
+
+
+
+
+GANHEI ESTES ERRORS, NA PÁGINA INICIAL (route de 'get all products'):
+
+
+
+
+
+
+
+
+xhr.js:210          GET http://localhost:3100/products net::ERR_CONNECTION_REFUSED
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> esse erro é do FRONTEND....
+
+
+
+
+
+
+
+
+
+-> tenho que alterar meu 'app.listen',
+
+fazer com que ele escute o SEND DE REQUESTS NA PORT 3100....
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+(app.js):
+
+
+const path = require('path');
+
+const mongoConnect = require('../backend/util/database').mongoConnect;
+
+const express = require('express');
+
+const bodyParser = require('body-parser');
+
+const productRoutes = require('./routes/products');
+
+const authRoutes = require('./routes/auth');
+
+const app = express();
+
+app.use(bodyParser.json());
+
+app.use('/images', express.static(path.join('backend/images')));
+
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET,POST,PUT,PATCH,DELETE,OPTIONS'
+  );
+  res.setHeader('Acess-Control-Allow-Headers', 'Content-Type');
+  next();
+});
+
+app.use('/products', productRoutes);
+
+app.use('/', authRoutes);
+
+mongoConnect(() => {
+  app.listen(3100);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> ceerto,
+
+aí minha route ficou assim:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+router.get('/', (req, res, next) => {
+
+  const db = getDb();
+
+
+  const products = db.collection('products');
+
+
+
+  const queryPage = req.query.page;
+  const pageSize = 5;
+  let resultProducts = [...products];
+  if (queryPage) {
+    resultProducts = products.slice(
+      (queryPage - 1) * pageSize,
+      queryPage * pageSize
+    );
+  }
+
+  res.json(resultProducts);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+--> mas estou ganhando um ERROR:
+
+
+TypeError: products is not iterable
+    at A:\projeto6-MONGODB\MODULO17-DOSHELLPARAODRIVER\novoprojeto21\backend\routes\products.js:69:28
+    at Layer.handle [as handle_request] (A:\projeto6-MONGODB\MODULO17-DOSHELLPARAODRIVER\novoprojeto21\node_modules\express\lib\router\layer.js:95:5)
+    at next (A:\projeto6-MONGODB\MODULO17-DOSHELLPARAODRIVER\novoprojeto21\node_modules\express\lib\router\route.js:137:13)
+    at Route.dispatch (A:\projeto6-MONGODB\MODULO17-DOSHELLPARAODRIVER\novoprojeto21\node_modules\express\lib\router\route.js:112:3) 
+    at Layer.handle [as handle_request] (A:\projeto6-MONGODB\MODULO17-DOSHELLPARAODRIVER\novoprojeto21\node_modules\express\lib\router\layer.js:95:5)
+    at A:\projeto6-MONGODB\MODULO17-DOSHELLPARAODRIVER\novoprojeto21\node_modules\express\lib\router\index.js:281:22
+    at Function.process_params (A:\projeto6-MONGODB\MODULO17-DOSHELLPARAODRIVER\novoprojeto21\node_modules\express\lib\router\index.js:341:12)
+    at next (A:\projeto6-MONGODB\MODULO17-DOSHELLPARAODRIVER\novoprojeto21\node_modules\express\lib\router\index.js:275:10)
+    at Function.handle (A:\projeto6-MONGODB\MODULO17-DOSHELLPARAODRIVER\novoprojeto21\node_modules\express\lib\router\index.js:174:3)    at router (A:\projeto6-MONGODB\MODULO17-DOSHELLPARAODRIVER\novoprojeto21\node_modules\express\lib\router\index.js:47:12)
+
+
+
+
+
+
+
+
+
+
+--> tenho que ver que tipo de object estou recebendo por meio desse 
+
+
+get...
+
+
+
+
+
+
+
+
+
+
+
+
+O OBJECT É ESTE:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Collection {
+  s: {
+    db: Db { s: [Object] },
+    options: {
+      raw: false,
+      promoteLongs: true,
+      promoteValues: true,
+      promoteBuffers: false,
+      ignoreUndefined: false,
+      bsonRegExp: false,
+      serializeFunctions: false,
+      fieldsAsRaw: {},
+      enableUtf8Validation: true,
+      readPreference: [ReadPreference]
+    },
+    namespace: MongoDBNamespace { db: 'test', collection: 'products' },
+    pkFactory: { createPk: [Function: createPk] },
+    readPreference: ReadPreference {
+      mode: 'primary',
+      tags: undefined,
+      hedge: undefined,
+      maxStalenessSeconds: undefined,
+      minWireVersion: undefined
+    },
+    bsonOptions: {
+      raw: false,
+      promoteLongs: true,
+      promoteValues: true,
+      promoteBuffers: false,
+      ignoreUndefined: false,
+      bsonRegExp: false,
+      serializeFunctions: false,
+      fieldsAsRaw: {},
+      enableUtf8Validation: true
+    },
+    readConcern: undefined,
+    writeConcern: undefined
+  }
+}
+
+
+
+
+
+
+
+---> CLARO QUE NÃO É ISSO QUE VOU QUERER...
+
+
+
+
+
+
+
+
+
+--> e seria bom instalar o NODEMON...
+
+
+
+
+
+
+
+
+
+
+
+OK, MAS O QUE INTERESSA É QUE ESTE CÓDIGO AQUI ESTÁ CORRETO:
+
+
+
+
+
+
+
+
+
+router.get('/', (req, res, next) => {
+  const db = getDb();
+
+  console.log('test');
+
+  db.collection('products')
+    .find({})
+    .toArray()
+    .then((products) => {
+      res.json(products);
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+--> só estou recebendo nenhum product na response pq... eu não sei, na verdade...
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA ESTOU RECEBENDO OS PRODUCTS CORRETAMENTE, POIS TROQUEi 
+
+'test' 
+
+por 
+
+
+'shop'
+
+
+NESSA STRING AQUI:
+
+
+
+
+
+
+
+
+
+
+const { MongoClient } = require('mongodb');
+
+const url =
+  'mongodb+srv://madblorga:papanacuas@cluster0.nhtjo.mongodb.net/shop';
+// Database Name
+let dbName = 'shop';
+// Connect using MongoClient
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------------------------
+
+
+
+
+
+
+
+
+
+---> ou seja, coloque o NOME DA DATABASE nesse seu cluster, que você vai querer utilizar....
+
+
+
+
+
+
+
+---> ok, a route de delete também está funcionando....
+
+
+
+
+
+
+
+
+
+
+--> agora só preciso fazer o frontend atualizar com o delete, sem reloads....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, CONSEGUI FAZER O FRONTEND FUNCIONAR....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA PRECISO FAZER 
+
+
+
+
+
+
+ AS ROUTES DE 'EDIT' E 'DELETE' product também funcionarem...
+
+
+
+
+
+
+
+
+
+
+ --> A ROUTE DE 'ADD' está sendo bloqueada por CORS....
+
+
+
+
+
+
+ --> tenho que corrigir isso lá no 'App.js'....
+
+
+
+
+
+
+
+ --> consegui.... era um mistype....
+
+
+
+
+
+
+
+
+
+ -- agora os products estão sendo addados..
+
+
+
+
+
+
+
+
+
+
+ -> só as images não estão sendo posicionadas...
+
+
+
+
+
+
+
+
+
+
+
+ --> para ter images preciso:
+
+
+
+ OU DO MULTER
+
+
+ ou 
+
+
+
+
+ do 
+
+ uso de 'links' 
+
+
+ para colocar as images...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -----> seria bom fazer o EDIT PRODUCT funcionar, também...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> OK.. ACHO QUE VAI FUNCIONAR, MAS PRECISO FAZER AQUELA COISA DA USER EXPERIENCE (fazer com que 
+ 
+ 
+ 
+ os fields sejam preenchidos com a info do product em que clicamos 'edit'....)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> É A ROUTE DE 'GET A SINGLE PRODUCT', provavelmente....
+
+
+
+
+
+
+
+
+
+
+
+
+ -> OK... CONSEGUI. DEU CERTO...
+
+
+
+
+
+
+
+
+
+
+ --> só um outro erro de cors, agora... --> basta solucionar isso para conseguir fazer o edit de meu product...
+
+
+
+
+
+
+
+
+
+
+ edit:1 Access to XMLHttpRequest at 'http://localhost:3100/products6222a4a378d5019c10cacb6f' from origin 'http://localhost:3000' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.
+EditProduct.js:83 Error: Network Error
+
+
+
+
+
+
+
+
+
+
+
+--> provavelmente é pq não coloquei 'OPTIONS' como aprovado pelo CORS...
+
+
+
+
+
+
+
+
+Não, mas não é isso....
+
+
+
+
+
+
+
+
+
+OK, NÃO CONSEGUI CONSERTAR O EDIT....
+
+
+
+
+
+
+
+
+
+--> VOU VER O VÍDEO DO PROFESSOR....
+
+
+
+
+
+
+
+
+
+
+---> ele fala do 'app.js'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> request é funnelado através de middlewares...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+app.js é o código que é rodado quando executamos nosso server....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR IMPORTA O 'mongodb',
+
+
+
+
+
+
+e aí o MONGOCLIENT DO MONGODB...
+
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+const mongoClient = require('mongodb').MongoClient....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> 
+
+
+
+
+
+
+ELE ESCREVE ESSENCIALMENTE ESSA NOSSA HELPER FUNCTION:
+
+
+
+
+
+
+const mongoConnect = (callback) => {
+  MongoClient.connect(url)
+    .then((client) => {
+      dbName = client.db();
+      callback();
+    })
+    .catch((err) => {
+      console.log(err);
+      throw err;
+    });
+};
+
+
+
+
+
+
+
+
+
+
+--> aí ele escreve, lá em 'app.js',
+
+
+
+basicamente isto:
+
+
+
+
+
+mongoConnect(() => {
+  app.listen(3100);
+})
+
+
+
+
+
+
+
+
+
+
+
+-> COM ISSO, A CONNECTION TERÁ SIDO ESTABELECIDA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->  OK, ESTAMOS CONECTADOS à DATABASE...
+
+
+
+
+
+
+
+
+
+--> MEU STYLING AINDA ESTÁ UM LIXO, ENTRETANTO....
+
+
+
+
+
+
+
+
+
+--> as borders não estão funcionando.....
+
+
+
+
+
+
+
+
+--> OK, AGORA CONSERTEI ISSO...
+
+
+
+
+
+
+--> falta o '$' nos PRICE...
+
+
+
+
+
+
+
+
+
+--> OK... AGORA O NEGÓCIO ESTÁ MELHOR...

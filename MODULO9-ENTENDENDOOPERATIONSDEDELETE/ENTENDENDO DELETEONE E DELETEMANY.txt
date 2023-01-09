@@ -1,0 +1,555 @@
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOLTAMOS A NOSSA DATABASE..
+
+
+
+
+
+
+
+
+
+--> PODEMOS USAR QUALQUER DATABASE...
+
+
+
+
+
+
+
+
+
+
+
+--> AINDA TEMOS NOSSA USER COLLECTION,
+
+
+MAS USAMOS OUTRA COLLECTION...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+DIGAMOS QUE QUEREMOS 
+
+DELETAR ALGUÉM...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> se queremos deletar apenas 1 document,
+
+escrevemos assim:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.users.deleteOne()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> COLOQUE O SEU FILTER ALI DENTRO,
+
+
+
+
+
+
+
+
+
+SÃO OS MESMOS FILTERS DE 'update' e 'find' --------> 
+
+
+
+
+
+
+
+
+
+
+TUDO QUE VOCÊ APRENDEU NO MÓDULO DE 'READ'
+
+VAI FUNCIONAR AUQI...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> tudo que você precisa para identificar 
+
+
+
+1 document,
+
+vocÊ pode 
+
+
+
+colocar aqui....
+
+
+
+
+
+
+
+
+
+
+--> APENAS PRECISA 'NARROW DOWN'
+
+o document/documents que você quer deletar....
+
+
+
+
+
+
+
+
+
+eX:
+
+
+
+
+
+
+
+
+
+
+
+
+db.users.deleteOne(
+    {
+        name: 'Chris'
+    }
+)
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR DIZ QUE É POSSÍVEL ADICIONAR UM 'writeConcern'
+
+
+
+NO SEGUNDO 
+
+
+PARÂMETRO... -> 
+
+
+
+
+
+
+
+
+
+
+MAS O PROFESSOR ESTÁ 'FINE' COM O writeConcern
+
+
+DEFAULT,
+
+pelo resto do curso...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.users.deleteOne({name: 'Chris'})
+
+
+
+
+
+
+
+
+
+
+{
+    "acknowledged": true, 
+
+
+    "deletedCount": 1
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> COM O CHRIS 
+
+
+
+
+
+DELETADO,
+
+AGORA 
+
+VAMOS DELETAR 
+
+
+
+MÚLTIPLOS DOCUMENT...
+
+
+
+
+
+
+
+
+
+-- >vamos deletar todos os document que são 'isSporty : true',
+
+
+
+E QUE 
+
+
+TENHAM 
+
+
+UMA AGE MAIOR DO QUE '30'..
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+db.users.deleteMany(
+    {
+        $and: [
+            {isSporty: true},
+            {
+                age: {$gt: 30 }
+            }
+        ]
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> OK... USEI O OPERATOR DE '$and',
+
+e o 
+
+de 
+
+'$gt'  (para achar os negócios com mais de 30 anos).
+
+
+
+
+
+
+
+
+
+
+
+USAMOS 'deleteMany' --> O DELETEMANY PODE ACABAR 
+
+DELETANDO 
+
+
+
+one,
+
+
+
+se vocÊ tiver apenas 1 document 
+
+
+
+
+
+
+QUE MATCHEOU ESSA QUERY...
+
+
+
+
+
+
+
+
+
+
+
+PODERÍAMOS TER ESCRITO 
+
+
+
+
+assim, também:
+
+
+
+
+db.users.deleteMany(
+    {age: {$gt: 30}, isSporty: true}
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO NÃO DELETOU NENHUM DOCUMENT,
+
+PQ NENHUM TINHA 'age > 30' ao mesmo tempo que tinha 
+
+'isSporty: true'...
+
+
+
+
+
+
+
+
+
+
+--> ALGUNS DOCUMENTS TINHAM 'isSporty: true',
+
+MAS AÍ 
+
+NÃO TINHAM O FIELD DE 'age'...
+
+
+
+
+
+
+
+
+--> PARA CONSEGUIR DELETAR ESSES DOCUMENTS, PODEMOS REFINAR NOSSO DELETE PARA FICAR ASSIM (com '$exists'):
+
+
+
+
+
+
+
+
+db.users.deleteMany(
+    {
+        $and: [
+            {isSporty: true},
+            {
+                age: {$exists: false }
+            }
+        ]
+    }
+)
+
+
+
+
+
+
+
+
+
+---------------------------
+
+
+
+
+
+
+
+
+AGORA QUANDO SALVARMOS,
+
+2 DOCUMENTS SERÃO DELETADOS... --> sucesso....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+age: null --> NÃO É SUFICIENTE PARA CARACTERIZAR '$exists: false'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, ESSE É O DELETEMANY EM AÇÃO...
+
+
+
+
+
+
+
+
+
+
+
+--> PODEMOS DEFINIR QUANTOS 'query selectors' QUISERMOS,
+
+
+
+
+no nosso filter,
+
+
+POR MEIO DE '$and: []'....

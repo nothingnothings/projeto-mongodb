@@ -1,0 +1,844 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> A AGGREGATION FUNCTION QUE RODAMOS NA ÚLTIMA AULA, com 'group':
+
+
+
+
+
+
+
+
+
+db.persons.aggregate([
+    { $match: { gender: 'female' } },
+    {
+      $group: {
+        _id: {
+          chosenState: '$location.state',
+        },
+        totalPersons: {
+          $sum: 1,
+        },
+      },
+    },
+  ]).pretty();
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO RETORNOU ESTES RESULTS:
+
+
+
+
+
+
+
+
+{ "_id" : { "chosenState" : "southland" }, "totalPersons" : 8 }
+{ "_id" : { "chosenState" : "چهارمحال و بختیاری" }, "totalPersons" : 8 }
+{ "_id" : { "chosenState" : "karaman" }, "totalPersons" : 1 }
+{ "_id" : { "chosenState" : "central ostrobothnia" }, "totalPersons" : 8 }
+{ "_id" : { "chosenState" : "south dublin" }, "totalPersons" : 3 }
+{ "_id" : { "chosenState" : "bolu" }, "totalPersons" : 2 }
+{ "_id" : { "chosenState" : "mardin" }, "totalPersons" : 3 }
+{ "_id" : { "chosenState" : "elazığ" }, "totalPersons" : 4 }
+{ "_id" : { "chosenState" : "islas baleares" }, "totalPersons" : 5 }
+{ "_id" : { "chosenState" : "gwent" }, "totalPersons" : 1 }
+{ "_id" : { "chosenState" : "vaud" }, "totalPersons" : 6 }
+{ "_id" : { "chosenState" : "valais" }, "totalPersons" : 4 }
+{ "_id" : { "chosenState" : "description" }, "totalPersons" : 8 }
+{ "_id" : { "chosenState" : "aydın" }, "totalPersons" : 3 }
+{ "_id" : { "chosenState" : "zuid-holland" }, "totalPersons" : 11 }
+{ "_id" : { "chosenState" : "limerick" }, "totalPersons" : 5 }
+{ "_id" : { "chosenState" : "muğla" }, "totalPersons" : 3 }
+{ "_id" : { "chosenState" : "louth" }, "totalPersons" : 7 }
+{ "_id" : { "chosenState" : "massachusetts" }, "totalPersons" : 4 }
+{ "_id" : { "chosenState" : "قم" }, "totalPersons" : 4 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> A DATA, PORTANTO, FOI TOTALMENTE TRANSFOMADA (a estruutra de cada document, aqui, não é a mesma que chegou INICIALMENTE ao 'aggregation pipeline'; não é 
+a mesma estrutura de cada document 'person'...)
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------->  E, COMO VOCÊ PODE TER PERCEBIDO,
+
+COM O USO DE 'group',
+
+
+
+NÓS __PERDEMOS_ 'ALL THE EXISTING DATa' --> MAS ISSO FAZ SENTIDO,
+
+
+PQ 
+
+
+
+___ NÓS_ FIZEMOS O 'GROUP TOGETHER' de nossa data... -->  E  _ ISSO NAÕ É UM PROBLEMA,
+
+
+
+
+PQ 
+
+
+
+
+QUANDO VOCÊ RODAR UM QUERY COMO ESSES,
+
+
+
+
+
+
+QUANDO VOCÊ RODAR UM 'GROUPING' desses,
+
+
+
+VOCê TIPICAMENTE '''FICARÁ FINE COM O LOSE DE SEUS DADOS'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> MAS É 
+
+
+RELEVANTE QUE 
+
+
+ _ QUANDO NÓS RODAMOS 
+
+
+
+
+
+
+ AQUELE 'PIPELINE' por meio de código como 
+
+
+
+
+
+
+
+
+ 
+
+
+db.persons.aggregate([
+    { $match: { gender: 'female' } },
+    {
+      $group: {
+        _id: {
+          chosenState: '$location.state',
+        },
+        totalPersons: {
+          $sum: 1,
+        },
+      },
+    },
+  ]).pretty();
+,
+
+ 
+
+
+
+
+
+
+
+
+
+O  QUE NÓS HAVÍAMOS CONSEGUIDO ERA 
+
+
+
+
+'''UM MONTE DE OUTPUTS, MAS EM UMA ORDER TOTALMENTE BAGUNÇADA'... ( sem sort, sem order)...
+
+
+
+
+
+
+
+
+
+
+
+
+--> E NO 'AGGREGATION FRAMEWORK',
+
+
+no caso,
+
+
+É ÓBVIO 
+
+
+
+
+
+
+QUE É POSSÍVEL FAZER 'SORT'.....
+
+
+
+
+
+
+
+
+
+
+--> E, ACERCA DO 'SORT',
+
+
+É POSSÍVE OBSERVAR bem claramente as VANTAGENS DO 
+
+
+
+
+
+
+AGGREGATION PIPELINE... .-->  A VANTAGEM __ É QUE __ VOCÊ PODE RODAR '.sort()'
+
+
+
+
+EM QUALQUER LUGAr DE SUA EXECUÇÃO..
+
+
+
+
+
+
+
+
+
+
+
+
+--> ENTRETANTO, NO CASO DE NOSSA QUERY,
+
+PROVAVELMENTE SERÁ MAIS INTERESSANTE FAZER SORT 
+
+
+
+pelo field  de 'totalPersons'... --------> E ESSE SORTING ÁI, CASUAL, MAS DIRECIONADO A COISAS ESPECÍFICAS COMO 'NÚMERO DE PESSOAS EM UM STATE',
+
+
+
+
+
+SÓ __ SERÁ POSSÍVEL DEPOIS 
+
+
+
+
+DE 
+
+
+
+TIVERMOS FEITO 'grouping' por meio de '$group' (fase de group)....
+
+
+
+
+
+
+
+
+
+
+
+
+--> SIM, É CLARO QUE PODERÍAMOS 
+
+
+rodar, na aggregation pipeline,
+
+CÓDIGO DE 
+
+
+
+
+SORTING__ A PARTIR DOS 'DOCUMENTS ORIGINÁRIOS' --------> ENTRETANTO, ISSO __ NÃO É BOM__... -> 
+
+
+
+
+NÃO É BOM PQ VAI LIMITAR  AS OPÇÕES/LIBERDADE DE 'sorting' ---> COMO POR EXEMPLO, NÃO PODEREMOS/NÃO PODEMOS MAIS 
+
+
+
+
+
+
+'''SORTEAR PELA QUANTIDADE DE PERSONS EM UM DETERMINADO ESTADO"", 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> NO CASO, VAMOS QUERER SEGUIR ESSE EXATO EXEMPLO:
+
+
+
+
+
+
+
+ESCREVER ETAPA (3a etapa) 
+
+
+
+DE 
+
+
+MODO QUE 
+SEJA POSSÍVEL SORTEAR OS USUÁRIOs PELO NÚMERO DE 'totalPersons'...
+
+
+
+
+
+
+
+
+
+
+
+
+----> E VAMOS ESCREVER O 'sort'
+
+
+EXATAMENTE COMO FAZÍAMOS ANTES, com o '.sort()'
+
+
+
+
+
+
+
+
+
+
+
+
+-> ISSO SIGNIFICA QUE ESCREVEREMOS:
+
+
+
+
+
+
+
+{
+    $sort: {totalPersons: 1 }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+--> OU SEJA, É POSSÍVEL FAZER REFERÊNCIA, EM UMA ETAPA POSTERIOR (nesse caso, etapa 3, em relação ao número 1-2) À FIELD 
+
+
+
+QUE FOI/SERÁ CRIADO __ JUSTAMENTE__ POR CONTA DO PRÓPRIO 
+
+
+
+
+
+
+RUN DE 'aggregate' (
+
+
+    ou seja,
+
+
+    fazer referência 
+
+    A FIELD QUE NÃO EXISTE NO NOSSO DATA SET ORIGINÁRIO, e sim que só 
+
+
+    EXISTE/EXISTIRÁ 
+
+
+    NO VALUE RETORNADO POR ESSE RUN PRESENTE DE 'aggregate'...
+)
+
+
+
+
+
+
+
+
+OK, MAS PQ ISSO FUNCIONA?
+
+
+
+
+
+
+
+É PQ '''CADA 
+
+PIPELINE STAGE 
+
+
+
+
+PASSA SUA OUTPUT DATA AO PRÓXIMO STAGE, 
+
+
+QUE VAI USAR ESSA OUTPUT DATA __ COMO SUA ""ÚNICA DATA"",
+
+VAI TRATAR ESSA OUTPUT DATA DO STAGE ANTERIOR COMO __ A ÚNICA DATA A QUE 
+ELE TEM ACESSO'''..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FICARÁ TIPO ASSIM.....:
+
+
+
+
+
+
+
+
+
+
+
+db.persons.aggregate(
+    [
+        { $match: {gender: "female"} },
+        { $group: {_id: {chosenState: "$location.state"}, totalPersons: {$sum: 1}}},
+
+        {$sort: { totalPersons: 1}}  ///STAGE DE NÚMERO 3...
+    ]
+).pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+-----> O STEP 3, PORTANTO, 
+
+´SO TEM 
+
+ACESSO à 'OUTPUT DATA' 
+
+
+
+
+
+
+
+DO STAGE DE 'group'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> E COMO TEREMOS ESSE FIELD DE 'totalPersons' 
+
+
+
+na output data retornada pelo stage de 'group',
+
+
+
+podemos 
+
+
+
+
+
+rodar 
+
+
+
+
+um SORT, NA ETAPA 3 ,
+
+FAZENDO SORT 
+
+pelo 
+
+
+
+field de 'totalPersons'
+
+
+
+em ASCENDING ORDER ('1')....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK....---> AGORA, NA NOSSA SHELL,
+
+SE RODAMOS 
+
+ESSA QUERY,
+
+
+
+recebemos isto:
+
+
+
+
+
+
+
+
+
+> db.persons.aggregate(
+...     [
+...         { $match: {gender: "female"} },
+...         { $group: {_id: {chosenState: "$location.state"}, totalPersons: {$sum: 1}}},
+...
+...         {$sort: { totalPersons: 1}}  ///STAGE DE NÚMERO 3...
+...     ]
+... ).pretty()
+{ "_id" : { "chosenState" : "karabük" }, "totalPersons" : 1 }
+{ "_id" : { "chosenState" : "northumberland" }, "totalPersons" : 1 }
+{ "_id" : { "chosenState" : "warwickshire" }, "totalPersons" : 1 }
+{ "_id" : { "chosenState" : "kastamonu" }, "totalPersons" : 1 }
+{ "_id" : { "chosenState" : "avon" }, "totalPersons" : 1 }
+{ "_id" : { "chosenState" : "paris" }, "totalPersons" : 1 }
+{ "_id" : { "chosenState" : "calvados" }, "totalPersons" : 1 }
+{ "_id" : { "chosenState" : "cleveland" }, "totalPersons" : 1 }
+{ "_id" : { "chosenState" : "ohio" }, "totalPersons" : 1 }
+{ "_id" : { "chosenState" : "kırşehir" }, "totalPersons" : 1 }
+{ "_id" : { "chosenState" : "ardahan" }, "totalPersons" : 1 }
+{ "_id" : { "chosenState" : "nord" }, "totalPersons" : 1 }
+{ "_id" : { "chosenState" : "essonne" }, "totalPersons" : 1 }
+{ "_id" : { "chosenState" : "manisa" }, "totalPersons" : 1 }
+{ "_id" : { "chosenState" : "seine-et-marne" }, "totalPersons" : 1 }
+{ "_id" : { "chosenState" : "maranhão" }, "totalPersons" : 1 }
+{ "_id" : { "chosenState" : "aksaray" }, "totalPersons" : 1 }
+{ "_id" : { "chosenState" : "afyonkarahisar" }, "totalPersons" : 1 }
+{ "_id" : { "chosenState" : "pennsylvania" }, "totalPersons" : 1 }
+{ "_id" : { "chosenState" : "california" }, "totalPersons" : 1 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> COMO VOCê PODE VER,
+
+AGORA 
+
+OS RESULTS ESTÃO SENDO DISPLAYADOS __ EM ORDEM CRESCENTE do number de 'totalPersons'..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------>ok...
+
+
+
+
+
+
+
+
+
+
+
+
+-> VIMOS QUE O SORTING TAMBÉM FUNCIONA... 
+
+
+
+
+
+
+
+
+--> E O QUE INTERESSA, AQUI, É QUE O 'SORTING'  ESTÁ SENDO 
+FEITO 
+
+
+
+'NO OUTPUT 
+
+
+DO NOSSO PREVIOUS STAGE' ( stage de 'group', no caso)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> E ISSO JÁ NOS MOSTRA QUE ''TEMOS UM MONTE DE PODER COM ESSAS TOOLS, JÁ'''' -> PQ 
+
+
+
+
+
+
+
+ESSA É UMA OPERATION _ QUE NÃO PODEMOS/NÃO PODERÍAMOS FAZER COM 
+
+
+
+O 
+
+METHOD NORMAL DE 'find()' -------> PQ 
+
+
+
+
+O METHOD 
+
+DE 
+
+
+'find()" 
+
+
+
+
+
+SÓ TE DEIXA _ _FAZER ___ SORT __ DE DOCUMENTS INTEIROS,
+
+
+
+
+POR MEIO DE ALGUM DOS FIELDS NO INTERIOR DESSES DOCUMENTS -------> ou seja,
+
+
+
+
+O 
+
+
+
+'sort' em 'find()'
+
+
+
+
+
+NÃO TE DEIXA, NATIVAMENTE,
+
+
+
+
+SORTAR_ _ DOCUMENTS 
+
+
+
+
+__ MODIFICADOS__ COMO ESSES AQUI... (não podemos, por exemplo, fazer 'GROUP' e aí 'SORT' no resultado desse group...)
+
+
+
+
+
+------>  SE QUISÉSSEMOS FAZER ISSO SÓ com 
+
+
+
+'.find()',
+
+
+
+
+NÓS SERÍAMOS OBRIGADOS A RODAR UMA QUERY SIMPLES DE 'find()" e aí 
+
+
+
+
+EDITAR O CÓDIGO RETRIEVADO,
+LÁ NO NOSSO CLIENTSIDE CODE... ->  JÁ COM  O 'aggregate()',
+
+
+
+PODEMOS/CONSEGUIMOS __ RODAR__ eSSA QUERY/ESPECIFICAÇÃO __ DIRETAMENTE NO MONGODB SERVER,
+
+
+
+PARA AÍ 
+
+CONSEGUIR A DATA __ DA MANEIRA QUE QUISERMOS __ 
+
+
+
+
+
+
+,
+
+
+PARA QUE O CLIENT FUNCIONE COM ELA 'DIRETAMENTE',
+
+
+
+sem precisar a transformar...

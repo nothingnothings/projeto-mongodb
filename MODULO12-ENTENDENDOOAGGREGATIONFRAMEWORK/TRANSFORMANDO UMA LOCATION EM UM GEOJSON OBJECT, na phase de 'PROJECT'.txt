@@ -1,0 +1,1674 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> APRENDEMOS UM MONTE SOBRE "$project",
+
+
+a fase de PROJECTION,
+
+
+E QUE 
+
+
+
+TEMOS UM MONTE DE OPERATORS QUE PODEM SER USADOS NELA,
+
+
+
+na última aula...
+
+
+
+
+
+
+
+
+
+
+
+--> E ISSO É SUPER IMPORTANTE,
+
+PQ 
+
+
+
+ESSA É UMA DAS 'CORE THINGS' QUE O AGGREGATION framework faz/pode fazer.... 
+
+
+
+
+
+
+
+
+
+
+
+-----> AGORA DEVEMOS FAZER 'PROJECT 'um pouco mais... --> PQ ISSO É UMA IMPORTANTE STEP DE QUASE QUALQUER 
+
+
+
+
+
+PIPELINE QUE CONSTRUÍRMOS...
+
+
+
+
+
+
+
+
+
+
+
+VAMOS DAR UMA OLAHDA NA NOSSA INPUT DATA INICIAL MAIS UMA VEZ:
+
+
+
+
+
+
+{
+        "_id" : ObjectId("62127db4e5b1e4e4716eb34e"),
+        "gender" : "female",
+        "name" : {
+                "title" : "ms",
+                "first" : "signe",
+                "last" : "rasmussen"
+        },
+        "location" : {
+                "street" : "3635 koldingvej",
+                "city" : "ryslinge",
+                "state" : "sjælland",
+                "postcode" : 44840,
+                "coordinates" : {
+                        "latitude" : "18.2563",
+                        "longitude" : "14.0142"
+                },
+                "timezone" : {
+                        "offset" : "+4:30",
+                        "description" : "Kabul"
+                }
+        },
+        "email" : "signe.rasmussen@example.com",
+        "login" : {
+                "uuid" : "687099d9-b4bd-4881-8657-90abd559844f",
+                "username" : "sadpeacock229",
+                "password" : "baggio",
+                "salt" : "J1WBRau1",
+                "md5" : "2b0824d7f90452cc93a879aaf717fa40",
+                "sha1" : "d7fc48d34816bccf8cac0c532b06e37e65974759",
+                "sha256" : "2388d9162c447e163fdaaf94fb99bc5ca42a93de167d82eed59e296f8d1de8dd"
+        },
+        "dob" : {
+                "date" : "1983-05-20T21:26:44Z",
+                "age" : 35
+        },
+        "registered" : {
+                "date" : "2010-09-30T04:08:40Z",
+                "age" : 7
+        },
+        "phone" : "46945447",
+        "cell" : "97293211",
+        "id" : {
+                "name" : "CPR",
+                "value" : "082246-7576"
+        },
+        "picture" : {
+                "large" : "https://randomuser.me/api/portraits/women/5.jpg",
+                "medium" : "https://randomuser.me/api/portraits/med/women/5.jpg",
+                "thumbnail" : "https://randomuser.me/api/portraits/thumb/women/5.jpg"
+        },
+        "nat" : "DK"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> ANTES, 
+
+
+
+
+
+NÓS USAMOS 'PROJECT' para 
+
+apenas 
+
+
+
+incluir/retrievar os fields de 'gender' 
+
+
+
+e 
+
+
+
+
+'fullName' (que é um field criado a partir dos embedded fields em 'name')...
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS O QUE MAIS PODEMOS FAZER?
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR EXPLICA QUE PODERÍAMOS INCLUIR 
+
+
+
+
+a 'location' do user...
+
+
+
+
+
+
+
+
+
+
+--------> OU SEJA,
+
+PODERÍAMOS PEGAR ISTO:
+
+
+
+
+
+
+
+
+ "location" : {
+                "street" : "9148 brock rd",
+                "city" : "shelbourne",
+                "state" : "québec",
+                "postcode" : "O8H 9F7",
+                "coordinates" : {
+                        "latitude" : "-13.9479",
+                        "longitude" : "-48.3596"
+                },
+
+
+
+
+
+
+
+
+
+
+
+
+
+                -----> E TRANSFORMAR EM UM GEOJSON OBJECT...
+
+
+
+
+
+
+
+    --> E AÍ ARMAZENAR ESSE GEOJSON OBJECT NO 
+
+
+    DOCUMENT QUE RETRIEVAMOS..
+
+
+
+
+    -> isso seria bem interessante....
+
+
+
+
+
+
+
+
+
+
+
+    formato de um GEOJSON OBJECT:
+
+
+
+
+
+
+
+    {
+        type: "Point",
+        coordinates: [long, lat]
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    --> PARA ISSO,
+
+    TEREMOS DE ESCREVER UM USO DO AGGREGATION PIPELINE...
+
+
+
+
+
+
+
+
+
+
+
+    começo assim:
+
+
+
+
+
+
+
+
+
+
+
+    db.persons.aggregate(
+        [
+            {$project: {
+                _id: 0, gender: 1, 
+                fullName: {
+                                           $concat: [
+
+           {$toUpper: {$substrCP: ["$name.first", 0, 1] }},
+           {$substrCP: ["$name.first", 1, {$subtract: [{$strLenCP: "$name.first"}, 1]}]},
+          " ",
+          {$toUpper: {$substrCP: ["$name.last", 0, 1] }},
+           {$substrCP: ["$name.last", 1, {$subtract: [{$strLenCP: "$name.first"}, 1]}]}
+      ]
+                          }
+                  },
+
+                location: {
+
+                }
+
+
+
+
+
+
+
+            }
+            
+            
+    
+            }
+        ]
+    )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    --> OK... É DENTRO DE 'location' que a 'mágica' acontecerá....
+
+
+
+
+
+
+
+
+
+
+
+
+
+    --> provavelmente escrevermos assim:
+
+
+
+
+
+
+
+           location: {
+                type: "Point", 
+                coordinates: [
+                        {}, {}
+                ]
+                }
+
+
+
+
+
+
+
+
+
+
+                2 EXPRESSIONS NESSE 'coordinates', para conseguir a 'long' e a 'lat'...
+
+
+                -> ou, então, nem precisamos desses '{}',
+
+
+
+                podemos só escrever 
+
+
+                "$location.coordinates.longitude" e "$location.coordinates.latitude"
+
+
+
+
+
+
+
+
+                EX:
+
+
+
+                      location: {
+                type: "Point", 
+                coordinates: [
+                        "$location.coordinates.longitude", "$location.coordinates.latitude"
+                ]
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FUNCIONOU...
+
+
+
+
+
+
+
+
+
+
+CONSEGUI 
+
+
+
+RETRIEVAR 
+
+
+TODOS ESSES DOCUMENTS COM 1 GEOJSON OBJECT 
+
+
+
+VÁLIDO EM CADA FIELD 
+
+
+
+'location':
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+> db.persons.aggregate([
+...   {
+...     $project: {     
+...       _id: 0,
+...       gender: 1,
+...       fullName: {
+...         $concat: [
+...           { $toUpper: { $substrCP: ['$name.first', 0, 1] } },
+...           {
+...             $substrCP: [
+...               '$name.first',
+...               1,
+...               { $subtract: [{ $strLenCP: '$name.first' }, 1] },
+...             ],
+...           },
+...           ' ',
+...           { $toUpper: { $substrCP: ['$name.last', 0, 1] } },
+...           {
+...             $substrCP: [
+...               '$name.last',
+...               1,
+...               { $subtract: [{ $strLenCP: '$name.first' }, 1] },
+...             ],
+...           },
+...         ],
+...       },
+...
+...       location: {
+...         type: 'Point',
+...         coordinates: [
+...           '$location.coordinates.longitude',
+...           '$location.coordinates.latitude',
+...         ],
+...       },
+...     },
+...   },
+... ]).pretty()
+{
+        "gender" : "male",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        "168.9462",
+                        "-22.5329"
+                ]
+        },
+        "fullName" : "Harvey Chambe"
+}
+{
+        "gender" : "male",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        "-154.6037",
+                        "-29.6721"
+                ]
+        },
+        "fullName" : "Carl Jaco"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        "-172.3753",
+                        "83.3998"
+                ]
+        },
+        "fullName" : "Madeleine Till"
+}
+{
+        "gender" : "male",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        "101.5995",
+                        "78.8545"
+                ]
+        },
+        "fullName" : "Isolino Viana"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        "43.9085",
+                        "25.1614"
+                ]
+        },
+        "fullName" : "Mestan Kaplan"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        "-83.3326",
+                        "-88.6846"
+                ]
+        },
+        "fullName" : "Sandra Lorenz"
+}
+{
+        "gender" : "male",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        "-54.1364",
+                        "-86.1268"
+                ]
+        },
+        "fullName" : "Gideon Van dr"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        "135.9359",
+                        "71.9851"
+                ]
+        },
+        "fullName" : "Katie Welch"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        "34.1689",
+                        "4.6625"
+                ]
+        },
+        "fullName" : "پریا پارس"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        "148.0944",
+                        "35.5726"
+                ]
+        },
+        "fullName" : "Louise Graham"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        "-8.5570",
+                        "-14.4912"
+                ]
+        },
+        "fullName" : "Shona Kempe"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        "59.5703",
+                        "-67.6434"
+                ]
+        },
+        "fullName" : "Andreia Arnaud"
+}
+{
+        "gender" : "male",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        "-90.9499",
+                        "21.3388"
+                ]
+        },
+        "fullName" : "بنیامین سالاری"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        "78.0207",
+                        "-84.1572"
+                ]
+        },
+        "fullName" : "Anne Ruiz"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        "-90.4049",
+                        "-65.0877"
+                ]
+        },
+        "fullName" : "Delia Duran"
+}
+{
+        "gender" : "male",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        "80.9269",
+                        "17.4101"
+                ]
+        },
+        "fullName" : "Vincent Küper"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        "174.2405",
+                        "3.6559"
+                ]
+        },
+        "fullName" : "Anaëlle Adam"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        "130.0105",
+                        "88.1818"
+                ]
+        },
+        "fullName" : "Gonca Alnıa"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        "-48.3596",
+                        "-13.9479"
+                ]
+        },
+        "fullName" : "Maeva Grewa"
+}
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        "14.0142",
+                        "18.2563"
+                ]
+        },
+        "fullName" : "Signe Rasmu"
+}
+
+
+
+
+
+
+
+
+
+
+
+----------------------------------------
+
+
+
+
+
+
+
+
+
+formato de cada 
+
+
+
+document ficou assim:
+
+
+
+
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        "14.0142",
+                        "18.2563"
+                ]
+        },
+        "fullName" : "Signe Rasmu"
+}
+
+
+
+
+
+
+
+
+
+OK, MAS 
+
+
+
+AQUI HÁ ALGO QUE EU ESQUECI DE FAZER....
+
+
+
+
+
+
+
+
+--> ESQUECI DE CONVERTER ESSAS 2 STRINGS (pq as coordinates estão como STRINGs)
+
+
+EM NUMBERS..
+.
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO, PROVAVELMENTE USAREI UM OPERATOR...
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+https://docs.mongodb.com/manual/reference/operator/aggregation/toString/
+
+
+
+
+
+
+
+
+
+
+New in version 4.0.
+
+Converts a value to a string. If the value cannot be converted to a string, $toString errors. If the value is null or missing, $toString returns null.
+
+$toString has the following syntax:
+
+{
+   $toString: <expression>
+}
+
+The $toString takes any valid expression.
+
+The $toString is a shorthand for the following $convert expression:
+
+
+
+
+
+
+
+
+
+
+
+ok....
+
+
+
+
+ENTÃO ESCREVEMOS ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+db.persons.aggregate([
+  {
+    $project: {
+      _id: 0,
+      gender: 1,
+      fullName: {
+        $concat: [
+          { $toUpper: { $substrCP: ['$name.first', 0, 1] } },
+          {
+            $substrCP: [
+              '$name.first',
+              1,
+              { $subtract: [{ $strLenCP: '$name.first' }, 1] },
+            ],
+          },
+          ' ',
+          { $toUpper: { $substrCP: ['$name.last', 0, 1] } },
+          {
+            $substrCP: [
+              '$name.last',
+              1,
+              { $subtract: [{ $strLenCP: '$name.first' }, 1] },
+            ],
+          },
+        ],
+      },
+
+      location: {
+        type: 'Point',
+        coordinates: [
+          { $toString: '$location.coordinates.longitude'},
+          { $toString: '$location.coordinates.latitude'},
+        ],
+      },
+    },
+  },
+]).pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> não, mas isso é 'toString'... preciso do caminho inverso,
+
+talvez 
+
+'parseInt',
+
+
+ ou algo assim,
+
+ algo que converta esse negócio em um NUMBER...
+
+
+
+
+
+
+ ex:
+
+
+ https://docs.mongodb.com/manual/reference/operator/aggregation/toInt/
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> MAS ISSO ME DEU UM __ _ERRO... 
+
+
+
+
+
+
+
+
+
+
+
+
+ ex:
+
+
+
+
+
+
+ on connection: connection to 127.0.0.1:27017 : aggregate failed :
+_getErrorWithCode@src/mongo/shell/utils.js:25:13
+doassert@src/mongo/shell/assert.js:18:14
+_assertCommandWorked@src/mongo/shell/assert.js:737:17
+assert.commandWorked@src/mongo/shell/assert.js:829:16
+DB.prototype._runAggregate@src/mongo/shell/db.js:281:5
+DBCollection.prototype.aggregate@src/mongo/shell/collection.js:1058:12
+@(shell):1:1
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------
+
+
+
+
+
+ah.... falhou pq 
+
+o negócio tem que ser uma integral de base 10... 
+
+(
+
+
+        ou seja,
+
+        numbers simples como -5,
+
+
+        123456, etc...
+)
+
+
+
+
+
+
+
+
+--> 'toInt'
+
+NÃO FUNCIONA COM FLOATS....
+
+
+
+
+
+-> preciso de outro 
+
+
+'toAlgumaCoisa'....
+
+
+
+7
+
+MongoDB supports double datatype. It is used for all floating point numbers. As MongoDB implements BSON spec, we may think of it's double as of BSON double. Which is 8 bytes (64-bit IEEE 754 floating point) according to the specification. And it supports 15-17 significant digits.
+
+So do not worry.
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> TENTAREI USAR '$toDouble'...
+
+
+
+
+
+
+
+
+
+
+
+{
+        "gender" : "male",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        80.9269,
+                        17.4101
+                ]
+        },
+        "fullName" : "Vincent Küper"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK.... PARECE QUE FUNCIONOU...
+
+
+
+
+
+
+
+
+
+
+
+
+----------------------
+
+
+
+
+
+
+
+
+
+
+
+
+PROFESSOR NOS MOSTRA ESSA TRANSFORMATION.... --> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ELE TAMBÉM VAI QUERER 
+
+
+OUTPUTTAR O EMAIL/MANTÊ-LO....
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+db.persons.aggregate([
+  {
+    $project: {
+      _id: 0,
+      gender: 1,
+      email: 1,
+      fullName: {
+        $concat: [
+          { $toUpper: { $substrCP: ['$name.first', 0, 1] } },
+          {
+            $substrCP: [
+              '$name.first',
+              1,
+              { $subtract: [{ $strLenCP: '$name.first' }, 1] },
+            ],
+          },
+          ' ',
+          { $toUpper: { $substrCP: ['$name.last', 0, 1] } },
+          {
+            $substrCP: [
+              '$name.last',
+              1,
+              { $subtract: [{ $strLenCP: '$name.first' }, 1] },
+            ],
+          },
+        ],
+      },
+
+      location: {
+        type: 'Point',
+        coordinates: [
+          { $toDouble: '$location.coordinates.longitude'},
+          { $toDouble: '$location.coordinates.latitude'},
+        ],
+      },
+    },
+  },
+]).pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+RESULTADO:
+
+
+
+
+
+
+
+
+
+
+
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        14.0142,
+                        18.2563
+                ]
+        },
+        "email" : "signe.rasmussen@example.com",
+        "fullName" : "Signe Rasmu"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------> CERTO...
+
+
+
+
+
+
+
+
+--> O PROFESSOR FEZ EXATAMENTE O QUE EU FIZ....
+
+
+
+
+
+
+
+
+
+--> PROFESSOR FALA DO FATO DE QUE 
+
+
+
+O NEGÓCIO FOI ARMAZENADO COMO UMA STRING, E QUE DEVEMOS A CONVERTER...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> professor aponta que 
+
+O MONGODB POSSUI UM OPERATOR DE '$convert' 
+
+
+
+que podemos utilizar..
+
+
+
+
+
+
+
+
+
+
+---> MAS EU USEI 
+
+
+
+
+'$toDouble'..
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> E O PROFESSOR VAI REALMENTE USAR '$convert'..
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NA VERDADE,
+
+
+O 
+
+
+
+'$toDouble'
+
+
+É UMA SHORTHAND PARA ESTA EXPRESSÃO:
+
+
+
+
+
+The $toDouble is a shorthand for the following $convert expression:
+
+{ $convert: { input: <expression>, to: "double" } }
+
+
+
+
+
+
+
+
+
+
+{ $convert: {input: "$location.coordinates.longitude", to: "double"}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> bem melhor usar essa shorthand...
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> 'input' -> VOCÊ DEFINE QUAL VALOR DEVE SER CONVERTIDO .... -----> 
+
+
+
+
+
+
+
+
+--> 'to' --> define o TYPE A QUE VOCÊ VAI QUERER CONVERTER ESSE VALOR ORIGINÁRIO..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NOS DOCS DO METHOD DE 'convert',
+
+DESCOBRIMOS QUE 
+
+
+o 
+
+
+field de 'to' 
+
+
+
+
+pode aceitar 
+
+
+
+
+
+
+IDENTIFIERS COMO:
+
+
+
+
+
+
+
+
+
+
+double 
+
+
+string 
+
+
+
+objectId 
+
+
+bool 
+
+
+date 
+
+
+
+int 
+
+
+
+long 
+
+
+
+decimal 
+
+
+
+
+
+
+
+
+
+
+
+
+--> SÃO ESSAS AS OPTIONS QUE VOCÊ TEM NO CONVERT,
+
+SÃO ESSES OS VALUES A QUE VOCê PODE CONVERTER..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> VOCÊ TAMBÉM PODE escrever 'onError' e 
+
+'onNull',
+
+
+valores que 
+
+SERÃO RETORNADOS SE ESSA OPERAÇÃO DE CONVERT FALHAR...
+
+
+
+
+
+
+
+
+
+-----> PROFESSOR, QUANTO A ESSES VALORES,
+
+
+
+armazena 
+
+
+
+
+'onError: 0.0, onNull: 0.0'... -------> ISSO SIGNIFICA QUE VAMOS RETORNAR APENAS '0' 
+
+SE FALHARMOS EM CONVERTER ESSA STRING...
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+{ $convert: { input: <expression>, to: "double", onError: 0.0, onNull: 0.0} }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... MAS NÃO INTERESSA QUAL FORMATO VOCê ESCOLHEU (o do shorthand ou o NORMAL, COMPRIDO),
+
+
+
+
+
+pq 
+
+
+AMBOS 
+
+LEVARÃO AO  RESULTADO QUE QUERÍAMOS,
+
+
+
+que é 
+
+este:
+
+
+
+
+
+{
+        "gender" : "female",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        14.0142,   ///isso será um number, significando que FOI UM SUCESSO A CONVERSAÕ.
+                        18.2563
+                ]
+        },
+        "email" : "signe.rasmussen@example.com",
+        "fullName" : "Signe Rasmu"
+}

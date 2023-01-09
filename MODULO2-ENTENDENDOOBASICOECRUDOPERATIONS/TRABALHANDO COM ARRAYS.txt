@@ -1,0 +1,81 @@
+
+
+
+
+
+
+VIMOS EMBEDDED DOCUMENTS, AGORA É HORA DE VER 'ARRAYS DE DATA'...
+
+
+
+
+
+
+
+
+
+
+
+-_> VOLTAMOS A COLLECTION DE PASSENGERS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> AGORA DIGAMOS QUE VAMOS QUERER RECORDAR OS HOBBIES DE NOSSOS PASSENGERS, TBM...
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR VAI UPDATAR APENAS 1 PASSENGER, o 'albert twostone',
+
+
+por meio do '_id'... --> 
+
+
+
+
+
+
+
+
+
+
+E VAI COLOCAR UM NOVO FIELD, 'hobbies',
+
+marcado com '[]'....
+
+
+
+
+um array... --> professor explica que poderíamos ter múltiplos objects,
+
+
+strings,
+
+arrays, qualquer coisa.... 
+
+
+
+
+
+
+
+
+
+certo... eu já sabia disso....

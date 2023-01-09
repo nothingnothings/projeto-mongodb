@@ -1,0 +1,1456 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+COM $SIZE e $ALL
+ 
+
+
+
+ fora do CAMINHO
+,
+
+
+
+
+É 
+
+
+HORA 
+
+
+
+DE 
+
+
+ESTUDARMOS O 
+
+
+
+ARRAY QUERY SELECTOR DE 
+
+
+
+"$elemMatch'....
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOLTAMOS à COLLECTION DE 
+
+
+
+'users'....
+
+
+
+
+
+
+
+
+
+
+--> TÍNHAMOS AUQELA USER DATA DE:
+
+
+
+
+
+
+
+
+> db.users.find({}).pretty()
+{
+        "_id" : ObjectId("62087cf32867f483687f8345"),
+        "name" : "Anna",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Yoga",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : 24
+}
+{
+        "_id" : ObjectId("62087cf32867f483687f8346"),
+        "name" : "CJ",
+        "hobbies" : [
+                {
+                        "title" : "Gym",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Swimming",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : 35
+}
+{
+        "_id" : ObjectId("62087cf32867f483687f8347"),
+        "name" : "Yan",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : null
+}
+{
+        "_id" : ObjectId("620880e92867f483687f8348"),
+        "name" : "TK",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3
+                },
+                {
+                        "title" : "Souji",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : null
+}
+{
+        "_id" : ObjectId("620881262867f483687f8349"),
+        "name" : "TKO",
+        "hobbies" : [
+                "1",
+                "2",
+                "3"
+        ],
+        "phone" : "800808080",
+        "age" : null
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+AGORA DIGAMOS 
+
+
+
+
+QUE QUEREMOS 
+
+
+ENCONTRAR TODOS OS USERS QUE 
+
+
+
+POSSUAM UM HOBBY DE 
+
+'sports' (embedded documetn com 'title: sports')
+,
+
+
+
+
+
+
+E COM UMA FREQUENCY DE '2'.... (nesse sport específico)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... VAMOS TENTAR FAZER ISSO....
+
+
+
+
+
+
+
+
+
+
+
+
+
+MAS COMO FICA NOSSA QUERY? 
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> PROFESSOR APONTA QUE PODERÍAMOS USAR A 
+
+
+
+
+KEYWORD DE '$and',
+
+
+
+
+teoricamente....
+
+
+
+
+
+
+
+
+
+
+
+
+-> AÍ 
+
+
+
+
+
+ESCREVERÍAMOS ASSIM:
+
+
+
+
+
+
+
+db.users.find(
+    {
+        $and: [
+            {
+
+            },
+
+            {
+
+            }
+        ]
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> EM AND TEREMOS VÁRIAS CONDITIONS,
+
+E A PRIMEIRA CONDITION SERÁ QUE 
+
+
+'PARA HOBBIES.TITLE,
+
+
+
+
+GOSTARÍAMOS DE ENCONTRAR "SPORTS" '....
+
+
+
+
+
+
+
+eX:
+
+
+
+
+
+
+
+
+
+
+
+db.users.find(
+    {
+        $and: [
+            {  
+                "hobbies.title": "Sports"
+            },
+
+            {
+
+            }
+        ]
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESSA É A PRIMEIRA CONDITIOn...
+
+
+
+
+
+
+
+
+
+
+
+--> JÁ A SEGUNDA CONDITION PODE SER QUE 
+
+
+
+"hobbies.frequency": 2 ...
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+
+db.users.find(
+    {
+        $and: [
+            {  
+                "hobbies.title": "Sports"
+            },
+
+            {
+                "hobbies.frequency": 2
+            }
+        ]
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+----------------> OK... ISSO FUNCIONARIA, NÃO?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+BEM, O PROFESSOR AINDA ADICIONA UM $gte 
+
+na frequency,
+
+para que ela seja IGUAL OU MAIOR DO QUE 2...
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+db.users.find(
+    {
+        $and: [
+            {  
+                "hobbies.title": "Sports"
+            },
+
+            {
+                "hobbies.frequency": {$gte: 2}
+            }
+        ]
+    }
+)
+
+
+
+
+--------------------------------------
+
+
+
+
+
+
+
+
+SE 
+
+
+ENFIARMOS ESSA 
+
+
+QUERY,
+
+
+
+
+
+VEREMOS 
+
+
+
+
+
+
+
+O DOCUMENT DE ANNA... -->  FIND VAI ME RETORNAR O DOCUMENT INTEIRO,
+
+PQ 
+
+O
+ 
+
+
+
+
+ FIND SEMPRE FAZ ISSO,
+
+ RETORNA O DOCUMENT INTEIRO, QUE CONTEM O EMBEDDED DOCUMENT....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> TAMBÉM ENCONTRAMOS MAX,
+
+ PQ ELE TBM TEM 'SPORTS',
+
+
+ DE FREQUENCY '3'....
+
+
+
+
+
+
+
+
+
+
+ --> MAS 
+
+ AGORA 
+
+ DIGAMOS QUE 
+
+
+ NOSSA QUERY É ALTERADA 1 PCO,
+
+
+ agora 
+
+ QUEREMOS ENCONTRAR 
+
+
+OS 
+
+DOCUMENTS COM ESSE HOBBY TENDO UMA '$gte' 
+
+
+
+
+
+de 3....
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+db.users.find(
+    {
+        $and: [
+            {  
+                "hobbies.title": "Sports"
+            },
+
+            {
+                "hobbies.frequency": {$gte: 3}
+            }
+        ]
+    }
+)
+
+
+
+
+
+--------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ok.... AÍ ENCONTRAREMOS UM PROBLEMÃO:
+
+
+
+
+
+
+
+
+
+
+
+
+PQ NÓS VAMOS GANHAR 'ANNA' de novo...
+
+
+
+
+
+
+
+
+
+
+E ANNA TEM ESTE FORMATO:
+
+
+
+
+
+
+
+
+
+> db.users.find({}).pretty()
+{
+        "_id" : ObjectId("62087cf32867f483687f8345"),
+        "name" : "Anna",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Yoga",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : 24
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> A FREQUENCY DE anna em 'sports' segue sendo 2,
+
+MAS AINDA ASSIM ELA APARECEU NO FIND...
+
+
+(e o requisito era de '3')...
+
+
+
+
+
+
+
+
+
+
+PQ ISSO?
+
+
+
+
+
+
+
+
+O QUE ESTÁ ACONTECENDO DE ERRADO, AQUI? 
+
+
+
+
+
+
+
+
+
+
+
+
+
+BEM, É PQ COM ESSA QUERY DE 
+
+
+
+'
+
+{
+    "hobbies.frequency": {$gte: 3}
+}
+
+
+',
+
+
+
+
+ESTAMOS DIZENDO 
+
+
+
+'ME ENCONTRE TODOS OS DOCUMENTS 
+
+
+EM QUE 
+
+'hobbies'
+
+
+
+
+HÁ UM DOCUMENT 
+
+
+
+COM 
+
+
+
+UMA FREQUENCY 
+
+
+GREATER OR EQUAL a 3'... ----------> E COMO EM ANNA TEMOS AQUELE 
+
+
+
+
+
+
+
+
+HOBBY DE 
+
+
+''YOGA',
+
+
+
+COM FREQUENCIA DE '3',
+
+
+
+
+
+
+
+
+
+É ISSO QUE ESTÁ TRAZENDO PROBLEMAS.... (pq isso está satisfazendo a query... quando você especifica essas conditions,
+
+
+
+como ''frequency'',
+
+essa frequency/propriedade
+
+NÃO PRECISA 
+
+SER OBRIGATORIAMENTE 
+
+
+
+DO 
+
+DOCUMENT/OBJECT   QUE POSSUI O TITLE DE 'sports'...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> ESTRUTURA DE ANNA:
+
+
+{
+        "_id" : ObjectId("62087cf32867f483687f8345"),
+        "name" : "Anna",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Yoga",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : 24
+}
+
+
+
+
+
+
+
+
+
+
+-> O YOGA TEM UMA FREQUENCIA DE '3',
+
+
+
+E ISSO SATISFAZ A SEGUNDA CONDITIOn....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ENTRETANTO, 
+
+É CLARO QUE NÃO É TÃO INCOMUM 
+
+
+
+
+TER CASOS EM QUE 
+
+VOCÊ VAI QUERER QUE 
+
+
+'ONE AND THE SAME ELEMENT' 
+
+
+
+VENHA 
+
+
+A 
+
+CUMPRIR SUAS CONDIÇÕES... --> E, PARA ISSO,
+
+
+
+
+VOCÊ TEM 
+
+O COMPLICADO 
+
+
+
+
+OPERATOR 
+
+DE 
+
+'$elemMatch'... --------> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+VAMOS PRECISAR REFORMULAR NOSSA QUERY...
+
+
+
+
+
+
+
+
+
+
+
+
+nossa query fracassada de 
+
+
+
+db.users.find(
+    {
+        $and: [
+            {"hobbies.title": "Sports"},
+            {"hobbies.frequency": {$gte: 3 }}
+        ]
+    }
+).pretty()
+
+
+
+
+
+
+DEVE SER SUBSTITUÍDA POR UMA QUERY__ que realmente faça o que queremos fazer....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------> EM VEZ DE USAR '$and',
+
+
+
+
+NÓS VAMOS ESPECIFICAR NOSSO ARRAY,
+
+
+
+
+
+
+
+de 'hobbies',
+ 
+
+
+
+
+
+
+
+
+
+
+
+TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+
+db.users.find(
+    {hobbies: }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AÍ,
+ 
+
+
+
+ COMO 'VALUE' 
+
+ desse array vamos passar um DOCUMENT/object,
+
+
+ em que 
+
+
+ VAMOS USAR 
+
+ '$elemMatch'....
+
+
+
+
+
+
+
+
+ ex:
+
+
+
+
+
+
+
+ 
+
+db.users.find(
+    {hobbies: {$elemMatch: } }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO, POR SUA VEZ,
+
+EXIGE 1 DOCUMENT COMO VALUE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+ 
+
+db.users.find(
+    {hobbies: {$elemMatch: {}} }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E AÍ, DENTRO DESSE NEGÓCIO,
+
+NÓS DESCREVMOS 
+
+
+
+
+
+
+COMO __ EXATAMENTE DEVEMOS 'MATCH OUR ELEMENT'... --->  
+
+
+
+
+
+
+
+
+
+BEM, SE HOBBIES FOSSE SÓ 1 ARRAY DE NUMBERS,
+
+
+
+você poderia imediatamente 
+
+começar 
+
+
+a 
+escrever 
+
+coisas como 
+
+
+
+''''
+
+
+
+
+$gt: 30, $lt: 50  ------------------>  MAS ISSO AÍ VOCÊ SÓ PODERIA ESCREVER SE 
+
+O 
+
+
+'hobbies'
+
+
+FOSSE 
+
+1 
+
+ARRAY DE NUMBERS,
+
+E NÃO DE 'embedded documents' (como nosso caso atual)...
+
+
+
+
+
+
+
+
+
+
+
+
+ex do que o professor havia falado:
+
+
+
+
+
+
+db.users.find(
+
+    {
+        hobbies: {
+            $elemMatch: {
+                $gt: 30, $lt: 50
+            }
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ENTRETANTO,
+
+AQUI NÓS __TEMOS__ EMBEDDED DOCUMENTS... --------> 
+
+
+
+
+
+
+
+
+
+
+
+É POR ISSO QUE 
+
+
+
+
+DENTRO DO DOCUMENT DE 
+
+
+'$elemMatch'
+
+
+
+você 
+
+
+TERÁ DE DESCREVER 
+
+'''WHAT YOU WILL LOOK FOR INSIDE OF THE EMBEDDED DOCUMENT''' --> no caso,
+
+
+
+
+PROFESSOR 
+
+VAI ESPECIFICAR QUE 
+
+
+
+
+'''TITLE DEVERÁ SER SPORTS,
+
+
+
+E FREQUENCY DEVERÁ SER $gte: 3.''''...
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+db.users.find(
+
+    {
+        hobbies: {
+            $elemMatch: {
+                    title: "Sports",
+                    frequency: {$gte: 3}
+            }
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> É ASSIM, PORTANTO,
+
+
+COMO PODEMOS 
+
+
+USAR 
+
+'$elemMatch'
+
+
+
+EM UM ARRAY COM EMBEDDED DOCUMENTS.... -------> NÓS ESSENCIALMENTE ''''DESCREVEMOS COMO 1 SINGLE DOCUMENT DEVERÁ SE PARECER''',
+
+
+
+
+PARA ENTÃO MATCHEAR NOSSA QUERY.... --> E SE 
+
+
+
+ 
+
+ O 
+
+
+
+
+ MONGODB ENCONTRAR 
+
+ PELO 
+
+ MENOS 1 EMBEDDED DOCUMENTS NESSE ARRAY DE 'hobbies'
+
+
+
+ COM 
+
+
+
+ ESSE TITLE DE 'Sports' 
+
+
+ E COM ESSA FREQUENCY DE '3' (ou maior)
+
+
+ (
+
+     os 2 critérios satisfeitos
+ ),
+
+
+
+
+
+
+
+
+O 
+
+
+
+
+MONGODB VAI INCLUIR ESSE DOCUMENT QUE CONTÉM 
+
+
+
+ESSE ARRAY DE HOBBIES, COM ESSE HOBBY ESPECÍFICO,
+
+
+
+NO RETURN DE FIND...
+
+
+
+
+
+
+
+
+
+
+
+
+--> 
+
+
+SE TIVERMOS MÚLTIPLOS 
+
+
+ELEMENTOS NESSE ARRAY 
+
+
+
+
+DE HOBBIES,
+
+ainda assim o document será 
+
+
+
+retornado,
+
+
+se apenas 1 desses hobbies tiver essa key de 'title: Sports' e a outra de 'frequency: 3'..

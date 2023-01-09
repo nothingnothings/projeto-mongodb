@@ -1,0 +1,1595 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> FALAMOS, ANTERIORMENTE, DE 'MULTI-KEY INDEXES'
+
+
+
+(
+    são indexes de ARRAYS
+)
+
+
+
+
+
+
+
+
+
+
+--> AINDA NESSE ASSUNTO,
+
+
+
+HÁ UM TIPO ESPECIAL DE 'MULTI-KEY INDEX'
+
+
+
+
+QUE 
+
+É 
+
+
+MT UTILIZADO,
+
+
+
+
+
+
+
+QUE SÃO 
+
+
+
+OS 
+
+
+
+'TEXT INDEXES'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> PROFESSOR CITA 1 TEXT DE EXEMPLO:
+
+
+
+
+
+
+
+
+
+
+
+
+This product is a must-buy for all fans of modern fiction!
+
+
+
+
+
+
+
+--> DIGAMOS QUE TEMOS ESSA STRING ARMAZENADA EM 1 FIELD DE ALGUM DOCUMENT.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE VOCÊ QUER FAZER 'SEARCH' por esse text,
+
+você tem 
+
+
+DUAS OPÇÕES:
+
+
+
+
+
+
+
+
+1) $regex --> é mal optimizado, não é bom
+
+
+
+
+
+
+--> não é uma boa maneira de procurar text, very low performance
+
+
+
+
+
+
+2) USO DE TEXT INDEX
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOCÊ PODE USAR UM TEXT INDEX -----> 1 TEXT INDEX É UM TIPO ESPECIAL DE INDEX,
+
+
+SUPORTADO PELO MONGODB,
+
+
+QUE VAI ESSENCIALMENTE TRANSFORMAR 
+
+ESSE 
+
+TEXT 
+EM 
+
+
+1 
+ARRAY 
+
+DE 
+
+SINGLE WORDS,
+
+
+
+E O ARMAZENAR COMO ISSO
+
+
+
+
+
+
+
+
+tipo 
+
+
+
+
+{
+    words: ["product", "must", "buy", "fans", "modern", "fiction"]
+}
+
+
+
+
+
+
+
+
+-------> ARRAY DE SINGLE WORDS ------> ELE SIMULA QUE VOCÊ ARMAZENOU DIRETAMENTE UM ARRAY ASSIM..
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS 1 COISA EXTRA QUE ELE FAZ, quando armazena essas words,
+
+para você,
+
+
+
+é 
+
+
+
+__ REMOVER___ TODAS AS 'STOP WORDS',
+
+
+
+E AÍ 
+
+
+
+'''STEMS''' todas as WORDS (ou seja, coloca ''''HASTES, CABOS''' em cada palavra)
+
+
+
+
+
+
+
+
+
+
+
+-> ELE FAZ ISSO PARA QUE VOCÊ TENHA UM ARRAY DE 'KEY WORDS',
+
+
+
+
+e para que 
+
+
+
+palavras como 'is' 'the' 'a' 
+
+
+
+
+
+SEJAM EXCLUÍDAS.. (pq tipicamente alguém não pesquisará por essas palavras)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, ESSE É O TEXT INDEX --> DEVEMOS DAR UMA OLHADA EM 1 TEXT INDEX DESSES
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> para isso,
+
+professor cria uma colleciton de products,
+
+
+e aí 
+
+
+insere vários documents 
+
+
+com 
+
+
+many
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+} db.products.insertMany([{title: "A Book", description: "This is an awesome book about a young artist."}, {title: "Red T-Shirt", descripition: "This T-Shirt is red and it's pretty awesome!"}])ption: "This is an awesome book about a young artist."}, {title: "Red T-Shirt", descripition:{
+        "acknowledged" : true,
+        "insertedIds" : [
+                ObjectId("620fbf391622c3230aa0fde5"),
+                ObjectId("620fbf391622c3230aa0fde6")
+        ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK AGORA VAMOS CRIAR E USAR UM TEXTINDEX,
+
+
+
+usá-lo no field de 
+
+
+'description'
+
+
+
+
+
+
+
+
+
+
+
+--> professor escreve 
+
+
+
+
+
+
+
+
+
+
+db.products.createIndex(
+    {
+        description: 
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS AGORA, IMPORTANTE!!!! --> VOCÊ NÃO VAI ESCREVER '1' 
+
+
+
+ou '-1' -------> VOCÊ PODERIA FAZER ISSO, SIM,
+
+
+MAS AÍ VOCÊ ACABARIA INDEXANDO ESSE FIELD COMO UM 
+
+
+'SINGLE-FIELD INDEX' (index comum).----------> AÍ, SE VOCÊ FIZESSE ISSO,
+
+
+
+
+
+
+
+
+
+
+CLARO QUE VOCÊ PODERIA FAZER SEARCH POR ''''EXATAMENTE ESSE TEXT''' (o text de "This is an awesome book about a young artist.")
+
+
+,
+
+
+PARA  ENTÃO UTILIZAR O INDEX -------------> MAS SE VOCÊ QUER 
+
+
+
+FAZER 
+
+
+
+
+
+SEARCH E PROCURAR POR 'INDIVIDUAL KEY-WORDS',
+
+
+
+
+VOCê __ É __ OBRIGADO___ A USAR OS 'TEXT INDEX' ------>  VOCÊ PRECISA DOS 'text-index'
+
+
+PARA 
+
+QUE 
+
+o 
+
+MONGODB CONSIGA 
+
+
+
+'SPLIT THIS UP'
+
+
+
+
+
+É POR ISSO QUE CRIAR UM 'TEXTINDEX' comum NÃO FUNCIONARÁ.
+
+
+
+
+
+
+
+
+
+
+
+--> certo MAS COMO FAZEMOS PARA CRIAR 1 TEXT INDEX?
+
+
+
+
+
+
+
+
+
+
+
+
+--> bem, não devemos escrever '1',
+
+
+
+e sim 
+
+
+"text",
+
+
+essa keyword é que FAZ COM QUE O INDEX SEJA CRIADO COMO UM 'TEXT INDEX'
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+db.persons4.createIndex(
+    {
+        description: "text"
+    }
+)
+
+
+
+
+
+
+
+
+
+------------>  PARA DROPPAR UM TEXT INDEX,
+
+ESCREVA ASSIM:
+
+db.collection.dropIndex("MyTextIndex")
+
+
+
+
+
+ex:
+
+
+
+
+> db.persons4.dropIndex("description_text")
+{ "nIndexesWas" : 6, "ok" : 1 }
+
+
+
+
+
+
+
+
+---------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------- ok 
+
+
+
+
+
+
+AÍ CRIAMOS UM TEXT INDEX,
+
+
+
+
+tipo assim
+
+
+
+
+
+
+
+
+
+
+db.products.createIndex(
+    {
+        "description": "text"
+    }
+)
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+> db.products.createIndex(
+     {
+         "description": "text"
+     }
+ )
+{
+        "numIndexesBefore" : 1,
+        "numIndexesAfter" : 2,
+        "createdCollectionAutomatically" : false,
+        "ok" : 1
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> ISSO VAI REMOVER TODAS AS 'STOP WORDS',
+
+
+
+e aí armazenar TODAS AS KEYWORDS EM 1 ARRAY,
+
+essencialmente
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+nossa data, agora, está assim:
+
+
+
+
+
+
+
+
+> db.products.find({}).pretty()
+{
+        "_id" : ObjectId("620fbf391622c3230aa0fde5"),
+        "title" : "A Book",
+        "description" : "This is an awesome book about a young artist."
+}
+{
+        "_id" : ObjectId("620fbf391622c3230aa0fde6"),
+        "title" : "Red T-Shirt",
+        "descripition" : "This T-Shirt is red and it's pretty awesome!"
+}
+
+
+
+
+
+
+
+
+-----------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ok, mas como podemos utilizar esse text index na nossa query?
+
+
+
+
+
+
+
+
+
+--> devemos USAR 
+
+
+
+
+
+
+O OPERATOR DE 
+
+
+'$text',
+
+
+
+
+
+
+
+
+E AÍ COLOCAR UM value de '{}' nessa key..
+
+
+
+
+
+
+
+tipo assim:
+
+
+
+
+
+
+
+
+
+db.products.find(
+    {
+        $text: {
+
+        }
+    }
+)
+
+
+
+
+
+
+
+
+-----------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+DENTRO DESSE DOCUMENT/OBJECT,
+
+
+
+colocamos um operator de '$search'.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA, NESSE MOMENTO, VOCê DEVE ESTAR SE PERGUNTANDO:
+
+
+
+
+''' PQ EU NÃO TENHO QUE ESPECIFICAR O FIELD QUE TENHO QUE PROCURAR, 
+
+NESSA FIND 
+
+QUERY??????????'''
+
+
+(pq 
+
+não tivemos que escrever 
+
+
+
+'db.products.find(
+    {
+        "description"
+    }
+)
+'
+
+
+)
+
+
+
+
+
+
+--> EM VEZ DISSO, APENAS DISSEMOS 
+
+''hey, quero procurar por um text nessa collection''' --> A RAZÃO PARA ISSO 
+
+
+
+
+É QUE ______________ APENAS 1 ÚNICO 'TEXT INDEX' 
+
+
+
+É PERMITIDO,
+
+
+POR COLLECTION ------> É PQ 'TEXT INDEXES'
+
+
+
+
+
+SÃO ____________PRETTY EXPENSIVE --> você pode imaginar isso,
+
+
+pq 
+
+
+
+SE VOCÊ 
+
+
+
+
+TIVER 
+
+UM MONTE DE TEXT,
+
+
+TEXT QUE PRECISA SER 'SPLIT UP',
+
+
+
+
+VOCÊ NÃO VAI QUERER TER QUE FAZER ISSO '10 VEZES POR COLLECTION' ( ou seja, em 10 diferentes fields),
+
+
+
+
+E É EXATAMENTE 
+
+
+
+POR ISSO 
+
+QUE 
+VOCÊ 
+
+
+
+
+
+
+SÓ TERÁ/TEM 
+
+1 TEXT-INDEX  
+
+
+
+em que suas queries vão 'look into'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NA VERDADE,
+
+VOCê  __________PODE___ fAZER MERGE DE MÚLTIPLOS FIELDS EM 1 ÚNICO TEXT INDEX,
+
+
+
+
+para então 
+
+
+fazer 'LOOK INTO ALL OF THEM' 
+
+
+automaticamente (isso às vezes será o que você vai querer fazer, quando você tiver mais de 1 field no seu document com longos text)
+
+
+
+
+
+
+
+
+
+
+------> MAS 
+
+
+O QUE INTERESSA É QUE 
+
+
+
+
+
+SUA QUERY REALMENTE SÓ PODE SER FEITA ASSIM:
+
+
+
+
+
+
+db.products.find(
+    {
+        $text: {
+            $search
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+------------> OU SEJA,
+
+NÃO HÁ NECESSIDADE 
+
+DE 
+
+
+
+escrever 
+
+
+db.products.find(
+    {
+        description:
+    }
+)
+
+ou
+
+
+db.products.find(
+    {
+        details:
+    }
+),
+
+
+
+
+
+
+
+
+
+
+ISSO REALMENTE NÃO EXISTE
+
+
+
+
+
+
+
+
+
+
+
+-> OK NESSE OPERATOR DE 'search',
+
+
+NÓS SIMPLESMENTE INPUTTAMOS 
+
+AS WORDS QUE QUEREMOS FAZER 'LOOK FOR'
+
+
+
+
+
+
+
+
+
+
+--> COLOCAMOS 'awesome', COMO EXEMPLO
+
+
+
+
+
+
+
+
+
+
+--> OUTRO DETALHE: o CASING, quando escrito na sua query,
+
+
+NÃO FAZ DIFERENÇA (tudo é armazenado como lower case)..
+
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+db.products.find(
+    {
+        $text: {
+            $search: "awesome"
+        }
+    }
+)
+
+
+
+
+db.products.find(
+    {
+        $text: {
+            $search: "red"
+        }
+    }
+)
+
+
+
+
+
+
+
+------> ok, mas isso não encontrou coisa alguma
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> quando coloquei 'awesome',
+
+encontrei 
+
+UMA ÚNICA ENTRY. (
+
+
+
+    a outra não foi encontrada
+)
+
+
+
+
+
+
+
+
+
+
+> db.products.find({$text: {$search: "awesome"}})
+{ "_id" : ObjectId("620fbf391622c3230aa0fde5"), "title" : "A Book", "description" : "This is an awesome book about a young artist." }
+
+
+
+
+
+
+
+
+--> há um erro, aqui,
+
+pq 
+
+eu tenho duas entries com 'awesome'.
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> pq isso?
+
+
+eu não sei
+
+
+
+
+
+
+
+
+--> SOU MT BURRO --> a description ficou como 'descripition'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK.. DEU CERTTO.
+
+
+
+
+> db.products.find({$text: {$search: "awesome"}})
+{ "_id" : ObjectId("620fcc701622c3230aa0fde7"), "title" : "A Book", "description" : "This is an awesome book about a young artist." }
+{ "_id" : ObjectId("620fcccc1622c3230aa0fde9"), "title" : "Red T-Shirt", "description" : "This T-Shirt is red and it's pretty awesome!" }      
+> db.products.find({$text: {$search: "red"}})
+{ "_id" : ObjectId("620fcccc1622c3230aa0fde9"), "title" : "Red T-Shirt", "description" : "This T-Shirt is red and it's pretty awesome!" }
+
+
+
+
+
+
+
+
+
+
+
+
+--> TAMBÉM COM ISSO:
+
+
+
+db.products.find(
+    {
+        $text: {
+            $search: 'book'
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+-_> ISSO RETORNA SÓ O 
+
+
+{ "_id" : ObjectId("620fcc701622c3230aa0fde7"), "title" : "A Book", "description" : "This is an awesome book about a young artist." }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK, MAS E SE AVACALHARMOS UM POUCO
+
+
+
+
+
+
+
+escrevemos 
+
+
+
+
+
+
+
+
+
+
+db.products.find(
+    {
+        $text: {
+            $search: "red book"
+        }
+    }
+).pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, AÍ EU _ VOU ACABAR__ ENCONTRANDO AMBOS OS DOCUMENTS
+
+
+
+
+
+
+
+
+> db.products.find(
+     {
+         $text: {
+             $search: "red book"
+         }
+     }
+ ).pretty()
+{
+        "_id" : ObjectId("620fcc701622c3230aa0fde7"),
+        "title" : "A Book",
+        "description" : "This is an awesome book about a young artist."
+}
+{
+        "_id" : ObjectId("620fcccc1622c3230aa0fde9"),
+        "title" : "Red T-Shirt",
+        "description" : "This T-Shirt is red and it's pretty awesome!"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> ISSO ACONTECE/ACONTECEU PQ 
+
+
+
+O MONGODB, COM ESSE FIND,
+
+NÃO VAI PROCURAR POR 
+
+
+1 
+
+
+DOCUMENT QUE TENHA 
+
+
+
+'red book' 
+tudo junto,
+
+e sim 
+
+
+
+VAI PROCURAR POR 
+
+
+
+DOCUMENTS QUE TENHAM __ OU__ 'red' __ OU__ 'book'
+
+
+
+(
+
+
+    e ambos documents possuem isso
+
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> MAS É CLARO QUE VOCê _________PODE__ fAZER FIND POR 'PHRASES' (2 palavras+) 
+
+
+
+
+
+
+
+
+-> VOCÊ FAZ ISSO COM __ O WRAP__ 
+
+
+
+
+
+
+
+
+
+
+
+DA SUA PHRASE COM 
+
+
+
+UMA SINTAXE ESPECIAL (meio regular expression),
+
+
+
+
+QUE É 
+
+
+O  __ WRAP__ DE SUA 
+
+
+
+
+
+WORD com 
+\"      \"
+
+
+
+
+
+
+
+
+
+
+TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+"\"red book\""
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+db.products.find(
+     {
+         $text: {
+             $search: "\"red book\""
+         }
+     }
+).pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> NÃO ENCONTRAREMOS COISA ALGUMA NA NOSSA DATABASE,
+
+JUSTAMENTE PQ 
+
+NÃO TEMOS NENHUMA STRING em 'description',
+
+em document algum,
+
+que 
+
+
+
+
+TENHA 'red book'..
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS 'AWESOME BOOK' funcionará, no entanto, pq temos isso na nossa collection:
+
+
+
+
+ db.products.find(
+      {
+          $text: {
+              $search: "\"awesome book\""
+          }
+      }
+ ).pretty()
+
+
+
+
+
+
+
+
+
+ -------------------------------------
+
+
+
+
+
+
+
+ENCONTRAREMOS ESTE RESULTADO:
+
+
+
+>  db.products.find(
+...       {
+...           $text: {
+...               $search: "\"awesome book\""
+...           }
+...       }
+...  ).pretty()
+{
+        "_id" : ObjectId("620fcc701622c3230aa0fde7"),
+        "title" : "A Book",
+        "description" : "This is an awesome book about a young artist."
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E ISSO É MT FORTE,
+
+E BEM MAIS RÁPIDO E EFICIENTE DO QUE REGULAR EXPRESSIONS.... --> ESSA É A ''WAY TO GO'' quando você quer procurar 
+
+
+key words em texts, nos seus fields...

@@ -1,0 +1,1253 @@
+
+
+
+
+
+
+
+
+
+
+
+BEM, VOCÊ TAMBÉM NÃO ESTÁ LIMITADO AO QUERY DE 'TOPMOST' LEVEL FIELDS...
+
+
+
+
+
+
+
+
+
+
+
+-> SE EXAMINAMOS A ESTRUTURA DE NOSSA COLLECTION,
+
+
+PERCEBEMOS QUE NOS NOSSOS DOCUMENTS HÁ UM MONTE DE EMBEDDED DOCUMENTS....
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+
+{
+        "_id" : ObjectId("62052b52d9ec2278a3f59325"),
+        "id" : 1,
+        "url" : "http://www.tvmaze.com/shows/1/under-the-dome",
+        "name" : "Under the Dome",
+        "type" : "Scripted",
+        "language" : "English",
+        "genres" : [
+                "Drama",
+                "Science-Fiction",
+                "Thriller"
+        ],
+        "status" : "Ended",
+        "runtime" : 60,
+        "premiered" : "2013-06-24",
+        "officialSite" : "http://www.cbs.com/shows/under-the-dome/",
+        "schedule" : {
+                "time" : "22:00",
+                "days" : [
+                        "Thursday"
+                ]
+        },
+        "rating" : {
+                "average" : 6.5
+        },
+        "weight" : 91,
+        "network" : {
+                "id" : 2,
+                "name" : "CBS",
+                "country" : {
+                        "name" : "United States",
+                        "code" : "US",
+                        "timezone" : "America/New_York"
+                }
+        },
+        "webChannel" : null,
+        "externals" : {
+                "tvrage" : 25988,
+                "thetvdb" : 264492,
+                "imdb" : "tt1553656"
+        },
+        "image" : {
+                "medium" : "http://static.tvmaze.com/uploads/images/medium_portrait/0/1.jpg",
+                "original" : "http://static.tvmaze.com/uploads/images/original_untouched/0/1.jpg"
+        },
+        "summary" : "<p><b>Under the Dome</b> is the story of a small town that is suddenly and inexplicably sealed off from the rest of the world by an enormous transparent dome. The town's inhabitants must deal with surviving the post-apocalyptic conditions while searching for answers about the dome, where it came from and if and when it will go away.</p>",
+        "updated" : 1529612668,
+        "_links" : {
+                "self" : {
+                        "href" : "http://api.tvmaze.com/shows/1"
+                },
+                "previousepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/185054"
+                }
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------->
+
+
+
+
+
+
+
+
+O PROFESSOR EXPLICA UQE __ PODEMOS FAZER 'QUERY'
+
+
+DESSES 'EMBEDDED FIELDS'
+
+
+___tAMBÉM__...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E PARA FAZER O QUERY DESSES EMBEDDED FIELDS,
+
+
+PROVAVELMENTE USAREMOS '$in',
+
+esse operator ESPECIAL....
+
+
+
+
+
+
+
+
+
+
+
+
+PROFESSOR JÁ HAVIA USADO ESSA SINTAXE..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ele escreve, primeiramente, isto:
+
+
+
+
+
+
+
+
+
+
+
+db.movies.find() 
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, AGORA DIGAMOS QUE QUEREMOS 
+PROCURAR POR TODOS 
+
+
+OS 
+
+
+
+
+DOCUMENTS EM QUE 
+
+
+
+
+'average',
+
+dentro da propriedade 'rating',
+
+
+
+
+É IGUAL A '7'...
+
+
+
+
+
+
+
+
+
+ex:
+ 
+
+
+
+
+
+
+
+db.movies.find(
+    {
+       
+    }
+) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO, BASTA ESPECIFICARMOS O 'PATH' AO __ FIELD__ EM QUE ESTAMOS INTERESSADOS (tipo 'rating.average')...
+
+
+
+
+
+
+--> você deve usar " " AO REDOR DO FIELD 
+
+
+
+QUE SEGURA O EMBEDDED DOCUMENT...
+
+
+
+EX:
+
+
+
+
+
+db.movies.find(
+    {
+       
+       "rating.average": 7.0
+    }
+) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO VAI FAZER COM QUE TODAS AS AVERAGES DE '7.0'
+
+
+
+
+
+NOS DOCUMENTS FAÇAM COM QUE ESSES DOCUMENTS SEJAM RETURNED.... 
+
+
+
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR AVACALHA UM POUCO, E USA '$gt' com isso:
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.movies.find(
+    {
+       
+       "rating.average": {$gt: 7.0}
+    }
+) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> VOCÊ PODE USAR TANTO '7.0' como '7',
+
+OS 2 DÃO NA MESMA....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... ISSO FUNCIONARÁ... 
+
+
+
+
+
+
+
+ESSA É UMA EASY WAY DE QUERIAR EMBEDDED DOCUMENTS... -------> E ESSE EMBEDDING DO PATH PODE SER 'AS DEEP AS YOU NEED IT TO BE'.... (dig into that embedded documenT) --> e aí você pode usar 
+
+
+
+QUAISQUER OPERATORS COM ESSE EMBEDDED FIELD,
+
+COMO VIMOS ALI EM CIMA....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E VOCÊ ___ TAMBÉM PODE QUERIAR 'arrays'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> COMO EXEMPLO DISSO,
+
+TEMOS O 
+
+
+
+
+
+
+ARRAY DE 'genres'
+
+
+em nossos document:
+
+
+ 
+
+    "genres" : [
+                "Drama",
+                "Science-Fiction",
+                "Thriller"
+        ],
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------->  
+
+
+AGORA DIGAMOS QUE QUEREMOS ENCONTRAR TODOS OS ITEMS QUE 
+
+POSSUEM O GENRE DE 'drama'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA FAZER ISSO FUNCIONAR, VAMOS PRECISAR USAR UMA 
+
+QUERY DE 'find',
+
+MAIS UMA VEZ...
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+
+
+db.movies.find(
+    {
+
+    }
+)
+
+
+
+
+
+
+
+
+
+--> MAS A QUERY EXPRESSION SERÁ DIFERENTE....
+
+
+
+
+
+
+
+
+
+
+
+-> TENHA EM MENTE:
+
+
+ESTAMOS PROCURNADO PELO FIELD DE 'genres'... --> e esse NÃO É UM EMBEDDED DOCUMENT, E SIM É UM ARRAY... ( se fosse um array em 1 embedded document, a única diferneça seria que você teria de usar a DOT NOTATIOn para o alcançar, nesse embedded document)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... É UM TOPLEVEL FIELD,
+ 
+ DE NOME 'GENRES'...
+
+
+
+
+
+
+
+
+
+
+ escrevemos:
+
+
+ db.movies.find({genres: "Drama"}).pretty(); 
+
+
+
+
+
+
+
+
+
+ MAS ISSO NÃO FUNCIONARÁ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ db.movies.find(
+         {
+                 "schedule.days": "Thursday"
+         }
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ db.movies.find(
+         {
+                 "rating.average": {$lte: 6.5}
+         }
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+ db.movies.find(
+         {
+                 "network.country.name": "United States"
+         }
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ----> ok, isso dá certo....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ OK... MAS COMO PODEMOS FAZER QUERIES COM BASE EM '''ELEMENTOS DENTRO DE ARRAYS'''? 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ---> vamos precisar do operator de '$in',
+  
+  eu acho...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  db.movies.find(
+          {
+                  "genres": "Drama" 
+          }
+  )
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> isso SURPREENDENTEMENTE __ FUNCIONARÁ_.... --> VAMOS 
+
+  TER RETORNADO TODOS OS ARRAYS COM 
+
+
+
+  'Drama' --------> OU SEJA,
+
+
+
+
+
+
+
+
+  O OPERADOR DE 'EQUALITY' É MALANDRO.... ---> 
+
+
+
+
+
+  quando vocÊ faz check de um field que é um ARRAY,
+
+
+
+
+  se ele retornar 'true',
+
+
+  isso 
+
+
+  não quer dizer que 
+
+
+
+
+  NESSE ARRAY SÓ EXISTIRÁ ESSE ÚNICO ITEM QUE VOCê CHECOU,
+
+  e sim 
+
+
+  que 
+
+
+
+  EXISTE ESSE ITEM, DENTRO DE VÁRIOS, NAQUELE ARRAY...
+
+
+
+
+
+
+
+
+
+
+
+  exemplo:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  {
+        "_id" : ObjectId("62052b52d9ec2278a3f5933f"),
+        "id" : 5,
+        "url" : "http://www.tvmaze.com/shows/5/true-detective",
+        "name" : "True Detective",
+        "type" : "Scripted",
+        "language" : "English",
+        "genres" : [
+                "Drama",
+                "Crime",
+                "Thriller"
+        ],
+        "status" : "Running",
+        "runtime" : 60,
+        "premiered" : "2014-01-12",
+        "officialSite" : "http://www.hbo.com/true-detective",
+        "schedule" : {
+                "time" : "21:00",
+                "days" : [
+                        "Sunday"
+                ]
+        },
+        "rating" : {
+                "average" : 8.3
+        },
+        "weight" : 99,
+        "network" : {
+                "id" : 8,
+                "name" : "HBO",
+                "country" : {
+                        "name" : "United States",
+                        "code" : "US",
+                        "timezone" : "America/New_York"
+                }
+        },
+        "webChannel" : null,
+        "externals" : {
+                "tvrage" : 31369,
+                "thetvdb" : 270633,
+                "imdb" : "tt2356777"
+        },
+        "image" : {
+                "medium" : "http://static.tvmaze.com/uploads/images/medium_portrait/0/61.jpg",
+                "original" : "http://static.tvmaze.com/uploads/images/original_untouched/0/61.jpg"
+        },
+        "summary" : "<p>Touch darkness and darkness touches you back. <b>True Detective</b> centers on troubled cops and the investigations that drive them to the edge. Each season features a new cast and a new case.</p>",
+        "updated" : 1536053668,
+        "_links" : {
+                "self" : {
+                        "href" : "http://api.tvmaze.com/shows/5"
+                },
+                "previousepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/182325"
+                },
+                "nextepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/1519992"
+                }
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> O OBJECT TEM ESTA ESTRUTURA, no field de 'genres':
+
+
+
+
+
+
+
+
+        "genres" : [
+                "Drama",
+                "Crime",
+                "Thriller"
+        ],
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+aí, se checamos por 
+
+'Crime',
+
+tipo assim:
+
+
+
+
+
+
+
+
+
+
+
+
+db.movies.find(
+        {
+                genres: "Crime"
+        }
+)
+
+
+
+
+
+
+
+
+
+
+--> ISSO VAI CERTAMENTE RETORNAR ESSE DOCUMENT, PQ 
+
+
+
+ELE TEM 'CRime'
+
+
+dentro dos genres....
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> MAS SE VOCÊ QUER 'EXACT EQUALITY' 
+
+
+nesse seu check do array,
+
+
+
+VOCê PODE CHECAR POR ISSO,
+
+TAMBÉM...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE VOCÊ QUER 'EXACT EQUALITY',
+
+
+
+vocÊ vai lá e simplesmente modifica sua query,
+
+
+
+para que fique 
+
+
+
+como 
+
+
+
+
+
+
+
+  db.movies.find(
+          {
+                  "genres": ["Drama"]
+          }
+  )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> OK, COM ISSO,
+
+
+
+ESTAREMOS SINALIZANDO AO MONGODB QUE QUEREMOS UM ARRAY DE 'genres'
+
+QUE TENHA EXATAMENTE 1 ÚNICO VALOR,
+
+QUE SERÁ ESSE 'Drama'....
+
+
+
+
+
+
+
+
+(É ASSIM QUE ESPECIFICAMOS ARRAYS EXATOS, NAS FINDS DO MONGODB)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... ISSO FAZ SENTIDO....
+
+
+
+
+
+
+
+
+
+É IMPORTANTE ENTENDER ISSO....
+
+
+
+
+
+
+
+
+
+VAMOS VER UNS EXEMPLOS..... 
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+{
+        "_id" : ObjectId("62052b52d9ec2278a3f5933b"),
+        "id" : 11,
+        "url" : "http://www.tvmaze.com/shows/11/gotham",
+        "name" : "Gotham",
+        "type" : "Scripted",
+        "language" : "English",
+        "genres" : [
+                "Drama",
+                "Action",
+                "Crime"
+        ],
+        "status" : "Running",
+        "runtime" : 60,
+        "premiered" : "2014-09-22",
+        "officialSite" : "http://www.fox.com/gotham",
+        "schedule" : {
+                "time" : "20:00",
+                "days" : [
+                        "Thursday"
+                ]
+        },
+        "rating" : {
+                "average" : 7.8
+        },
+        "weight" : 99,
+        "network" : {
+                "id" : 4,
+                "name" : "FOX",
+                "country" : {
+                        "name" : "United States",
+                        "code" : "US",
+                        "timezone" : "America/New_York"
+                }
+        },
+        "webChannel" : null,
+        "externals" : {
+                "tvrage" : 38049,
+                "thetvdb" : 274431,
+                "imdb" : "tt3749900"
+        },
+        "image" : {
+                "medium" : "http://static.tvmaze.com/uploads/images/medium_portrait/166/416219.jpg",
+                "original" : "http://static.tvmaze.com/uploads/images/original_untouched/166/416219.jpg"
+        },
+        "summary" : "<p>The good. The evil. The beginning.</p><p>Everyone knows the name Commissioner Gordon. He is one of the crime world's greatest foes, a man whose reputation is synonymous with law and order. But what is known of Gordon's story and his rise from rookie detective to Police 
+Commissioner? What did it take to navigate the multiple layers of corruption that secretly ruled Gotham City, the spawning ground of the world's most iconic villains? And what circumstances created them – the larger-than-life personas who would become Catwoman, The Penguin, The Riddler, Two-Face and The Joker?</p><p><b>Gotham </b>is an origin story of the great DC Comics Super-Villains and vigilantes, revealing an entirely new chapter that has never been told. It follows one cop's rise through a dangerously corrupt city teetering between good and evil, and chronicles the birth of one of the most popular super heroes of our time.</p>",
+        "updated" : 1536171775,
+        "_links" : {
+                "self" : {
+                        "href" : "http://api.tvmaze.com/shows/11"
+                },
+                "previousepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/1422374"
+                },
+                "nextepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/1473788"
+                }
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.movies.find(
+        {
+                "schedule.days": ["Thursday"]
+        }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO VAI ENCONTRAR ESSE DOCUMENT DE 'GOTHAM',
+
+
+pq 
+
+
+
+
+
+usamos TANTO O NESTING QUANTO A EQUALITY POR ARRAYS ESPECÍFICOS ('[]').... ----> claro que se você quer que a query encontre só 
+
+
+
+
+
+
+
+DOCUMETNS QUE __POSSUEM___ 'thursday'
+
+como 
+
+
+elemento no array,
+
+dentre outros,
+
+vocÊ deve escrever assim:
+
+
+
+
+
+
+db.movies.find(
+        {
+                "schedule.days": "Thursday"
+        }
+)
+
+
+

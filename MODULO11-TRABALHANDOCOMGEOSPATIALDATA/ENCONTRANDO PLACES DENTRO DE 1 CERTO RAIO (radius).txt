@@ -1,0 +1,1100 @@
+
+
+
+
+
+
+
+
+
+-----> PARA CONCLUIR AS GEOSPATIAL QUERIES QUE PODEMOS RODAR,
+
+
+
+
+DEVEMOS 
+
+
+
+
+ENCONTRAR 
+
+
+
+
+'''TODOS OS PLACES 
+
+EM 
+
+1 
+CERTO RAIO, AO REDOR DO USER''''...
+
+
+
+
+
+
+
+
+
+
+
+
+-> NÓS JÁ FIZEMOS ISSO ANTES,
+
+com o comando de 
+
+
+'$near' (
+
+
+    que diz, por meio de '$minDistance' e '$maxDistance',
+
+
+
+    se um 
+
+
+
+
+    PLACE ESTÁ PERTO OU NÃO....
+)
+
+
+
+
+
+
+
+
+
+
+--> O COMANDO NEAR TAMBÉM FAZ 'SORT'
+
+dos reuslts,
+
+
+
+
+ESSA É A DIFERENÇA 
+
+IMPORTANTE 
+
+
+
+
+
+ENTRE ELE E O OPERATOR QUE VAMOS USAR AGORA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA O PROFESSOR QUER 
+NOS DAR 
+
+OUTRO operator,
+
+
+
+
+
+
+
+operator que RETRIEVA O DOCUMENT SE ELE ESTIVER DENTRO 
+
+
+
+
+
+
+DE CERTA 'RANGE' relativa ao user.....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> PROFESSOR 
+
+
+
+
+CLICA 
+
+
+
+EM 
+
+
+
+
+1 
+
+PONTO DO GOLDEN GATE PARK,
+
+
+
+
+
+
+
+
+
+
+AÍ ELE CHECA POR UM CERTO 'RAIO' 
+
+
+
+
+
+
+
+se estendendo 
+
+
+por esse user,
+
+em todas as direçoes...
+
+
+
+
+
+
+
+
+
+
+
+
+A COLLECTION DE places 
+
+
+
+
+tem os 
+
+
+
+lugares que escrevemos, antes...
+
+
+
+
+
+(com 'stones', 'academy', 'flowers', etC)...
+
+
+
+
+
+
+
+
+
+
+
+
+--> AÍ,
+
+
+DENTRO 
+
+
+DESSA COLLECTION,
+
+
+
+VAMOS QUERER ENCONTRAR 
+
+
+
+TODOS OS ELEMENTS (sem sorting ) QUE 
+
+
+
+ESTEJAM
+
+
+
+EM 
+
+
+1 CERTO RAIO/DISTÂNCIA radial  DO USER...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O FIELD 'location' é o field que 
+
+ARMAZENA AS COORDINATES,
+
+
+
+
+
+E QUE TEM O NOSSO 'GEOJSON OBJECT/data'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ok.. ---> professor 
+
+
+
+vai 
+
+
+
+ENTÃO USAR O operator de 
+
+'$geoWithin'... --> 
+
+
+
+
+
+
+
+
+
+
+AÍ ELE NOS PERGUNTA:
+
+
+
+
+
+
+''''PQ geoWithin',
+
+
+
+e não 
+
+
+
+'geoIntersects???'''
+
+
+
+
+
+
+
+
+
+
+
+
+----> É PQ AGORA VAMOS QUERER ENCONTRAR '''TODOS OS PLACES QUE 
+
+
+
+EXISTEM 
+
+DENTRO 
+DESSA ÁREA QUE VAMOS ESPECIFICAR AGORA,
+
+NESSA QUERY'...
+
+
+
+(
+
+    antes, com o 'geoWithin',
+
+
+    tinhamos o oposto: TÍNHAMOS 
+
+
+
+
+    UM 'POINT' NA QUERY, E AÍ 
+
+
+    QUERÍAMOS ENCONTRAR A ÁREA/ÁREAS QUE 
+
+
+    ENVOLVIAM ESSE POINT...
+)
+
+
+
+
+
+
+
+
+
+
+------>  OK... GEOWITHIN _ NORMALMENTE
+ 
+
+
+ ACEITA/EXIGE 1 OPERATOR DE "$geometry',
+
+
+
+
+ QUE DESCREVE ___ O 'GEOSJON OBJECT' (que, nesse caso, será de type 'polygon', um polygon, uma área, geralmente)..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS HÁ OUTRO OPERATOR ESPECIAL QUE VOCê PODE USAR NO MONGODB,
+
+QUE É 
+
+o 
+
+
+
+
+
+
+
+
+'$centerSphere' 
+
+
+
+
+
+
+
+
+
+
+
+-------> ESSE É UM OPERATOR ÚTIL,
+
+QUE 
+
+TE DEIXA 
+
+
+RAPIDAMENTE 
+
+
+
+
+
+FAZER/GETTAR UM 'CIRCLE'
+
+
+AO REDOR DE UM CERTO PONTO.... ---------> OU SEJA,
+
+ELE 
+
+USA 
+UM 
+
+RADIUS, E UM CENTER,
+
+
+E AÍ 
+
+
+TE DÁ 
+
+UM 
+
+
+CIRCLE AO REDOR DESSE CENTER...
+
+
+
+
+
+
+
+
+
+
+--> ELE EXIGE 1 ARRAY COMO VALUE,
+
+
+E 
+
+
+
+ESSE ARRAY 
+
+
+
+
+TEM 2 VALUES/elements...
+
+
+
+
+
+
+
+
+
+--> O PRIMEIRO ELEMENTO É UM OUTRO ARRAY,
+
+QUE VAI SEGURAR SUAS 'COORDINATES' (do user)..
+.
+
+
+
+
+
+
+-> É LONGITUDE E LATITUDE,
+
+
+COMO ANTES....
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+37.77002825057193, -122.48728131096236
+
+
+
+
+
+db.find(
+    {
+        location: {
+            $geoWithin: {
+                $centerSphere: [
+                    [-122.48728131096236, 37.77002825057193]
+                ]
+            }
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+-----> já o SEGUNDO ELEMENTO NESSE ARRAY PROVAVELMENTE SERÁ O TAMANHO DO RAIO, EM METROS....
+
+
+
+
+
+
+
+
+
+--> É O RADIUS, EM METROS... --> ESSE 
+
+
+RADIUS PRECISA SER TRANSFORMADO, MANUALMENTE,
+
+
+DE 
+
+
+METROS/MILES ___ PARA__ 'RADIANS'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOCÊ PODE TRABALHAR COM RADIANS OU COM KILOMETERS...
+
+
+
+
+
+
+
+
+--> VAMOS TRABALHAR COM KM...
+
+
+
+
+
+
+
+
+
+
+---> AÍ VAMOS QUERER PROCURAR 
+
+
+
+EM 1 RADIUS 
+
+
+DE 
+
+
+
+
+
+
+
+
+1 KM.. -------> 
+
+
+
+
+
+
+
+
+
+
+PARA FAZER ISSO,
+
+
+
+
+professor 
+
+
+
+
+divide 
+
+
+1km
+
+
+PELO  
+
+
+
+RAIO EQUATORIAL DA TERRA,
+
+
+
+
+QUE É 
+
+6, 378.1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OU SEJA,
+
+
+
+VAI ESCREVER UMA EXPRESSÃO ASSIM:
+
+
+
+
+
+
+
+
+
+1 / 6378.1 
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+db.places.find(
+    {
+        location: {
+            $geoWithin: {
+                $centerSphere: [
+                    [-122.48728131096236, 37.77002825057193], 1 / 6378.1
+                ]
+            }
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AUMENTE O NÚMERO '1' para outros valores,
+
+
+SE VOCÊ QUER AUMENTAR O RAIO..
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS COM ESSA QUERY, NÃO ENCONTREI NADA...
+
+
+
+
+
+
+
+
+
+
+
+
+--> EU AINDA NÃO HAVIA SELECIONADO MINHA DATABASE... AGORA FUNCIONOU.
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+
+>           db.places.find(
+...                       {
+...                           location: {
+...                               $geoWithin: {
+...                                   $centerSphere: [
+...                                       [-122.48728131096236, 37.77002825057193], 1000 / 6378.1  
+...                                   ]
+...                               }
+...                           }
+...                       }
+...                   )
+{ "_id" : ObjectId("62125201279681a0f040fbe7"), "name" : "Flowers", "location" : { "type" : "Point", "coordinates" : [ -122.49182600352387, 37.770412230737094 ] } }
+{ "_id" : ObjectId("62125201279681a0f040fbe8"), "name" : "Stones", "location" : { "type" : "Point", "coordinates" : [ -122.48956963050625, 37.76978923166615 ] } }
+{ "_id" : ObjectId("6211d26f4bf425539a521037"), "name" : "California Academy of Sciences", "location" : { "type" : "Point", "coordinates" : [ 
+-122.4757474, 37.7689999 ] } }
+>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> OK, ISSO FUNCIONOU....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+professor quer updatar uma das nossas coordinates...
+
+
+
+
+
+
+
+
+
+
+--> vai querer updatar a 
+
+de 
+
+
+
+'academy'...
+
+
+
+
+
+
+
+
+
+
+ele escreve assim:
+
+
+
+
+
+
+
+(
+
+    ESTA QUERY NÃO FUNCIONA:
+
+
+
+
+db.places.updateOne(
+    {
+        _id: ObjectId("6211d26f4bf425539a521037")
+    },
+    {
+        $pop: { "location.coordinates": 1},
+        $push: {"location.coordinates": -122.4757475}
+    },
+)
+
+
+
+
+DÁ O ERRO DE 
+
+
+''
+errmsg" : "Updating the path 'location.coordinates' would create a conflict at 'location.coordinates'",'''
+
+
+
+
+
+
+
+--> uso de '$pop' e '$push' em 1 MESMO FIELD/KEY resulta nesse erro...
+
+)
+
+
+
+-----------------------------------
+
+
+
+
+
+
+
+
+
+
+
+VOU  VER O VÍDEO DO PROFESSOR...
+
+
+
+
+
+
+
+
+
+
+
+---> ah, ele é malandro.... --> ele usou 
+
+
+
+'$set',
+
+
+
+COISA BEM SIMPLES... --> não escreveu uma query complexa... que cara linguiça....
+
+
+
+
+
+
+
+
+
+
+
+
+------> certo, ele fez o caminho bem mais fácil...
+
+
+
+
+
+
+
+
+
+--->ok, acabamos este módulo....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> É ASSIM QUE PODEMOS RODAR QUERIES, GEOQUERIES...
+
+
+
+
+
+
+
+
+
+
+
+
+$near vs $geoWithin -->  
+
+
+
+
+
+O NEAR RETORNA OS 'PLACES' EM UMA SORTED ORDER,
+
+
+JÁ O 
+
+
+
+
+'geoWithin'
+
+
+
+NÃO O FAZ... (unsorted list)...
+
+
+
+
+
+
+
+
+
+
+
+--> É CLARO QUE AINDA PODEMOS 
+
+
+
+SORTAR 
+
+
+
+
+OS NOSSOS DOCUMENTS RETRIEVADOS por "$geoWithin'
+
+
+com 
+
+o 
+
+METHOD DE 'sort'...
+
+
+
+
+
+
+
+
+
+
+-_> O $near' 
+
+
+
+
+
+
+
+
+
+NOS DÁ OS PLACES/LOCATIONS EM UMA CERTA RADIUS (os documents),
+
+
+E AO MESMO TEMPO NOS DÁ A 'PROXIMITY' (
+
+
+    sorta por PROXIMITY..
+)
+
+
+
+
+
+
+
+--> VAI DEPENDER DAS SUAS NECESSIDADES...- -> QUER SORTED OU UNSORTED RESULTS?
+
+
+
+
+
+
+
+
+
+
+--> $NEAR É A SOLUÇÃO ARRUMADA,
+
+
+$geoWithin 
+
+É A SOLUÇÃO BAGUNÇADA...

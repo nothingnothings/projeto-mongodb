@@ -1,0 +1,950 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... NÓS VIMOS 'inc',
+
+para o incrment,
+
+
+
+e também para o 'decrement' (é versátil, pode ser usado para os 2)....
+
+
+
+
+
+,
+
+
+QUE ATUAM SOBRE 1 FIELD, ALTERANDO-O....
+
+
+
+
+
+
+
+--> 
+
+
+
+BEM, outros 
+
+
+OPERATORS ÚTEIS SÃO 
+
+
+
+
+1) min 
+
+
+2) max 
+
+
+3) mul...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR QUER RAPIDAMENTE NOS MOSTRAR COMO ELES FUNCIONAM...
+
+
+
+
+
+
+
+
+
+
+--> DIGAMOS QUE QUEREMOS, NA NOSSA DATABASE,
+
+
+
+DEFINIR A AGE DE 'chris'
+
+
+
+
+COMO SENDO DE '35',
+
+
+
+MAS __ aPENAS_ SE A 
+
+'existing age'
+
+
+
+É MAIOR DO QUE 40... ------> ok, aqui estabelecemos/estabeleceremos uma CONDIÇÃo...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESSA É OUTRA COISA COMUM,
+
+
+
+1 CENÁRIO QUE VOCÊ PODERÁ ENCONTRAR.... -_> VOCê TERÁ 
+
+
+1 
+
+CERTO FIELD,
+
+
+
+
+
+
+
+
+que você VAI QUERER SETTAR COMO SENDO 1 CERTO VALOR,
+
+
+
+MAS __ aPENAS__ SE 
+
+
+
+
+
+
+ELE 
+
+
+
+
+
+FOR 'CURRENTLY HIGHER' do que um certo valor,
+
+e
+ 
+
+ NÃO VAI QUERER ISSO,
+ SE ELE 
+
+
+
+FOR 'LOWER' do que esse valor, currently...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR NOS MOSTRA COMO ISSO PODE FUNCIONAR..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.users.updateOne({name: 'Chris'})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> agora, no segundo parâmetro, colocamos o update em si....
+
+
+
+
+
+
+
+
+
+db.users.updateOne({name: 'Chris'},
+
+
+
+{
+
+
+}
+
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> DENTRO DESSE PARÂMETRO,
+
+INPUTTMAOS 
+
+o 
+
+operator de 
+
+
+'$min'... --------> DENTRO DESSE OPERATOR,
+
+
+
+
+
+
+FALAMOS O NOME DO FIELD QUE QUEREMOS 
+
+
+
+
+QUE SEJA INCLUÍDO NESSE 'MIN'.... --> COMO VALOR DESSE FIELD,
+
+
+COLOCAMOS 
+
+
+'35'...
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+db.users.updateOne({name: 'Chris'},
+
+
+
+{
+$min: {
+    age: 35
+}
+
+}
+
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> AGORA, SE ENFIARMOS ESSA QUERY NO NOSSO DATABASE,
+
+
+
+VEREMOS QUE 
+
+
+
+
+
+1 ELEMENT TERÁ SIDO MODIFICADO,
+
+
+
+
+
+
+
+
+E, DE FATO,
+
+
+
+O CHRIS FOI MODIFICADO, SUA AGE 
+
+
+
+
+
+FOI 
+
+
+TRANSFORMADA EM '35'.... (antes era 40)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA O PROFESSOR VAI NOS MOSTRAR 
+
+
+O CASO OPOSTO, EM QUE ESSE OPERATOR NÃO TERÁ EFEITO ALGUM:
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> nesse caso, a age de chris começa como '35',
+
+
+e aí 
+
+
+definimos um '$min'
+
+
+
+DE 
+
+38 (valor superior ao que ele ATUALMENTE POSSUI....)
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+db.users.updateOne({name: 'Chris'},
+
+
+
+{
+$min: {
+    age: 38
+}
+
+}
+
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO, NO CASO,
+ 
+ VAI RETORNAR:
+
+ {
+     acknowledged: true,
+     matchedCount: 1,
+     modifiedCount: 0
+ }
+
+
+
+
+
+
+
+
+
+
+ --> PQ  NADA FOI MODIFICADO?
+
+
+
+
+
+ É PQ 
+
+
+ o valor de '35' É INFERIOR A '38',
+
+
+
+
+ o que 
+
+ faz com que 
+
+
+
+ SEJA RESPEITADO O VALOR DE '35',
+
+
+
+
+ que não vai ser alterado para ficar como '38'....
+
+
+
+
+
+
+
+ (
+
+
+     no exemplo anterior, em que chris tinha 40 que foram transformados em 
+
+     '35',
+
+
+
+     '40' é OBVIAMENTE maior do que 35,
+
+
+     e é 
+
+     por isso 
+    
+    QUE ESSE VALOR FOI 'AMPUTADO' para que ficasse como 35...
+ )
+
+
+
+
+
+
+
+
+
+
+
+ OK... ESSE É O 'MIN'....
+
+
+
+
+
+
+
+
+
+
+
+ -> O COMPORTAMENTO DE 'max'
+
+
+ DEVE SER O CONTRÁRIO...
+
+
+
+
+
+
+
+
+
+
+ ex:
+
+
+
+
+
+
+
+
+
+
+ JUNIOR TEM 80 anos --> mas o MAX de age deve ser 40.....
+
+
+
+
+
+
+ ex:
+
+
+
+
+
+ db.users.updateOne(
+     {name: 'junior'},
+
+
+     {
+         $max: {
+             age: 40
+         }
+     }
+ )
+
+
+
+
+
+
+
+
+ --------> 
+
+
+
+
+
+
+
+
+
+
+ na verdade, o comportamento de 'Max' é meio estranho...
+
+
+
+
+
+
+
+
+
+ --> manu tem 80 em age, sim.... --> mas quando rodarmos:
+
+
+
+> db.users.updateOne({name: 'Manu'}, {$max: {age: 40}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> a age de manu NÃO SERÁ REDUZIDA PARA FICAR COMO '40'......... (não, ela vai continuar sendo 80)...
+
+
+
+
+
+--> ela só vai ser reduzida para ficar como '40' se você colocar '$min'...
+
+
+
+
+
+
+
+
+
+
+
+--> JÁ SE VOCÊ COLOCAR '$max: 80' 
+
+
+
+
+
+E O VALOR DE JUNIOR FOR INFERIOR A 80,
+
+
+COMO 
+
+'40',
+
+
+
+SUA AGE SERÁ AUTOMATICAMENTE BOOSTADA PARA '80'..
+
+
+
+
+
+
+
+
+
+
+
+
+resumindo:
+
+
+
+
+
+$MIN 
+
+
+
+
+1) se seu valor está MAIOR DO QUE O MIN, SERÁ REDUZIDO PARA FICAR COMO O 'min'...
+
+
+
+
+
+2) se seu valor está MENOR DO QUE O MIN, ficará como está....
+
+
+
+
+
+
+
+
+
+
+
+$MAX 
+
+
+
+
+
+
+1) se seu valor está MAIOR DO QUE O MAX, NADA ACONTECERÁ....
+
+
+
+
+
+
+
+2) se seu valor está MENOR DO QUE O MAX, SERÁ BOOSTADO ATÉ O VALOR DE 'MAX'..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------------------------------
+
+
+
+
+
+
+
+
+
+
+
+MAX VAI UPDATAR SE O VALUE ESTÁ MENOR DO QUE O 'NEW VALUE/MAX VALUE'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> POR FIM, TEMOS '$mul',
+
+que é 
+
+
+de 
+
+'MULTIPLY'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O manu ESTÁ COMO '38'....
+
+
+
+
+
+
+
+
+
+
+-> AÍ USAMOS 'mul' --> O MUL VAI MULTIPLICAR A AGE PELO NUMBER QUE NÓS ESPECIFICARMOS...
+
+
+
+
+
+
+
+
+
+
+
+--> DIGAMOS QUE 
+
+
+
+
+O CHRIS FICOU 10% MAIS VELHO... ---> para isso, escrevemos '1.1',
+
+
+que será o multiplier desse number...
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+
+db.users.updateOne({name: 'Chris', {$mul: {age: 1.1}}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE APERTARMOS 1 ,
+
+
+
+VEREMOS QUE 
+
+
+ISSO FUNCIONARÁ... ---> 
+
+
+
+
+
+O CHRIS VAI FICAR COM UMA AGE DE 
+
+41.80000000000000000004
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> E ISSO É ALGO PODRE,
+
+
+
+QUE TEMOS QUE CONSERTAR (cortar essa 'missing precision' de nosso number) ------> VEREMOS ISSO NO MÓDULO 
+
+
+
+DE 
+
+
+
+'NUMBERS' do curso... -----> VAMOS QUERER USAR AQUELE 'HIGH PRECISION TYPE'...
+
+
+
+
+
+
+
+
+MAS O QUE INTERESSA É QUE O NEGÓCIO FUNCIONOU...
+
+
+
+
+
+
+
+
+
+
+
+
+-> ok...
+
+
+esses foram o "$max'
+
+
+
+$min 
+
+
+
+e 
+
+
+$mul....

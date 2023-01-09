@@ -1,0 +1,335 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOLTAMOS À DATABASE DE 'flights', no nosso database server,
+
+
+
+lá para nossa collection de 'flightData'...
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+
+> db.flightData.find().pretty()
+{
+        "_id" : ObjectId("61ff05eb156a623d98a99136"),
+        "departureAirport" : "MUC",
+        "arrivalAirport" : "SF0",
+        "aircraft" : "AIRBUS A380",
+        "distance" : 12000,
+        "intercontinental" : true,
+        "delayed" : false
+}
+{
+        "_id" : ObjectId("61ff05eb156a623d98a99137"),
+        "departureAirport" : "LHR",
+        "arrivalAirport" : "TXL",
+        "aircraft" : "AIRBUS A320",
+        "distance" : 950,
+        "intercontinental" : false,
+        "example course" : true
+}
+
+
+
+
+
+
+
+
+
+
+
+------------------------------
+
+
+
+
+
+
+
+
+
+
+AGORA DIGAMOS QUE QUEREMOS ARMAZENAR O 'STATUS' PARA UMA FLIGHT....
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO,
+ 
+ professor vai usar updateMany para settar esse field....
+
+
+
+
+
+
+
+
+
+
+ EX:
+
+
+
+
+
+
+
+
+
+ > db.flightData.updateMany({}, {$set: {status: "departed"}})
+{ "acknowledged" : true, "matchedCount" : 2, "modifiedCount" : 2 }
+> db.flightData.find().pretty()
+{
+        "_id" : ObjectId("61ff05eb156a623d98a99136"),
+        "departureAirport" : "MUC",
+        "arrivalAirport" : "SF0",
+        "aircraft" : "AIRBUS A380",
+        "distance" : 12000,
+        "intercontinental" : true,
+        "delayed" : false,
+        "status" : "departed"
+}
+{
+        "_id" : ObjectId("61ff05eb156a623d98a99137"),
+        "departureAirport" : "LHR",
+        "arrivalAirport" : "TXL",
+        "aircraft" : "AIRBUS A320",
+        "distance" : 950,
+        "intercontinental" : false,
+        "example course" : true,
+        "status" : "departed"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> OK.... MAS AGORA QUEREMOS QUE ESSE 'status' 
+
+
+SEJA __ OUTRO __ DOCUMENT,
+
+OU SEJA,
+
+OUTRO PAR DE '{}',
+
+
+EM QUE TEMOS 
+
+OUTRO CONJUNTO DE KEY-VALUE PAIRS....
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+
+
+> db.flightData.updateMany({}, {$set: {status: {description: "on-time", lastUpdated: "1 hour ago"}}})
+{ "acknowledged" : true, "matchedCount" : 2, "modifiedCount" : 2 }
+> db.flightData.find().pretty()
+{
+        "_id" : ObjectId("61ff05eb156a623d98a99136"),
+        "departureAirport" : "MUC",
+        "arrivalAirport" : "SF0",
+        "aircraft" : "AIRBUS A380",
+        "distance" : 12000,
+        "intercontinental" : true,
+        "delayed" : false,
+        "status" : {
+                "description" : "on-time",
+                "lastUpdated" : "1 hour ago"
+        }
+}
+{
+        "_id" : ObjectId("61ff05eb156a623d98a99137"),
+        "departureAirport" : "LHR",
+        "arrivalAirport" : "TXL",
+        "aircraft" : "AIRBUS A320",
+        "distance" : 950,
+        "intercontinental" : false,
+        "example course" : true,
+        "status" : {
+                "description" : "on-time",
+                "lastUpdated" : "1 hour ago"
+        }
+}
+
+
+
+
+
+---------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+OK.... ESSE É UM EXEMPLO DE EMBEDDED DOCUMENT... --> É JSON DOCUMENT DENTRO DE OUTRO 
+
+JSON DOCUMENT
+
+
+
+
+
+
+
+
+
+
+
+
+--> E VOCÊ PODE, AINDA, TER OUTRO 
+
+EMBEDDED DOCUMENT DENTRO 
+
+
+
+DESSE EMBEDDED DOCUMENT...
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+> db.flightData.find().pretty()
+{
+        "_id" : ObjectId("61ff05eb156a623d98a99136"),
+        "departureAirport" : "MUC",
+        "arrivalAirport" : "SF0",
+        "aircraft" : "AIRBUS A380",
+        "distance" : 12000,
+        "intercontinental" : true,
+        "delayed" : false,
+        "status" : {
+                "description" : "on-time",
+                "lastUpdated" : "1 hour ago",
+                "details" : {
+                        "responsible" : "Max"
+                }
+        }
+}
+{
+        "_id" : ObjectId("61ff05eb156a623d98a99137"),
+        "departureAirport" : "LHR",
+        "arrivalAirport" : "TXL",
+        "aircraft" : "AIRBUS A320",
+        "distance" : 950,
+        "intercontinental" : false,
+        "example course" : true,
+        "status" : {
+                "description" : "on-time",
+                "lastUpdated" : "1 hour ago",
+                "details" : {
+                        "responsible" : "Max"
+                }
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> e ainda podemos ter ARRAYS DE DATA,
+
+
+O QUE VEREMOS NA PRÓXIMA AULA...

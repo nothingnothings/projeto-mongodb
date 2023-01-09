@@ -1,0 +1,218 @@
+
+
+
+
+
+
+
+
+NO MÓDULO ANTERIOR,
+
+
+
+
+O PROFESSOR NOS MOSTROU COMO PODEMOS 
+
+CONSTRUIR UM APP DE VERDADE,
+
+
+
+USANDO O MONGODB 
+
+
+DRIVER 
+
+E INTERAGINDO COM O MONGODB DATABAS.E..
+
+
+
+
+
+
+
+
+AGORA O PROFESSOR VAI NOS MOSTRAR UM SET TOTALMENTE DIFERENTE DE FEATURES,
+
+QUE
+ 
+
+ A COMPANHIA DO MONGODB TAMBÉM NOS OFERECE...
+
+
+
+
+
+
+
+
+
+
+
+
+ --> ESSAS FEATURES SÃO LOOSELY RELACIONADAS COM A SOLUÇÃO DE DATABASE, O MONGODB,
+
+
+ MAS 
+
+ ACABAM 
+
+ ENTRANDO 'EM UM NOVO REINO'... --> ESSAS FEATURES NÃO 
+
+
+ SÃO 
+
+
+
+ CONECTADAS DIRETAMENTE à DATABASE,
+
+
+
+
+
+ SÃO 
+
+
+
+
+ FEATURES TOTALMENTE NOVAS,
+
+ COMO 
+
+ LOGO APRNEDEREMOS....
+
+
+
+
+
+
+
+
+
+ -> PORTANTO, TUDO QUE APRENDEMOS ATÉ AGORA, 
+
+
+ SOBRE DATABASES E ETC,
+
+
+
+
+
+NÃO É DE FATO TOCADO POR ISSO... --> MAS AS COISAS QUE APRENDEMOS NESSE MÓDULO PODEM NOS AJDUAR 
+
+
+
+A 
+DESENVOLVER APPS MODERNOS 
+
+
+
+
+
+E APPS MOBILE EM GERAL...
+
+
+
+
+
+
+
+
+
+
+--> MAS O QUE HÁ NESSE MÓDULO?
+
+
+
+
+
+
+
+
+
+
+1) VEREMOS O QUE É O 'stitch'...
+
+
+
+
+
+
+
+2) --> mongodb stitch --> VEREMOS O QUE ESTÁ POR TRÁS DISSO, 
+
+quais serviços podem ser encontrados no environment do stitch,
+
+
+
+e o que esses serviços fazem para nós...
+
+
+
+
+
+
+
+
+3) depois de entendermos o que é o stitch,
+
+VAMOS __ O UTILIZAR... --> VAMOS O UTILIZAR PARA 
+
+
+TRANSFORMAR NOSSO
+
+APP UM POUCO.. -->
+
+
+
+
+
+
+VOCÊ VERÁ 
+
+
+QUE SEREMOS CAPAZES DE '''NOS LIVRAR ''' DE NOSSA 
+
+
+
+PRÓPRIA 
+
+'NODE REST API' ---> o que é um BIG DEAL,
+
+
+pq 
+
+
+
+
+vai nos deixar 'BASICAMENTE FOCAR INTEGRALMENTE ' NA NOSSA 
+
+
+
+user interface,
+
+
+
+na nossa core business logic,
+
+e aí 
+
+
+não teremos 
+
+de escrever nenhum código serverside/backend serverside.... (
+
+
+    EVITAMOS BOILERPLATE CODE SETTADOR DE REST API...,
+
+
+
+    evitamos settar auth por conta própria, etc etc....
+)
+
+
+
+
+
+
+
+--> DEVEMOS COMEÇAR....

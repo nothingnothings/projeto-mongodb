@@ -1,0 +1,1654 @@
+
+
+
+
+
+
+
+
+
+
+
+QUASE ACABAMOS COM ESTE MÓDULO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> 1 ÚLTIMA PALAVRA SOBRE COMO VOCÊ BUILDA INDEXES...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> COM ISSO,
+
+PROFESSOR QUER DIZER COMO ''ADDAR INDEXES''' 
+
+
+
+
+
+
+
+
+
+
+
+--> VOCÊ PODE ADD INDEXES DE 2 MANEIRAS,
+
+
+
+NO 
+
+'''FOREGROUND'''' 
+
+
+
+E NO 
+
+'''BACKGROUND'...
+
+
+
+
+
+
+
+--> ATÉ AGORA NO MÓDULO,
+
+NÓS SEMPRE OS 
+
+
+ADICIONAMOS 
+
+
+
+NO 'FOREGROUND',
+
+
+
+
+
+
+
+
+
+
+
+com 'createIndex()',
+
+
+
+
+
+JUSTAMENTE POR 
+
+
+
+
+
+MEIO DE TODOS OS COMMANDS E OPERATOR QUE APRENDEMOS, como 
+
+
+"$search" 
+
+
+
+e 
+
+
+"$meta" 
+
+
+
+
+
+
+
+
+
+
+---------> TUDO ISSO ACONTECEU NO 'FOREGROUND' --------> 
+
+
+
+
+
+
+
+
+E ALGO QUE NÃO PERCEBEMOS,
+
+
+
+
+JUSTAMENTE PQ 
+
+
+TUDO ACONTECEU 
+
+
+
+
+INSTANTANEAMENTE,
+
+
+
+
+
+
+
+
+É QUE __ DURANTE A CRIAÇÃO DOS INDEXES, NO FOREGROUND,
+
+
+
+A COLLECTION SERÁ 'LOCKED IN',
+
+E VOCê NÃO PODERÁ A EDITAR (por consequência disso) -------------> COLLECTION IS LOCKED DURING INDEX CREATION....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------> MAS AGORA, NO CASO, DESCOBRIMOS QUE 
+
+
+
+'''' É POSSÍVEL CRIAR INDEXES/BUILDAR __ INDEXES__ NO BACKGROUNDDD DE 
+
+SUA DATABASE''' ----> OU SEJA,
+
+
+COLOCAR ESSA CRIAÇÃO COMO 'UM PROCESSO NO BACKGROUND'... 
+
+
+
+
+
+
+
+
+----> a VANTAGEM DISSO É QUE 
+
+
+''SUA COLLECTION AINDA ESTARÁ DISPONÍVEL/ACESSÍVEL DURANTE__ A CRIAÇÃO 
+
+DESSE INDEX'''... 
+
+
+
+
+
+
+
+
+
+--> A DESVANTAGEM É QUE _ A CRIAÇÃO SERÁ ___ MAIS LENTA...
+
+
+
+
+
+
+
+
+
+
+
+
+--> JÁ A CRIAÇÃO 
+
+
+NO 'FOREGROUND'
+
+
+
+É BEM MAIS RÁPIDA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> ENTRETANTO,
+
+SE VOCê TEM UM APP QUE JÁ ESTÁ 'BUILT FOR PRODUCTION',
+
+
+JÁ USADA 
+
+
+
+EM PRODUCTION,
+
+
+
+
+
+VOCÊ ___PROVAVELMENTE_ NÃO VAI QUERER TER QUE 'PAUSAR TUDO'
+
+
+
+SÓ PQ 
+VOCÊ ESTÁ ADICIONANDO UM NOVO INDEX...
+
+
+
+
+
+
+
+
+
+
+-----------> É POR ISSO QUE O PROFESSOR 
+
+QUER NOS MOSTRAR ''COMO PODEMOS 
+
+
+
+ADICIONAR UM INDEX NO BACKGROUND DE SUA DATABASE,
+
+
+DURANTE SUA VIDA ATIVA,
+
+
+
+E QUE DIFERENÇA ISSO FAZ'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA MOSTRAR A DIFERENÇA ENTRE ESSES 2 'MODOS' DE BUILD DE INDEXES,
+
+
+
+
+O PROFESSOR PREPAROU UM ARQUIVO JAVASCRIPT 
+
+
+
+
+
+
+,
+
+
+
+QUE ESTÁ ANEXADO A ESSE VÍDEO....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR EXPLICA,  DE NOVO,
+
+QUE O MONGOSHELL
+ 
+
+
+ TAMBÉM É CAPAZ DE RODAR ARQUIVOS JAVASCRIPT,
+
+ pq 
+
+ é 
+
+ BASEADO EM JAVASCRIPT....
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> para isso,
+
+ devmos 
+
+
+
+ rodar 
+
+
+ 'mongo credit-rating.js'. ..  
+
+
+
+
+
+
+
+
+
+
+
+
+ -------> COMO ESCREVEMOS 'mongo' ,
+
+
+
+ O 
+
+
+ MONGOSHELL AINDA VAI TENTAR SE CONECTAR AO SERVER/'mongod instance',
+
+
+
+
+ MAS AÍ __ ELE 
+
+
+ VAI TENTAR ___ RODAR 
+
+ OS COMANDOS QUE TEMOS DENTR ODE '
+
+
+
+
+
+ credit-rating.js' 
+
+
+
+
+ _ '''AGAINST THE SERVER''''
+
+
+
+
+
+
+
+
+
+
+
+
+ --> E, NESSA FILE,
+ O PROFESSOR 
+
+
+ ESSENCIALMENTE TEM UM 'LOOP'
+
+
+
+
+ QUE VAI ADICIONAR 1 
+
+ MILHAO 
+
+ DE DOCUMENTS A 1 COLLECTION,
+
+
+ COM RANDOM NUMBERS 
+
+
+
+
+ NESSES DOCUMENTS...
+
+
+
+
+
+
+
+
+
+
+
+
+ --> BEM... O EXECUTE DISSO PODE DURAR UM BOCADO... ---> pode demorar múltiplos minutos,
+
+
+ dependendo do seu sistema....
+
+
+
+
+
+
+
+ --> VOCÊ PODE QUITAR ESSE PROCESSO COM 'control + c'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -------> ENFIE TUDO NA SUA DATABASE,
+
+ NÃO SE PREOCUPE SE ISSO DEMORAR 1 PCO,
+ É TOTALMENTE NORMAL...
+
+
+
+
+
+
+
+
+
+
+
+
+ --> OK... MAS N TENHO ACESSO A ESSE ARQUIVO... 
+
+
+
+
+
+
+
+
+
+ --> TENHO QUE ESCREVÊ-LO DO 0...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -----> CADA DOCUMENT FICA COM UM CÓDIGO ASSIM:
+
+
+
+
+
+
+
+
+ {
+
+     _id: ObjectId('aaaa'),
+     "person_id": 1,
+     "score": 8.1282928291821992,
+     "age": 78
+ }
+
+
+
+
+
+
+
+
+
+ ESCREVI ESTE CÓDIGO AQUI:
+
+
+ 
+let count = 1;
+
+conn = new Mongo();
+db = conn.getDB("myDatabase");
+
+
+
+
+
+while (count < 1000000) {
+
+    db.creditRatings.insertOne(
+        {
+            "person_id": count,
+            "score": Math.random() * 10,
+            "age": (Math.random() * 100).toFixed()
+        }
+    )
+    printjson(`${count}`)
+    count + 1;
+
+
+}
+
+
+
+
+
+
+
+
+
+
+-------> MAS N FUNCIONOU...
+
+
+
+
+
+(
+
+
+    fica só printando '1',
+
+    perpetuamente...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+COM ISTO AQUI,
+
+MEU CÓDIGO DEU CERTO:
+
+
+
+
+
+
+
+let count = 1;
+
+conn = new Mongo();
+db = conn.getDB("myDatabase");
+
+
+
+
+
+while (count < 1000000) {
+
+    db.creditRatings.insertOne(
+        {
+            "person_id": count,
+            "score": Math.random() * 10,
+            "age": (Math.random() * 100).toFixed()
+        }
+    )
+    printjson(`${count}`)
+  count = count + 1;
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> REALMENTE,
+
+
+O CÓDIGO DEMORA UM POUCO PARA SER EXECUTADO...
+
+
+
+
+
+
+
+-----------------------
+
+
+
+
+
+
+
+
+
+
+
+
+--> se examinarmos nossa database de 
+
+
+'myDatabase',
+
+
+E AÍ 
+
+rodarmos 
+
+
+
+
+
+
+
+
+db.creditRatings.find({}).count(),
+
+
+
+
+
+
+
+
+
+
+
+
+
+VEREMOS QUE TEMOS 1 MILHAO DE DOCUMENTS...
+
+
+
+
+
+
+
+
+
+
+
+--> E NADA DISSO AÍ ESTÁ 'INDEXED'...
+
+
+
+
+
+
+
+
+
+
+
+-> E ANTES DE 
+
+ADICIONARMOS 
+
+
+
+
+INDEXES NO BACKGROUND/FOREGROUND,
+
+
+
+
+
+
+
+
+
+
+
+PODEMOS USAR ESSA OPORTUNIDADE 
+
+
+PARA PRATICAR 1 POUCO MAIS O INDEXING..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> DEVEMOS DAR UMA OLHADA 
+
+em 
+
+
+
+
+'db.ratings.findOne()',
+
+
+
+
+PARA 
+
+
+ENTÃO 
+
+
+
+ENCONTRAR A PRIMEIRA PERSON QUE ENCONTRAMOS (de _id 1)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA DIGAMOS QUE QUEREMOS INDEXAr 'age',
+
+
+
+
+POR ISSO 
+
+ESCREVEMOS
+
+
+
+
+
+
+
+
+
+
+
+db.creditRatings.createIndex(
+    {
+        age: 1
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> QUANDO VOCÊ CRIAR ESSE INDEX,
+
+PERCEBERÁ 
+
+
+QUE ELE NÃO VAI TERMINAR INSTANTANEAMENET ---> 
+
+NÃO VAI 
+
+TERMINAR Insta 
+
+
+
+JUSTAMNET 
+
+
+
+PQ TEMOS __ 1 MILHAO _ DE DOCUMENTS 
+
+
+SENDO INDEXADOS....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... AÍ O PROFESSOR 
+
+
+ESCREVE 
+
+
+
+
+'db.creditRatings.explain("executionStats").find(
+    {age: {$gt: 80}}
+)
+'
+
+
+
+
+
+
+
+
+
+
+
+-> MAS ISSO DEU 'fail', para mim..
+
+
+
+
+
+
+'EOF' (stage)
+
+
+
+EOF (end-of-file) 1 means no more data can be read. If this is indicated as the winning plan, I expect you haven’t queried the intended namespace (perhaps didn’t use the intended database?) or the target collection has not been created yet. I would confirm the queryPlanner.namespace 4 value in your explain plan is as expected.
+
+If collection data exists, an explain with executionStats will include an isEOF 2 indication in executionStages when a stage indicates there are no further results to return.
+
+Regards,
+Stennie
+
+
+
+
+--> é pq 
+
+
+
+eu escrevi 'ratings' em vez de 'creditRatings'...
+
+
+
+
+--> ELE QUER ENCONTRAR TODOS OS DOCUMENTS COM AGE MAIOR DO QUE 80...
+
+
+
+
+
+
+
+
+
+
+
+
+--> CERTo....
+
+AÍ VOCÊ VERÁ 
+
+O NÚMERO DE 
+
+
+
+
+
+KEYS EXAMINADAS...
+
+
+
+na versão dele,
+
+
+99685...
+
+
+
+
+
+
+
+
+
+
+
+----> E ACABAMOS USANDO O 'IXSCAN' (index scan),
+
+
+
+EM QUE 
+
+
+TIVEMOS QUE OLHAR TODAS ESSAS 
+
+
+
+KEYS 
+
+
+NO INDEX,
+
+
+
+e aí 
+
+
+
+
+
+EXAMINAR 
+
+
+
+
+
+
+TODOS OS 'DOCS',
+
+
+E AÍ RETORNAR ESSES 
+
+DOCS... -> tudo isso 
+
+
+
+
+TOMOU 2 MILISSECONDS...
+
+
+
+
+
+
+
+--> o meu: 
+
+  "executionTimeMillis" : 4,
+
+
+
+
+
+
+
+
+
+
+--> OK... AGORA VAMOS DROPPAR ESSE INDEX,
+
+
+
+com 
+
+
+
+
+db.creditRatings.dropIndex(
+    "age": 1
+)
+
+
+
+
+
+
+
+
+
+-> ISSO FEITO,
+
+VAMOS REPETIR ESSA QUERY,
+
+
+mas agora sem esse index...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> DROPPAMOS O INDEX,
+
+
+e aí tenteamos...
+
+
+
+
+
+
+
+
+
+
+porra, eu sou mt idiota... coloquei o 
+
+
+
+
+age como UMA STRING, e não como um number.... --> e acho que não há como consertar isso....
+
+
+
+
+
+
+
+
+
+-> bem, eu posso usar o SCORE no meu indexing, tipo assim:
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+db.creditRatings.find({score: {$gt: 7}}).count()
+312069
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> AÍ POSSO RODAR ISSO COM 'explain',
+
+
+tipo assim:
+
+
+
+
+
+db.creditRatings.explain("executionStats").find({score: {$gt: 7}})
+
+
+
+
+
+
+
+
+
+---> AÍ RECEBO ISTO:
+
+
+
+
+
+
+> db.creditRatings.explain("executionStats").find({score: {$gt: 7}})        
+{
+        "explainVersion" : "1",
+        "queryPlanner" : {
+                "namespace" : "myDatabase.creditRatings",
+                "indexFilterSet" : false,
+                "parsedQuery" : {
+                        "score" : {
+                                "$gt" : 7
+                        }
+                },
+                "maxIndexedOrSolutionsReached" : false,
+                "maxIndexedAndSolutionsReached" : false,
+                "maxScansToExplodeReached" : false,
+                "winningPlan" : {
+                        "stage" : "FETCH",
+                        "inputStage" : {
+                                "stage" : "IXSCAN",
+                                "keyPattern" : {
+                                        "score" : 1
+                                },
+                                "indexName" : "score_1",
+                                "isMultiKey" : false,
+                                "multiKeyPaths" : {
+                                        "score" : [ ]
+                                },
+                                "isUnique" : false,
+                                "isSparse" : false,
+                                "isPartial" : false,
+                                "indexVersion" : 2,
+                                "direction" : "forward",
+                                "indexBounds" : {
+                                        "score" : [
+                                                "(7.0, inf.0]"
+                                        ]
+                                }
+                        }
+                },
+                "rejectedPlans" : [ ]
+        },
+        "executionStats" : {
+                "executionSuccess" : true,
+                "nReturned" : 312069,
+                "executionTimeMillis" : 534,
+                "totalKeysExamined" : 312069,
+                "totalDocsExamined" : 312069,
+                "executionStages" : {
+                        "stage" : "FETCH",
+                        "nReturned" : 312069,
+                        "executionTimeMillisEstimate" : 48,
+                        "works" : 312070,
+                        "advanced" : 312069,
+                        "needTime" : 0,
+                        "needYield" : 0,
+                        "saveState" : 312,
+                        "restoreState" : 312,
+                        "isEOF" : 1,
+                        "docsExamined" : 312069,
+                        "alreadyHasObj" : 0,
+                        "inputStage" : {
+                                "stage" : "IXSCAN",
+                                "nReturned" : 312069,
+                                "executionTimeMillisEstimate" : 11,
+                                "works" : 312070,
+                                "advanced" : 312069,
+                                "needTime" : 0,
+                                "needYield" : 0,
+                                "saveState" : 312,
+                                "restoreState" : 312,
+                                "isEOF" : 1,
+                                "keyPattern" : {
+                                        "score" : 1
+                                },
+                                "indexName" : "score_1",
+                                "isMultiKey" : false,
+                                "multiKeyPaths" : {
+                                        "score" : [ ]
+                                },
+                                "isUnique" : false,
+                                "isSparse" : false,
+                                "isPartial" : false,
+                                "indexVersion" : 2,
+                                "direction" : "forward",
+                                "indexBounds" : {
+                                        "score" : [
+                                                "(7.0, inf.0]"
+                                        ]
+                                },
+                                "keysExamined" : 312069,
+                                "seeks" : 1,
+                                "dupsTested" : 0,
+                                "dupsDropped" : 0
+                        }
+                }
+        },
+        "command" : {
+                "find" : "creditRatings",
+                "filter" : {
+                        "score" : {
+                                "$gt" : 7
+                        }
+                },
+                "$db" : "myDatabase"
+        },
+        "serverInfo" : {
+                "host" : "DESKTOP-V43A7S1",
+                "port" : 27017,
+                "version" : "5.0.6",
+                "gitVersion" : "212a8dbb47f07427dae194a9c75baec1d81d9259"
+        },
+        "serverParameters" : {
+                "internalQueryFacetBufferSizeBytes" : 104857600,
+                "internalQueryFacetMaxOutputDocSizeBytes" : 104857600,
+                "internalLookupStageIntermediateDocumentMaxSizeBytes" : 104857600,
+                "internalDocumentSourceGroupMaxMemoryBytes" : 104857600,
+                "internalQueryMaxBlockingSortMemoryUsageBytes" : 104857600,
+                "internalQueryProhibitBlockingMergeOnMongoS" : 0,
+                "internalQueryMaxAddToSetBytes" : 104857600,
+                "internalDocumentSourceSetWindowFieldsMaxMemoryBytes" : 104857600
+        },
+        "ok" : 1
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------> OK, AÍ DROPPAMOS ISSO AÍ E TENTAMOS DE NOVO,
+PARA 
+
+
+VER 
+
+SE 
+
+
+NOSSO EXECUTION TIME AUMENTA (com o COLLSCAN, o default, sem indexes)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NA VERDADE, NOSSO EXECUTIONTIME FOI AINDA MENOR... (é pq eu estava retrievando mtos documents/estou retrievando mtos documents, e isso atrapalha os indexes)..
+
+
+
+
+
+
+
+
+
+
+
+--> MAS isso tudo é algo que voCê já sabia...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS O PROFESSOR QUER AGORA NOS MOSTRAR QUE 
+
+A ACTUAL
+ 
+ 'INDEX CREATION'
+
+
+
+
+
+ __ LEVA _ TEMPO...
+
+
+
+
+
+
+
+
+
+
+
+ --> PROFESSOR VAI NOS MOSTRAR QUE O 
+
+
+
+ CREATE DE UM INDEX,
+
+ ESSE PROCESSO,
+
+
+
+ ELE 
+
+
+ VAI 
+
+
+
+
+
+ BLOQUEAR O 
+
+
+
+ EXECUTE DE OPERAÇÕES 
+
+
+
+
+
+
+
+
+ENQUANTO O INDEX VAI SENDO CRIADO...
+
+
+
+
+
+
+
+
+
+
+
+--> A QUERY DE 'findOne()"
+
+DO PROFESSOR _ SÓ ACABA_ DEPOIS QUE O INDEX FOR CRIADO,
+
+
+
+no 'foreground'....
+
+
+
+
+
+
+
+
+
+
+
+--> ou seja,
+
+isso é péssimo para 
+
+databases que já estão deployadas,
+
+
+em production...
+
+
+
+
+
+
+
+
+
+---> NOSSAS OPERAÇÕES SERÃO 'DEFERRED'
+
+
+ENQUANTO A CRIAÇÃO DO INDEX ESTIVER OCORRENDo...
+
+
+
+
+
+
+
+
+
+
+--> E PARA INDEXINGS MAIS COMPLEXOS,
+
+DOCUMENTS MAIS COMPLEXOS,
+
+ESSA CRIAÇÃO 
+
+
+
+DE INDEXES VAI DEMORAR BEM MAIS (principalmente com text indexes),
+
+PQ 
+
+
+A 
+
+
+
+DATABASE/COLLECTION PODERÁ FICAR 'LOCKED'
+
+
+por minutos,
+
+
+até....
+
+
+
+
+
+
+
+
+
+--> E ISSO NÃO É UMA OPÇÃO EM PRODUCTION DATABASES......
+
+
+
+
+
+
+
+
+
+
+
+
+--> É POR ISSO QUE EXISTE 
+
+A OPÇÃO DE 'create THE 
+
+INDEXES IN THE BACKGROUND'...
+
+
+
+
+
+
+
+
+
+
+--> PARA ACESSAR/APLICAR ESSA OPTION,
+
+
+
+VOCÊ DEVE PASSAR 1 SEGUNDO ARGUMENTo
+
+
+
+
+NO createIndex....------> 
+
+
+
+
+
+
+
+
+É A OPTION DE '
+
+
+
+background: true'...
+
+
+
+
+
+
+
+
+
+
+
+--> O DEFAULT É 'false,'
+
+
+
+USADO QUANDO VOCê QUER CRIAR ESSES INDEXES NO FOREGROUND...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O CÓDIGO FICA ASSIM:
+
+
+
+
+
+
+
+db.creditRatings.createIndex(
+    {
+        score: 1
+    },
+
+    {
+        background: true
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> SE DEIXAMOS ISSO AÍ,
+
+
+
+
+
+
+NOSSAS OPERAÇÕES PODERÃO CONTINUAR ACONTECENDO (inserts e updates, deletes, etc etc),
+
+
+
+
+
+
+PQ O 
+
+
+
+INDEX VAI FICAR SENDO CRIADO NO BACKGROUND, O QUE É BEM ÚTIL PARA DATABASES EM PRODUCTION...2

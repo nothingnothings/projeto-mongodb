@@ -1,0 +1,550 @@
+
+
+
+
+
+
+
+
+
+
+
+JÁ USEI DRIVERS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR DIZ QUE USAREMOS O SHELL POR GRANDE PARTE DO CURSO,
+
+
+PQ 
+
+ELE 
+
+É UM ÓTIMO NEUTRAL GROUND 
+
+
+
+
+PARA O TRABALHO COM O MONGODB (
+
+
+    pq o professor não sabe se você está construindo um app node,
+
+
+    c++, PHP, ou phyton...
+)
+
+
+
+
+
+
+
+
+
+
+
+--> E A VANTAGEM DA SHELL É QUE ELA PODE SER USADA COM __ TODAS ESSAS LINGUAGENS DIFERENTES....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS É CLARO QUE, NO FINAL DAS CONTAS,
+
+VOCÊ CONSTRUIRÁ UM APP COM UMA LINGUAGEM DE PROGRMAAÇÃO em que 
+
+esse app 
+
+'SHOULD ISSUE THESE COMMANDS AGAINST THE MONGODB SRVER'..
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> CLIQUE NOS DOCS DO MONGODB --->  aí nos docs você tem os 
+
+
+
+
+MONGODB DRIVERS.... -->  ESSES DRIVERS 
+
+
+SÃO PACKAGES QUE 
+
+VOCÊ INSTALA PARA AS DIFERENTES LINGUAGENS DE PROGRAMAÇÃO 
+
+
+
+EM QUE VOCÊ USA NOS SEUS APPS/seus apps são escritos... --------> ESSES DRIVERS SÃO 
+
+
+
+
+
+'''PONTES''' ENTRE SUA LINGUAGEM DE PROGRAMAÇÃO ESCOLHIDA __ E O MONGODB__ SERVER..
+
+
+
+
+
+
+
+
+
+
+TEMOS UM MONTE DE DRIVERS:
+
+
+
+
+
+
+
+
+C DRIVER 
+
+
+C++ DRIVER
+
+
+
+C+ and .NET driver 
+
+
+JAVA DRIVER 
+
+
+NODEJS DRIVER 
+
+
+PERL DRIVER 
+
+
+
+PHP DRIVER 
+
+
+PHYTON DRIVER 
+
+
+
+RUBY DRIVER 
+
+
+
+
+MONGOID ODM 
+
+
+
+SCALA DRIVER 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------>     NESSES DRIVERS AÍ,
+
+VOCÊ 
+
+
+
+EXECUTA OS MESMOS COMANDOS QUE RODAMOS NO SHELL,
+
+
+
+SÓ QUE __ AJUSTADOS__ À LANGUAGE 
+
+
+
+
+QUE VOCÊ ESTÁ USANDO/ESCREVENDO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NODEJS E O PHYTON DRIVER....
+
+
+
+
+
+
+
+
+
+
+--> DEVEMOS VER COMO É O TRABALHO COM ELES, E COMO UM DIFERE DO OUTRO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MONGODB NODEJS DRIVER ---> QUICK START GUIDE ----> 
+
+
+VEMOS COMO INICIAR NOSSO MONGODB DATABASE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VEMOS, NESSE NEGÓCIO,
+
+QUE NÓS TAMBÉM VAMOS FAZER 'REACH OUT'
+ 
+ a uma database,
+
+
+
+ como visto pelo código 
+
+ de 
+
+
+
+
+
+
+ 'const insertDocuments = function(db, callback) {
+
+        const collection = db.collection('documents');
+
+
+
+
+
+        collection.insertMany([....])
+
+ }
+
+
+
+
+
+
+
+
+
+
+
+ --> OU SEJA,
+
+ EM VEZ DE ESCREVER 
+
+ 'db.nomeDaDatabase',
+
+
+
+ AQUI ESCREVEMOS 
+
+
+ 'db.collection('nomeDaDatabase')' ,,
+
+
+
+
+
+
+
+ O QUE QUER DIZER QUE 'collection' VIRÁ/VIROU UM MÉTODO DENTRO DE 'db'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --------> na collection, nesse exemplo, estão usando 'insertMany'...
+
+
+
+
+
+
+
+
+
+
+ --> ISSO SIGNIFICA QUE AS CORE FEATURES DO MONGODB SHELL __ FICAM INTACTAS NESSES DRIVERS,
+
+
+ só a linguagem que é alterada....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> AÍ O PROFESSOR VAI ATÉ O DRIVER DO PHYTON..
+
+
+
+
+
+
+
+ --> ELE ABRE O TUTORIAL...
+
+
+
+
+
+
+
+
+
+
+
+
+ -----------------------------
+
+
+
+
+ COMO É USADO O MONGODRIVER COM O PHTYON?
+
+
+
+
+
+
+
+
+
+
+
+ 1) execute 'import pymongo'... --> ESSE É O DRIVER OFICIAL PARA O PHyton...
+
+
+
+
+
+
+
+
+ 2)  Você CONSEGUE ACESSO à DATABASE, POR MEIO DE CÓDIGOS COMO 
+
+
+
+
+
+
+ 'db = client.test_database' 
+
+
+
+
+
+
+
+
+
+
+
+
+3) E VOCÊ GANHA ACESSO A UMA COLLECTION POR MEIO DO CÓDIGO 
+
+
+'
+collection = db.test_collection'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AÍ, POR FIM, 
+
+
+
+4) 
+
+você ESCREVE CÓDIGO TIPICAMENTE PHYTOn (ou seja, snake case, SEM CAMELCASE),
+
+
+
+e com códigos como este:
+
+
+
+
+
+
+post = {"author": "mike", 
+"text": "My first blog post!"}
+
+
+posts = db.posts;
+post_id = posts.insert_one(post).inserted_id
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> OK... ISSO AÍ VAI INSERIR UM DOCUMENT... ----> ISSO SIGNIFICA QUE A SINTAXE MUDA,
+
+MAS A MANEIRA GERAL PELA QUAL VOCÊ TRABALHA COM A DATA NÃO MUDA NEM UM POUCO...(
+
+é a mesma coisa que você faz com o shel...
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> E, NA VERDADE, ISSO É ALGO QUE VEREMOS MAIS TARDE NO CURSo, um NODE APP 
+QUE USA MONGODB.... --> FAREMOS UM APP PEQUENO EM QUE ADICIONAMOS UM NOVO PRODUCT --> PROFESSOR USARÁ ISSO,
+
+mais tarde no curso, para QUE DEIXEMOS DE USAR O SHELL (que tem essa linguagem default, padrão) E passemos a usar 
+
+
+DRIVERS variados...
+
+
+
+
+
+
+
+
+
+
+
+
+-> SHELL -->  COMMON GROUD/NEUTRAL GROUND EM QUE PODEMOS  SEMPRE CONCORDAR, PEGAR ESSA LÓGICA DE 
+
+
+
+
+
+
+
+'COMO INSERIR, COMO CONFUIGURAR SEUS INSERTS, COMO QUERIAR DATA, 
+
+
+COMO FILTRAR DATA, COMO SORT DATA' ... --> TUDO PARA QUE 
+
+
+
+
+
+VOCê CONSIGA USAR ESSE CONHECIMENTO COM QUALUER APP QUE VOCÊ CONSTRUIR

@@ -1,0 +1,2566 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> OK... DEMOS UMA PRIMEIRA OLHADA EM 'indexes'...
+
+
+
+
+
+
+
+
+SÃO CRIADOS COM CÓDIGOS COMO ESTE:
+
+
+
+
+
+> db.persons2.createIndex(
+...         {
+...                 "dob.age": 1
+...         }
+... )
+
+
+
+
+
+
+
+
+
+{
+        "numIndexesBefore" : 1,
+        "numIndexesAfter" : 2,
+        "createdCollectionAutomatically" : false,
+        "ok" : 1
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA DEVEMOS DAR UMA OLHADA EM UM 'SINGLE DOCUMENT' na nossa database:
+
+
+
+
+
+> db.persons2.explain("executionStats").find(         {                 "dob.age": {$gt: 20}         } )
+{
+        "explainVersion" : "1",
+        "queryPlanner" : {
+                "namespace" : "exemploPersons.persons2",
+                "indexFilterSet" : false,
+                "parsedQuery" : {
+                        "dob.age" : {
+                                "$gt" : 20
+                        }
+                },
+                "maxIndexedOrSolutionsReached" : false,
+                "maxIndexedAndSolutionsReached" : false,
+                "maxScansToExplodeReached" : false,
+                "winningPlan" : {
+                        "stage" : "FETCH",
+                        "inputStage" : {
+                                "stage" : "IXSCAN",
+                                "keyPattern" : {
+                                        "dob.age" : 1
+                                },
+                                "indexName" : "dob.age_1",
+                                "isMultiKey" : false,
+                                "multiKeyPaths" : {
+                                        "dob.age" : [ ]
+                                },
+                                "isUnique" : false,
+                                "isSparse" : false,
+                                "isPartial" : false,
+                                "indexVersion" : 2,
+                                "direction" : "forward",
+                                "indexBounds" : {
+                                        "dob.age" : [
+                                                "(20.0, inf.0]"
+                                        ]
+                                }
+                        }
+                },
+                "rejectedPlans" : [ ]
+        },
+        "executionStats" : {
+                "executionSuccess" : true,
+                "nReturned" : 5000,
+                "executionTimeMillis" : 5,
+                "totalKeysExamined" : 5000,
+                "totalDocsExamined" : 5000,
+                "executionStages" : {
+                        "stage" : "FETCH",
+                        "nReturned" : 5000,
+                        "executionTimeMillisEstimate" : 0,
+                        "works" : 5001,
+                        "advanced" : 5000,
+                        "needTime" : 0,
+                        "needYield" : 0,
+                        "saveState" : 5,
+                        "restoreState" : 5,
+                        "isEOF" : 1,
+                        "docsExamined" : 5000,
+                        "alreadyHasObj" : 0,
+                        "inputStage" : {
+                                "stage" : "IXSCAN",
+                                "nReturned" : 5000,
+                                "executionTimeMillisEstimate" : 0,
+                                "works" : 5001,
+                                "advanced" : 5000,
+                                "needTime" : 0,
+                                "needYield" : 0,
+                                "saveState" : 5,
+                                "restoreState" : 5,
+                                "isEOF" : 1,
+                                "keyPattern" : {
+                                        "dob.age" : 1
+                                },
+                                "indexName" : "dob.age_1",
+                                "isMultiKey" : false,
+                                "multiKeyPaths" : {
+                                        "dob.age" : [ ]
+                                },
+                                "isUnique" : false,
+                                "isSparse" : false,
+                                "isPartial" : false,
+                                "indexVersion" : 2,
+                                "direction" : "forward",
+                                "indexBounds" : {
+                                        "dob.age" : [
+                                                "(20.0, inf.0]"
+                                        ]
+                                },
+                                "keysExamined" : 5000,
+                                "seeks" : 1,
+                                "dupsTested" : 0,
+                                "dupsDropped" : 0
+                        }
+                }
+        },
+        "command" : {
+                "find" : "persons2",
+                "filter" : {
+                        "dob.age" : {
+                                "$gt" : 20
+                        }
+                },
+                "$db" : "exemploPersons"
+        },
+        "serverInfo" : {
+                "host" : "DESKTOP-V43A7S1",
+                "port" : 27017,
+                "version" : "5.0.6",
+                "gitVersion" : "212a8dbb47f07427dae194a9c75baec1d81d9259"
+        },
+        "serverParameters" : {
+                "internalQueryFacetBufferSizeBytes" : 104857600,
+                "internalQueryFacetMaxOutputDocSizeBytes" : 104857600,
+                "internalLookupStageIntermediateDocumentMaxSizeBytes" : 104857600,
+                "internalDocumentSourceGroupMaxMemoryBytes" : 104857600,
+                "internalQueryMaxBlockingSortMemoryUsageBytes" : 104857600,
+                "internalQueryProhibitBlockingMergeOnMongoS" : 0,
+                "internalQueryMaxAddToSetBytes" : 104857600,
+                "internalDocumentSourceSetWindowFieldsMaxMemoryBytes" : 104857600
+        },
+        "ok" : 1
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{
+        "_id" : ObjectId("620c8cee53c75eb1f488985c"),
+        "gender" : "female",
+        "name" : {
+                "title" : "mademoiselle",
+                "first" : "mélissa",
+                "last" : "nicolas"
+        },
+        "location" : {
+                "street" : "4013 rue du moulin",
+                "city" : "semsales",
+                "state" : "ticino",
+                "postcode" : 2990,
+                "coordinates" : {
+                        "latitude" : "-27.4371",
+                        "longitude" : "-55.6579"
+                },
+                "timezone" : {
+                        "offset" : "+4:00",
+                        "description" : "Abu Dhabi, Muscat, Baku, Tbilisi"
+                }
+        },
+        "email" : "mélissa.nicolas@example.com",
+        "login" : {
+                "uuid" : "5abb1ac6-47c6-4da9-a84d-c0bcd61dbfff",
+                "username" : "redsnake891",
+                "password" : "zzzz",
+                "salt" : "GCn0tYQj",
+                "md5" : "b5eafb160c3a1477c251bfbf59268601",
+                "sha1" : "2c64cb41e3a7637875b6fd199ea1a7bf47b7c98e",
+                "sha256" : "35e781432c7f75c5f9093fb2883c561f3311eff28777caa273a9a5c272847537"
+        },
+        "dob" : {
+                "date" : "1996-12-02T20:57:03Z",
+                "age" : 21
+        },
+        "registered" : {
+                "date" : "2008-01-02T09:45:02Z",
+                "age" : 10
+        },
+        "phone" : "(457)-502-0653",
+        "cell" : "(467)-575-0937",
+        "id" : {
+                "name" : "AVS",
+                "value" : "756.1621.9570.05"
+        },
+        "picture" : {
+                "large" : "https://randomuser.me/api/portraits/women/38.jpg",
+                "medium" : "https://randomuser.me/api/portraits/med/women/38.jpg",
+                "thumbnail" : "https://randomuser.me/api/portraits/thumb/women/38.jpg"
+        },
+        "nat" : "CH"
+}
+
+
+
+
+
+
+
+-----------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+E AÍ CRIAMOS UM INDEX, NA ÚLTIMA AULA,
+
+PARA O 
+FIELD DE 
+
+
+
+'age'..
+
+
+
+
+
+
+
+
+
+
+--> VOCÊ PODE DROPPAR UM INDEX COM 
+
+
+
+
+'db.users2.dropIndex({age: 1})' 
+
+
+
+
+
+
+
+
+
+(BASTA ESCREVER A KEY EM QUE VOCê CRIOU O INDEX, usar 'dropIndex()' e aí escrever '1')...
+
+
+
+
+
+
+GANHEI UM ERRO..
+
+
+
+
+
+
+> db.users2.dropIndex({age: 1})
+{
+        "ok" : 0,
+        "errmsg" : "ns not found exemploPersons.users2",
+        "code" : 26,
+        "codeName" : "NamespaceNotFound"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> COMO POSSO VER MEUS INDEXES?
+
+
+
+
+
+
+
+
+
+
+
+> db.mycoil.getIndexes()
+[ ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.persons2.getIndexes()
+
+
+
+
+
+
+
+
+
+
+
+
+
+FICOU ASSIM:
+
+
+
+
+
+
+
+
+> db.persons2.getIndexes()
+[
+        {
+                "v" : 2,
+                "key" : {
+                        "_id" : 1
+                },
+                "name" : "_id_"
+        },
+        {
+                "v" : 2,
+                "key" : {
+                        "dob.age" : 1
+                },
+                "name" : "dob.age_1"
+        }
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... PARA DROPPAR MEU INDEX, ESCREVO ASSIM:
+
+
+
+
+
+
+db.persons2.dropIndex(
+    {
+        "dob.age": 1
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TIPO ASSIM:
+
+
+
+
+> db.persons2.dropIndex(
+...     {
+...         "dob.age": 1
+...     }
+... )
+{ "nIndexesWas" : 2, "ok" : 1 }
+>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> AÍ RODO ESSE CÓDIGO DE 'getIndexes' mais uma vez:
+
+
+
+
+
+
+
+
+
+
+
+
+fica assim:
+
+
+> db.persons2.getIndexes()
+[ { "v" : 2, "key" : { "_id" : 1 }, "name" : "_id_" } ]
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESSE É O STATE DE NOSSO APP, QUANDO NÃO TEMOS NENHUM INDEX EM 1 COLLECTION...
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------> ANTES,
+
+
+CRIAMOS UM INDEX EM 1 FIELD QUE TINHA UM NUMBER (dob: {age: 33}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS VOCê TAMBÉM PODE CRIAR INDEXES EM FIELDS QUE POSSUEM __ TEXT__.... --> e isso faz mt sentido,
+
+PQ TEXT É 
+
+
+ALGO QUE VOCê REGULARMENTE FAZ 
+
+
+'SEARCH FOR',
+
+
+
+
+
+
+
+
+E TEXTS podem 'PERFECTLY BE SORTED' ... ------------> JÁ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+JÁ 'BOOLEANS' NÃO FAZEM MT SENTIDO DE SEREM USADOS EM INDEXEs... --> ISSO PQ 
+
+
+
+
+
+
+QUANDO VOCê TEM SÓ 2 VALUES, true/false,
+
+
+
+
+
+
+É GRANDE A PROBABILIDADE DE QUE INDEXES NÃO VÃO AUMENTAR A SPEED DE SUAS QUERIES TANTO ASSIM...
+
+
+
+
+
+
+
+
+
+
+
+(segunda restrição, portanto: NÃO USE INDEXES QUANDO SEU FIELD ARMAZENA BOOLEANS)
+
+
+
+
+
+
+-------> OK... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> AGORA VAMOS CRIAR UM _ _SEGUNDO INDEX (na verdade, é o primeiro index dnv, pq droppamos o primeiro)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... AGORA VAMOS USAR UM 'text index'... -->  O PROFESSOR VAI TENTAR CRIAR 1 INDEX 
+lá no field de 
+
+
+
+
+'gender' 
+
+
+
+
+
+
+(
+
+
+
+    bizarro, isso aí.... -> é bizarro pq 
+
+
+
+    GENDERS, em databases comuns, só podem ser 2, male ou female,
+
+
+
+    tipo um boolean...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"gender": "male"...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+O PROFESSOR CRIA UM INDEX DESSE FIELD TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+db.persons2.createIndex(
+    {
+        "gender": 1
+    }
+)
+
+
+
+
+
+
+
+
+
+----------------------------
+
+
+
+
+
+
+
+
+
+
+
+OK.... O PROFESSOR FALA DO PROBLEMA DO BOOLEAN....
+
+
+
+
+
+
+
+
+
+
+-> E, DE FATO,
+
+
+
+
+
+SE NÓS 
+
+
+
+RODARMOS UM COMANDO DE 
+
+
+
+
+
+
+db.persons2.explain("executionStats").find(
+    {
+        "gender": "male"
+    }
+),
+
+
+
+
+
+
+
+
+
+
+
+VAMOS GANHAR DE VOLTA VÁRIAS KEYS... -----> VAMOS GANHAR TIPO METADE DA QUANTIDADE DOS DOCUMENTS,
+
+nesse data set...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> ok... ISSO, DE NOVO, É UM EXEMPLO PARA UM INDEX PARA UM FIELD __ QUE NÃO FAZ MT SENTIDO TER... (ou que não vai melhorar mt nossa query speed, PQ VAMOS ESTAR FETCHEANDO UMA GRANDE FATIA DE NOSSA DATA SET COM NOSSA QUERY, e isso é algo ruim, em questão de uso de indexes, pq os indexes na verdade deixam o processo mais LENTO... )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> AINDA ASSIM,
+
+
+USAMOS O INDEX, AQUI.... --> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+E ISSO VAI, TAMBÉM, 
+
+NOS DIZER ALGO SOBRE OS 
+
+'winningPlan' e 'rejectedPlans' 
+
+
+
+
+
+
+
+
+
+
+
+--> COM EFEITO,
+
+
+
+o mongodb 
+
+
+NÃO PARECEU TER CONSIDERADO 1 
+
+
+'COLLSCAN' (collection scan),
+
+
+
+
+
+
+
+
+PQ SE NÓS EXAMINARMOS O ARRAY DE 'rejectedPlans',
+
+
+VEMOS ISTO:
+
+
+
+
+
+
+                 },
+                        "direction" : "forward"
+                },
+                "rejectedPlans" : [ ]
+
+
+
+
+
+
+
+
+
+
+            
+
+
+
+
+            REJECTEDPLANS, 
+
+
+            VAZIO.... ----> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            OU SEJA,
+
+
+
+
+            O 'COLLECTIONSCAN' nem foi considerado....
+
+
+
+
+
+
+
+
+
+
+PROFESSOR EXPLICA:
+
+
+
+
+
+
+
+o 'rejectedPlans' VAI SEMPRE 'PROCURAR POR OUTROS INDEXES QUE VOCê CRIOU',
+
+
+
+
+MAS __ NUNCA VAI  ''PROCURAR PELO COLLECTIONSCAN como uma alternativa'' (collscan),
+
+
+
+
+ISSO SIMPLESMENTE NÃO É POSSÍVEL,
+
+
+NÃO É O COMPORTAMENTO DO MONGODB...
+
+
+
+
+
+
+(
+
+
+    em outras palavras,
+
+    o 'COLLSCAN' 
+
+
+    SÓ SERÁ UTILIZADO SE VOCê __ NÃO POSSUIR UM INDEX__ 
+
+
+
+    NESSE SEU FIELD específico, ou se TODOS OS INDEXES QUE VOCê POSSUI 
+
+    NESSE FIELD 
+
+
+    SÃO __ INVÁLIDOS..
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> OK... MAS HÁ 
+
+
+UM OUTRO TIPO DE INDEX QUE PODEMS UTILIZAR.... ------> DIGAMOS QUE QUEREMOS 
+
+
+
+
+
+'
+''ENCONTRAR TODAS AS PERSONS QUE SÃO MAIS VELHAS DO QUE 40,
+
+
+
+E MALE'''... --->  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PARA CASOS COMO ESSE, 
+
+
+
+COM FILTERS COMPOSTOS (2 condições),
+
+
+
+
+PODEMOS CRIAR AQUILO QUE 
+
+É 
+
+CHAMADO DE 
+
+
+
+'COMPOUND INDEX'... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PRIMEIRAMENTE,
+
+
+
+O PROFESSOR VAI DROPPAR ESSE index de 'age' 
+
+que tínhamos anteriormente,
+
+
+com 
+
+
+
+
+
+db.persons2.dropIndex({
+    "dob.age": 1
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> AÍ VAMOS CRIAR UM NOVO INDEX...
+
+
+
+
+
+
+
+
+
+
+
+
+código será assim:
+
+
+
+
+
+
+
+
+
+
+
+
+db.persons2.createIndex(
+    {
+
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS É CLARO QUE NESSE 'index'
+
+
+NÃO TEREMOS APENAS O 'gender',
+
+
+
+
+
+POIS TAMBÉM TEMOS A CONDIÇÃO DE 'age'... -------> É POR ISSO QUE DEVEMOS TER 
+
+
+__dUAS KEYS,
+
+tipo 
+
+
+
+
+
+{"dob.age": 1, gender: 1}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> CERTO.... MAS UM PROBLEMA, AQUI, É QUE 
+
+
+A __ ORDEM__ ENTRE ESSES 2 FIELDS,
+
+
+DE 
+
+
+
+"dob.age": 1 
+
+
+e 
+
+
+"gender": 1,
+
+
+
+
+
+
+
+
+
+
+IMPORTA__............ IMPORTA PQ UM 'compound index' 
+
+
+
+
+
+
+
+É SIMPLESMENTE UM  _____INDEX_ COM 'MAIS DO QUE 1 ÚNICO FIELD' (como aqui, em que temos DOIS FIELDS, o de age e o de gender)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> QUAIS SÃO OS EFEITOS PRÁTICOS DISSO?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+BEM, ISSO VAI ESSENCIALMENTE __ ARMAZENAR 1 ÚNICO INDEX, SIM,,
+
+
+
+
+
+
+MAS 1 ÚNICO INDEX 
+
+
+
+
+EM QUE 
+
+
+'CADA ENTRY NO INDEX' 
+
+
+NÃO SERÁ 1 ÚNICO VALUE,
+
+MAS 
+
+SIM 
+
+
+
+'2 COMBINED VALUES' ---------->  ISSO SIGNIFICA QUE __ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+NÃO SERÃO CRIADOS 2 INDEXES PARA ESSE seu 'createIndex()',
+
+
+
+
+E SIM QUE __ SERÁ CRIADO 
+
+
+
+
+APENAS 1 ÚNICO INDEX ,
+
+
+
+
+
+MAS 1 INDEX EM QUE 
+
+
+
+'''CADA ELEMENT É UM  ""__CONNECTED VALUE____"""  '''' --->  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OU SEJA,
+
+EM CADA INDEX SERÃO CRIADOS PARES DE 'ages' e 'genders'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> tipo assim:
+
+{
+    gender: male,
+    age: 30
+},
+{
+    gender: male,
+    age: 30
+},
+{
+    gender: male,
+    age: 30
+},
+{
+    gender: male,
+    age: 31
+}
+
+
+
+
+
+
+
+
+
+
+----------------------------------------------------
+
+
+
+
+
+
+
+ISSO TUDO FICARÁ NA 'INDEX LIST'.... ---------> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+E A ORDEM AQUI, entre esses 2 elementos,
+
+
+DEFINE 
+
+
+
+
+'''QUAL TIPO DE PAIRS''' O MONGODB VAI CRIAR... (
+
+
+
+
+    vai determinar se ele criará 
+
+
+
+
+
+
+um FIELD de 
+
+
+'33 male' 
+
+
+ou 
+
+
+'male 33'
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E ISSO AÍ FAZ TODA DIFERENÇA PARA SUAS QUERIES,
+
+COMO VOCÊ LOGO VERÁ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK.... VAMOS CRIAR NOSSO INDEX ASSIM:
+
+
+
+
+db.persons2.createIndex(
+    {
+        "dob.age": 1, "gender": 1
+    }
+)
+
+
+
+
+
+
+
+------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+COM ISSO,
+
+
+
+PODEMOS USAR ESSE 'COMPOUND INDEX' COM 2 DIFERENTES QUERIES.... --> 
+
+
+
+
+
+
+
+
+
+A QUERY MAIS ÓBVIA QUE 'TIRA VANTAGEM' 
+
+
+
+
+dos indexes 
+
+
+
+
+É 
+
+
+
+
+
+
+'age'... -->  
+
+
+
+
+
+
+
+
+
+
+
+
+
+FAZEMOS UM FIND QUERY DE 
+
+
+TODAS AS PESSOAS EM QUE A AGE É 35, e em que tem 'gender: male'...
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+db.persons2.explain().
+find(
+    {
+        "dob.age": 35, gender: "male"
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> OK.... E ESSES SÃO OS 2 ELEMENTS EM QUE 'tenho meu index'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E AQUI, NO '.find()' call,
+
+
+
+
+
+
+A ORDEM DE ESCRITA DOS FILTERS/coisas a procurar _ _NÃO IMPORTA,
+
+
+
+BTW (ao contrário daquilo visto no MOMENTO DA CRIAÇÃO DO INDEX)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> OK.... NOSSO CÓDIGO RETORNADO POR 
+
+
+
+
+db.persons2.explain().find(
+    {
+        "dob.age": 35, gender: "male"
+    }
+)
+
+
+
+
+
+
+
+
+
+
+SERÁ ESTE:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+> db.persons2.explain().find(     {         "dob.age": 35, gender: "male"     } )
+{
+        "explainVersion" : "1",
+        "queryPlanner" : {
+                "namespace" : "exemploPersons.persons2",
+                "indexFilterSet" : false,
+                "parsedQuery" : {
+                        "$and" : [
+                                {
+                                        "dob.age" : {
+                                                "$eq" : 35
+                                        }
+                                },
+                                {
+                                        "gender" : {
+                                                "$eq" : "male"
+                                        }
+                                }
+                        ]
+                },
+                "queryHash" : "6602FE25",
+                "planCacheKey" : "9009B656",
+                "maxIndexedOrSolutionsReached" : false,
+                "maxIndexedAndSolutionsReached" : false,
+                "maxScansToExplodeReached" : false,
+                "winningPlan" : {
+                        "stage" : "FETCH",
+                        "inputStage" : {
+                                "stage" : "IXSCAN",
+                                "keyPattern" : {
+                                        "dob.age" : 1,
+                                        "gender" : 1
+                                },
+                                "indexName" : "dob.age_1_gender_1",
+                                "isMultiKey" : false,
+                                "multiKeyPaths" : {
+                                        "dob.age" : [ ],
+                                        "gender" : [ ]
+                                },
+                                "isUnique" : false,
+                                "isSparse" : false,
+                                "isPartial" : false,
+                                "indexVersion" : 2,
+                                "direction" : "forward",
+                                "indexBounds" : {
+                                        "dob.age" : [
+                                                "[35.0, 35.0]"
+                                        ],
+                                        "gender" : [
+                                                "[\"male\", \"male\"]"
+                                        ]
+                                }
+                        }
+                },
+                "rejectedPlans" : [ ]
+        },
+        "command" : {
+                "find" : "persons2",
+                "filter" : {
+                        "dob.age" : 35,
+                        "gender" : "male"
+                },
+                "$db" : "exemploPersons"
+        },
+        "serverInfo" : {
+                "host" : "DESKTOP-V43A7S1",
+                "port" : 27017,
+                "version" : "5.0.6",
+                "gitVersion" : "212a8dbb47f07427dae194a9c75baec1d81d9259"
+        },
+        "serverParameters" : {
+                "internalQueryFacetBufferSizeBytes" : 104857600,
+                "internalQueryFacetMaxOutputDocSizeBytes" : 104857600,
+                "internalLookupStageIntermediateDocumentMaxSizeBytes" : 104857600,
+                "internalDocumentSourceGroupMaxMemoryBytes" : 104857600,
+                "internalQueryMaxBlockingSortMemoryUsageBytes" : 104857600,
+                "internalQueryProhibitBlockingMergeOnMongoS" : 0,
+                "internalQueryMaxAddToSetBytes" : 104857600,
+                "internalDocumentSourceSetWindowFieldsMaxMemoryBytes" : 104857600
+        },
+        "ok" : 1
+}
+
+
+
+
+
+
+
+
+
+-> A PARTE QUE INTERESSA É ESTA:
+
+
+
+
+
+
+
+
+  "stage" : "FETCH",
+                        "inputStage" : {
+                                "stage" : "IXSCAN",
+                                "keyPattern" : {
+                                        "dob.age" : 1,
+                                        "gender" : 1
+                                },
+                                "indexName" : "dob.age_1_gender_1",
+                                "isMultiKey" : false,
+                                "multiKeyPaths" : {
+                                        "dob.age" : [ ],
+                                        "gender" : [ ]
+                                },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> COMO VOCÊ PODE VER,
+
+
+o 
+
+'indexName'
+
+
+NOS MOSTRA QUE ESTÁ SENDO USADO UM 'compound index'... (mistura de 2 fields)...
+
+
+
+
+
+
+
+
+
+
+
+ESSE NAME AÍ É AUTOGENERATED,
+
+
+
+
+
+
+
+
+ele simplesmente indica 
+
+
+
+
+
+
+
+
+QUE ESSE É UM COMPOUND INDEX,
+
+
+
+
+
+
+
+
+PQ OS NAMES SÃO 'GENERATED FROM THE VALUES THAT ARE PLACED IN THE INDEX'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK... ESSE É UM COMPOUND INDEX,
+
+PORTANTO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> E O 'COMPOUND INDEX'
+
+
+ACELERA NOSSAS QUERIES  
+
+
+
+
+
+
+
+
+PARA TODOS OS REQUESTS QUE VÃO ATÉ ESSES 
+
+
+
+2 
+
+FIELDS de 
+
+
+"dob.age" e "gender"....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> MAS 1 OUTRO QUERY QUE ACABA ACELERADO POR ESSE MESMO 'INDEX'
+
+
+
+
+
+
+
+é encontrado quando fazemos FIND por 'age'... (só por age, sem 'gender')
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+db.persons2.explain().find({"dob.age": 35})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE TENTARMOS RODAR ESSA QUERY AÍ,
+
+
+
+
+
+VEREMOS 
+
+
+
+
+
+"stage": "IXSCAN",
+
+
+
+
+
+
+
+
+
+
+
+
+
+E TAMBÉM VEREMOS 
+
+
+
+"indexName": "dob.age_1_gender_1",
+
+
+
+
+
+
+
+
+
+SINALIZANDO QUE __ O COMPOUND INDEX AINDA FOI UTILIZADO,
+
+
+
+
+
+
+MESMO EU NUNCA TENDO ESPECIFICADO 'gender' como critério, nesse meu request de find específico...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------> PORÉM, O COMPOUND INDEX PODE SER USADO 
+
+
+
+
+
+
+
+'''FROM LEFT TO RIGHT''', por assim dizer.... ------> ISSO QUER DIZER QUE SE 
+
+
+VOCÊ 
+
+TEM 
+
+
+
+'age' e 'gender' NO SEU COMPOUND INDEX,
+
+
+
+
+
+VOCÊ 
+
+VAI PODER/VAI SER OBRIGADO A USAR 
+
+
+
+ESSE COMPOUND INDEX:
+
+
+
+
+
+
+
+
+
+
+
+1) NAS FINDS DE 'AGE' E 'GENDER', ambos como critérios, em conjunto...
+
+
+
+
+
+
+
+2) NAS FINDS DE 'age', SENDO UTILIZADA COMO CRITÉRIO __ SOZINHO__ (sem o 'gender')......
+
+
+
+
+
+
+
+
+
+
+
+
+
+o formato do indexName,
+ no nosso exemplo, é este:
+
+
+
+ dob.age_1_gender_1 
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> NA VERDADE, A ÚNICA HIPÓTESE EM QUE ESSE 
+
+
+
+
+'index' NÃO SERÁ UTILIZADO _ _sERÁ QUANDO:
+
+
+
+
+
+
+
+
+
+
+3) FAZEMOS FIND APENAS COM 'gender' ------> NESSE CASO, O __ INDEX NÃO SERÁ UTILIZADO... NÃO ACABA UTILIZADO JUSTAMENTE PQ 
+
+
+''O COMPOUND INDEX É USADO FROM LEFT TO RIGHT''''..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> É POR ISSO QUE O PROFESSOR EXPLICOU QUE 'A ORDEM IMPORTA'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO SIGNIFICA QUE SE NÓS TENTARMOS RODAR UM FIND APENAS por 'gender: male',
+
+
+
+
+
+
+
+
+
+
+
+VAMOS __ ACABAR RODANDO UM 'COLLSCAN',
+
+
+
+EM VEZ DE UM 'IXSCAN' -------> ISSO PQ 
+
+
+
+
+O MONGODB TEM ESSA LIMITAÇÃO,
+
+ELE 
+
+É 
+
+_________INCAPAZ__ DE 'LOOK INTO' 
+
+
+
+O SEGUNDO VALOR DE 
+
+
+" dob.age_1_gender_1  " (ou qualquer outro COMPOUND INDEX NAME )
+
+
+
+
+
+
+
+_ DE FORMA STANDALONE....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->  E ISSO, ESSA LIMITAÇÃO,
+
+FAZ TOTAL SENTIDO...
+
+
+
+
+
+
+
+
+
+
+
+
+-> mas pq faz sentido?
+ 
+
+
+
+
+
+
+
+
+
+
+ --> É PQ SE VOCê TIVER UM MONTE DE PAIRS DE VALUES NO SEU INDEX,
+
+
+ como 
+
+
+ '{
+     33 male 
+ }
+
+ {
+     33 male 
+ }
+
+
+{
+     33 male 
+ }
+
+{
+     34 female 
+ }
+
+
+
+'
+
+
+
+
+
+
+
+
+'
+
+
+
+
+
+
+
+
+
+
+
+
+-------> SE VOCê TIVER UM MONTE DE ENTRIES NO SEU INDEX QUE POSSUEM ESSE FORMATO,
+
+sendo sortados pelo VALOR DE 
+
+'age',
+
+
+O INDEX 'VERDADEIRO', primário, 
+
+
+
+
+
+
+
+
+SERÁ __ 'age',
+
+
+
+
+
+
+pq 
+
+
+
+
+
+É ELE QUE ESTABELECE O 'SORTING DE VERDADE' (cima-baixo)
+
+
+
+
+
+
+
+
+
+
+
+-> JÁ O 'male/female', essa parte aí,
+
+
+
+
+
+
+
+
+
+SERÁ __ TAMBÉM SORTADA,
+
+
+MAS 
+
+
+APENAS _ DENTRO __ DE SUA PRÓPRIA CATEGORIA (
+
+    ou seja,
+
+
+    '33 female'
+
+    '33 female' 
+
+
+    '33 male' 
+)
+
+
+
+
+
+
+
+
+
+
+
+-> É CLARO QUE AS PARTES 'female/male'
+
+
+
+NAÕ SÃO SORTADAS NA 'OVERALL LIST',
+
+
+
+JUSTAMENTE 
+
+POR 
+ESTAREM 'GROUPED TOGETHER' com as AGES,
+
+que 
+
+
+
+
+SÃO O ELEMENTO QUE REALMENTE ESTABELECEU NOSSO SORTING E a parte 'principal' de nosso index...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PORTANTO,
+
+VOCÊ PODE USAR UM 
+
+COMPOUND INDEX 'from left to right '----------> SE VOCÊ TIVER UM COMPOUND INDEX com 3 ou 4 elementos (máximo 31),
+
+
+
+
+
+VOCê PODE, ENTÃO, 'USAR APENAS OS 2 PRIMEIROS, OS PRIMEIROS 3,
+
+
+OU OS 
+
+
+4'.... --> A ÚNICA COISA QUE VOCê ________NÃO PODERÁ FAZER__ É USAR O 'FOURTH OR THIRD ONE'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESSAS SÃO AS RESTRIÇÕES DOS 'compound indexes'...
+
+
+
+
+
+
+
+
+
+
+-> MAS COMPOUND INDEXES EM GERAL TE DEIXAM 'SPEED UP' suas queries 
+
+
+
+QUE USAM MÚLTIPLOS VALORES,
+
+
+SE VOCÊ 
+
+
+
+
+
+
+
+
+
+
+
+CRIAR 1 COMPOUND INDEX NESSES 'MULTIPLE VALUES'...

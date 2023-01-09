@@ -1,0 +1,472 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> ok, vamos CONTINUAR COM O 'DELETE' DE PRODUCTS, AGORA...
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO,
+
+
+
+
+PRECISAMOS 
+
+
+
+USAR O 'productDeleteHandler' ---> 
+
+
+
+V
+AMOS REMOVER O CÓDIGO 
+
+
+
+
+DO 
+
+
+
+
+
+
+AXIOS,
+
+E ÁI 
+
+
+VAMOS USAR 
+
+
+AQUELE 
+
+
+
+CÓDIGO QUE 
+
+
+FAZ 
+
+
+REACH OUT 
+
+
+
+AO 
+
+
+
+
+
+MONGODB (e, sim, você poderia outsourcear isso em uma function separada)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+COMEÇAMOS COM ISTO:
+
+
+
+
+
+
+
+
+
+
+
+  productDeleteHandler = (productId) => {
+
+    const mongodb = Stitch.defaultAppClient.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas');
+
+
+    mongodb.db('shop2').collection('products').deleteOne()
+    .then(
+      () => {
+
+      }
+    )
+    .catch(
+      (err) => {
+        this.props.onError('Deleting the product failed. Please try again later.');
+      }
+    )
+
+
+
+
+
+
+
+
+
+
+  };
+
+
+
+
+
+
+
+
+
+
+
+
+
+  EX:
+
+
+
+
+
+
+
+
+
+
+
+
+    productDeleteHandler = (productId) => {
+
+    const mongodb = Stitch.defaultAppClient.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas');
+
+
+    mongodb.db('shop2').collection('products').deleteOne(
+      {
+        _id: ObjectId(productId)
+      }
+    )
+    .then(
+      () => {
+
+      }
+    )
+    .catch(
+      (err) => {
+        this.props.onError('Deleting the product failed. Please try again later.');
+      }
+    )
+
+
+
+
+
+
+
+
+
+
+  };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> mas o import de 'ObjectId' 
+
+  realmente naõ está funcionando... --> talvez tentar isso SEM 
+
+
+
+  o 
+
+  'objectId'?  (Ver se a conversão é automática, com o mongo stitch...)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  -----> É CLARO QUE SE QUEREMOS __ CONSEGUIR__ DELETAR ALGUMA COISA, PRECISAMOS DA AUTORIZAÇÃO PARA TAL...
+
+
+
+
+
+
+
+
+
+  --> no caso, só temos, ainda, 'anon users' (users genéricos de nosso app, sem login específico) ---> esse 
+
+  tipo de user 
+
+
+
+  NÃO DEVE SER CAPAZ DE FAZER DELETE 
+
+
+  DE NOSSOS PRODUCTS...
+
+
+
+
+
+
+
+
+
+  --> mesmo assim, testamos esse delete para ver se ele funciona...
+
+
+
+
+
+
+
+
+
+
+  ---> ok, ele funciona, MESMO COM A FALTA DE IMPORT DE 'ObjectId()'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> CERTO.... ---> AGORA SÓ PRECISMAOS 
+
+
+
+
+  CRIAR 1 
+
+  USER 
+
+  QUE 
+
+
+  FAÇA 
+
+
+
+
+  ESSE PROCESSO PARA NÓS...
+
+
+
+
+
+
+
+  --> que seja capaz de fazer essa conversão...
+
+
+
+
+
+
+
+
+
+
+  (
+      OBS: O CÓDIGO DO PROFESSOR FICOU COM O PROBLEMA DO 'ObjectId'(),
+
+
+      mas parece que o realm dispensou a necessidade dessa conversão...
+  )
+
+
+
+
+
+
+
+
+
+
+  --. O FIX DO PROFESSOR FOI O USO DA PACKAGE DE 
+
+
+  'bson',
+
+
+
+  QUE 
+
+
+  É UMA PACKAGE 
+
+
+
+
+
+  ___ QUE NOS __ DEIXA__ CRIAR UM OBJECTID OBJECT__ 
+
+
+
+  DENTRO  DO BROWSER__ (e não em um backend como o node, por exemplo)...
+
+
+
+
+
+
+
+npm install --save bson....
+
+
+
+
+
+
+
+
+
+--> PARA USAR O 
+
+
+'bson',
+
+
+
+
+
+escrevemos assim:
+
+
+
+
+
+
+
+
+
+
+import BSON from 'bson' ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> AÍ VAMOS ESCREVER ASSIM:
+
+
+
+
+
+
+
+
+
+new BSON.ObjectId(productId)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, O DELETE DE 1 PRODUCT AGORA FUNCIONA, MAS QUEREMOS ADICIONAR 1 USER COM ESSA PERMISSÃO...
+
+
+
+
+
+
+
+

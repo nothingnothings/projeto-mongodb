@@ -1,0 +1,221 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> ASSIM COMO TEMOS '$unset'
+ 
+
+ PARA __ DROPPAR__ 1 FIELD ESPECÍFICO,
+
+
+
+
+
+
+
+
+ TEMOS TAMBÉM 
+
+
+
+ A OPÇÃO __ DE RENOMEAR _ FIELDS....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ EX, TEMOS O MANU:
+
+
+
+
+
+
+
+
+
+ {
+        "_id" : ObjectId("6206ef9a302d097773cc19a5"),
+        "name" : "Manu",
+        "hobbies" : [
+                {
+                        "title" : "Cars",
+                        "frequency" : 1
+                },
+                {
+                        "title" : "Horses",
+                        "frequency" : 2
+                }
+        ],
+        "phone" : "2222222222",
+        "age" : 40
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA DIGAMOS QUE QUEREMOS RENOMEAR 'age' para 'totalAge'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO,
+
+
+
+PODEMOS RODAR:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.users.updateMany(
+    {},
+
+
+
+
+    {
+        $rename: {
+
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> É O OPERATOR DE '$rename' --> ELE ACEITA/EXIGE 1 DOCUMENT COMO VALUE,
+
+EM QUE 
+
+VOCÊ ESPECIFICA O FIELD QUE VOCÊ QUER RENOMEAR... -> AÍ ,
+
+
+COMO UMA STRING,
+
+VOCÊ ESCREVE O NOVO NAME QUE ESSE 
+
+FIELD DEVERÁ TER....
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+
+db.users.updateMany(
+    {},
+    {
+        $rename: {
+            age: "newAge"
+        }
+    }
+)
+
+
+
+
+------------------------------
+
+
+
+
+
+
+
+
+
+TODOS OS DOCUMENTS QUE NÃO TINHAM O FIELD DE 'age'
+
+
+
+NÃO TERÃO SOFRIDO EFEITOS.... --> PARA QUE SOFRAM EFEITOS, VOCÊ PRIMEIRAMENTE DEVERIA TER SETTADO O FIELD DE 'age',
+
+por meio de 
+
+
+'$set'...

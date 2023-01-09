@@ -1,0 +1,1066 @@
+
+
+
+
+
+
+
+
+
+
+AUTHENTICATION E AUTHORIZATION...
+
+
+
+
+
+
+
+
+
+
+
+
+O QUE SÃO?
+
+
+
+
+
+
+
+
+
+
+
+
+SÃO 2 CONCEITOS CORRELATOS....
+
+
+
+
+
+
+
+
+
+
+
+
+
+AUTHENTICATION --> É 'ALL BOUT' o IDENTIFY DOS USERS NA SUA DATABASE.... (
+
+    IDENTIFICA USUÁRIOS VÁLIDOS DE UMA DATABASE...
+
+)
+
+
+
+
+
+
+
+
+
+
+AUTHORIZATION --> IDENTIFICA __ O QUE_ CADA 1 DESSES USERS É CAPAZ DE FAZER, NA SUA DATABASE...
+
+
+
+
+
+
+
+
+
+
+
+-----> SE QUEREMOS USAR UMA ANALOGIA DO MUNDO REAL:
+
+
+
+
+
+
+'''SOU EMPREGADO, POSSO ACESSAR O ESCRITÓRIO DO MEU EMPREGO''' 
+
+
+
+
+'''MAS NÃO POSSO ACESSAR O COFRE, PQ ISSO É COISA DO GERENTE'''' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MONGODB USA ESSES 2 CONCEITOS PARA 
+
+CONTROLAR:
+
+
+1) QUEM PODE SE CONECTAR AO SERVER 
+
+
+
+
+
+
+
+
+
+2) O QUE CADA 1 DESSAS PESSOAS PODE FAZER...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> por 'people'/'pessoas',
+
+
+
+
+
+PROFESSOR NÃO QUER DIZER APENAS PEOPLE,
+
+
+
+E SIM 
+
+
+
+O 
+
+
+'APP QUE VOCÊ ESTÁ CONSTRUINDO' -------> PQ VOCÊ, COMO DEV,
+
+
+
+VAI ESCREVER CÓDIGO DE MODO QUE 
+
+
+SEU 
+
+SERVER/APP VAI 
+
+
+SE 
+
+
+CONECTAR 
+
+AUTOMATICAMENTE 
+
+À DATABASe SERVER...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> TAMBÉM É IMPORTANTE ENTENDER 
+
+QUE QUANDO O PROFESSOR FALA DE 
+
+
+
+'users',
+
+ELE NÃO ESTÁ 
+
+FALANDO 
+
+DOS 
+
+
+USERS 
+DA 
+
+
+SUA 
+
+SHOP,
+
+
+E 
+
+
+SIM 
+
+DOS 
+
+
+
+'USERS' que são o 'app',
+
+
+
+
+ou 
+
+
+
+
+então os 'admin'/donos 
+
+
+
+
+do mongodb server. .. --> pessoas que tem permissão 
+
+para 
+
+
+
+trabalhar diretamente 
+
+
+
+
+COM SEU DATABASE SERVER....
+
+
+
+
+
+
+
+
+
+--------> MAS ANTES DE ESCREVERMOS ALGUNS COMANDOS PARA 'CREATE USERS'
+ 
+
+
+ E 'AUTHENTICATE' nossa database,
+
+
+
+
+ É IMPORTANTE 
+
+
+ ENTENDER 
+
+ COMPLETAMENTE 
+
+
+
+
+
+
+ O 
+
+
+ SISTEMA 
+
+ DE 
+ DATABASE
+
+ USADO 
+
+
+
+ PELO MONGODB...
+
+
+
+
+
+
+
+
+
+
+--> O MONGODB 
+
+
+
+
+EMPREGA UM 
+
+
+
+
+SISTEMA DE 
+
+
+
+'ROLE BASED ACCESS CONTROL'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO FUNCIONA ASSIM:
+
+
+
+
+
+
+
+
+
+
+DIGAMOS QUE TEMOS UM 
+
+MONGODB SERVER COM 3 DATABASES...  -----> 
+
+
+
+
+
+
+
+
+
+
+TEMOS:
+
+
+
+
+
+
+
+
+1) SHOP DATABASE --> collections de PRODUCTS e CUSTOMERS 
+
+
+
+
+
+
+2) BLOG DATABASE --> collections de POSTS e AUTHORS 
+
+
+
+
+
+
+3) ADMIN DATABASE --> essa é uma database que já vimos nos módulos anteriores, ela já vem 'out of the box'...
+--> É UMA DATABASE ESPECIAL, E O PROFESSOR DEPOIS VAI NOS EXPLICAR A RAZÃO DE ELA SER ESPECIAL....
+
+
+
+*'local' 
+
+
+*'config' 
+
+(2 databases adicionais, out of the box)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> OK... TEMOS 
+
+
+
+ESSAS 2 DATABASES 'não especiais'... -------> SÃO DATABASES CRIADAS POR NÓS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> OK... AÍ NÓS ENABLAMOS AUTHENTICATION NA NOSSA DATABASE,
+
+
+
+
+
+
+NO MONGODB SERVER (que abrange essas 3 databases)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AUTHENTICATION PODE SER IMPLEMENTADA, NO MONGODB,
+
+DE UMA MANEIRA BEM FÁCIL....
+
+
+
+
+
+
+
+
+
+
+--> DE REPENTE,
+
+NOSSO MONGODB SERVER SÓ DEIXA 'AUTH USERS'
+
+
+
+interagirem com os DOCUMENTS e com o overall server...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> OK.. DIGAMOS QUE TEMOS 1 'USER'... ----> user pode significar UMA REAL PERSON,
+
+
+COMO UM 
+
+
+'DATA ANALYST', um cara que vai se conectar a sua database ATRAVÉS DO MONGOSHELL (como 
+estamos fazendo, nesse curso),
+
+
+
+OU ENTÃO PODE SER 
+
+
+'UM APP DE VERDADE',
+
+
+
+que pode 
+
+
+ser o MONGODB DRIVER DE SEU APP, ou o 'OVERALL APP CODE usando o driver para se conectar a sua database'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+USER ==== NÃO SERÁ O '''USER''' DE SEU APP, NÃO VAI SER O OTÁRIO QUE COMPRA PRODUCTS, ETC...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+User ===== DATA ANALYST OR YOUR APP...
+
+
+
+
+
+
+
+
+
+
+
+--> OK, TEMOS UM USER QUE QUER INTERAGIR COM 
+
+
+
+A MONGODB DATABASE...
+
+
+
+
+
+
+
+
+
+--> CERTO... --> COMO CRIAMOS UM USER,
+
+
+PRECISAMOAS 
+
+
+LOGGAR 
+
+
+COM 
+
+
+'AUTHENTICATION E PASSWORD',
+
+
+
+justamente 
+
+pq 
+
+
+
+
+'AUTHENTICATION FOI ENABLADA'...
+
+
+
+
+
+
+
+
+
+
+
+---> E O MONGODB AUTOMATICAMENTE TEM UM PROCESSO NO LUGAR,
+
+
+EM QUE 
+
+TEMOS 
+
+
+QUE 
+
+INPUTTAR UM USERNAME E PASSWROD... --> É CLARO QUE ISSO SIGNIFICA QUE 
+
+
+UM 
+
+
+USER PRECISA EXISTIR NO MONGODB SERVER 
+
+
+PREVIAMENTE,
+
+
+
+
+
+CASO CONTRÁRIO 
+
+
+O LOGIN SERÁ IMPOSSÍVEL... --> é exatamente isso que faremos 
+
+
+
+
+nas próximas lições;
+
+
+
+vamos  
+
+
+
+
+
+
+
+CRIAR __ UNS USERS DESSES, NA NOSSA DATABASE... (antes eu havia feito isso no MONGODB ATLAS, mas nunca em um server físico, presencial)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... --> DIGAMOS QUE O USER JÁ EXISTE NO SERVER,
+
+
+
+
+E QUE 
+
+
+
+
+O USER 'DE VERDADE'
+
+FEZ LOGIN NO SERVER COM ESSE USER...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> OK, ESTAMOS LOGGED IN... --> MAS 
+
+
+COM APENAS ESSA INFO AÍ,
+
+DE QUE ESTMAOS 
+
+'logged in',
+
+
+
+
+
+
+NÃO TEMOS PERMISSÃO PARA FAZER COISA ALGUMA... --> EM VEZ DISSO,
+
+
+
+
+
+NO MONGODB USERS 
+
+SÃO 
+
+ENTITIES 
+
+
+QUE 
+
+
+NÃO 
+
+
+SÃO APENAS COMPOSTAS DE 'USERNAME' E 'PASSWORD',
+
+
+
+MAS TAMBÉM 
+
+
+
+TEM ASSIGNADOS A ELES alguns 'roles'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> E ESSES 'ROLES'
+ 
+
+ SÃO UNS GRUPOS DE PRIVILEGES.... --> O QUE É UM 'PRIVILEGE'?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ O QUE SÃO PRIVILEGES? 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ PRIVILEGE --> É SEMPRE UMA COMBINAÇÃO de 
+
+
+
+
+ '1 RESOURCE' + '1 ACTION' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> ISSO PODE PARECER BEM OBSCURO, MAS NÃO É TÃO DIFÍCIL... -----> 
+
+
+
+
+
+
+
+
+
+
+EXEMPLO:
+
+
+
+
+
+RESOURCE --> será a DATABASE DE 'shop', collection de 'products'...
+
+
+
+ACTIONS --> será a action de 'insert()' --> 
+
+
+
+
+
+
+
+
+OK, O USER PODERÁ FAZER 'INSERT' 
+
+
+DE DOCUMENTS 'PRODUCT',
+
+lá 
+
+
+
+NA collection de 'PRODUCTS'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK... PRIVILEGE --> SÃO OS DIREITOS DE CADA USER...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ESSE PRIVILEGE EXISTIRÁ PARA ALGUM LOGGED-IN USER,
+
+nesse nosso exemplo (algum admin, por exemplo)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> COMO MENCIONADO, ISSO É UM PRIVILEGE --> TIPICAMENTE VOCÊ 
+
+
+
+
+
+NÃO TERÁ 
+
+
+
+
+PRIVILEGES 'SOZINHOS' --> eles GERALMENTE SÃO AGRUPADOS,
+
+
+
+E FORMAM AQUILO QUE 
+
+
+
+É CHAMADO DE 
+
+
+
+'ROLES'...
+
+
+
+
+
+
+
+
+
+
+
+ROLE --> VÁRIOS PRIVILEGES --> e cada privilege pode ter algumas actions ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+USER TEM UM ROLE, ROLE QUE INCLUI TODOS OS PRIVILEGES QUE FAZEM SENTIDO PARA ESSE USER...
+
+
+
+
+
+
+
+
+
+
+
+
+--> E É ESSE O MODELO USADO PELO MONGODB,
+
+
+QUE 
+
+
+VEREMOS NAS PRÓXIMAS AULAS...  -----> É UM MODELO BEM FLEXÍVEL,
+
+
+E O 
+
+ESTUDARMEOS 
+
+
+
+AO LONGO 
+
+DAS 
+
+
+
+PRÓXIMAS AULAS....
+
+
+
+
+
+
+
+ELE NOS DEIXA CRIAR MÚLTIPLOS USERS QUE, NÓS, COMO DATABASE OWNER/ADMIN,
+
+
+
+
+
+PODEMOS 
+
+DAR 
+
+EXATAMENTE OS RIGHTS DE QUE AQUELE USER PRECISA.... --> E ISSO É IMPORTANTE:
+
+
+
+
+NÕA QUEREMOS DAR TODOS OS RIGHTS A 1 USER APENAS... --> PQ SE O DATA ANALYST 
+
+
+TEM 
+
+
+TODOS OS RIGHTS,
+
+
+ESSA 
+
+PESSOA 
+
+
+
+FICA, DE REPENTE,
+
+
+CAPAZ 
+
+
+DE 
+
+
+
+DELETAR DOCUMENTS/DATABASES --> E NO CASO DO DATA ANAYLST,
+
+
+
+
+VAMOS QUERER QUE A PESSOA SÓ SEJA CAPAZ DE 'READ DATA'...
+
+
+
+
+
+
+
+
+
+--> PESSOAS PODEM ACABAR APAGANDO COISAS POR ACIDETNE,
+
+
+
+POR ISSO 
+
+
+GARANTIMOS A UMA PESSOA 
+
+
+SO´
+
+
+
+AS COISAS DE QUE 
+
+ela REALMENTE PRECISA... --> e isso 
+
+é um 
+
+
+
+APPROACH COMUM EM VÁRIAS LINGUAGENS DE DATABASE,
+
+
+
+E QUE É USADA NO MONGDOB TAMBÉM..

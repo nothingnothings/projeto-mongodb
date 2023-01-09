@@ -1,0 +1,564 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> O QUE INFLUENCIA PERFORMANCE, ENTÃO?
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> POR 1 LADO,
+
+
+
+TEMOS COISAS QUE NÓS DIRETAMENTE/INDIRETAMENTE CONTROLAMOS, COMO DESENVOLVEDORES...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> TEMOS QUE:
+
+
+
+
+
+
+
+
+1) ESCREVER QUERIES/OPERATIONS ___ EFICIENTES... de find, insert, update, delete, TAMBÉM O AGGREGATE FRAMEWORK... -> tudo isso deve ser feito de uma 
+
+MANEIRA CUIDADOSA, TUDO PARA QUE VOCÊ RETRIEVE A DATA DE QUE VOCê PRECISA,  para que você inserte a data tbm da maneira que você necessita, no formato correto, com os 'writeConcern' corretos....
+
+
+
+
+
+
+2) USAR INDEXES --> ou vocÊ vai ter acesso à database e vai criá-los por conta própria,
+
+ou então você vai 'comunicate' com o DATABASE ADMIN,
+
+para então poder garantir que, PARA AS QUERIES QUE SEU APP FAZ,
+
+
+VOCÊ TERÁ 
+
+
+os 
+
+'CORRETOS INDEXES' PARA __ SUPORTAr__ ESSAS QUERIES,
+PARA 
+
+RODÁ-LAS EFICIENTEMENTE....
+
+
+
+
+
+
+
+3) POR FIM,
+ 
+ UMA 
+
+ 'FITTING DATA SCHEMA',
+
+
+ um 
+
+ data schema eficiente,
+
+
+
+ sem redundâncias e incompatibilidades (ver REFERENCING e EMBEDDING) TAMBÉM É NECESSÁRIO --->  SE VOC~E 
+
+
+
+ SEMPRE PRECISA TRANSFORMAR SUA 
+
+
+
+ DATA 
+
+
+ TANTO NO CLIENTSIDE OU QUANDO 
+
+ FAZ 
+
+
+ FETCH 
+
+
+
+ COM O AGGREGATION FRAMEWORK,
+
+
+
+
+ se vocÊ 
+
+ precisa 
+
+ fazer 
+ um monte 
+
+
+ de transformations para conseguir 'common queries',
+
+
+ ISSO SIGNIFICA/SIGNIFICARÁ QUE 
+
+
+
+
+ O FORMATO DE DISTRIBUIÇÃO DE SUA DATA,
+ COMO 
+
+ ESTÁ ARMAZENADO NAS SUAS COLLECTIONS,
+
+
+
+
+ NÃO 
+
+
+ESTARÁ 'OPTIMAL' --> você tem que encontrar 1 data schema na sua database QUE 
+
+
+SE ENCAIXE 
+
+
+no perfil de seu aplicativo/use-case needs....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK...
+
+
+
+ESSE É O 'BLOCO DO DEVELOPER',
+
+as coisas que 
+
+você deve ter em mente como DEV...
+
+
+
+
+
+
+
+
+
+são: 
+
+
+------------|
+   QUERIES EFICIENTES/OPERATIONS EFICIENTES         |
+            |
+            |
+  INDEXES   APROPRIADOS       |
+
+            |
+
+   DATA SCHEMA QUE FAZ SENTIDO         |
+-------------
+
+
+
+
+
+
+
+
+
+
+
+----> ESSES SÃO FATORES QUE 
+
+
+VOCÊ 'PODE INFLUENCIAR' como DEV e como 
+
+
+
+DATABASE ADMIN....
+
+
+
+
+
+
+
+
+
+
+
+--> CLARO QUE ESSE CURSO É PARA DEVELOPERS,
+
+
+
+ 
+ MAS VOCÊ AINDA TEM QUE TER ESSAS COISAS EM MENTE,
+
+ E AÍ 
+
+ CONVERSAR 
+
+
+ COM SEUS 
+
+ ADMINS ACERCA DE COISAS COMO 'INDEXES'
+
+
+ ou 
+
+ acerca 
+
+
+ do 
+
+ 'data schema',
+
+
+
+ TUDO 
+
+ PARA QUE 
+
+
+
+ VOCÊ CONSIGAM TRABALHAR EM CONJUNTO PARA ENTREGAR O MELHOR APP POSSÍVEL..
+
+
+
+
+
+
+
+
+
+ --> MAS TAMBÉM HÁ OUTRA PARTE 
+
+
+ SOBRE 'PERFORMANCE',
+
+
+ que 
+ é 
+
+
+ a parte 
+
+ que 
+
+ o professor 
+
+ ensinará 
+
+ nesse módulo...
+
+
+
+
+
+
+
+
+
+
+
+
+ --> É O 'OUTRO BLOCO' de preocupações:
+
+
+
+
+
+
+
+É COMPOSTO POR:
+
+
+
+
+
+
+
+
+
+
+1) HARDWARE E NETWORK em que vocÊ deploya seu MONGODB SERVER E DATABASE...
+
+
+
+
+
+
+
+
+
+
+2) SHARDING TAMBÉM É UM CONCEITO IMPORTANTE....
+
+
+
+
+
+
+
+
+
+
+3) REPLICA SETS TAMBÉM...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SHARDING E REPLICA SETS SERÃO EXPLCIADOS NESSE MÓDULO... -----> SÃO BASICAMETNE 'ALL ABOUT'
+
+
+
+
+
+DISTRIBUIR __ DATA___ E __ O 'WORKLOAD'/INCOMING REQUESTS,
+
+
+
+
+MAS 
+
+O 
+
+PROFESSOR VAI OS EXPLICAR EM DETALHE...
+
+
+
+
+
+
+
+
+
+
+
+------> mas o hardware e network,
+
+
+sharding e 
+
+replica sets 
+
+são tarefas que vocE^NÃO TEM QUE TER TANTO ENVOLVIMENTO,
+
+COMO 
+DESENVOLVEDOR...
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------|
+ HARDWARE E NETWORK        |
+            |
+            |
+ SHARDING      |
+
+            |
+
+    REPLICA SETS       |
+-------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+ESSAS SÃO TAREFAS _ tÍPICAS __dE 
+
+
+
+'DATABASE ADMIN' 
+
+
+
+e 
+
+
+'SYSTEM ADMIN'... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NÃO VAMOS ESTUDAR ESSES NEGÓCIOS TÃO A FUNDO,
+
+
+
+
+PQ 
+
+
+
+ESSES SÃO ASSUNTOS BEM 
+
+
+COMPLICADOS,
+
+
+
+
+E FAZEM 
+
+PARTE DE CURSOS 
+
+SEPARADOS 
+
+
+PARA 
+
+
+
+'ADMINISTRAR SERVERS E DATABASES',
+
+
+
+e não 
+
+
+são 
+
+algo que 
+
+vocÊ, como desenvolvedor,
+
+tem que fazer....
+
+
+
+
+
+
+
+
+--> MAS AINDA É BOM ENTENDER ISSO TUDO,
+
+PARA 
+
+ENTENDER A 'BIG PICTURE' DO MONGODB...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> COM ISSO,
+
+
+VEREMOS 'CAPPED COLLECTIONS' antes (tem mais a ver com O TRABALHO DOS DEVS),
+
+
+
+
+
+
+
+mas 
+
+posteriormente o professor vai NOS EXPLICAR O QUE É O SHARDING,
+
+
+O QUE SÃO REPLICA SETS,
+
+
+E A´I
+
+
+
+
+
+_ COMO __ PODEMOS __ DEPLOYAR_ NOSSO APP MONGODB NA WEB...

@@ -1,0 +1,758 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+->  OK.... DE VOLTA à SHELL... --> 
+
+
+
+escrevemos 'mongo' para conectar...
+
+
+
+
+
+
+
+
+
+
+
+--> VAMOS TRABALHAR COM A COLLECTION DE 'movies',
+
+QUE IMPORTAMOS NO ÚLTIMO MÓDULO....
+
+
+
+
+
+
+
+
+
+
+
+
+--> AÍ O PROFESOSR ESCREVE 
+
+'db.movies.findOne()' --> ISSO ENCONTRA/ENCONTRARÁ _ EXATAMENTE 1 ÚNICO OBJECT....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E O PROFESSOR EXPLICA QUE __ PODEMOS _ PASSAR 1 FILTER A ESSE METHOD,
+
+PARA ENTÃO DEFINIR QUAL 
+
+
+DOCUMENT PRECISA SER... --> MAS O TRASH É QUE 
+
+
+ELE VAI RETORNAR O PRIMEIRO DOCUMENT 
+QUE MATCHEIE ESSA QUERY...
+
+
+
+
+
+
+
+
+
+
+
+--> SE VOCê ESCREVER 'db.movies.findOne()'  
+
+
+
+
+
+
+
+ELE REALMENTE VAI PEGAR O PRIMEIRO 'DOCUMENT' NA SAU COLLECTION...
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS SE VOCê ESPECIFICAR 
+
+UM filter, TIPO UM 
+
+
+
+
+db.movies.findOne({age: 30}),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SE VOCê ESPECIFICAR ISSO,
+
+ELE VAI 'RETURN THE FIRST DOCUMENT THAT SATISFIES THAT CONDITION'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO SIGNIIFCA QUE 'findOne({})' 
+
+E 
+
+'findOne()'
+
+
+
+SEMPRE VAO RETORNAR O PRIMEIRO DOCUMENT...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... MAS OUTRO DETALHE CURIOSO É QUE 'findOne'
+
+
+
+
+NÃO VAI RETORNAR UM 
+
+
+poínter,
+
+ esim 
+
+
+ VAI RETORNAR só aquele 'acknowledged' com os 'insertedIds'...
+
+
+
+
+
+
+
+
+
+
+
+
+ COMO EXEMPLO DISSO,
+
+
+ EXECUTAMOS:
+
+
+
+
+
+
+
+
+
+
+
+ db.movies.findOne()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ isso nos retorna:
+
+
+
+ > db.movies.findOne()
+{
+        "_id" : ObjectId("62052b52d9ec2278a3f59325"),
+        "id" : 1,
+        "url" : "http://www.tvmaze.com/shows/1/under-the-dome",
+        "name" : "Under the Dome",
+        "type" : "Scripted",
+        "language" : "English",
+        "genres" : [
+                "Drama",
+                "Science-Fiction",
+                "Thriller"
+        ],
+        "status" : "Ended",
+        "runtime" : 60,
+        "premiered" : "2013-06-24",
+        "officialSite" : "http://www.cbs.com/shows/under-the-dome/",
+        "schedule" : {
+                "time" : "22:00",
+                "days" : [
+                        "Thursday"
+                ]
+        },
+        "rating" : {
+                "average" : 6.5
+        },
+        "weight" : 91,
+        "network" : {
+                "id" : 2,
+                "name" : "CBS",
+                "country" : {
+                        "name" : "United States",
+                        "code" : "US",
+                        "timezone" : "America/New_York"
+                }
+        },
+        "webChannel" : null,
+        "externals" : {
+                "tvrage" : 25988,
+                "thetvdb" : 264492,
+                "imdb" : "tt1553656"
+        },
+        "image" : {
+                "medium" : "http://static.tvmaze.com/uploads/images/medium_portrait/0/1.jpg",
+                "original" : "http://static.tvmaze.com/uploads/images/original_untouched/0/1.jpg"
+        },
+        "summary" : "<p><b>Under the Dome</b> is the story of a small town that is suddenly and inexplicably sealed off from the rest of the world by an enormous transparent dome. The town's inhabitants must deal with surviving the post-apocalyptic conditions while searching for answers about the dome, where it came from and if and when it will go away.</p>",
+        "updated" : 1529612668,
+        "_links" : {
+                "self" : {
+                        "href" : "http://api.tvmaze.com/shows/1"
+                },
+                "previousepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/185054"
+                }
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> OK... ISSO DEU CERTO..
+
+
+
+
+
+
+
+
+
+
+--> aGORA TEMOS UM PUNHADO DE DATA QUE PODEMOS 'PLAY AROUND'..
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> É ASSIM QUE PODEMOS ENCONTRAR '1 DOCUMENT'...
+
+
+
+MAS DIGAMOS QUE QUEREMOS ENCONTRAR 1 DOCUMENT DIFERENTE....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS ANTES DISSO VAMOS VER A ALTERNATIVA À 'findOne',
+
+
+QUE É 
+
+
+'find()'....
+
+
+
+
+
+
+
+
+
+
+
+-> FIND' VAI NOS RETORNAR UM CURSOR,
+
+
+
+COMO APRNEDMEOS ANTERIORMENTE,
+
+
+e não todos os documents na sua collection...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E 'pretty'
+
+É UM METHOD QUE PODEMOS CHAINAR PARA CONSEGUIR UM OUTPUT MAIS PRETTY....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... --> ISSO VAI NOS DAR 1 CURSOR,
+
+
+
+E NÃO VAI NOS DAR TODOS OS DOCUMENTS (PARA 
+
+EVITAR 
+
+
+
+FAZERMOS GET DE TODOS OS DOCUMENTS DA DATABASE, QUE SERIA MT 
+
+DEVAGAR....
+
+)
+
+
+
+
+--> VAMOS OBTER SÓ OS PRIMEIROS 20 DOCUMENTS, COM O SHELL...
+
+
+
+
+
+
+
+
+
+
+
+
+-> AÍ 
+
+
+
+
+PODMEOS  
+
+PROCURAR 1 DOS 
+
+DOCUMENTS POR MEIO DE ALGUM DE SEUS FIELDS,
+
+
+como 
+
+
+
+"{
+    name: 'Max"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> É ASSIM QUE ESPECIFICAMOS UM FILTER,
+
+TANTO EM 'find()'
+
+
+
+
+como 
+
+
+'findOne()'....
+
+
+
+
+
+
+
+
+
+
+
+-- >É UM EQUALITY OPERATOR, ACHO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------> findOne --> VAI NOS ENCONTRAR APENAS 1 OBJECT QUE 
+
+
+
+TEM ESSE CRITÉEIOR,
+
+
+
+
+
+
+
+
+
+
+AO PASSO QUE 
+
+
+'find'
+
+
+VAI NOS RETORNAR __TODOS OS OBJECTS__ COM ESSE CRITÉRIO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------> AGORA ESCREVEMOS:
+
+
+
+
+
+
+
+
+
+db.movies.findOne({name: "The Last Ship"})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> OK.... ----> QUEREMOS PROCURAR POR ESSE FIELD,
+
+
+
+COM ESSE VALOR....
+
+
+
+
+
+
+
+
+
+
+------> SE ESCREVEMOS ASSIM,
+
+
+O MONGODB VAI 'LOOK FOR EQUALITY'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> SE APERTAMOS 
+
+
+
+'ENTER',
+
+
+
+ 
+ VAMOS CONSEGUIR 
+
+
+ SÓ 
+
+
+
+ 1 DOCUMENT 
+
+
+
+
+
+
+
+
+
+ QUE TEM 
+
+
+ ESSE 'last ship',
+
+
+
+ PQ SÓ EXISTE 1 COM ISSO, E PQ RODAMOs 'findOne'
+
+
+ na nossa 
+
+ database..
+
+
+
+
+
+
+
+
+
+
+ -----------------------------
+
+
+
+
+
+
+
+
+
+ OK... 
+
+
+
+
+
+
+
+
+
+
+ ENTENDI, TUDO ISSO EU JÁ SABIA..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ OK, ESSES SÃO OS FIND E FINDONE,
+
+ E COMO VOCê  
+
+
+
+
+
+
+ PASSA 1 'FILTER' por meio do pass de um FILTER POR MEIO DO PASS DE UM 'DOCUMENT' COMO ARGUMENT,
+
+
+
+ E ESSE 
+
+ DOCUMENT DESCREVE SUA 'FILTERING CRITERIA'....  -------> E AQUI USAMOS 
+
+ 'EQUALITY',
+
+
+
+ MAS É CLARO QUE EXISTEM 
+
+
+ BEM MAIS 
+
+ MANEIRAS 
+
+ DE FILTERING,
+
+ E BEM MAIS OPERATORS DE FILTERING....
+
+
+
+
+
+
+
+
+
+
+
+ -- >DEVEMOS ESTUDAR ESSES OPERATORS...

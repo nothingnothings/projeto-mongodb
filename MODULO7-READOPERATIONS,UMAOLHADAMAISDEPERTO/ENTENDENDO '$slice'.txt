@@ -1,0 +1,584 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> HÁ MAIS UM PARÂMETRO ESPECIAL DE 'PROJECTION',
+
+
+
+
+
+
+
+
+
+
+PROJECTION PARAMETER,
+
+QUE TEM RELAÇÃO COM 'ARRAYS'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------> É O OPERATOR DE "$slice' -----> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+O PROFESSOR REPETE AQUELA ÚLTIMA QUERY,
+
+
+esta aqui:
+
+
+
+> db.movies.find({"rating.average": {$gt: 9}}, {genres: {$elemMatch: {$eq: "Horror"}}}).pretty() 
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PROCURA POR MOVIES COM RATING.AVERAGE MAIOR DO QUE 9,
+
+
+
+
+
+
+E EM QUE TEMOS 
+
+
+
+UM ARRAY DE 'genres'
+
+QUE POSSUA UMA STRING 'Horror'...
+
+
+
+
+
+
+
+
+
+
+
+
+-> EM VEZ DISSO,
+
+O PROFESSOR USARÁ OUTRO CRITÉRIO.... --> ELE AINDA VAI USAR UM 'SPECIAL VALUE'
+
+
+nesse 'genres' do segundo parâmetro:
+
+
+
+
+
+
+
+db.movies.find({"rating.average": {$gt: 9}}, {genres: {}} )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NO CASO,
+
+
+ELE VAI PROCURAR POR UM 'SLICE' 
+
+
+DO ARRAY DE 'genres'....
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+db.movies.find({"rating.average": {$gt: 9}}, {genres: {$slice: 2}, name: 1} )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> COLOCAMOS UM VALUE DE '2'... --> 
+
+DIGAMOS QUE 
+
+SERÁ UM VALUE DE 2... ------> O QUE ISSO VAI RETORNAR, A NÓS,
+
+
+
+
+
+
+
+É UMA LIST DE ITEMS EM QUE 
+
+
+
+
+
+TEREMOS SÓ O '_id',
+
+
+O 
+
+'name'
+
+
+
+E AÍ 
+
+
+
+
+OS GENRES --> ENTRETANTO,
+
+
+SÓ TEREMOS 'THE FIRST TWO ELEMENTS'
+
+desse array
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+db.movies.find({"rating.average": {$gt: 9}}, {genres: {$slice: 2}, name: 1})
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+> db.movies.find({"rating.average": {$gt: 9}}, {genres: {$slice: 2}, name: 1})
+{ "_id" : ObjectId("62052b52d9ec2278a3f59337"), "name" : "Berserk", "genres" : [ "Anime", "Fantasy" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59377"), "name" : "Game of Thrones", "genres" : [ "Drama", "Adventure" ] }      
+{ "_id" : ObjectId("62052b52d9ec2278a3f593c7"), "name" : "Breaking Bad", "genres" : [ "Drama", "Crime" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593cf"), "name" : "The Wire", "genres" : [ "Drama", "Crime" ] }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593d0"), "name" : "Firefly", "genres" : [ "Adventure", "Science-Fiction" ] }    
+{ "_id" : ObjectId("62052b52d9ec2278a3f593e9"), "name" : "Stargate SG-1", "genres" : [ "Action", "Adventure" ] }       
+{ "_id" : ObjectId("62052b52d9ec2278a3f593f4"), "name" : "Rick and Morty", "genres" : [ "Comedy", "Adventure" ] }  
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> ISSO, É CLARO, VAI NOS DAR UMA LIST DE ITEMS,
+
+
+
+
+
+
+
+
+
+
+que serão, como dito,
+
+
+assim:
+
+
+
+
+
+
+
+--> COLOCAMOS UM VALUE DE '2'... --> 
+
+DIGAMOS QUE 
+
+SERÁ UM VALUE DE 2... ------> O QUE ISSO VAI RETORNAR, A NÓS,
+
+
+
+
+
+
+
+É UMA LIST DE ITEMS EM QUE 
+
+
+
+
+
+TEREMOS SÓ O '_id',
+
+
+O 
+
+'name'
+
+
+
+E AÍ 
+
+
+
+
+OS GENRES --> ENTRETANTO,
+
+
+SÓ TEREMOS 'THE FIRST TWO ELEMENTS'
+
+desse array
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-. ISSO ACONTECEU PQ NÓS 'slice'
+
+
+2 DOS NUMBERS... (E o resto foi excluído)--------> É CLARO QUE EXISTEM MAIS OPTIONS COM 
+
+ESSE ARGUMENTO... ---------> VOCê 
+
+
+
+
+
+
+
+
+
+PODE ATÉ MESMO USAR 'SLICE' de uma maneira DIFERENTE.... --> VOCÊ PODE 
+
+
+
+
+USAR O '$SLICE'
+
+
+NO FORMATO/PADRÃO DE 'array'.... ----> 
+
+
+
+tipo assim:
+
+
+
+
+
+db.movies.find({"rating.average": {$gt: 9}}, {genres: {$slice: []}, name: 1})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE VOCÊ USAR ESSE FORMATO,
+
+
+
+
+
+VOCê TEM, NO ARRAY, OS PARÂMETROS:
+
+
+
+
+
+
+
+1) A QUANTIDADE DE ELEMENTS 
+
+NO ARRAY (de genres)
+
+QUE VOCÊ VAI SKIPPAR....
+
+
+
+
+
+
+2) JÁ O SEGUNDO ARGUMENTO É "A QUANTIDADE DE DATA A QUE VOCÊ VAI QUERER LIMITAR ESSE SEU ARRAY''..
+                            (quase como "$size")...
+
+
+
+
+
+
+
+
+
+
+
+
+
+Ex:
+
+
+
+
+
+
+
+
+db.movies.find({"rating.average": {$gt: 9}}, {genres: {$slice: [1, 2]}, name: 1})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NESSE CASO, COM ESSES PARÂMETROS,
+
+
+VAMOS 'SKIPPAR O PRIMEIRO ITEM DO ARRAY'
+
+
+
+
+E AÍ 
+
+VAMOS 
+
+
+RETORNAR OS ITEMS 2 E 3,
+
+apenas eles....
+
+
+
+
+
+
+
+
+
+--> realmente, o primeiro value terá sido skippado, e os outros 2 
+
+vão ser retornados....
+
+
+
+
+
+
+
+
+
+
+--> AGORA TEMOS UM MONTE DE DIFERENTES MANEIRAS DE CONTROLAR O QUE VOCÊ VÊ...
+
+
+
+
+
+
+
+--> para normal fields,
+
+é fácil de fazer o choose, com '0' e '1'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> JÁ PARA 'ARRAYS',
+
+
+é difícil/impossível de fazer isso com '0' e '1',
+
+
+
+E JUSTAMENTE POR ISSO VOCÊ TEM 
+
+'$elemMatch',
+
+
+
+'$'
+
+
+e 
+
+"$slice"
+
+
+
+
+PARA _ CONTROLAR__ QUAIS ELEMENTS DO ARRAY ACABAAM NO SEU 'RESULT SET'
+
+
+
+
+
+
+
+
+
+
+OK... COM ISSO, OBTEMOS 'FULL CONTROL' DAQUILO QUE FETCHEAMOS,
+
+POR MEIO DO FILTERING...
+
+
+
+
+
+
+
+
+--> E AÍ, TAMBÉM 
+
+
+TEMOS A VANTAGEM DE ESCREVER QUAIS FIELDS DOS SEUS DOCUMENTS DEFVEM SER ENFIADOS NOS RESULTS DE SEU RESULT SET,
+
+
+obtido por 'find()' com diversos methods e operators...

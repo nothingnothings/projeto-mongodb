@@ -1,0 +1,437 @@
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -> DEMOS UMA BOA OLHADA NO QUE SÃO INDEXES,
+
+
+ E SOBRE COMO VOCÊ PODE CRIAR SEUS PRÓPRIOS INDEXES...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> E O PROFESSOR QUER NOS ENCORAJAR A 
+
+
+
+
+ PLAY AROUND COM INDEXES,
+
+
+ PARA VERMOS NOSSAS DIFERENTES OPTIONS,
+
+
+
+ E PARA 
+
+ VER COMO INDEXES FUNCIONAM...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ---> MAS PARA QUE CONSIGAMOS 'PLAY AROUND'
+
+
+ E PARA QUE 
+
+ SAIBAMOS SE UM INDEX É WORTH THE EFFORT,
+
+
+
+
+
+
+
+
+
+
+ PRECISAMOS SER CAPAZES DE 
+
+
+
+
+
+
+ '''DIAGNOSE YOUR QUERIES''''
+
+
+
+
+
+
+
+
+ --> ANTES DE MAIS NADA,
+
+ O METHOD DE '
+
+
+
+ explain()'
+
+
+ É MUITO IMPORTANTE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ explain() --> A PARTE IMPORTANTE É QUE VOCÊ PODE:
+
+
+
+
+
+
+
+ A) EXECUTÁ-LO SOLTO, TIPO ASSIM MESMO...
+
+
+
+
+
+
+
+
+
+ B) EXECUTÁ-LO COM UM PARÂMETRO DE "queryPlanner", que fará COM QUE SEJA escolhido UM 'DEFAULT MINIMAL OUTPUT'...
+
+
+
+
+
+
+
+
+
+ EX:
+
+
+
+
+
+
+
+
+
+ > db.sessions.explain("queryPlanner").find({})         
+{
+        "explainVersion" : "1",
+        "queryPlanner" : {
+                "namespace" : "newSessions.sessions",
+                "indexFilterSet" : false,
+                "parsedQuery" : {
+
+                },
+                "queryHash" : "8B3D4AB8",
+                "planCacheKey" : "D542626C",
+                "maxIndexedOrSolutionsReached" : false,
+                "maxIndexedAndSolutionsReached" : false,
+                "maxScansToExplodeReached" : false,
+                "winningPlan" : {
+                        "stage" : "COLLSCAN",
+                        "direction" : "forward"
+                },
+                "rejectedPlans" : [ ]
+        },
+        "command" : {
+                "find" : "sessions",
+                "filter" : {
+
+                },
+                "$db" : "newSessions"
+        },
+        "serverInfo" : {
+                "host" : "DESKTOP-V43A7S1",
+                "port" : 27017,
+                "version" : "5.0.6",
+                "gitVersion" : "212a8dbb47f07427dae194a9c75baec1d81d9259"
+        },
+        "serverParameters" : {
+                "internalQueryFacetBufferSizeBytes" : 104857600,
+                "internalQueryFacetMaxOutputDocSizeBytes" : 104857600,
+                "internalLookupStageIntermediateDocumentMaxSizeBytes" : 104857600,
+                "internalDocumentSourceGroupMaxMemoryBytes" : 104857600,
+                "internalQueryMaxBlockingSortMemoryUsageBytes" : 104857600,
+                "internalQueryProhibitBlockingMergeOnMongoS" : 0,
+                "internalQueryMaxAddToSetBytes" : 104857600,
+                "internalDocumentSourceSetWindowFieldsMaxMemoryBytes" : 104857600
+        },
+        "ok" : 1
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO SÓ VAI TE DIZER O 'winningPlan',
+
+
+
+E não te dirá mt mais coisas.... -----> AQUI NO DIZ QUE FOI O 'COLLSCAN'..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C) A OPÇÃO NÚMERO 3 É RODAR com o parâmetro 'executionStats' --> JÁ FIZEMOS ISSO ALGUMAS VEZES NESSE MÓDULO -> ISSO VAI NOS ___ DAR__ UM DETAILED SUMMARY, NOS DARÁ 'winningPlan' e também POSSIBLY REJECTED PLANS....
+
+------> A OPÇÃO NÚMERO 3 TAMBÉM NOS DÁ INFORMAÇÃO SOBRE QUANTO TEMPO ESSA SUA QUERY LEVOU...
+
+
+
+
+
+
+
+
+
+
+
+D) a opção NÚMERO 4 É O PARâMETRO de 'allPlansExecution',
+
+
+
+
+
+
+que é uma option 
+
+
+QUE TAMBÉM TE DÁ DETAILED SUMMARY,
+
+
+
+MAS AÍ 
+
+
+
+
+
+TAMBÉM TE DÁ AINDA MAIS INFO,
+PQ 
+
+TE MOSTRA 'COMO O WINNINGPLAN FOI ESCOLHIDO'... ( 
+
+
+    WINNING PLAN DECISION PROCCESS....
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+> db.sessions.explain("queryPlanner").find({})         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VEREMOS OS USOS DOS 3 DURANTE ESSE MÓDULO....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA DETERMINAR SE UMA DETERMINADA QUERY FOI/É EFICIENTE,
+
+
+
+
+É OBVIAMENTE PROVEITOSO OLHAR:
+
+
+
+
+
+
+
+1) MILLISECONDS PROCESS TIME --->  COMPARE ISSO COM A SOLUÇÃO EM QUE VOCÊ NÃO USA INDEXES ('COLLSCAN VS IXSCAN')... ----> IXSCAN __ TIPICAMENTE__ GANHA DE 'COLLSCAN', __ EXCETO QUANDO SUAS QUERIES RETRIEVAREM A MAIOR PARTE DOS DOCUMENTS EM 1 DADA COLLECTION.. --> IXSCANS também deixam o ADD DE SEUS ARQUIVOS MAIS LENTO ('insertOne')...
+
+
+
+
+
+
+2) OUTRA MEASURE IMPORTANTE --> VOCê DEVE PENSAR:  A) O NÚMERO DE 'KEYS' (no index) que são examinadas, em relação aos DOCUMENTS...
+                                                    B) O NÚMERO DE DOCUMENTS QUE É EXAMINADO (não vá colocar 1 index para todos seus fields)...
+                                                    C) O NÚMERO DE DOCUMENTS QUE É'RETURNED'...
+
+
+
+
+
+
+
+
+
+quanto a 'A' --> o número de KEYS/indexes e ACTUAL DOCUMENTS na sua collection deve ser quase igual.... (SHOULD BE AS CLOSE AS POSSIBLE), ou __ DEVE SER 0....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O NÚMERO DE 'DOCUMENTS EXAMINED' E 'DOCUMENTS RETURNED' também devem ser QUASE IGUAIS, OU ENTÃO '0'....
+
+
+
+
+
+
+
+
+
+
+
+
+---> quando dizemos '0',
+queremos dizer '
+
+COVERED QUERIES',
+
+
+
+que é uma coisa ESPECIAL QUE O PROFESSOR NOS ENSINARÁ AGORA... (na próxima aula)
+
+
+
+
+
+
+
+
+
+
+
+
+0 --> SHOULD BE 0, LOOKED AT 0 DOCUMENTS... -----> esse é o case em uma 'COVERED QUERY'...

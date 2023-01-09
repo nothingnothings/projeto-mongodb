@@ -1,0 +1,1741 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+CREATING E EDITING USERS...
+
+
+
+
+
+
+
+
+
+
+-> DEPOIS DE TODA TEORIA,
+
+
+DEVEMOS FINALMENTE COMEÇAR O TRABALHO COM ALGUNS USERS,
+
+
+PARA 
+
+'GET A FEEL'
+
+
+
+
+SOBRE 
+
+
+COMO 
+
+ISSO 
+
+FUNCIOAN,
+
+
+
+COMO 
+
+PODEMOS 
+
+
+
+CREATE E EDIT USERS,
+
+
+
+
+
+
+
+E SOBRE COMO PODEOMS 
+
+
+ 
+
+ 'WORK AS A USER'..
+
+
+
+
+
+
+
+
+
+
+
+
+ --> ISSO PQ ATÉ AGORA SEMPRE TRABALHAMOS COM 'ALL RIGHTS MODE',
+
+
+
+
+
+
+
+
+ O QUE FACILITAVA AS COISAS... --> AGORA VAMOS 
+
+
+ '
+ SHRINK DOWN'
+
+
+ nossos privilégios,
+
+
+
+
+ PARA 
+
+ TER 
+
+ MAIS SEGURANÇA E UM AMBIENTE MAIS REALISTA...
+
+
+
+
+
+
+
+
+-> 
+
+
+USERS SÃO CRIADOS,
+
+POR 
+
+
+___ 1 USER__ COM RIGHTS/PERMISSÕES SUFICIENTES,
+
+
+
+
+COM O COMANDO DE 
+
+
+'createUser()' (no mongoshell)...
+
+
+
+
+
+
+
+
+
+
+
+
+-> 
+
+
+
+AÍ VOCÊ CRIA UM USER COM UM CONJUNTO USERNAME-PASSWORD...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E AÍ __ CADA__ USER__ VAI CONTER PELO MENOS 1 'ROLE',
+
+
+
+e 
+
+
+
+
+cada role VAI CONTER, TIPICAMENTE,
+
+
+
+1 PUNHADO DE PRIVILEGES...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> BEM, 1 USER 
+
+
+é 
+
+SEMPRE 
+
+CRIADO 
+
+
+
+
+
+'EM UMA DATABASE',
+
+
+ATTACHEADO A 1 DATABASE.... ------> MAS 1 DETALHE É QUE 
+
+
+
+
+
+O ACESSO 
+
+
+DE CADA USER NÃO __ É LIMITADO __ APENAS A ESSA DATABASE 
+
+
+
+
+em que 
+
+
+é 
+
+
+
+'authenticated'... --_> MAS O QUE INTERESSA É QUE 
+
+
+
+
+
+
+ESSE USER __ TEM QUE __ SER AUTENTICADO NESSA 
+
+
+DATABASE.. ----------> O QUE REALMENTE 
+
+
+
+
+INTERESSA SÃO OS 'ROLES' QUE VOCÊ ASSIGNA A UM USER... -------> 
+
+
+
+
+
+
+
+
+
+SE ALGUM USER É 'AUTHENTICATED AGAINST THE SHOP DATABASE',
+
+
+
+
+ O USER TVZ AINDA TENHA O ROLE DE 
+
+
+ '''WORK WITH ALL DATABASES THAT EXIST IN YOUR MONGODB ENVIRONMENT''' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> ISSO PODE PARECER ESTRANHO AGORA, MAS QUE VAI SE TORNAR MAIS CLARO AO LONGO DAS PRÓXIMAS AULAS,
+
+
+EM QUE 
+
+
+
+ENTENDEREMOS 
+
+
+
+
+''''PQ PODEMOS ASSIGNAR __ USERS_ A DIFERENTES DATABASES, SE ISSO NÃO FAZ 
+LOCKDOWN DO SEU ACESSO'''' (meio contraditório)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> É CLARO QUE PODEMOS FAZER MAIS DO QUE O CREATE DE USERS;
+
+
+
+
+
+
+PODEMOS UPDATAR USERS,
+
+
+com o comando 
+
+de 
+
+
+
+'updateUser()'..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> TENHA EM MENTE QUE 'updateUser()'
+
+
+
+SIGNIFICA QUE O ADMIN UPDATOU O USER... ---> você pode usar 
+
+
+ISSO 
+
+PARA 
+
+UPDATAR O PASSWORD, POR EXEMPLO,
+
+MAS 
+
+AÍ 
+
+VOCÊ TERÁ 
+
+QUE 
+COMUNICAR O USER DE QUE VOCÊ EFETUOU ESSA MUDANÇA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> OK, É ASSIM QUE CRIAMOS E EDITAMOS USERS...
+
+
+
+
+
+
+
+
+
+--> VAMOS PRATICAR ISSO...
+
+
+
+
+
+
+
+
+
+
+--> RODAMOS o comando para iniciar nosso 
+
+
+
+server,
+
+
+
+
+'mongod' 
+
+
+ou 
+
+
+'net start MongoDB'...
+
+
+
+
+
+
+
+--------> MAS AGORA O PROFESSOR VAI COLOCAR UM 
+
+PARÂMETRO ADICIONAL,
+
+o
+ 
+
+
+ '--auth'....
+
+
+
+
+
+
+
+
+------->  ISSO SIMPLESMENTE SIGNIFICA QUE 
+
+
+''AGORA VOCÊ VAI TER QUE FAZER AUTH PARA PODER TRABALHAR COM ESSA DATABASe'''..
+
+
+
+
+
+
+
+
+
+
+
+-> anteriormente nós não colocávamos esse parameter,
+
+
+
+
+o que significa que 
+
+QUALQUER 1 PODIA ENTRAR E BAGUNÇAR NOSSA DATABASE..
+
+
+
+
+
+
+
+
+
+
+-> mas se executamos nossa database com esse '--auth',
+
+tudo 
+
+
+
+muda...
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+PS A:\projeto6-MONGODB\MODULO14-MONGODBESEGURANÇA> net start mongoDb --auth
+O serviço de MongoDB Server (MongoDB) está sendo iniciado.
+O serviço de MongoDB Server (MongoDB) foi iniciado com êxito.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... AGORA TEMOS UM USER QUE VAI REQUERER 
+
+QUE 
+
+
+
+
+
+USERS FAÇAM 'AUTHENTICATE'....
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA, SE TROCARMOS DE TERMINAL 
+
+
+E 
+
+TENTARMOS NOS CONECTAR AO NOSSO SERVER,
+
+
+com 
+
+
+'mongo',
+
+
+
+
+
+
+NÓS AINDA SEREMOS CAPAZES DE NOS CONECTAR (e não teremos nenhum 'failed")...
+
+
+
+
+
+
+
+
+
+
+
+
+--> CONSEGUIREMOS NOS CONECTAR JUSTMAENTE PQ 
+
+
+
+HÁ 
+
+'''2 MANEIRAS DE FAZER SIGNIN'''' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> você pode FAZER 'SIGNIN' 
+
+
+
+
+
+na database OU COM 
+
+
+
+'db.auth()" (isso é um comando, um COMMAND QUE EXIGE 1 USERNAME E 1 PASSWORD, como parâmetros)...
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+db.auth('user', 'password')  
+
+
+
+(
+
+    ISSO SERIA ESCRITO DEPOIS DE VOCÊ ESTAR 'CONECTADO' À database...
+)
+
+
+
+
+
+
+
+
+-> ALTERNATIVAMENTE,
+
+
+VOCê PODE ESCREVER A FLAG de 
+
+
+
+'-u' para o USERNAME,
+
+
+
+e 
+
+'-p' para o password,
+
+
+e aí tentar se conectar,
+
+
+
+
+TIPO ASSIM:
+
+
+
+
+
+
+
+
+mongo -u max -p password
+
+
+
+
+
+
+
+
+
+
+
+-------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+OK... MAS POR ENQUANTO VAMOS NOS CONECTAR AO MONGO SEM 
+
+
+O USO DE 1 USER, e sem a criação dele, tbm....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS É CLARO QUE AQUI ENFRENTAREOMS UM PROBLEMA.... --> que problema será esse?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> O PROBLEMA QUE INICIALMENTE ENFRENTAREMOS:
+
+
+
+
+
+1)  NOS CONECTAMOS A UMA DATABASE QUE REQUER AUTHENTICATION, MAS AINDA _ NÃO TEMOS NENHUM USER_...
+
+
+
+
+
+
+
+
+E, DE FATO,
+
+SE TENTARMOS ESCREVER 
+
+'show dbs',
+
+
+
+
+não recebemos coisa alguma,
+
+
+
+mesma coisa com 
+
+
+
+'show collections'...
+
+
+
+
+
+
+
+
+
+
+
+--> hmmm  mas o meu código mostra... há algo de errado...
+
+
+
+
+
+
+
+
+
+
+VI ESTA MENSAGEM:
+
+
+
+
+
+
+---
+The server generated these startup warnings when booting:
+        2022-02-26T18:29:22.959-03:00: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+
+
+
+
+
+
+
+
+
+
+https://docs.mongodb.com/v4.4/tutorial/enable-authentication/
+
+
+
+
+https://www.opten.ch/de/blog/2013/november/enabling-authentication-for-a-mongo-db-instance-running-on-windows/
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> parece que o ÚNICO JEITO DE INICIAR COM 
+
+
+
+'net start mongoDb' 
+
+
+
+(iniciar como um SERVICE)
+
+
+
+
+É
+
+
+
+
+FAZER ISTO:
+
+https://docs.mongodb.com/v4.0/tutorial/enable-authentication/
+
+
+
+
+
+
+
+
+
+If you start the mongod using a configuration (https://docs.mongodb.com/v4.0/reference/configuration-options/#configuration-options) 
+file, add the security.authorization configuration file setting:
+
+security:
+    authorization: enabled
+
+
+
+
+
+
+
+
+
+
+EX (mongod.cfg):
+
+
+
+
+
+
+
+
+
+
+
+# mongod.conf
+
+# for documentation of all options, see:
+#   http://docs.mongodb.org/manual/reference/configuration-options/
+
+# Where and how to store data.
+storage:
+  dbPath: C:\Program Files\MongoDB\Server\5.0\data
+  journal:
+    enabled: true
+#  engine:
+#  wiredTiger:
+
+# where to write logging data.
+systemLog:
+  destination: file
+  logAppend: true
+  path:  C:\Program Files\MongoDB\Server\5.0\log\log\mongod.log
+
+# network interfaces
+net:
+  port: 27017
+  bindIp: 127.0.0.1
+
+
+#processManagement:
+
+#security:
+security:
+   authorization: "enabled"
+
+
+#operationProfiling:
+
+#replication:
+
+#sharding:
+
+## Enterprise-Only Options:
+
+#auditLog:
+
+#snmp:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+RESULTADO:
+
+
+PS A:\projeto6-MONGODB\MODULO14-MONGODBESEGURANÇA> net start MongoDb
+O serviço de MongoDB Server (MongoDB) está sendo iniciado.
+O serviço de MongoDB Server (MongoDB) foi iniciado com êxito.
+
+PS A:\projeto6-MONGODB\MODULO14-MONGODBESEGURANÇA>
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> ok... agora testamos de novo o connect com 'mongo'....
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+MongoDB shell version v5.0.6
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("d747c3db-6a11-426d-868d-f2aa9cbb26a8") }
+MongoDB server version: 5.0.6
+================
+Warning: the "mongo" shell has been superseded by "mongosh",
+which delivers improved usability and compatibility.The "mongo" shell has been deprecated and will be removed in
+an upcoming release.
+For installation instructions, see
+https://docs.mongodb.com/mongodb-shell/install/
+================
+> show dbs
+>
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, AGORA A AUTH ESTÁ NO LUGAR...
+
+
+
+
+
+
+
+
+
+
+--> SE TENTAMOS USAR VÁRIOS COMANDOS, 
+
+
+
+
+
+
+não conseguimos,
+
+pq 
+
+
+não temos users...
+
+
+
+
+
+
+> show collections
+Warning: unable to run listCollections, attempting to approximate collection names by parsing connectionStatus
+
+
+
+
+
+
+
+
+
+
+--> AINDA NÃO TEMOS USER ALGUM.... --> E O MONGODB TEM UMA SOLUÇÃO ESPECIAL PARA 
+
+ISSO,
+
+CHAMADO 
+
+
+
+DE 
+
+
+
+'''THE LOCALHOST EXCEPTION''' --> quando você estiver se conectando 
+
+
+À 
+
+
+
+database NESSE ''STATE''',
+ 
+
+ em que 
+
+
+ VOCê NÃO ADICIONOU NENHUM USER ATÉ O MOMENTO,
+
+
+
+
+A VOCÊ É PERMITIDO __ ADICIONAR__ 1 ÚNICO USER.... -->  E ESSE USER,
+
+
+
+
+NO CASO,
+
+VAI SER O 
+
+
+'USER ORIGINÁRIO',
+
+
+o user 
+
+
+
+QUE SERÁ CAPAZ DE 'CREATE MORE USERS'....
+
+
+
+
+
+
+
+
+
+--> E, PARA FAZER ISSO,
+
+
+VOCÊ DEVE:
+
+
+
+
+
+
+
+
+1) TROCAR PARA A DATABASE de 'admin' (out of the box),
+
+
+com 
+
+'use admin'...
+
+
+
+
+
+
+
+
+2) ISSO FEITO,
+
+
+VOCê DEVE RODAR O COMANDO 
+
+'db.createUser()'
+
+
+
+
+
+
+
+
+
+
+
+--> CERTO.... -> E UM USER É CRIADO POR MEIO DO PASS 
+
+DE UM DOCUMENT/OBJECT A ESSA FUNÇÃO,
+
+tipo assim:
+
+
+
+
+
+
+
+
+
+db.createUser(
+  {
+     
+  }
+)
+
+
+
+
+
+
+
+
+
+-> O PRIMEIRO ARGUMENTO DEVE SER 'user '--> E O VALUE DEVE SER O USERNAME DESSE user....
+
+
+
+
+
+
+
+
+
+
+--> vamos colocar 'Arthur'..
+
+
+db.createUser(
+  {
+     user: "Arthur'
+  }
+)
+
+
+
+
+
+
+
+
+
+
+--> ISSO FEITO,
+
+
+VOCê
+
+
+
+DEVE COLOCAR A KEY DE 
+
+
+'pwd' ,
+
+
+
+
+
+QUE SERÁ O NOSSO PASSWORD... ---> coloque uma 
+
+
+
+SENHA __ FORTE__>...
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+db.createUser(
+  {
+     user: "Arthur',
+     pwd: "Juc@pirama1"
+  }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+-> ISSO FEITO,
+
+VOCê PRECISA DE UMA  KEY DE 
+
+'roles',
+
+
+
+
+QUE SEGURARÁ UM ARRAY DE ROLES.. --> E VOCê PODE ADICIONAR MÚLTIPLOS ROLES 
+
+
+A UM MESMO USER,
+
+DE DIFERENTES FORMAS...
+
+
+
+
+
+
+
+
+eX:
+
+
+
+db.createUser(
+  {
+     user: "Arthur',
+     pwd: "Juc@pirama1",
+     roles: []
+  }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> ENTRETANTO, POR ENQUANTO,
+
+
+
+HÁ 1 ROLE QUE VOCê DEVE CERTAMENTE ADICIONAR,
+
+
+
+
+
+
+que é 
+
+o 
+
+role de 
+
+
+
+"userAdminAnyDatabase"
+
+
+
+
+
+
+(
+
+  E HÁ VÁRIOS ROLES QUE VOCÊ PODE ASSIGNAR, HÁ ALGUNS 
+
+  PRÉ-DEFINIDOS, QUE O PROFESSOR NOS EXPLICARÁ...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+userAdminAnyDatabase -->  ESSE´E UM ROLE ESPECIAL,
+
+
+BUILT-IN,
+
+
+QUE 
+
+
+VAI 
+
+
+DAR A ESSE USER O DIREITO DE 
+
+
+__ADMINISTRAR__ 
+
+
+
+QUALQUER DATABASE NESSE MONGODB ENVIRONMENT...
+
+
+
+
+
+
+
+
+EX:
+
+
+
+db.createUser(
+  {
+     user: "Arthur',
+     pwd: "Juc@pirama1",
+     roles: [
+       "userAdminAnyDatabase"
+     ]
+  }
+)
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+> use admin
+switched to db admin
+> db.createUser(
+...     {
+...        user: "Arthur",
+...        pwd: "Juc@pirama1",
+...        roles: [
+...          "userAdminAnyDatabase"
+...        ]
+...     }
+...   )
+Successfully added user: { "user" : "Arthur", "roles" : [ "userAdminAnyDatabase" ] }
+
+
+
+
+
+
+
+
+
+
+
+
+---> OK... AGORA SE TENTARMOS RODAR 
+
+
+
+'show dbs',
+
+
+
+VAMOS GANHAR 
+
+
+
+
+
+__ UM ERRO __ DIFERENTE, UM 
+
+
+'DIFFERENT KIND OF ERROR'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> > show dbs
+> show collections
+Warning: unable to run listCollections, attempting to approximate collection names by parsing connectionStatus
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, N RECEBI NADA DE DIFERENTE... -> MAS 
+
+
+O PROFESSOR 
+
+
+
+
+APONTA QUE 
+
+
+NÓS 
+
+
+
+DEVEMOS NOS 'AUTHENTICATE'
+
+
+
+no server,
+
+
+
+
+
+
+
+POR ISSO ELE NOS MANDA RODAR O COMANDO DE 
+
+
+'db.auth()'....
+
+
+
+
+
+
+
+
+
+
+--> NESSE COMANDO, TEMOS 2 PARÂMETROS:
+
+
+
+
+
+
+1) o USERNAME 
+
+
+
+2) a password....
+
+
+
+
+
+
+
+
+
+
+escrevemos assim:
+
+
+
+
+
+
+
+
+
+db.auth(
+  "Arthur", 
+  "Juc@pirama1"
+)
+
+
+
+
+
+
+
+
+
+
+
+--> EX:
+
+
+> db.auth(
+...   "Arthur",
+...   "Juc@pirama1"
+... )
+1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> SE VOCê FOI BEM SUCEDIDO,
+
+
+
+VOCÊ GANHARÁ O NÚMERO '1', 
+
+
+SINALIZANDO 
+
+QUE SEU LOGIN DEU CERTO..... --------> MAS ANTES DISSO,
+
+VOCê DEVE SE ASSEGURAR 
+
+DE QUE 
+
+
+VOCê 
+
+ESTÁ 
+
+NA DATABASE DE 
+
+
+'admin',
+
+QUE É ONDE CRIAMOS ESSSE USER 
+
+de 
+
+'userAdminAnyDatabase'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------> CERTO... AÍ VOCÊ DEVE ESTAR AUTENTICADO...
+
+
+
+
+
+
+
+
+ISSO FEITO,
+
+VOCÊ PROVAVELMENTE SERÁ CAPAZ DE 
+
+
+rodar 
+'show dbs',
+
+
+'show collections',
+
+ etc...
+
+
+
+
+
+
+ EX:
+
+
+
+ > show dbs
+admin            0.000GB
+arrayData        0.000GB
+blog             0.000GB
+carData          0.000GB
+cities           0.000GB
+companyData      0.000GB
+config           0.000GB
+exemploPersons   0.003GB
+exemploPipeline  0.003GB
+exemplos         0.000GB
+financialData    0.000GB
+flights          0.000GB
+geospatial       0.000GB
+hospital         0.000GB
+local            0.000GB
+maps             0.000GB
+movieData        0.000GB
+myDatabase       0.039GB
+newSessions      0.000GB
+numbers          0.000GB
+society          0.000GB
+support          0.000GB
+test             0.000GB
+users            0.000GB
+
+
+
+
+
+
+-------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK, AGORA NÃO GANHAMOS MAIS ERROS DE AUTH.... -> CRIAMOS ESSE USER, 1 ÚNICO USER,
+
+E COM 
+
+
+ESSE ROLE ESPECIAL..
+
+
+
+
+
+
+
+
+
+--> MAS ANTES DE CRIARMOS MAIS USERS,
+
+
+
+DEVEMOS 
+
+
+FALAR SOBRE ESSE ROLE ESPECIAL DE 
+
+
+
+'userAdminAnyDatabase',
+
+
+
+
+E __ TAMBÉM _ SOBRE_ QUAIS ROLES EXISTEM, EM GERAL.....

@@ -1,0 +1,1155 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOLTAMOS AO SHELL....  nos conectamos ao running 
+
+
+
+
+mongodb SERVICE (net start mongoDB) 
+
+com 
+
+
+
+
+
+mongo --tls --tlsCAFile mongodb.pem --host localhost
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> MAS AGORA O PROFESSOR QUER NOS INTRODUZIR A 'CAPPED COLLECTIONS',
+
+e nos 
+
+explicar o que são...
+
+
+
+
+
+
+
+
+
+--> ok, mas agora recebi um erro:
+
+
+
+PS A:\projeto6-MONGODB\MODULO15-PERFORMANCE,TOLERANCIADEFALHASEDEPLOYMENT> mongo --tls --tlsCAFile mongodb.pem --host localhost
+Failed global initialization: InvalidSSLConfiguration Failed to open PEM file: mongodb.pem
+
+
+
+
+
+
+
+
+
+
+
+
+--> ah, é pq não tenho esse arquivo nesse meu folder de 
+
+
+
+PS A:\projeto6-MONGODB\MODULO15-PERFORMANCE,TOLERANCIADEFALHASEDEPLOYMENT> 
+
+
+
+
+
+
+
+--> basta copiá-lo e colá-lo aqui...
+
+
+
+ex:
+
+
+
+PS A:\projeto6-MONGODB\MODULO15-PERFORMANCE,TOLERANCIADEFALHASEDEPLOYMENT> mongo --tls --tlsCAFile mongodb.pem --host localhost
+Failed global initialization: InvalidSSLConfiguration Failed to open PEM file: mongodb.pem
+PS A:\projeto6-MONGODB\MODULO15-PERFORMANCE,TOLERANCIADEFALHASEDEPLOYMENT> mongo --tls --tlsCAFile mongodb.pem --host localhost
+MongoDB shell version v5.0.6
+connecting to: mongodb://localhost:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("5643b6bd-1da7-480c-a785-116b07cf4102") }
+MongoDB server version: 5.0.6
+================
+Warning: the "mongo" shell has been superseded by "mongosh",
+which delivers improved usability and compatibility.The "mongo" shell has been deprecated and will be removed in
+an upcoming release.
+For installation instructions, see
+https://docs.mongodb.com/mongodb-shell/install/
+================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------> OK.... AGORA VAMOS FALAR SOBRE CAPPED COLLECTIONS..
+
+
+
+
+
+
+
+
+
+
+
+
+
+CAPPED COLLECTIONS SÃO UM TIPO ESPECIAL DE COLLECTION,
+
+
+
+QUE VOCê TEM DE CRIAR EXPLICITAMENTE...
+
+
+
+
+
+
+
+
+
+
+
+--> NAS CAPPED COLLECTIONS,
+
+
+
+É LIMITADA A QUANTIDADE DE DOCUMENTS/DATA QUE PODE SER ARMAZENADA..... ---> E, NESSA COLLECTION,
+
+
+
+
+DOCUMENTS 
+
+
+VELHOS DEMAIS __ VÃO SER SIMPLESMENTE __ DELETADOs_ SE O SIZE DESSA 
+
+
+COLLECTION FOR 
+
+EXCEDIDO... --> 
+
+
+
+
+É UMA 
+
+
+
+'STORE'
+
+EM QUE 
+
+
+
+A DATA VELHA É AUTOMATICAMENTE DELETADA QUANDO 
+
+
+
+__ NOVA __ DATA CHEGA___.... ---> ESSE TIPO DE COLLECTION PODE SER EFICIENTE PARA 
+
+
+
+
+
+
+
+
+'HIGH THROUGHPUT APPLICATION LOGS',
+
+
+em que 
+
+vocÊ 
+
+
+
+realmente 
+SÓ PRECISA 
+
+DOS 
+
+LOGS 
+
+MAIS 
+
+RECENTES,
+
+
+
+OU ENTÃO 
+
+
+ 
+
+
+
+COMO UM 'CACHING SERVICE',
+
+
+
+
+
+
+
+
+
+EM QUE A DATA + RECENTE É MANTIDA,
+
+MAS 
+
+A 
+
+DATA 
+MAIS 
+
+VELHA,
+
+QUE 
+
+
+NÃO FOI 
+
+MODIFICADA EM UM LOOOOOOONGO TEMPO,
+
+essa será deletada... (e aí 
+
+
+você 
+
+vai simplesmetne readicionar essa data em um momento posterior, se quiser)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> PARA CRIAR UMA COLLECTION DESSAS,
+
+
+VOCÊ PRIMEIRAMENTE PRECISA 
+
+SE 
+
+CONECTAR A UMA DAS DATABASES....
+
+
+
+
+
+
+
+
+
+--> AÍ ___ VOCê __ É OBRIGADO_ A USAR __o  COMANDO DE 
+
+
+
+'db.createCollection()'
+
+
+
+
+
+(
+
+
+
+    NO CURSO INTEIRO,
+
+    SÓ USAMOS ESSE COMANDO EM 2 HIPÓTESES:
+
+
+
+    1) QUANDO QUERÍAMOS CRIAR 1 COLLECTION SEM ADICIONAR NADA NO SEU INTERIOR, INICIALMENTE...
+
+
+
+
+
+
+
+
+    2) QUANDO QUERÍAMOS/QUEREMOS CRIAR UMA COLLECTION COM VALIDATION/COLLECTIONSCHEMA...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+-> COM 
+
+'createCollection',
+
+como 
+
+sempre,
+
+
+
+VOCÊ INICIALMENTE DEFINE 1 NAME... -->  O PROFESSOR VAI USAR O NAME DE 'capped',
+
+mas pode ser qualquer coisa....
+
+
+
+
+
+
+
+
+
+db.createCollection(
+    "capped", 
+    {
+
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+--> MAS É CLARO QUE O QUE INTERESSA É O SEGUNDO ARGUMENTO QUE VOCÊ PASSA,
+
+QUE 
+É 
+
+
+
+AS 'OPTIONS',
+
+
+
+
+
+
+ESSENCIALMENTE..
+
+
+
+
+
+
+
+
+
+--> AQUI,
+
+
+A OPTION QUE VOCê VAI QUERER ADICIONAR É 
+
+
+
+
+'capped: true'...
+
+
+
+
+
+
+
+
+
+
+--> ISSO VAI TRANSFORMAR SUA COLLECTION EM UMA __ CAPPED__ COLLECTION___....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> POR DEFAULT,
+
+
+
+
+UMA CAPPED COLLECTION TERÁ UM TAMANHO DE '4 bytes'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS VOCê PODE DEFINIR UM SIZE MAIOR,
+
+COM 
+
+'size: '...
+
+
+
+
+
+
+
+
+
+
+
+
+--> PODEMOS COLOCAR QUALQUER OUTRO VALOR,
+
+VALOR QUE SERÁ ENTÃO 
+
+
+
+COLOCADO COMO __ MÚLTIPLO DE 256 BYTEs...
+
+
+
+
+
+
+
+
+
+
+10000 --> SERÁ CONVERTIDO EM 10MIL BYTES,
+
+que serão convertidos...
+
+
+
+
+
+
+
+
+
+
+--> 'max' --> É OPCIONAL... --> O SIZE É REQUIRED,
+
+
+MAS ESSE É OPCIONAL..
+
+
+
+
+
+
+
+
+--> O 'MAX' 
+
+
+TE DEIXA LIMITAR ___ A QUANTIDADE__ MÁXIMA DE DOCUMENTS DESSA COLLECTION, desvinculada do 'size'...
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+db.createCollection('capped', {capped: true, size: 10000, max: 3})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> CERTO... MAS QUANDO EU TENTAR FAZER ISSO, VOU RECEBER 1 ERRO:
+
+
+
+
+
+
+{
+        "ok" : 0,
+        "errmsg" : "not authorized on newCollections to execute command { create: \"capped\", capped: true, size: 10000.0, max: 3.0, lsid: { id: UUID(\"12cd04d9-ff7b-4e78-8dfc-a7c963c18f66\") }, $db: \"newCollections\" }",
+        "code" : 13,
+        "codeName" : "Unauthorized"
+}
+
+
+
+
+
+
+
+
+
+
+-> É POR CAUSA DE NOSSA AUTHORIZATION.....
+
+
+
+
+
+
+É POR CAUSA DO 'AUTH' aplicado a nossa instance mongod/net start MongoDB...
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> temos que updatar as permissions do user de 'Arthur',
+
+
+para que 
+
+ELE CONSIGA FAZER CREATE DE COLLECTIONS
+
+
+
+
+
+EM QUALQUER DATABASE...
+
+
+
+
+
+
+
+ACHO QUE AGORA FOI:
+
+
+
+
+> use admin
+switched to db admin
+> show users                      
+{
+        "_id" : "admin.Arthur",
+        "userId" : UUID("2ab3a4d3-d9b7-4128-b032-e8cb37f4ea3a"),
+        "user" : "Arthur",
+        "db" : "admin",
+        "roles" : [
+                {
+                        "role" : "userAdminAnyDatabase",
+                        "db" : "admin"
+                }
+        ],
+        "mechanisms" : [
+                "SCRAM-SHA-1",
+                "SCRAM-SHA-256"
+        ]
+}
+> db.updateUser("Arthur", {roles: ["userAdminAnyDatabase", "readWriteAnyDatabase"]})
+
+
+
+
+
+
+
+
+
+
+
+
+PRONTO:
+
+
+
+
+
+
+> db.createCollection('capped', {capped: true, size: 10000, max: 3})
+{ "ok" : 1 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> OK.... AGORA 
+
+VAMOS INSERIR DOCUMENTS...
+
+
+
+
+
+
+
+
+
+-> ex:
+
+
+
+
+
+
+
+
+db.capped.insertOne(
+
+    {
+        name: "Max"
+    }
+)
+
+
+db.capped.insertOne(
+
+    {
+        name: "Manu"
+    }
+)
+
+
+db.capped.insertOne(
+
+    {
+        name: "Maria"
+    }
+)
+
+db.capped.insertOne(
+
+    {
+        name: "Manny"
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> TEORICAMENTE, TERÍAMOS 4 DOCUMENTS NA NOSSA DATABASE... ENTRETANTO,
+
+SE EU 
+
+EXECUTAR
+
+
+
+db.capped.find({}),
+
+VEJO ISTO:
+
+
+
+> db.capped.find({})
+{ "_id" : ObjectId("621d2a26c2e0c7b3edd5653b"), "name" : "Manu" }
+{ "_id" : ObjectId("621d2a2ac2e0c7b3edd5653c"), "name" : "Maria" }
+{ "_id" : ObjectId("621d2a32c2e0c7b3edd5653d"), "name" : "Manny" }
+>
+
+
+
+
+
+
+
+
+----------------> OU SEJA,
+
+O 'MAX',
+
+document 
+
+
+MAIS VELHO,
+
+
+FOI 
+
+
+
+DELETADO/REMOVIDO,
+
+justamente por causa do cap de '3 documents'
+
+
+
+
+
+
+aplicado por 'max: 3' ....
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK.....  ESSAS SÃO AS 'CAPPED COLLECTION'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS HÁ ALGO IMPORTANTE DE SER ESCLARECIDO:
+
+
+ 
+
+ EM CAPPED COLLECTIONS,
+
+
+
+
+
+
+ A ORDEM QUE RETRIEVAMOS 
+
+
+ OS 
+
+ DOCUMENTS __ É _ SEMPRE_ _  A ORDER __ EM QUE  
+
+
+
+ELES FORAM INSERIDOS.... (
+
+
+    já em uma collection normal,
+
+
+
+NÃO É GARANTIDO QUE A ORDER 
+
+
+SERÁ 
+
+
+DE INSERT... -> é por isso que precisamos rodar queries com '.sort(_id: 1)' para sortar em normal collections...
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+------> SE QUEREMOS MUDAR A ORDER 
+
+
+
+
+DE 
+
+UMA 
+
+
+CAPPED COLLECTION,
+
+
+
+
+SORTAR 'NA ORDEM INVERSA',
+
+
+
+
+
+
+
+devemos usar 
+
+o 
+
+OPERATOR 
+
+ESPECIAL DE 
+
+
+
+
+
+
+'$natural: -1'
+
+
+
+
+
+COM O 'sort',
+
+PARA 
+
+QUE 
+
+ENTÃO 
+
+
+O 
+
+FIND 
+
+
+NOS RETRIEVE O RESULTADO__ COM A ORDEM INVERSA...
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+db.capped.find().sort(
+    {
+        $natural: -1
+    }
+).pretty()
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+> db.capped.find({})
+{ "_id" : ObjectId("621d2a26c2e0c7b3edd5653b"), "name" : "Manu" }
+{ "_id" : ObjectId("621d2a2ac2e0c7b3edd5653c"), "name" : "Maria" }
+{ "_id" : ObjectId("621d2a32c2e0c7b3edd5653d"), "name" : "Manny" }
+> db.capped.find().sort(
+...     {
+...         $natural: -1
+...     }
+... ).pretty()
+{ "_id" : ObjectId("621d2a32c2e0c7b3edd5653d"), "name" : "Manny" }
+{ "_id" : ObjectId("621d2a2ac2e0c7b3edd5653c"), "name" : "Maria" }
+{ "_id" : ObjectId("621d2a26c2e0c7b3edd5653b"), "name" : "Manu" }
+
+
+
+
+
+
+
+
+-----------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+----------> VOCê __TAMBEM __ PODE CRIAR INDEXES EM 'CAPPED COLLECTIONS'...
+
+
+
+
+
+
+
+
+
+----->  E COMO TODAS AS COLLECTIONS COMUNS,
+
+AS CAPPED COLLECTIONS 
+
+
+TAMBÉM
+POSSUEM 
+
+UM INDEX  
+
+
+default em '_id'... ------> MAS É CLARO QUE VOCÊ NÃO PRECISA USÁ-LO, OBRIGATORIAMENTE....
+
+
+
+
+
+
+
+
+
+
+
+
+-----> PROFESSOR INSERE UM NOVO DOCUMENT,
+
+
+E AÍ 
+
+
+
+
+
+
+NÃO GANHAMOS UM ERROR,
+
+MAS 
+O 
+
+
+DOCUMENT 
+
+MAIS VELHINHO , O 'Max'
+
+
+TERÁ 
+
+SIDO 
+
+
+REMOVIDO...
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... .ESSA É UMA CAPPED COLLECTION... ---> HÁ ALGUNS CASES EM QUE ELA É UMA BOA IDEIA....
+
+
+
+
+
+
+
+
+
+
+--> EM QUE CASOS VOCÊ USARÁ AS CAP COLLECTIONS?
+
+
+em casos 
+
+em que 
+
+vocÊ vai querer o 'automatic clean-up' --> CASOS EM QUE VOCÊ VAI QUERER 
+
+
+MANTER a
+ 
+
+
+
+ COLLECTION FAIRLY SMALL,
+
+ FÁCIL DE SE TRABLAHAR COM ,
+
+
+
+
+
+ E SEM 
+
+ PRECISAR SE PREOCUPAR COM O 
+
+ 'MANUAL DELETE '
+
+
+
+ de data.... --->  USE-CASES 
+
+
+
+
+ EM QUE 
+
+
+
+ VOCê TEM ALTO THROUGHPUT 
+
+
+
+ E NÃO SE IMPORTA COM O LOSS DE OLD DATA --> ex: 'caching' --> 
+
+
+
+
+
+ AÍ, NESSES CASOS,
+
+
+
+ AS CAPPED COLLECTIONS 
+
+
+ SÃO UMA BOA TOOL PARA SALVAR PERFORMANCE...
+
+
+
+
+
+
+
+
+
+
+
+ ---> MAS OBVIAMENTE NÃO É UMA SOLUÇAÕ BOA PARA 
+
+
+
+
+
+
+
+ ARMAZENAR BLOG POSTS, PRODUCTS, USERS, ETC...

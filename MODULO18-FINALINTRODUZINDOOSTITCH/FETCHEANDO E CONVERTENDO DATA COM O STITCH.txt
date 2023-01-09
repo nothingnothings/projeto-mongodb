@@ -1,0 +1,54 @@
+
+
+
+
+
+
+
+
+
+
+
+
+-----> ISSO TINHA DE SER FEITO ANTERIORMNETE,
+
+
+
+COM O STITCH,
+
+MAS 
+
+
+PARECE QUE 
+
+
+O 
+
+
+MONGO REALM __ CONVERTE__ OS DATA TYPES 
+INCOMPATÍVEIS 
+
+DO 
+
+STITCH 
+
+
+
+
+__ AOS_ FORMATOS _ ACEITOS__ PELO JAVASCRIPT/react ---> 
+
+
+
+
+
+
+
+aí não precisamos usar '.map()' para converter os 'products' ,
+
+
+
+converter os valores das propriedades em valores 
+
+
+
+utilizáveis pelo javascript...

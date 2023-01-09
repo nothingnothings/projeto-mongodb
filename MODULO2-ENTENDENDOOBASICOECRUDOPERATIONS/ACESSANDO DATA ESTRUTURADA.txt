@@ -1,0 +1,834 @@
+
+
+
+
+
+
+
+
+
+ESTUDAMOS OS EMBEDDED DOCUMENTS E OS ARRAYS, nos nossos documents...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS 1 COISA QUE O PROFESSOR QUER MOSTRAR ANTES DE ACABAR COM ESSE MÓDULO É 
+
+
+
+
+'''COMO ACESSAR SUCH STRUCTURED DATA'''...
+
+
+
+
+
+
+
+
+
+
+
+--> vamos começar pelo array de 'hobbies' do passenger de 'Albert Twostone'....
+
+
+
+
+
+
+
+
+
+
+
+-> PARA ACHAR ESSE PASSENGER EM SI,
+
+ESCREVEMOS ISTO:
+
+
+
+
+
+EX:
+
+
+
+
+
+
+> db.passengers.find({_id: ObjectId("61ff432914ef90797a42a0fd")})
+{ "_id" : ObjectId("61ff432914ef90797a42a0fd"), "name" : "Albert Twostone", "age" : 68, "hobbies" : [ "sports", "cooking" ] }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> JÁ SE QUEREMOS __ 
+
+
+
+SÓ OS 'hobbies'
+
+nesse albert twostone,
+
+
+
+
+devemos escrever assim:
+
+
+
+
+
+
+
+
+db.passengers.find({_id: ObjectId("61ff432914ef90797a42a0fd")}).hobbies
+
+
+
+
+
+
+
+
+
+
+
+--> OK, MAS QUANDO ESCREVO ISSO AÍ,
+
+
+RECEBO __ NADA__... -> nada aparece, como resultado... 
+
+
+
+
+
+
+
+
+
+
+
+--> eu penso que é um erro,
+
+
+
+mas professor 
+
+
+
+DIZ QUE DEVEMOS USAR 'findOne()' 
+
+PARA __ 
+
+
+FAZER COM QUE ISSO NÃO RETORNE UM CURSOR,
+E SIM 
+
+O ACTUAL 
+
+ELEMENT...
+
+
+
+
+
+
+
+
+
+
+
+
+-->ok, aí FUNCIONOU....
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+db.passengers.findOne({_id: ObjectId("61ff432914ef90797a42a0fd")}).
+
+
+
+
+
+OUTPUT:
+[ "sports", "cooking" ]
+
+
+
+
+
+
+
+---------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+--> E PODEMOS, AINDA,
+ 
+
+ FAZER 'SEARCH'
+
+ POR 
+
+
+ ESSE ARRAY COM 'sports' e 'cooking',
+
+
+ por meio de 
+
+
+ 'find'...
+
+
+
+
+
+
+
+
+
+
+ --> 
+
+
+
+ basta escrever uma query como esta:
+
+
+
+
+
+
+
+
+
+
+
+
+
+ db.passengers.findOne(
+     {
+        hobbies: [
+            "sports",
+            "cooking"
+        ]
+     }
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+ ----------------> E ISSO FUNCIONA/FUNCIONOU, nos retrieva esse 
+
+
+
+ 'Albert Twostone' DOCUMENT...
+
+
+
+
+
+
+
+
+
+
+
+ --->  E SE ESCREVEMOS ASSIM:
+
+
+ 
+ db.passengers.findOne(
+     {
+        hobbies: [
+            "sports",
+        
+        ]
+     }
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+--> TAMBÉM VAMOS RECEBER ESSE DOCUMENT, PQ A PRESENÇA DE APENAS 1 ELEMENTO NESSE ARRAY 
+
+
+
+JÁ 
+
+
+
+FAZ COM QUE ELE SATISFAÇA ESSA QUERY....
+
+
+
+
+
+
+
+
+-------> OK... É ASSIM QUE PODEMOS 'QUERY ARRAYS'...
+
+
+
+
+
+
+
+
+
+--> MAS COMO PODEMOS QUERIAR 'objects"?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> LEMBRE-SE: NÓS TÍNHAMOS NESTED OBJECTS/DOCUMENTS LÁ 
+
+
+EM NOSSA FLIGHTDATa,
+
+
+
+nos diversos documents, como visto neste código....
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+> db.flightData.find({}).pretty()
+{
+        "_id" : ObjectId("61ff05eb156a623d98a99136"),
+        "departureAirport" : "MUC",
+        "arrivalAirport" : "SF0",
+        "aircraft" : "AIRBUS A380",
+        "distance" : 12000,
+        "intercontinental" : true,
+        "delayed" : false,
+        "status" : {
+                "description" : "on-time",
+                "lastUpdated" : "1 hour ago",
+                "details" : {
+                        "responsible" : "Max"
+                }
+        }
+}
+{
+        "_id" : ObjectId("61ff05eb156a623d98a99137"),
+        "departureAirport" : "LHR",
+        "arrivalAirport" : "TXL",
+        "aircraft" : "AIRBUS A320",
+        "distance" : 950,
+        "intercontinental" : false,
+        "example course" : true,
+        "status" : {
+                "description" : "on-time",
+                "lastUpdated" : "1 hour ago",
+                "details" : {
+                        "responsible" : "Max"
+                }
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> AGORA SE QUEREMOS QUERIAR ALGUM DESSES NEGÓCIOS, POR MEIO DE UM DE SEUS EMBEDDED DOCUMENTS,
+
+
+acho que escreveremos assim:
+
+
+
+
+
+
+db.flightData.find(
+    {status: {description: "on-time"}}
+)
+
+
+
+
+
+
+
+
+
+--> MAS ISSO NÃO FUNCIONOU....
+
+
+
+
+(não retrievou nada...)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... A SINTAXE É DIFERENTE, MESMO... 
+
+
+
+em vez de escrever 'status: {description: "on-time"}',
+
+
+
+vamos usar 
+
+
+UMA DOT NOTATION BIZARRA...
+
+
+
+
+
+
+
+
+db.flightData.find(
+    {
+        status.description: .....
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> OK, MAS AQUI TEMOS UM ERRO.... -> 
+
+
+
+
+NÃO PODEMOS SÓ ESCREVER 
+
+
+'status.description'... --> ISSO PQ 
+
+
+QUANDO 
+
+
+
+
+QUEREMOS 'DRILL INTO OUR DOCUMENT',
+
+PARA QUERIAR 
+
+
+COISAS 
+
+DENTRO 
+
+DELE,
+
+
+
+
+NÃO PODEMOS SÓ ESCREVER DE FORMA SOLTA algo como  status.description --> EM VEZ DISSO,
+
+
+
+
+TEMOS QUE 
+
+WRAPPAR 
+
+
+
+ESSA ESCRITA COM "",
+
+
+
+
+TIPO ASSIM:
+
+
+
+
+
+
+
+db.flightData.find(
+    {
+        "status.description": .....
+    }
+)
+
+
+
+
+
+--------------------------------------
+
+
+
+FUNCIONOU:
+
+
+
+
+
+
+
+
+
+
+
+ db.flightData.find(     {         "status.description": "on-time"     } )
+{ "_id" : ObjectId("61ff05eb156a623d98a99136"), "departureAirport" : "MUC", "arrivalAirport" : "SF0", "aircraft" : "AIRBUS 
+A380", "distance" : 12000, "intercontinental" : true, "delayed" : false, "status" : { "description" : "on-time", "lastUpdated" : "1 hour ago", "details" : { "responsible" : "Max" } } }
+{ "_id" : ObjectId("61ff05eb156a623d98a99137"), "departureAirport" : "LHR", "arrivalAirport" : "TXL", "aircraft" : "AIRBUS 
+A320", "distance" : 950, "intercontinental" : false, "example course" : true, "status" : { "description" : "on-time", "lastUpdated" : "1 hour ago", "details" : { "responsible" : "Max" } } }
+>
+
+
+
+
+
+
+-------------------------------------------
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+> db.flightData.find(     {         "status.description": "on-time"     } ).pretty()
+{
+        "_id" : ObjectId("61ff05eb156a623d98a99136"),
+        "departureAirport" : "MUC",
+        "arrivalAirport" : "SF0",
+        "aircraft" : "AIRBUS A380",
+        "distance" : 12000,
+        "intercontinental" : true,
+        "delayed" : false,
+        "status" : {
+                "description" : "on-time",
+                "lastUpdated" : "1 hour ago",
+                "details" : {
+                        "responsible" : "Max"
+                }
+        }
+}
+{
+        "_id" : ObjectId("61ff05eb156a623d98a99137"),
+        "departureAirport" : "LHR",
+        "arrivalAirport" : "TXL",
+        "aircraft" : "AIRBUS A320",
+        "distance" : 950,
+        "intercontinental" : false,
+        "example course" : true,
+        "status" : {
+                "description" : "on-time",
+                "lastUpdated" : "1 hour ago",
+                "details" : {
+                        "responsible" : "Max"
+                }
+        }
+}
+
+
+
+
+
+
+
+--------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+OK, TODAS AS FLIGHTS SERÃO PRINTADAS, PQ TODAS ELAS 
+
+
+
+
+POSSUEM 
+
+
+ESSE 'description: "on-time"...
+
+
+
+
+
+
+
+
+
+
+
+
+--> E PODEMOS DRILLAR AINDA MAIS FUNDO,
+
+SE ESCREVEMOS ASSIM:
+
+
+
+
+
+> db.flightData.find(     {         "status.details.responsible": "Max"     } )
+
+
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+
+
+> db.flightData.find(     {         "status.details.responsible": "Max"     } ).pretty()            
+{
+        "_id" : ObjectId("61ff05eb156a623d98a99136"),
+        "departureAirport" : "MUC",
+        "arrivalAirport" : "SF0",
+        "aircraft" : "AIRBUS A380",
+        "distance" : 12000,
+        "intercontinental" : true,
+        "delayed" : false,
+        "status" : {
+                "description" : "on-time",
+                "lastUpdated" : "1 hour ago",
+                "details" : {
+                        "responsible" : "Max"
+                }
+        }
+}
+{
+        "_id" : ObjectId("61ff05eb156a623d98a99137"),
+        "departureAirport" : "LHR",
+        "arrivalAirport" : "TXL",
+        "aircraft" : "AIRBUS A320",
+        "distance" : 950,
+        "intercontinental" : false,
+        "example course" : true,
+        "status" : {
+                "description" : "on-time",
+                "lastUpdated" : "1 hour ago",
+                "details" : {
+                        "responsible" : "Max"
+                }
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... ESSA DOT NOTATION É ALGO QUE VOCÊ TAMBÉM VERÁ UM MONTE NESSE CURSO,
+
+PQ 
+ISSO 
+
+
+
+TE DEIXA PROCURAR POR EMBEDDED DOCUMENTS NOS SEUS FILTERS ........ filters de qualquer coisa....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... ISSO É TUDO, POR ENQUANTO...
+
+
+
+
+
+
+
+
+
+
+--> VEREMOS COMO USAR QUERIES EFICIENTES AO LONGO DO CURSO...
+
+
+
+
+
+
+
+
+
+--> isso é o básico do mongodb....
+
+
+
+
+
+
+
+
+--> TEREMOS 1 MÓDULO INTEIRO SOBRE ESTRUTURAÇÃO ÓPTIMA DE SUA DATA, ETC...

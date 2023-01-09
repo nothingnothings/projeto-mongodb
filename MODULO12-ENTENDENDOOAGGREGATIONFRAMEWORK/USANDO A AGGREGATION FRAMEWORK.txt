@@ -1,0 +1,738 @@
+
+
+
+
+
+
+
+
+
+
+
+
+ESTAMOS USANDO NOSSA DATABASE DE 
+
+'exemploPipeline',
+
+
+com a collection de 'persons'...
+
+
+
+
+
+
+
+
+
+
+
+--> usamos a aggregation framework de um modo bem simples:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+rodamos, 
+
+
+
+em vez de 'find',
+
+
+
+
+
+'aggregate()'...
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+db.persons.aggregate()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> JÁ VIMOS ISSO 1 VEZ NO NOSSO CURSO,
+
+
+LÁ 
+
+
+
+COM 
+
+
+
+o 
+
+'lookup',
+
+
+
+
+
+no módulo de 
+
+
+
+
+
+SCHEMAS E RELATIONS....
+
+
+
+
+
+BONUS, usando' lookUp()' para fazer o MERGE DE RELATIONS COM REFERENCES
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM... LEMBRO-ME UM POUCO...
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, 
+
+
+O 
+
+
+
+
+METHOD DE 'aggregate'
+
+
+
+EXIGE __ 1 
+
+
+ARRAY__ COMO 
+
+PARÂMETRO...
+
+
+
+
+
+
+
+
+
+
+-_> ELE EXIGE 1 PARÂMETOR PQ 
+
+
+
+
+
+
+ELE VAI QUERER 
+
+
+
+
+
+QUE VOCÊ ESPECIFIQUE A SÉRIE DE ETAPAS QUE SERÁ EXECUTADA NA NOSSA 
+
+
+DATA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> A PRIMEIRA ETAPA 
+
+
+
+
+
+
+VAI RECEBER 'ALL THE DATA',
+
+diretametne 
+
+de nossa collection...
+
+
+
+
+
+
+
+
+
+
+-_> É POR ISSO QUE A PRIMEIRA ETAPA GERALMETNE SERÁ 
+
+'$match',
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PARA AFUNILAR OS NEGÓCIOS ENCONTRADOS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, MAS O PROFESSOR JÁ NOS DÁ UM AVISO:
+
+
+
+
+AGGREGATE ___ NÃO 
+
+VAI 
+
+
+
+'FETCH ALL THE DATA IN THE DATABASE AND THEN GIVE IT TO YOU',
+
+
+
+
+
+
+
+
+
+
+
+é claro que 
+
+
+
+A PRIMEIRA 
+
+ETAPA 
+
+
+
+
+RODA 
+
+
+NA 
+
+
+DATABASE,
+
+
+E POR ISSO PODE 
+
+
+TIRAR 
+
+VANTAGEM DE 
+
+'INDEXES' ---> ISSO QUER DIZER QUE 
+
+
+
+
+SE 
+
+VOCÊ FIZER 'FILTER' OU 'SORT'
+
+NA PRIMEIRA 
+
+ETAPA,
+
+
+
+
+VOCÊ 
+
+TIRA VANTAGEM DOS INDEXES... --> ISSO QUER DIZER QUE 
+
+VOCÊ 
+
+
+NAÕ PRECISA 
+
+
+
+
+FETCHEAR TODOS OS DOCUMENTS DE UMA COLLECTION SÓ PQ VOCê ESTÁ USANDO 'aggregate'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... --> AGGREGATE 
+
+
+
+
+
+
+,
+
+COMO 'FIND',
+
+
+
+É EXECUTADO NO MONGODB SERVER,
+
+
+
+E POR ISSO 
+
+
+PDOE 
+
+
+TIRAR 
+
+VANTAGEM 
+
+DE COISAS COMO INDEXES,
+
+E É O QUE 
+
+ELE 
+FAZ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> 
+
+
+
+
+
+
+
+professor 
+
+
+escreve o aggregate em múltiplas lines,
+
+
+tipo assim:
+
+
+
+
+
+
+
+
+db.persons.aggregate(
+    [
+        {}
+    ]
+)
+
+
+
+
+
+
+
+
+
+
+
+--> CADA DOCUMENT EM 'aggregate'
+
+SERÁ UMA 'STEP/ETAPA'...
+
+
+
+
+
+
+
+
+--> a primeira ETAPA SERÁ 
+
+
+
+UMA 
+
+
+
+PHASE DE 
+
+'$match' -------> 
+
+
+
+
+É ESSENCIALMENTE A 'FILTERING STEP'...
+
+
+
+
+
+
+--> 1 CRITÉRIO PELO QUAL VOCÊ FILTRARÁ SUA DATA, NESSA COLLECTION DE PERSONS...
+
+
+
+
+
+
+
+
+
+
+
+
+--> E AÍ 
+
+VOCê 
+
+PODE 
+FILTRAR, AQUI,
+
+EXATAMENTE COMO VOCê 
+
+
+FILTRA EM 'find'...
+
+
+
+
+
+
+
+
+
+--> 
+
+
+
+
+AQUI, POR EXEMPLO,
+
+
+
+
+PODEMOS 
+
+PROCURAR POR 
+
+
+'females only'...
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+db.persons.aggregate(
+[
+{$match: {gender: "female"}}
+]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE QUISERMOS,
+
+JÁ PODEMOS FECHAR NOSSA PIPELINE...
+
+
+
+
+
+
+
+
+
+
+--> BASTA RODAR ESSA QUERY AÍ...
+
+
+
+
+
+
+
+
+
+
+
+
+--> O OUTPUT SERÁ ESTE:
+
+
+
+
+        "picture" : {
+                "large" : "https://randomuser.me/api/portraits/women/37.jpg",
+                "medium" : "https://randomuser.me/api/portraits/med/women/37.jpg",
+                "thumbnail" : "https://randomuser.me/api/portraits/thumb/women/37.jpg"
+        },
+        "nat" : "NZ"
+}
+Type "it" for more
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> OU SEJA,
+
+
+SERÁ 1 CURSOR,
+
+
+VISTO 
+
+PELA PRESENÇA DAQUELE 'type it for more'... 
+
+
+
+
+
+
+
+
+
+
+
+--> OU SEJA,
+
+
+COMO O  FIND METHOD,
+
+
+O 
+
+
+
+
+
+'AGGREGATE' METHOD TAMBÉM VAI RETORNAR UM CURSOR...
+
+
+
+
+
+
+
+
+
+
+--> OK.... --> ENTÃO VOCÊ TEM QUE O UTILIZAR COMO SE FOSSE UM 'FIND' ESPECIAL...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> 
+
+
+
+
+
+
+rodamos pretty print,
+
+que também funciona...
+
+
+
+
+
+
+
+
+
+
+
+--> A ETAPA DE MATCH É 
+
+
+
+
+
+BEM COMUM,
+
+PQ 
+
+
+
+É 
+
+
+
+ESSENCIALMENTE O MESMO FILTER DO 'FIND' 
+
+
+
+mehtod...
+
+
+
+
+
+
+
+
+
+-_> A PARTE MAIS INTERESSANTE É A FASE DE 'GROUPING',
+
+
+
+que será vista na próxima aula...

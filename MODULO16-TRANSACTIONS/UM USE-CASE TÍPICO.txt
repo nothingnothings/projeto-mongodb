@@ -1,0 +1,312 @@
+
+
+
+
+
+
+
+
+
+
+
+-----> OK... NOS CONECTAMOS AO MONGODB ATLAS SERVER...
+
+
+
+
+
+ 
+
+
+
+-> PROFESSOR VAI USAR UMA NOVA DATABASE,
+
+
+'blog2'..
+
+
+
+
+
+
+
+
+
+
+
+
+--> AÍ O PROFESSOR INSERE USERS SIMPLES:
+
+
+
+
+
+
+
+
+
+
+db.users.insertOne({name: "Max"})
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+MongoDB Enterprise atlas-gc0c6b-shard-0:PRIMARY> db.users.insertOne({name: "Max"})
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("621ef42a8ba295d281e9772c")
+}
+
+
+
+
+
+
+
+
+
+
+
+-> AÍ CRIAMOS UM MONTE DE POSTS,com 
+
+
+
+
+db.posts.insertMany(
+    [
+        {
+                title: 'First post',
+                userId: ObjectId("621ef42a8ba295d281e9772c")
+        },
+
+        {
+             title: 'Second post',
+                userId: ObjectId("621ef42a8ba295d281e9772c")
+        }
+        ,
+
+        {
+             title: 'Third post',
+                userId: ObjectId("621ef42a8ba295d281e9772c")
+        }
+    ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, 
+
+
+
+
+3 POSTS CRIADOS PELO MESMO USER...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... FORAM CRIADOS.... --> MAS 
+
+DIGMAOS QUE 
+
+
+QUEREMOS DELETAR O USER....
+
+
+
+
+
+
+
+
+
+
+
+-> 
+
+
+VAMOS ENCONTRAR O USERID,
+
+
+
+
+
+
+E AÍ 
+
+
+ESCREVEMOS 
+
+
+'db.users.deleteOne(
+    {_id: ObjectId("621ef42a8ba295d281e9772c")
+    }
+)'
+
+
+
+
+
+
+
+
+
+
+
+--> OK,
+
+VOCÊ DELETARIA ESSE USER,
+
+
+SIM..
+
+
+
+
+
+
+
+
+--> E DEPOIS DE ELE SER DELETADO,
+
+PROVAVELMENTE ESCREVERÍAMOS ISTO:
+
+
+
+
+
+
+
+'db.posts.deleteMany(
+    {userId: ObjectId("621ef42a8ba295d281e9772c")
+    }
+)'
+
+
+
+
+
+
+
+
+
+
+
+
+-----> OK... MAS N VAMOS DELETAR ESSES COMNADOS,
+
+
+PQ 
+
+NÃO QUEREMOS 
+
+
+
+
+DELETAR NOSSA DATA,
+
+pq vamos a utilizar no exemplo...
+
+
+
+
+
+
+
+
+
+
+--> OK... ESSAS 2 OPERATIONS SERIAM EXECUTAADS
+ 
+
+
+
+  
+  EM 99% DOS CASOS.... --> o problema é o 1%,
+
+  os 
+
+  cases em que 
+
+
+  o DELETE DOS POSTS VAI FALHAR/falha...
+
+
+
+
+
+
+
+
+
+
+  --> OK, SE ISSO ACONTECER,
+
+  ESTAREMOS EM 1 STATE EM QUE TEREMOS APAGADO O USER/POST,
+
+
+
+
+  MAS SEM APAGAR O DOCUMENT 'CORRESPONDENTE' a ele... 
+
+
+
+
+
+
+
+
+
+
+
+  --> É AÍ QUE PODEMOS TRABLAHAR COM TRANSACTIONS...
+
+
+
+
+
+
+
+
+
+
+  --> MAS COMO ELAS FUNCIONAM?
+
+
+
+  VEREMOS NA PRÓXIMA AULA...

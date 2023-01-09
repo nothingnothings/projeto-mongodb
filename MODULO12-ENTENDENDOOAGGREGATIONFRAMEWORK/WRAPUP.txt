@@ -1,0 +1,384 @@
+
+
+
+
+ACABAMOS COM ESTE MÓDULO...
+
+
+
+
+
+
+
+
+
+
+
+DEMOS UMA BOA OLHADA 
+
+
+NO AGGREGATION FRAMEWORK,
+
+E NOS STAGES E OPERATORS OFERECIDOS POR ELE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> HÁ MTOS STAGES E OPERATORS QUE PODEMOS ESCOLHER..
+
+
+
+
+
+
+
+
+
+
+
+----> devemos ver os docs do mongodb,
+
+
+para ver como os operators funcionam.......
+
+
+
+
+
+
+
+
+
+
+--> STAGES DEFINEM OS DIFERENTES STEPS PELOS QUAIS SUA DATA É 'FUNNELED THROUGH'...
+
+
+
+
+
+
+
+
+
+
+--> CADA STAGE RECEBE O OUTPUT DO ÚLTIMO STAGE COMO OUTPUT,
+
+EXCETO 
+
+
+
+NO PRIMEIRO STAGE,
+QUE INTERAGE DIRETAMENTE COM SUA COLLECTION, E QUE, PORTANTO, TIRA VANTAGEM 
+
+
+
+DE INDEXES 
+
+
+E ASSIM POR DIANTE (como geoindexes e text indexes, por exemplo)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOCÊ TAMBÉM DEVE SABER QUE 
+
+
+
+O 
+
+MONGODB 'OPTIMIZA AUTOMATICAMENTE' 
+
+
+SEU PIPELINE, POR TRÁS DAS CENAS,
+
+PARA ENTÃO 
+
+
+'MATCH EARLY' -> mas você anida 
+
+
+deve 
+
+escrever código 
+
+bom,
+
+
+
+
+
+BOM SETUP DE PIPELINE STAGES (ordem e uso de stages),
+
+
+
+
+
+
+
+
+
+
+
+
+GERALMENTE 
+
+
+
+
+FAÇA 
+
+
+__ O QUERY/MATCH 
+
+
+
+__ ANTES__ DO PROJECT/SORT,
+
+
+
+TUDO PARA EVITAR 
+
+
+
+SORTING E PROJECTING DESNECESSÁRIO SOBRE TODA SUA DATA (o que pesa bem mais)... -----> isso se você 
+
+
+
+planeja 
+
+'FILTER IT DOWN' mesmo assim....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OPERATORS, NO CASO, 
+
+
+SÃO USADOS DENTRO 
+
+
+
+DE STAGES... --> E QUE OPERATORS PODEM SER USADOS EM QUE LUGAR,
+
+
+ISSO DEPENDE DE CADA STAGE....
+
+
+
+
+
+
+
+
+
+--> VOCê VAI 'GET A FEEL' A MEDIDA QUE VOCÊ VAI APRENDENDO DIFERNTES OPERATORS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> É CLARO QUE HÁ ALGUNS STAGES BEM IMPORTANTES...
+
+
+
+
+
+
+
+
+
+--> MAIS IMPORTANTES:
+
+
+
+
+$MATCH 
+
+
+$GROUP 
+
+
+$PROJECT 
+
+
+$SORT 
+
+
+
+$UNWIND 
+
+
+
+
+
+
+
+
+
+
+
+-->OS OUTROS STAGES TAMBÉM SÃO BONS,
+
+
+MAS ESSES 
+
+STAGES 
+
+SÃO OS QUE VOCê MAIS USARÁ....
+
+
+
+
+
+
+
+
+--> VOCÊ DEVE ENTENDER O QUE ELES FAZEM...
+
+
+
+
+
+
+
+
+--> TAMBÉM HÁ ALGUNS COMPORTAMENTOS QUE SÃO COMPARTILHADOS 
+
+
+
+
+
+
+
+ENTRE 'FIND FILTERS' 
+
+e 
+
+'projection',
+
+
+
+
+
+
+
+E 
+
+
+
+TAMBÉM 
+
+'match' e 'project',
+
+
+
+
+QUE 
+
+
+SÃO KINDOF EQUIVALENTES NO 
+
+
+AGGREGATION FRAMEWORK....
+
+
+
+
+
+
+
+
+
+
+--> MAS TENHA EM MENTE QUE NO AGGREGATION FRAMEWORK,
+
+
+especialmente 
+
+
+
+'PROJECT',
+
+
+
+é um 
+
+
+
+stage que É BEM MAIS FLEXÍVEL E PODE FAZER BEM MAIS COISAS DO QUE A VERSÃO DO 
+
+'find' (
+
+
+
+
+    como adicionar novos fields,
+
+
+
+
+    recalcular coisas,
+
+
+
+
+
+    FAZER UM MONTE DE COISAS 
+
+    QUE 
+
+    VOCÊ NÃO PODE FAZER COM A PROJECTION 
+
+
+    NO 
+
+
+
+    METHOD DE FIND tradicional....
+)

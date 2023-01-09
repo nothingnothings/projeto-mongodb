@@ -1,0 +1,229 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA COMEÇAR COM A AGGREGATION PIPELINE,
+
+PRECISAMOS 
+
+DE 
+
+
+ALGUMA DATA...
+
+
+
+
+
+
+
+
+
+--> VAMOS USAR 
+
+
+
+
+
+A DATA DE 'persons'...
+
+
+
+
+
+--> BASTA IMPORTAR ESSE NEGÓCIO 
+
+
+
+
+NA NOSSA DATABASE...
+
+
+
+
+
+
+
+
+
+
+
+
+--> VAMOS IMPORTAR COM MONGOIMPORT,
+
+
+
+com aquele código de 
+
+
+
+PS A:\projeto6-MONGODB\MODULO12-ENTENDENDOOAGGREGATIONFRAMEWORK> mongoimport -d exemploPipeline -c persons persons.json --jsonArray
+
+
+2022-02-20T14:43:16.140-0300    connected to: mongodb://localhost/
+2022-02-20T14:43:16.304-0300    5000 document(s) imported successfully. 0 document(s) failed to import.
+
+
+
+-----------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+ok...
+
+
+
+
+
+
+IMPORTAMOS TUDO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> AGORA NOS CONECTAMOS à DATABASE, COM A SHELL..
+
+
+
+
+
+
+
+
+
+
+
+
+CADA PERSON POSSUI ESTE FORMATO:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+{
+        "_id" : ObjectId("62127db4e5b1e4e4716eb34e"),
+        "gender" : "female",
+        "name" : {
+                "title" : "ms",
+                "first" : "signe",
+                "last" : "rasmussen"
+        },
+        "location" : {
+                "street" : "3635 koldingvej",
+                "city" : "ryslinge",
+                "state" : "sjælland",
+                "postcode" : 44840,
+                "coordinates" : {
+                        "latitude" : "18.2563",
+                        "longitude" : "14.0142"
+                },
+                "timezone" : {
+                        "offset" : "+4:30",
+                        "description" : "Kabul"
+                }
+        },
+        "email" : "signe.rasmussen@example.com",
+        "login" : {
+                "uuid" : "687099d9-b4bd-4881-8657-90abd559844f",
+                "username" : "sadpeacock229",
+                "password" : "baggio",
+                "salt" : "J1WBRau1",
+                "md5" : "2b0824d7f90452cc93a879aaf717fa40",
+                "sha1" : "d7fc48d34816bccf8cac0c532b06e37e65974759",
+                "sha256" : "2388d9162c447e163fdaaf94fb99bc5ca42a93de167d82eed59e296f8d1de8dd"
+        },
+        "dob" : {
+                "date" : "1983-05-20T21:26:44Z",
+                "age" : 35
+        },
+        "registered" : {
+                "date" : "2010-09-30T04:08:40Z",
+                "age" : 7
+        },
+        "phone" : "46945447",
+        "cell" : "97293211",
+        "id" : {
+                "name" : "CPR",
+                "value" : "082246-7576"
+        },
+        "picture" : {
+                "large" : "https://randomuser.me/api/portraits/women/5.jpg",
+                "medium" : "https://randomuser.me/api/portraits/med/women/5.jpg",
+                "thumbnail" : "https://randomuser.me/api/portraits/thumb/women/5.jpg"
+        },
+        "nat" : "DK"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> BASTANTE DATA EM 
+
+
+
+1 PERSON... --> 
+TEMOS ATÉ DUMMY LOCATIONS...
+
+
+
+
+
+
+
+
+
+
+
+----->  AGORA DEVEMOS VER COMO PODEMOS USAR A AGGREGATION FRAMEWORK NESSA DTA....

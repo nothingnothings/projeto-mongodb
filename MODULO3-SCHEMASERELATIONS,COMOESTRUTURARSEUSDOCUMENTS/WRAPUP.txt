@@ -1,0 +1,416 @@
+
+
+
+
+
+
+
+
+
+
+DATA MODELLING E STRUCTURING --> COISAS PARA CONSIDERAR....
+
+
+
+
+
+
+
+
+
+
+
+
+--> PRIMEIRA COISA IMPORTANTE DESSE WRAPUP..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> 1)
+
+
+PRIMEIRAMENTE,
+
+CONSIDERE QUAL TIPO DE FORMATO VOCÊ USARÁ PARA FETCHEAR SUA DATA... ----> AINDA MAIS SE VOCÊ TIVER UM APP EM QUE VOCÊ FETCHEIA MT...
+
+
+
+
+
+
+
+
+
+
+2) COM QUAL FREQUENCIA VOCÊ VAI FETCHEAR SUA DATA
+
+
+
+
+
+
+3)  COM QUE FREQUENCIA VOCÊ VAI ALTERAR SUA DATA? 
+
+
+
+
+
+
+
+
+
+(
+
+
+
+    GERALMENTE OS APPS SÃO OPTIMIZADOS PARA READS,
+
+    E NÃO PARA WRITES....
+) ---------> MAS SE VOCê VAI 'WRITE' MT 
+
+
+
+SOBRE SUA DATA,
+
+
+
+
+
+
+TENTE SEMPRE 
+
+
+
+EVITAR 'DUPLICATES'  ------> ASSEGURE QUE VOCÊ NÃO TENHA 
+
+
+
+
+NENHUM DUPLICATE...
+
+
+
+
+
+
+
+
+
+
+
+-_> SE VOCÊ FIZER 'READ' MT,
+
+
+ALGUNS DUPLICATES SERÃO OK,
+
+
+DESDE QUE NÃO MUDEM COM MT FREQUÊNCIA AO LONGO DA VIDA DO SEU APP... (basicamente o que vimos durante as difernetes relation options)...
+
+
+
+
+
+
+
+
+
+4) outra pergunta é: 
+
+
+
+QUAL É O TAMANHO DE SUA DATABASE? É TODA A CIDADE DE NOVA YORK? SE FOR, TALVEZ NÃO SEJA UMA BOA IDEIA 
+
+USAR O EMBEDDING DE DOCUMENTS (documents mt grandes, data limits)..
+
+
+
+
+
+
+
+
+5) COMO SUA DATA É RELATED?   em geral,
+
+
+'ONE-TO-ONE', 'ONE-TO-MANY', 
+
+'MANY-TO-MANY' --> ISSO JÁ VAI TE DAR UMA DICA SE É MELHOR USAR REFERENCING OU EMBEDDING...
+
+
+
+
+
+
+
+
+6) EM GERAL,
+
+
+DUPLICATES VÃO TE MACHUCAR MT? OU VOCÊ TEM SNAPSHOT DATA, COMO 'orders',
+
+por exemplo? (em que você não se importa com a latest data, updates to your most recent data )
+
+
+
+
+
+
+
+
+
+
+7) VOCÊ VAI ATINGIR LIMITES DE STORAGE? (
+
+    100 levels de nesting, com o mongodb...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VIMOS:
+
+
+
+
+
+
+1) COMO MODELAR 'SCHEMAS' --> ISSO PODE FAZER SENTIDO,
+
+APEASR DE 
+
+MONGODB NÃO ENFORÇAR SCHEMAS SOBRE VOCÊ.... (SCHEMAS DEVEM SER MODELLED COM BASE NOS SEUS APPLICATION NEEDS  )
+
+
+
+
+
+
+
+
+2) FATORES IMPORTANTES NO MODELLING SÃO AQUELES JÁ MENCIONADOS, READ E WRITE FREQUENCY,
+
+RELATIONS,
+
+
+AMOUNT E SIZE DA DATA....
+
+
+
+
+
+
+(
+
+    TAMBÉM APRENDEMOS SOBRE DATA TYPES... --> veremos os numbers de novo, mais tarde no curso...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TAMBÉM APRENDEMOS SOBRE 
+
+
+MODELLING RELATIONS... 
+
+
+
+
+
+
+
+TEMOS 2 OPÇÕES:
+
+
+
+
+
+
+1) EMBEDDING DOCUMENTS OU REFERENCES...
+
+
+
+
+
+2) USE EMBEDDED DOCUMNTS SE VOCÊ TEM RELATIONS DE 'one-to-one' ou 
+'one-to-many',
+
+
+E SE 
+
+ISSO FIZER SENTIDO PARA SEU APP (ou seja, SE VOCÊ REALMENTE FICA MELHOR COM A DATA SENDO FETCHEADA JUNTA, TOGETHER; o que não era o caso do CAR e DOS CUSTOMERS, POR EXEMPLO )
+
+
+
+
+
+
+-->  se você não tiver razão alguma para splittar sua data, separar data em collections, use o EMBED de documents...
+
+
+
+
+
+
+
+
+
+
+--> USE REFERENCES SE 
+
+
+HÁ QUANTIDADES ABSURDAS DE NESTED DATA,
+
+
+
+QUE TE FORÇAM A DIVIDIR DATA EM DIFERENTES COLLECTIONS...
+
+
+
+
+
+
+
+
+
+
+--> EXCEPTIONS SÃO SEMPRE POSSÍVEIS,
+
+
+
+MAS 
+
+VOCÊ DEVE TER EM MENTE 
+
+
+
+
+COMO SEU APP FUNCIONA, E COMO AS ESTRUTURAS SE COMUNICAM...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> POR FIM, VIMOS SCHEMA VALIDAITON,
+
+
+
+QUE TE DEIXA 
+
+
+
+
+BLOQUEAR INSERTS E 
+
+
+
+UPDATES COM DOCUMENTS INVÁLIDOS( que não respeitam o schema)..
+
+
+
+
+
+
+
+
+
+
+
+-> VOCÊ PODE 
+
+DEFINIR RULES PARA VALIDAR INSERTS E UPDATES ANTES DE WRITAR AO DATABASE...
+
+
+
+
+
+
+
+
+
+--> APRENDEMOS QUE PODEOMS 
+
+CONFIGURAR O 'VALIDATION LEVEL' ( se isso é aplicado a todas operações de insert/update, ou se só aquelas de update que 
+
+
+ATUAREM SOBRE DATA VÁLIDA JÁ INSERIDA NA NOSSA DATABASE )
+
+
+
+
+
+TAMBÉM QUE PODEMOS DEFINIR A 'validationAction', que pode ser OU warn 
+
+
+OU 
+
+
+ERROR (
+
+    warn logga um warninng em um arquivo log, e ARMAZENA A DATA MESMO ASSIM...
+
+
+    e o 
+
+    'error' 
+
+
+    É O COMPORTAMENTO PADRÃO, QUE SIMPLESMENTE NÃO INSERE/UPDATA O DOCUMENT...
+)

@@ -1,0 +1,1475 @@
+
+
+
+
+
+
+
+
+
+
+PRIMEIRO DE TUDO:
+
+
+
+
+
+
+
+
+
+
+O QUE É O STITCH? 
+
+
+
+
+
+
+
+
+
+
+
+
+--> O QUE É O MONGODB STITCH? 
+
+
+
+
+
+
+
+
+
+
+
+
+--> é uma 'SERVERLESS PLATFORM FOR BUILDING APPLICATIONS'...
+
+
+
+
+
+
+
+
+
+
+--> OU SEJA,
+
+
+
+
+É UMA 'COLEÇÃO DE SERVIÇOS',
+
+
+
+serviços oferecidos pela companhia mongodb,
+
+
+
+
+
+
+
+que vocÊ pode USAR QUANDO 
+
+ESTIVER CONSTRUINDO UM APP  (tanto mobile apps, como desktop apps, como webapps)...
+
+
+
+
+
+
+---> COM ISSO,
+
+
+
+VOCÊ PODE EVITAR ESSE BOILERPLATE CODE 
+
+
+e entõa 
+
+focar 
+
+
+
+NA SUA USER INTERFACE E NA SUA CORE LOGIC,
+
+
+
+
+
+
+
+
+só na parte IMPORTANTE DO SEU CÓDIGO, PARTE DIFERENCIADA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> vocÊ evita o código que setta o server, que manageia o server, 
+
+
+
+código que setta 
+
+
+a restful api,
+
+
+
+
+
+
+
+
+
+
+pq tudo isso será HANDLADO PELO STITCH...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> OK.. O STITCH HANDLA TUDO ISSO --> MAS COMO TUDO ISSO FUNCIONA?
+
+
+
+
+
+
+
+
+
+
+
+-_> TUDO ISSO GIRA EM VOLTA DO 'MONGODB ATLAS' (
+
+    cloud database 
+),
+
+
+
+
+
+
+
+O QUE SIGNIFICA QUE A INTEGRAÇÃO COM O ATLAS É ESPECIALMENTE FÁCIL....
+
+
+
+
+
+
+
+
+
+
+--> E  UMA CORE FEATURE, POR EXEMPLO,
+
+
+
+
+É A 'AUTHENTICATION' DO SEU APP ------> aqui, por 'auth',
+
+
+
+o professor 
+
+
+
+
+NÃO ESTÁ FALANDO DE 
+
+
+'USERS DA MONGODB 
+
+DATABASE' (ou seja, 'compradores' de nossa loja, ou então 'pessoas' de nosso app social...)
+
+
+
+
+
+---> AQUI, O PROFESSOR ESTÁ FALANDO DA AUTH 
+
+
+
+__ DOS_ _ 'APP USERS', ou seja,
+
+
+
+
+
+dos node servers, da backend, dos analistas e desenvolvedores que interagem com seu banco de dados...
+
+
+
+
+
+
+
+
+
+---> PQ ISSO É IMPORTANTE? 
+
+
+
+É IMPORTANTE PQ O STITCH NOS DÁ 
+ACESSO 
+
+
+A NOSSA DATABASE 
+
+
+
+DO ATLAS.... -------> E ESSE ACESSO _ _VAI _ ENTÃO FICAR DISPONÍVEL __ DE __DENTRO ___ 
+
+
+DE NOSSA 
+
+
+
+CLIENTSIDE APPLICATION (e não na SERVERSIDE APPLICATION).. -->  
+
+
+
+
+
+
+
+
+
+
+
+EM OUTRAS PALAVRAS,
+
+
+NAQUELE NOSSO EXEMPLO CONCRETO DO MÓDULO ANTERIOR,
+
+
+
+
+
+__ ESSE __ aCESSO___ à DATABASE ATLAS__ FICARÁ __ DISPONÍVEL NO __ PRÓPRIO __ REACT APp....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS NO ÚLTIMO MÓDULO, O PROFESSOR EXPLICOU QUE 
+
+
+
+NÃO É ÓPTIMO ACESSAR 
+
+
+
+NOSSA DATABASE 
+
+
+DIRETAMENTE DO CLIENTSIDE,
+
+
+
+ISSO 
+
+
+
+
+PQ __ NÓS NÃO VAMOS QUERER 'EXPOR DIRETAMENTE NOSSAS DATABASE CREDENTIALS' (senhas, usuários, etc etc)... --> 
+
+
+
+
+
+
+
+
+MAS A IDEIA POR TRÁS DO STITCH, A SOLUÇÃO DELE,
+
+É QUE 
+
+
+
+ELE 
+
+_ NÃO VAI _  EXPOR __ NOSSAS 'DATABASE CREDENTIALs' --> em vez disso,
+
+
+
+
+
+
+
+NOSSOS APPLICATION USERS (compradores)
+
+
+VÃO PODER/VÃO _ FAZER__ LOGIN 
+
+
+
+
+
+E SIGNUP _ _ATRAVÉS__ DO SERVIÇO DO STITCH,
+ 
+
+
+
+
+ SERVIÇO PROVIDENCIADO POR ELE,
+
+
+
+
+
+ E AÍ O  USER VAI GANHAR 'TEMPORARY CREDENTIALS',
+
+
+
+
+
+
+ credenciais temporárias PARA TER UM 
+
+
+
+
+ 'FINE-GRAINED ACCESS' 
+
+  
+
+  À database... --> e nós vamos poder 
+
+  '
+  LOCKDOWN' 
+
+
+
+
+
+
+
+  O QUE 1 ÚNICO USER PODE FAZER... -->  isso quer dizer que 
+
+
+
+  podemos 
+
+  dizer 
+
+
+
+  '''1 USER 
+
+
+
+FICA PERMITIDO 
+
+
+
+A 
+
+
+
+
+FAZER INSERT DE DOCUMENTS NESSA COLLECTION ESPECÍFICA, 
+
+
+
+
+E, LÁ,
+
+
+
+ELE PODE MUDAR TAL E TAL FIELD,
+
+
+
+
+MAS 
+
+
+
+ESSE FIELD ESPECÍFICO NÃO PODE SER MUDADO POR ELE'....- ->  isso pode ser locked down por nós, com o stitch,
+
+e o professor nos mostrará isso, COMO SETTAR ESSAS RULES, nesse módulo...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> PORTANTO,
+
+
+podemos 
+
+passar 
+
+
+
+a 'authentication'/direitos aos USERS DE NOSSO APP,
+
+
+
+PQ 
+
+
+ELES __ NÃO VÃO __ ter acesso  ___ COMPLETO__ À DATABASe ( 
+
+    coisa que certamente teriam, 
+
+    se tivessem nossas 
+
+
+
+    'database credentials' ,
+
+
+    algo que NÃO TERÃO, NESSA HIPÓTESE DO STITCH, pq não ficarão expostas...
+)
+
+
+
+
+
+
+
+
+
+
+--> OK, ISSO QUER DIZER QUE O STITCH FAZ MANAGE DISSO PARA NÓS ,
+
+
+
+
+por trás das cenas... --> ELE 'TAKES OUR RULES' em consideração,
+
+
+
+e 
+
+
+aí
+
+
+GARANTE ACESSO 
+
+
+
+
+AOS USERS DE NOSSA DATABASE, SIM, 
+
+
+MAS _ APENAS __ EXATAMENTE ÀS COISAS QUE 
+
+
+
+DEVERÃO TER PERMISSÃO PARA FAZER,
+
+
+como 
+
+
+'create products'... --------> no módulo passado,
+
+
+
+
+fazíamos esse controle através 
+
+
+do 
+
+
+NODE,
+
+
+MAS AGORA FAREMOS ISSO 
+
+ATRAVÉS 
+
+DO 
+
+STITCH....
+
+
+
+
+--------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+A SEGUNDA COISA IMPORTANTE É QUE PODEMOS 
+
+'react to events' 
+
+
+no stitch --> isso significa que se algo é 
+
+
+
+
+
+ADICIONADO/INSERTADO NA DATABASE/UPDATADO,,
+
+
+
+
+
+
+
+
+
+podemos RODAR 1 CÓDIGO QUE FAZ ALGUMA COISA A PARTIR DISSO,
+
+
+COMO ENVIAR 1 EMAIL AO USER QUE INSERIU ESSE PRODUCT,
+
+
+
+OU ENTÃO 
+
+
+'LOG SOMETHING INTO OTHER COLLECTION',
+
+
+ou qualquer outra coisa que queremos fazer...
+
+
+
+
+
+
+
+
+
+
+
+--> OK, RECAPITULANDO:
+
+
+
+
+
+
+
+
+
+
+
+
+
+COISAS QUE O STITCH NOS DÁ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+1) ACESSO FÁCIL à DATABASE ATLAS...
+
+
+
+
+
+
+
+
+
+
+2) AUTHENTICATION MAIS FÁCIL, dada diretamente aos CLIENTS, CLIENTSIDE, sem precisar usar um SERVIDOR/SERVERSIDE....
+
+
+
+
+
+
+
+
+
+
+
+3) REAGIR A EVENTOS (disparar 1 email para o email de 1 user, se ele inserir/updatar alguma coisa) 
+
+
+
+
+
+
+
+
+
+
+E AGORA, TEMOS 4:
+
+
+
+
+
+
+
+
+
+
+você pode executar alguns códigos/funcionalidades NA NUVEM....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> stitch, então, não é apenas um toolset que nos deixa construir bonitas UIs 
+
+
+e clientside code,
+
+
+
+
+
+
+
+pq nós AINDA PODEMOS EXECUTAR CÓDIGO NA NUVEM, 
+
+ATRAVÉS 
+
+
+
+
+
+
+DAS CHAMADAS 
+
+
+''STITCH FUNCTIONS''',
+
+que 
+são 
+
+
+essencialmente 
+
+code snippets 
+
+
+que definimos --> NESSES CODE SNIPPETS,
+
+
+
+NÃO PRECISAMOS ESCREVER O 
+
+
+'CÓDIGO BOILER PLATE',
+
+
+
+
+
+
+
+aquela lenga-lenga do parse de incoming requests,
+
+
+
+expose de routes em uma restful api.... ---> COM O STITCH,
+
+
+APENAS 
+
+
+ESCREVEMOS O CÓDIGO QUE QUEREMOS EXECUTAR.... --> E AÍ 
+
+
+
+
+,
+
+isso feito,
+
+podemos 
+
+executar esse código
+
+
+OU __ DIRETAMENTE__ 
+
+
+
+__ DO CLIENTSIDE (dentro  desse código clientside),
+
+
+
+
+
+
+
+
+
+
+OU ENTÃO NO PRÓPRIO STITCH (dentro das 'stitch functions'),
+
+
+
+
+
+
+
+
+
+
+
+OU ENTÃO SETTAMOS 1 'TRIGGER' (aspecto de 'react to events')
+
+
+
+
+
+
+
+
+
+
+
+----> certo... isso significa que temos muita flexibilidade, aqui...
+
+
+
+
+
+
+
+
+
+
+
+
+--> E SE VOCÊ TRABALHA COM ALGO COMO 'FIREBASE'
+
+OU 
+
+
+
+
+
+'AWS LAMBDA',
+
+
+essa 
+
+
+
+parte 
+
+
+
+
+do 
+
+
+
+'EXECUTE CODE/FUNCTIONALITY IN THE CLOUD' 
+
+
+
+
+É ESSENCIALMENTE 
+
+A MESMA FEATURE 
+
+
+
+
+
+
+DO FIREBASE/AWS LAMBDA ---------->  E O __ MONGODB__ STITCH,
+
+
+COMO UM TODO,
+
+
+
+É PRATICAMENTE UMA RESPOSTA 
+
+AO 
+
+FIREBASE 
+
+E 
+O 
+
+AWS LAMBDA... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> CERTO.... MAS EM DETALHES:
+
+
+
+
+
+
+
+
+
+PARA O ACESSO 
+
+
+À DATABASe
+
+
+
+DO MONGODB,
+
+
+
+TEMOS O 
+
+
+'STITCH QUERYANYWHERE' ------>  É A SOLUÇÃO DO STITCH 
+
+PARA 
+
+
+
+
+NOS DEIXAR RODAR QUERIES 
+
+
+COM BASE 
+
+
+
+
+
+NAS 'RULES' QUE 
+
+SETTAMOS 
+
+PARA 
+OS 
+
+USERS 
+
+
+
+DE NOSSO 
+
+
+APP,
+
+
+
+DIRETAMENTE__ A NOSSA DATABASE....  (comunicação 'client' -> 'database', diretamente, a partir dessas rules... )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> TAMBÉM TEMOS 'MONGODB MOBILE',
+
+
+QUE O PROFESSOR NÃO NOS MOSTRARÁ ----> É BASICAMENTE UMA DATABASE LOCAL DO MONGODB 
+
+
+
+
+
+que vocÊ PODE INSTALAR EM 
+
+
+
+
+
+
+
+
+'MOBILE DEVICES',
+
+
+
+EM QUE 
+
+VOCÊ PODE STORE DATA E ENTÃO 
+
+
+
+SINCRONIZAR ESSA 
+
+DATA 
+
+
+
+COM A CLOUD... ----->  ESSA DATA SERÁ ARMAZENADA, NO DISPOSITIVO,
+
+
+
+
+MESMO SE O DISPOSITIVO (mobile) ESTIVER OFFLINE --> assim que a conexão for RESTAURADA,
+
+
+o dispositivo VAI SINCRONIZAR A MINI-DATABASE 
+
+
+
+DESSE DISPOSITIVO COM 
+
+
+
+A DATABASE NA CLOUD.....
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> ''SYNC IT TO THE CLOUD WHEN YOU ARE ONLINE ''' -> esse é um tópico que não abordaremos aqui, mas que é interessante...
+
+
+
+
+
+
+
+
+
+--> é o mongodb mobile....
+
+
+
+
+
+
+
+
+----> JÁ AS 'REAÇÕES A EVENTOS'
+
+
+
+é algo contemplado 
+
+
+pelos 
+
+'STITCH TRIGGERS',
+
+
+
+
+QUE É O NOME 
+
+DO 
+
+SERVIÇO 
+
+
+
+
+QUE 
+
+NOS 
+
+DEIXA CONFIGURAR TRIGGERS,
+
+TRIGGERS QUE 
+
+VÃO 
+
+ENTÃO 
+
+CHAMAR STITCH FUNCTIONS A PARTIR 
+
+DE EVENTOS 
+
+
+DIVERSOS.... (insertOne, etc)...
+.
+
+
+
+
+
+
+
+
+
+
+------> POR FIM, OPCIONALMENTE,
+
+
+
+TEMOS 
+
+
+A FEATURE DO 
+
+ 'STITCH SERVICES',
+
+ que 
+ é 
+ uma 
+
+ feature que 
+
+ nos deixa 
+
+
+
+
+ INTEGRAR _ O STITCH__ COM OUTROS SERVICES,
+
+
+
+
+
+ COMO O 
+ '
+ AWS S3' --> AWS S3 --> É ÚTIL PQ O 
+
+
+
+
+ STITCH NÃO TEM NENHUM FILE STORAGE BUILT-IN (pq uma database não deve ser usada como file storage; o mongodb não é exemplo de file storage system)
+
+
+
+
+
+
+
+
+
+
+
+
+ ---> já o AMAZON WEB SERVICE S3 
+
+
+ é 
+
+ um serviço ótimo 
+
+
+
+ quando o 
+
+
+
+
+
+ assunto é 
+
+
+
+
+ ARMAZENAMENTO DE ARQUIVOS.. ------> E NÃO TEM NENHUM OUTRO SERVICE QUE 
+
+
+
+ PODERIA NOS 
+
+ AJUDAR A ARMAZENAR FILES, QUANDO O ASSUNTO É MONGODB.. (
+
+
+     ou seja, sua única opção, se você quer usar 
+     a plataforma mongodb com isso, 
+
+
+     PURAMENTE A PLATAFORMA MONGODB,
+
+     é usar 
+
+
+     esse 
+     'Stitch Services' 
+
+
+
+    PARA FAZER 
+
+    REACH OUT AO 
+
+
+
+    'AWS S3' 
+
+
+
+
+    E ENTÃO SE COMUNICAR COM ESSE TIPO DE DATABASE ESPECIAL PARA 
+
+
+    FAZER O STORAGE DE FILES...
+
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+ --> E VEMOS UM MONTE DE EXEMPLOS DE 'USO DE SERVIÇOS DIVERSOS' (como o aws s3) 
+
+
+
+ NOS STITCH DOCS...
+
+
+
+
+
+
+
+
+
+
+ -------> OK.... --> ESSA É A BIG PICTURE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> TEMOS NOSSA CLOUD DATABASE, COM A QUAL PODEMOS TRABALHAR COM O 'STITCH QUERYANYWHERE'...
+
+
+
+
+
+
+
+
+
+
+
+ --> TAMBÉM TEMOS OS 'EVENTS', com os quais podemos fazer 'LISTEN TO AUTH/DATABASE EVENTS'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> POR FIM, PODEMOS EXECUTAR CÓDIGO NA CLOUD, rodar esses códigos na cloud MANUALMENTE, SEM O 
+
+
+ TRIGGERING POR EVENTS..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> ESSA É A IDEIA, AQUI.... --> A IDEIA 
+
+
+ É QUE 
+
+
+
+ NÓS 
+
+
+
+
+
+CONSTRUÍMOS 
+
+
+NOSSA 
+
+'CLIENTSIDE APPLICATION' (como um mobile app, ou um web app (SINGLE-PAGE APPLICATION ))
+
+
+
+
+
+
+
+
+..... depois de construir essa interface,
+
+
+
+
+
+TEREMOS 
+
+UM 
+
+CÓDIGO SERVERSIDE, UMA LÓGICA QUE SERÁ RODADA 
+
+
+
+NO SERVIDOR/BACKEND.... ------>  essa lógica será rodada, AGORA, no __ sTITCH__ (em vez do backend tradicional, que é um servidor NODEJS, php, phyton, etc)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA, PORTANTO,
+
+VAMOS 
+
+CONECTAR 
+
+
+
+
+
+
+
+
+
+
+
+CLIENT -------> STITCH SERVERS ------> MONGODB ATLAS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> AINDA QUE O STITCH SEJA CHAMADO DE 'SERVERLESS',
+
+
+
+ainda _eXISTEM__ SERVERS DO STITCH,
+
+
+
+
+só que eles são servers do STITCH, E NÃO SEUS...
+
+
+
+
+
+
+
+
+
+
+
+
+--> É O STITCH QUE MANAGEIA UM MONTE DE BOILERPLATE CODE PARA NÓS....
+
+
+
+
+
+
+
+
+
+
+
+
+--> NÓS APENAS NOS COMUNICAMOS __ COM O ATLAS,
+
+
+PARA ENTÃO 
+
+
+
+
+
+
+
+EXECUTAR COISAS RELATIVAS A:
+
+
+
+
+
+
+1) DATABASE 
+
+
+
+2) FUNCTIONS 
+
+
+
+3) APP USER AUTHENTICATION..
+
+
+
+
+
+
+
+
+
+
+
+--> fazemos isso com a ajuda do SDK  do stitch,
+
+
+
+
+E AGORA_ PODEMOS __ FOCAR SÓ NA 
+
+
+
+NOSSA USER INTERFACE E NA LÓGICA DA DATABASE,
+
+
+
+
+
+
+DEIXADO DE LADO O CÓDIGO BOILERPLATE...

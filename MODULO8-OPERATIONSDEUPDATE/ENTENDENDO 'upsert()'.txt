@@ -1,0 +1,792 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA QUE TRABALHAMOS BASTANTE  
+
+
+NOS 'FIELD OPERATORS',
+
+
+
+
+
+ANTES DE FALARMOS SOBRE 'ARRAY OPERATORS',
+
+
+
+
+
+
+
+QUE SÃO 
+
+BONS OPERATORS QUE NOS AJUDAM COM O WORK E UPDATE 
+
+
+DE 
+
+
+'ARRAY VALUES',
+
+
+
+
+DEVEMOS 
+
+
+
+VER 
+
+
+
+
+1 NICE OPTION QUE VOCÊ PODE PASSAR 
+
+
+
+A 
+
+
+
+'updateOne()'
+
+
+
+
+e 
+
+
+'updateMany()"...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ANTES DE MAIS NADA,
+
+
+
+
+
+
+
+DEVEMOS RAPIDAMENTE DAR UMA OLHADA NAS NOSSAS PEROSNS,
+
+
+
+
+
+
+com este código:
+
+
+
+
+
+
+
+
+
+
+> db.users.find({}).pretty()
+{
+        "_id" : ObjectId("6206ef9a302d097773cc19a4"),
+        "name" : "Max",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 3
+                },
+                {
+                        "title" : "Cooking",
+                        "frequency" : 6
+                }
+        ],
+        "phone" : 111111111
+}
+{
+        "_id" : ObjectId("6206ef9a302d097773cc19a5"),
+        "name" : "Manu",
+        "hobbies" : [
+                {
+                        "title" : "Cars",
+                        "frequency" : 1
+                },
+                {
+                        "title" : "Horses",
+                        "frequency" : 2
+                }
+        ],
+        "phone" : "2222222222",
+        "newAge" : 38
+}
+{
+        "_id" : ObjectId("6206f26d302d097773cc19a6"),
+        "name" : "Anna",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "yoga",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "newAge" : null
+}
+>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------> AGORA DIGAMOS QUE QUEREMOS 
+
+
+
+_ UPDATAR UM DOCUMENT 
+
+
+
+QUALQUER, 
+
+
+DOCUMENT QUE 
+
+
+NÃO SABEMOS SE ELE 
+
+EXISTE 
+
+
+
+NA COLLECTION OU NÃO (
+
+
+casos em apps em que 
+
+
+
+
+VOCê NÃO SABE SE 
+
+A DATA FOI SALVA À DATABASE AINDA... --> E SE ESSA DATA AINDA NÃO FOI SALVA,
+
+
+AGORA VOCÊ VAI QUERER CRIAR 1 NOVO DOCUMENT... --> SE ESSA DATA JÁ TINHA SIDO SALVA,
+
+
+
+VOCÊ QUER 'OVERWRITE' 
+
+o 
+
+
+já existing document....
+
+
+
+
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E ISSO VOCÊ PODE FAZER POR MEIO DO CÓDIGO DE 
+
+
+
+
+
+db.users.updateOne(
+    {
+        name: "maria"
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E MARIA NÃO EXISTE AINDA, NO CASO.... (não temos esse document)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+db.users.updateOne(
+    {
+        name: "maria"
+    },
+
+
+    {
+
+
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+_> E VAMOS QUERER 'UPDATE' ESSE VALUE... -------->
+
+
+
+
+
+VAMOS UPDATAR 1 FIELD DE MARIA,
+
+NO CASO A 'age',
+
+
+
+
+que será de 29,
+
+
+
+e os hobbies como '[{title: 'good food', frequency: 3}]' 
+
+
+
+
+
+
+
+
+
+
+--> também define 'isSporty: true'...
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+db.users.updateOne(
+    {
+        name: "maria"
+    },
+
+
+    {
+        age: 29,
+        hobbies: ["1", "2"],
+        isSporty: true
+
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE ENVIARMOS ESSA QUERY,
+
+VEREMOS QUE NENHUM DOCUMENT TERÁ SIDO ENCONTRADO (matchedCount: 0),
+
+
+
+E POR ISSO 
+
+
+NENHUMA CHANGE TERÁ SIDO FEITA..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS COMO O PROFESSOR MENCIONOU,
+
+
+
+
+TALVEZ NESSE TIPO DE CENÁRIO __ NÃO VAMOS QUERER 'GET THIS INFORMATION' e então MANUALLY INSERT THIS PERSON ---->
+
+
+
+
+
+
+nessas hipóteses,
+
+
+VAMOS QUERER QUE O MONGODB FAÇA ISSO PARA NÓS:
+
+
+
+
+VAMOS QUERER QUE ELE OU:
+
+
+1) UPDATE 1 EXISTING DOCUMENT na nossa collection, com esse critério 
+
+
+
+
+2) INSERTA UM DOCUMENT QUE AINDA NÃO EXISTE NA NOSSA DATABASE, com esses valores....
+
+
+
+
+
+
+
+
+
+
+
+update + insert = upsert.... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PODEMOS FAZER ISSO, NO CASO,
+
+
+
+POR MEIO DO PASS__ DE UM __ TERCEIRO__ ARGUMENTO A 'updateOne' (ou seja, isso não é usado como um OPERATOR DE FIELDS)...
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+db.users.updateOne(
+    {
+        name: "maria"
+    },
+
+
+    {
+        age: 29,
+        hobbies: ["1", "2"],
+        isSporty: true
+
+    },
+
+
+    {
+
+            //aqui..
+
+    }
+)
+
+
+
+
+
+----------------------------
+
+
+DENTRO 
+
+DESSE TERCEIRO PARÂMETRO,
+
+
+VAMOS DEFINIR ESSA NICE OPÇÃO DE 'upsert',
+
+que deve ser definido como TRUE....
+ 
+
+ (
+
+
+     o default é false)...
+ )
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+db.users.updateOne(
+    {
+        name: "maria"
+    },
+    { $set: {
+        age: 29,
+        hobbies: ["1", "2"],
+        isSporty: true
+    }
+    },
+    {
+            upsert: true
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM.... UPDATE É O UPDATE + INSERT --> 
+
+
+
+
+
+
+SIGNIFICA QUE SE O DOCUMENT NÃO EXISTE,
+
+
+
+
+
+
+ELE SERÁ CRIADO.... -----> 
+
+
+
+
+SE SETTAMOS O 
+
+
+'upsert' como TRUE,
+
+
+
+
+
+
+
+
+
+
+
+ENVIARMOS ESSA QUERY AÍ,
+
+
+RECEBEREMOS ESTE RESULTADO:
+
+
+
+
+
+
+
+
+> db.users.updateOne(
+...     {
+...         name: "maria"
+...     },
+...     { $set: {
+...         age: 29,
+...         hobbies: ["1", "2"],
+...         isSporty: true
+...     }
+...     },
+...     {
+...             upsert: true
+...     }
+... )
+{
+        "acknowledged" : true,
+        "matchedCount" : 0,
+        "modifiedCount" : 0,
+        "upsertedId" : ObjectId("620ad1c24ea2f984551d2d48")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> OU SEJA,
+
+
+
+
+
+NÃO RECEBEREMOS 
+
+'matchedCount'
+
+
+OU 'modifiedCount',
+
+
+
+mas receberemos 
+
+
+
+'upsertedId'... ----> e AÍ O OBJECTID DO NEGÓCIO QUE FOI UPSERTADO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E SE AGORA OLHARMOS NOSSOS OBJECTS,
+
+VEREMOS QUE 
+
+ESSE DOCUMENT TERÁ SIDO SETTADO,
+
+E QUE 
+
+
+ELE ATÉ MESMO 
+
+
+
+
+ADICIONOU um 'objectId'
+
+
+
+inédito a esse document (mesmo nós não havendo especificado que esse objectId deveria ser adicionado)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> ALÉM DISSO, ELE TAMBÉM AUTOMATICAMENTE SETTOU O FIELD DE 'name: "Maria",
+
+
+
+
+que 
+
+
+TAMBÉM FOI ALGO QUE EU NÃO HAVIA SETTADO LÁ NO MEU SEGUNDO PARÂMETRO/object que descrevia os elementos a serem '$set'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> OU SEJA, O MONGODB É BEM ESPERTO..... --> ELE CONSTATOU QUE 
+
+ELE 
+
+
+DEVERIA SETTAR O 'name: "Maria" ' 
+
+
+
+
+
+DENTRO DO NEWLY ADDED DOCUMENT (upsertado)....
+
+
+
+
+
+
+
+
+
+UPSERT, PORTANTO, PODE SER BEM ÚTIL PARA FAZER TRABALHO COM UPDATES 
+
+
+
+
+
+EM QUE 
+
+VOCÊ NÃO SABE SE 1 DETERMINADO DOCUMENT JÁ EXISTE...

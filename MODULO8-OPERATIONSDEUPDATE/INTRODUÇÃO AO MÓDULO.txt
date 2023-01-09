@@ -1,0 +1,200 @@
+
+
+
+
+
+
+
+
+
+
+ENTENDENDO 'DOCUMENT UPDATES'...
+
+
+
+BECAUSE WE ALWAYS NEED THE LATEST INFORMATION...
+
+
+
+
+
+
+
+
+
+
+
+--> APRENDEMOS SOBRE COMO PODEMOS 'INSERT DOCUMENTS',
+
+
+
+ E SOBRE COMO PODEMOS OS ENCONTRAR (com find e seus filters, operators e methods)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> AGORA OUTRO TYPICAL USE-CASE É AQUELE EM QUE VOCÊ DESEJA ALTERAR SEUS DOCUMENTS....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> É POR ISSO QUE NESSE MODULE VEREMOS SOBRE '''COMO PODEMOS UPDATE DOCUMENTS''',
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 1) DOCUMENT UPDATING OPERATOR ('UPDATE')....
+
+
+
+
+
+
+
+
+
+
+
+2) COMO USAR DIFERENTES OPERATORS PARA APLICAR ''DIFERENTES TIPOS DE UPDATE'
+
+
+
+NA SUA DATA.. (isso pq existem várias maneiras de overwrite a data já existente...  )
+
+
+
+
+
+
+
+
+
+
+
+
+3) VEREMOS COMO 'UPDATE DIFFERENT FIELDS',
+
+
+
+POR EXEMPLO POR MEIO DO SET DE UM VALUE DIFERENTE,
+  
+
+  OU PELO 'INCREMENT' DE UM NUMBER....
+
+
+(HÁ DIFERENTES FERRAMENTAS PARA  TE AJUDAR COM ISSO)....
+
+
+
+
+
+
+
+
+
+4) ESPECIFICAMENTE,
+
+O PROFESSOR VAI NOS AJUDAR COM O __ UPDATE__ DE ARRAYS__.... -> POR EXEMPLO,
+
+
+
+O ADD DE UM NOVO _ ELEMENT__ A UM ARRAY,
+
+OU ENTÃO O REMOVE DE 1....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESSAS TODAS SÃO COISAS QUE 
+VOCÊ PODE FAZER COM 
+
+OS METHODS updateMany()
+
+
+e 
+
+
+updateOne(),
+
+
+
+PROVIDENCIADOS PELO MONGODB...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> E ANTES DE VERMOS OS DIFERENTES UPDATE OPERATORS,
+
+
+
+DEVEMOS VER ESSES METHODS RAPIDAMNETE,
+
+MAIS UMA VEZ,
+PARA ENTÃO COMEÇARMOS A FAZER O 'UPDATING'...

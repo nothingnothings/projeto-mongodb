@@ -1,0 +1,1140 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK...VIMOS 'COMPARISON OPERATORS' (lt, lte, ne, nin)
+
+
+e 'LOGICAL OPERATORS'  (nor e or, not, 'and')....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> COM OS LOGIC OPERAOTRS COMPLETADOS,
+
+
+
+
+DEVEMOS VER  OS 'ELEMENT OPERATORS'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> SÓ TEMOS 2 TIPOS DE ELEMENT OPERATORS:
+
+
+
+
+
+
+1) $EXISTS ---
+
+
+
+
+
+
+
+
+
+
+2) $type..
+
+
+
+
+
+
+
+
+
+
+
+O QUE ELES FAZEM?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA MOSTRAR O QUE ESSES COMANDOS FAZEM,
+
+O PROFESSOR ABRE UMA NOVA DATABASE, DE USERS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.users.insertMany(
+    [{name: "Max", hobbies: [{}, {}, {}]}]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> EM CADA OBJECT/DOCUMENT 'user',
+
+
+
+teremos 
+
+uma key com name,
+
+e aí 
+
+
+
+
+'HOBBIES',
+
+QUE SERÁ 
+
+UM ARRAY COM EMBEDDED DOCUMENTS.....
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+db.users.insertMany(
+    [{name: "Max", hobbies: [{title: "Sports", frequency: 3}, {title: "Cooking", frequency: 6} ]}]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> certo... 
+
+
+2 TIPOS DE 
+
+
+embedded documents, em 1 user...
+
+
+
+
+
+
+
+
+TAMBÉM TERÁ UM PHONE DE 111111111
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+db.users.insertMany(
+    [{name: "Max", hobbies: [{title: "Sports", frequency: 3}, {title: "Cooking", frequency: 6} ], phone: 111111111}]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> AÍ TEMOS UM USER COM 'MANUEL',
+
+
+
+
+
+
+
+e aí com outros hobbies,
+
+
+como 'Cars',
+
+
+
+com outra frequency....
+
+
+
+
+
+
+
+Ex:
+
+
+
+
+
+db.users.insertMany(
+    [{name: "Max", hobbies: [{title: "Sports", frequency: 3}, {title: "Cooking", frequency: 6} ], phone: 111111111},
+    {name: "Manu", hobbies: [{title: "Cars", frequency: 1}, {title: "Horses", frequency: 2} ], phone: 2222222222, age: 30}
+    ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR TAMBÉM COLOCA UMA AGE DE 30...
+
+
+
+
+
+
+
+
+OK, SÃO 2 NOVOS DOCUMENTS....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... MAS EU FIZ UMA CAGADA... -> O PHONE DE MANU DEVERÁ SER DE TYPE 'STRING',
+
+e não number... (
+
+
+    essa será uma diferença DELIBERADA, PROPOSITAL....
+)
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+db.users.insertMany(
+    [{name: "Max", hobbies: [{title: "Sports", frequency: 3}, {title: "Cooking", frequency: 6} ], phone: 111111111},
+    {name: "Manu", hobbies: [{title: "Cars", frequency: 1}, {title: "Horses", frequency: 2} ], phone: '2222222222', age: 30}
+    ]
+)
+
+
+
+
+
+
+
+
+
+--> RODO DELETEMANY({}),
+
+
+
+PARA DELETAR TUDO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> O TYPE DE 'phone' 
+
+
+
+
+nos nossos 2 users SERÁ DISTINTO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E AQUELES OPERATORS DE '$exists' e '$type'
+
+
+NOS AJUDARÃO COM ISSO.....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS O QUE ESSES OPERATORS FAZEM? 
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, DIGAMOS QUE 
+
+
+
+NESSA NOSSA COLLECTION QUEREMOS __ ''ACHAR TODAS AS PERSONS QUE POSSUEM  1 FIELD 
+
+
+DE 
+
+
+AGE''' (sem nos importarmos com o VALUE que 
+
+está dentro desse field )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PODEMOS FAZER ISSO,
+
+
+
+
+basta começar assim:
+
+
+
+
+
+
+
+db.users.
+
+
+find(
+
+    {
+
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> VAMOS ACHAR TODOS OS DOCUMENTS EM QUE 
+
+'age: ' 
+
+
+
+
+
+
+
+
+
+
+AGE _ _EXISTE....
+
+
+
+
+
+
+
+
+
+--> PARA ISSO, 
+
+ESCREVEMOS 
+
+
+
+
+{
+    age: {$exists: true}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> TAMBÉM PODERÍAMOS CHECAR POR '$exists: false '---> AÍ RETORNARÍAMOS QUAISQUER OBJECTS EM QUE 
+
+ESSE FIELD NÃO EXISTE/NÃO ESTÁ PRESENTE....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ESCRITA COMPLETA:
+
+
+
+db.users.find(
+    {
+        age: {$exists: true}
+    }
+)
+
+
+
+
+------------------------------
+
+
+
+
+
+
+
+
+OK...
+
+
+
+
+
+
+
+
+EX:
+
+
+db.users.find(
+    {
+        age: {$exists: true}
+    }
+).count()
+
+
+
+
+
+
+
+
+
+
+--> ISSO VAI NOS RETORNAR APENAS 1 DOCUMENT, 'manu',
+
+QUE POSSUI 
+
+
+ESSE FIELD AÍ....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> É CLARO QUE PODEMOS USAR ESSE '$exists'
+
+JUNTO DE OUTROS ARGUMENTS,
+
+
+COMO 
+
+
+
+
+
+
+
+'age deve ser MAIOR DO QUE 30'...
+
+
+
+(AGE DEVE EXISTIR E DEVE SER MAIOR DO QUE 30)...
+
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+db.users.find(
+    {
+        age: {$exists: true, $gt: 30}
+    }
+).count()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE ESCREVEMOS ESSE '$gt: 30' 
+
+
+ADICIONAL,
+
+
+NÃO VAMOS RETORNAR NENHUM DOCUMENT, NESSE EXEMPLO,
+
+
+PQ 
+
+
+
+
+
+A AGEDE MANU NÃO É SUPERIOR A 30.... (gt)...
+
+
+
+
+
+
+
+
+--> A AGE DO MANU EXISTE, MAS ELA NÃO É MAIOR DO QUE 30...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> CLARO QUE '$gte' (EQUAL OR GREATER THAN) 
+
+
+
+
+
+
+funcionaria, retornaria o document 'manu',
+pq a age dele´e exatamente 30....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... ESSE É O 'EXISTS'....
+
+
+
+
+
+
+
+
+
+
+
+
+--> o $exists é bem straightforward....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+MAS AGORA O PROFESSOR QUER ADICIONAR MAIS 1 USER na nossa database,
+para exemplificar....
+
+
+
+
+
+
+
+
+
+
+
+ele escreve 
+
+
+db.users.insertOne(
+    {
+        name: "Anna", hobbies: [{title: "Sports", frequency: 2, 
+        {title: "yoga", frequency: 3},
+        ]
+         phone: "800808080", age: null
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> A AGE ESTÁ COMo 'null' PQ 
+
+
+
+
+
+NÃO FOI 'DISCLOSED',
+
+VAMOS DIZER....
+
+
+
+
+
+
+
+
+
+--> CLARO QUE ISSO, TECNICAMNETE,
+
+
+
+FAZ UMA DIFERENÇA... ---> PQ 
+
+
+SE AGORA 
+
+FAZEMOS 
+
+
+'db.users.find()',
+
+
+VAMOS PERCEBER QUE 
+
+
+'anna'
+
+
+
+
+TEM ESSE FIELD DE 'age',
+
+A 
+
+
+ÚNICA PARTICULARIDADE É QUE SEU VALOR ESTÁ COMO 'null' ---> NULL É UM VALOR ESPECIAL,
+
+QUE SÓ 
+
+SIGNIFICA QUE 
+
+''NÃO HÁ NENHUM VALUE NESSA KEY'',
+
+
+
+MAS A KEY EM SI ESTÁ ALI, ISSO QUE INTERESSA (ela 'exists')...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> MAS SE REPETIRMOS 
+
+NOSSA QUERY DE ANTES,
+
+
+PROCURANDO POR 
+
+
+
+
+
+
+
+
+"age field existindo',
+
+
+
+
+
+VAMOS 
+
+
+
+ENCONTRAR 'ANNA '
+
+
+também,
+
+
+
+
+JUSTAMENTE 
+
+
+
+PQ O FIELD EXISTE,
+
+
+A ÚNICA PARTICULARIDADE É QUE ELE ESTÁ COMO 'null'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> CERTO... MAS ÀS VEZES, PARA CONTORNAR ISSO,
+
+
+VAMOS QUERER 
+
+ENCONTRAR 
+
+
+TODOS OS DOCUMENTS EM QUE TAL FIELD EXISTE,
+
+
+MAS DOCUMENTS EM QUE 
+
+ESSE FIELD TENHA 
+
+
+
+
+
+
+UM 
+
+
+'VALID VALUE' (type correto)... -->    E ISSO NÃO É ACESSADO POR '$exists: false', pq já vimos que isso só vai encontrar os documents que NÃO POSSUEM ESSE FIELD, E NÃO DOCUMENTS QUE POSSUEM ESSE FIELD, MAS QUE ESTÁ SETTADO COMO NULL.....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OU SEJA,
+
+SE VOCê QUER 
+
+
+
+
+PROCURAR POR DOCUMENTS EM QUE 
+
+
+
+'age'
+
+EXISTE,
+
+
+
+MAS QUE TAMBÉM EXISTA 1 VALUE NESSE FIELD QUE EXISTE,
+
+
+
+VOCÊ TEM QUE CHECAR 
+
+
+
+POR 
+
+
+
+'FIELD NÃO É EQUAL A NULL '( ou seja, você terá de usar '$ne'...)  --> OPERADOR DE  'not equal'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> POR ISSO SUA QUERY FICARÁ ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+db.users.find({age: {$exists: true, $ne: null}}).pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, AGORA PROCURAMOS POR TODOS OS OBJECTS/DOCUMENTS EM QUE O FIELD DE AGE EXISTE,
+
+e que não É NULL....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> certo... entendi... --> e isso vai retornar 'manu',
+ 
+ de novo...
+
+
+
+
+
+
+
+ --> ESSA COMBINAÇAÕ DE '$ne: null' com "$exists"
+
+
+ É ESPECIALMENTE ÚTIL PARA QUE VOCÊ TENHA DOCUMETNS 
+
+ EM QUE 
+
+ VOCÊ REALMENTE TEM UM __ VALUE__ VÁLIDO__ NO SEU FIELD...
+
+
+
+ 
+

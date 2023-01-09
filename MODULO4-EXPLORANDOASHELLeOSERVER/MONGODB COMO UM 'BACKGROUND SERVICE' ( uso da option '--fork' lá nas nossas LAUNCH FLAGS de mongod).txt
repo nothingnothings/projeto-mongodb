@@ -1,0 +1,845 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VAMOS EXPLORAR A OPTION DE '--fork'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR JÁ COMEÇA MENCIONANDO QUE '--fork'
+
+é uma feature 
+
+SOMENTE DISPONÍVEL NO MAC E LINUX...
+
+
+
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR VAI MOSTRAR UMA SOLUÇÃO PARA O WINDOWS, É CLARO,
+ 
+
+ MAS É 
+
+ UM WORKAROUND....
+ ]
+
+
+
+
+
+
+
+
+
+
+ --> MAS O QUE FAZ O FORK?
+
+
+
+
+
+
+
+
+
+ -> se rodamos 
+
+ nossa instance 
+
+
+
+ com 
+
+
+
+
+ '''mongod --fork''',
+
+
+
+
+
+
+
+
+
+
+ A PRIMEIRA COISA QUE OBTEREMOS SERÁ UM __ ERROR___.... -> ISSO PQ 
+
+ 
+
+ UMA COIAS QUE PRECISAMOS SETTAR, AQUI,
+
+
+
+
+ _ É JUSTAMENTE o '--logpath',
+
+
+ QUE SEMPRE DEVE SER USADO COM '--fork'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> logo veremos a razão disso...
+
+
+
+
+
+
+
+
+
+
+
+
+ -> ok... -> O PROFESSOR COLOCA O LOGPATH NESSE COMANDO AÍ,
+
+ TIPO ASSIM:
+
+
+ PS A:\projeto6-MONGODB\MODULO4-EXPLORANDOASHELLeOSERVER> mongod --fork 
+  --dbpath /mongodb/db   --logpath /mongodb/db/logs/log.log
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ------------------------------------
+
+
+
+
+
+
+
+  O QUE 'fork' fará, nesse caso,
+
+  É INICIAR 
+
+
+
+  O MONGOD SERVER COMO UM 
+
+  'CHILD PROCCESS'...  --------- ISSO SIGNIFICA,
+
+
+
+
+
+PORTANTO,
+
+
+QUE 
+
+
+
+O MONGOD NÃO VAI MAIS 'BLOCK' 
+
+
+A JANELA DE NOSSO TERMINAL ----> EM OUTRAS PALAVRAS,
+
+
+PODEREMOS EXECUTAR COMANDOS DE TERMINAL NORMALMENTE,
+
+
+COISAS COMO 
+
+
+'cd folderName',
+
+
+
+etc etc... -->  SERÁ UMA EXECUÇAÕ __ NON BLOCKING,
+
+
+PQ 
+
+
+O SERVIDOR MONGOD 
+
+VAI CONTINUAR RODANDO,
+
+MAS COMO UM 
+
+'BACKGROUND PROCESS'...
+
+
+
+
+
+
+
+
+
+
+
+--> PQ NORMALMENTE,
+O 
+
+
+MONGOD É UM 'FOREGROUND PROCESS',
+
+
+QUE 
+BLOQUEIA 
+
+
+
+NOSSA JANELA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE OPTAMOS POR 'fork',
+
+
+
+
+
+
+ACABAMOS FAZENDO COM QUE 'MONGOD'
+
+
+
+
+
+SEJA ___ EXECUTADO COMO UM 'SERVICE',
+
+
+E NÃO COMO UM 
+
+
+
+
+
+
+
+
+
+'PROCESS' (Que é o default, execução BLOCKING)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ELE ACABA SENDO RODADO COMO UM 'SERVICE NO BACKGROUND'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> MESMO 
+
+
+
+SENDO EXECUTADO COMO UM _ BACKGROUND SERVICE,
+AINDA PODEMOS 
+
+
+NOS CONECTAR A ESSE SERVER,
+
+POR MEIO DE 
+
+
+
+'mongo'... (
+
+
+    PQ O SERVER AINDA ESTARÁ 'UP AND RUNNING', EXATAMENTE COMO ANTES....
+
+
+
+
+
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> E O FATO DE ESSE NEGÓCIO FICAR RODANDO NO BACKGROUND É _ JUSTAMENTE_ A 
+
+RAZÃO 
+
+PARA 
+
+
+
+SERMOS OBRIGADOS A DEFINIR UM 'LOGPATH'... --> pq como ELE ESTÁ RODANDO NO BACKGROUND,
+
+ELE FICA INCAPAZ DE 
+
+
+LOGGAR 'ERRORS/WARNINGS'
+
+
+DIRETAMETNE 
+
+
+
+
+NA JANELA DO TERMINAL (que não vai poder ser bloqueada, justamente pq 
+
+o negócio está sendo executado de forma 'non-blocking'... 
+
+)
+
+
+
+
+
+
+
+
+
+
+-------> COMO ELE NÃO VAI PODER LOGGAR OS LOGS NO TERMINAL,
+
+
+
+
+
+ESSE RUN DE 'fork' 
+
+
+vai DUMPAR OS LOGS LÁ NOS NOSSOS ARQUIVOS '.log',
+
+
+
+
+no path que especificamos com '--logpath /caminho/pasta'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------. ok... --> É ASSIM QUE PODEOMS RODAR O MONGOD como um BACKGROUND PROCESS,
+
+SE ASSIM O DESEJARMOS....
+
+
+
+
+
+
+
+
+
+
+
+-> JÁ NO WINDOWS,
+
+
+
+O COMANDO DE '--fork'
+
+NÃO FICA DISPONÍVEL.... ------> MAS AINDA ASSIM,
+
+
+VOCÊ 
+
+
+TEM A OPÇÃO DE EXECUTAR O SERVER mongod 
+
+
+COMO UM SERVICE,
+
+
+
+
+
+
+DESDE QUE VOCÊ TENHA MARCADO AQUELA OPÇÃO DE '''''install as a service''' 
+
+
+
+
+DURANTE A INSTALAÇÃO DO MONGODB (o que fizemos, neste curso)... 
+
+
+
+
+
+
+
+
+
+
+
+
+OK... COM ISSO CHECADO/INSTALADO,
+
+
+
+
+
+PODEMOS, DE FATO,
+
+INICIAR O MONGOD SERVER COMO UM __ SERVICE, BACKGROUND SERVER --> PARA ISSO,
+
+QUITE TODOS 
+
+os
+
+
+COMANDOS 
+
+
+
+RODANDO EM TODOS SEUS COMMAND PROMPTS...
+
+
+
+
+
+
+
+
+
+
+-> AÍ ABRA O COMMAND PROMPT COMO ADMIN....
+
+
+
+
+
+
+
+
+
+
+
+--> E AÍ ESCREVA 
+
+
+'net start MongoDB'  -------> E ISSO VAI __ REALMENTE 'START THE MONGODB SERVER'
+
+como um 
+
+BACKGROUND SERVER...
+
+
+
+
+
+
+
+
+
+-> MAS COM ISSO, RECEBO UM AVISO:
+
+
+
+
+
+PS A:\projeto6-MONGODB\MODULO4-EXPLORANDOASHELLeOSERVER> net start MongoDB
+O serviço solicitado já foi iniciado.
+
+Para obter mais ajuda, digite NET HELPMSG 2182.
+
+PS A:\projeto6-MONGODB\MODULO4-EXPLORANDOASHELLeOSERVER> NET HELPMSG 2182
+
+O serviço solicitado já foi iniciado.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------> OK, MAS A PERGUNTA É, COMO PODEMOS 'QUIT' UM RUNNING SERVICE DESSE?
+
+
+
+
+
+
+
+
+
+
+
+-> NO MAC, VOCÊ PODE FAZER ISSO FACILMENTE, POR MEIO DA CONEÃO 
+
+
+
+
+
+À database com o mongoshell..
+
+
+
+
+
+
+
+
+-> aí você vai escrever 'db.shutdownServer()'... -----> ISSO VAI DESLIGAR O SERVER A QUE VOCÊ ESTÁ CONECTADO..
+
+
+
+
+
+
+
+
+
+
+
+------> COM O MONGODB NO WINDOWS,
+
+
+você também pode fazer isso....
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+
+PS A:\projeto6-MONGODB\MODULO4-EXPLORANDOASHELLeOSERVER> mongo
+MongoDB shell version v5.0.6
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("5fa11fd3-1e5d-4e0d-96d6-2d9fe6f1d5e7") }
+MongoDB server version: 5.0.6
+================
+Warning: the "mongo" shell has been superseded by "mongosh",
+which delivers improved usability and compatibility.The "mongo" shell has been deprecated and will be removed in 
+an upcoming release.
+For installation instructions, see
+https://docs.mongodb.com/mongodb-shell/install/
+================
+---
+The server generated these startup warnings when booting:
+        2022-02-06T07:47:23.333-03:00: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+---
+---
+        Enable MongoDB's free cloud-based monitoring service, which will then receive and display
+        metrics about your deployment (disk utilization, CPU, operation statistics, etc).
+
+        The monitoring data will be available on a MongoDB website with a unique URL accessible to you
+        and anyone you share the URL with. MongoDB may use this information to make product
+        improvements and to suggest MongoDB products and deployment options to you.
+
+        To enable free monitoring, run the following command: db.enableFreeMonitoring()
+        To permanently disable this reminder, run the following command: db.disableFreeMonitoring()
+---
+> show dbs
+admin     0.000GB
+blog      0.000GB
+carData   0.000GB
+cities    0.000GB
+config    0.000GB
+exemplos  0.000GB
+hospital  0.000GB
+local     0.000GB
+support   0.000GB
+test      0.000GB
+> use admin
+switched to db admin
+> db.shutdownServer()
+server should be down...
+> ^C
+bye
+{"t":{"$date":"2022-02-09T04:39:41.011Z"},"s":"I",  "c":"QUERY",    "id":22791,   "ctx":"js","msg":"Failed to end logical session","attr":{"lsid":{"id":{"$uuid":"5fa11fd3-1e5d-4e0d-96d6-2d9fe6f1d5e7"}},"error":{"code":9001,"codeName":"SocketException","errmsg":"socket exception [CONNECT_ERROR] server [couldn't connect to server 127.0.0.1:27017, connection attempt failed: SocketException: Error connecting to 127.0.0.1:27017 :: caused by :: Nenhuma conex\ufffdo p\ufffdde ser feita porque a m\ufffdquina de destino as recusou ativamente.]"}}}
+PS A:\projeto6-MONGODB\MODULO4-EXPLORANDOASHELLeOSERVER> mongo
+MongoDB shell version v5.0.6
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Error: couldn't connect to server 127.0.0.1:27017, connection attempt failed: SocketException: Error connecting to 127.0.0.1:27017 :: caused by :: Nenhuma conex�o p�de ser feita porque a m�quina de destino as recusou ativamente. :
+connect@src/mongo/shell/mongo.js:372:17
+@(connect):2:6
+exception: connect failed
+exiting with code 1
+PS A:\projeto6-MONGODB\MODULO4-EXPLORANDOASHELLeOSERVER>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ok, o código de 'db.shutdownServer()'
+
+REALMENTE FUNCIONA, até mesmo no windows...
+
+
+
+
+
+
+
+
+
+
+-> PARA REINICIAR ESSE NOSSO SERVER mongod,
+
+
+
+ESCREVA
+
+
+o que o professor pediu (
+
+    do run 'COMO UM BACKGROUND SERVICE',
+
+
+),
+
+
+tudo por meio do run do código 
+
+
+
+
+'net start MongoDB'...
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+PS A:\projeto6-MONGODB\MODULO4-EXPLORANDOASHELLeOSERVER> net start MongoDB
+O serviço de MongoDB Server (MongoDB) está sendo iniciado.
+O serviço de MongoDB Server (MongoDB) foi iniciado com êxito.
+
+PS A:\projeto6-MONGODB\MODULO4-EXPLORANDOASHELLeOSERVER>
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OUTRA ALTERNATIVA À 'db.shutdownServer()'
+
+
+É 
+
+
+
+
+
+
+'net stop MongoDB', lá no terminal do windows...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> OK... MAS É ASSIM QUE PODEMOS USAR O 
+
+
+MONGODB SERVER COMO UM 'BACKGROUND SERVICE',
+
+EM VEZ DE UM FOREGROUND SERVICE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O QUE VOCê USA, NO CASO, 
+
+
+DEPENDE DO QUE VOCê QUISER,
+
+PQ VOCê RECEBE OS EXATOS MESMOS EFEITOS 
+
+
+nas 2 modalidades (
+
+    forefront ou background...
+),
+
+
+o professor só queria mostrar as alternativas....

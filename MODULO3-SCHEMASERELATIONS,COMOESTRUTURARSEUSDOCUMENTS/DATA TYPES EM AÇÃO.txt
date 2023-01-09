@@ -1,0 +1,1826 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> OK, AGORA VAMOS TRABALHAR COM ESSES DATA TYPES....
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR 
+
+
+NOS EXPLICA A MANEIRA DE DELETAR UMA DATABASE INTEIRA.... --> PARA FAZER ISSO,
+
+
+VÁ ATÉ A DATABASE (
+
+    com 'use nomeDaDatabase'
+
+
+
+)
+
+
+
+E AÍ EXECUTE 
+
+
+
+'db.dropDatabase()'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> ISSO VAI SE LIVRAR DA DATABASE....
+
+
+
+
+
+
+
+
+
+
+
+--> vamos criar uma nova database,
+
+
+
+de nome 
+
+
+
+
+
+'companyData'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> LÁ DENTRO,
+
+
+DIGAMOS QUE TEMOS UMA COLLECTION DE 'companies',
+
+em que 
+
+vmaos querer 
+
+
+
+INSERIR UMA NOVA COMPANY...
+
+
+
+
+
+
+
+
+
+-> DENTRO DE 1 DOCUMENT 'company',
+
+PROFESSOR VAI QUERER SHOWCASE ALGUNS DESSES DATA TYPES...
+
+
+
+
+
+
+
+
+
+-> em programming languages distintas, ÀS vezes você não pode usar " '' "...
+
+
+
+
+
+
+
+
+--> definimos um isStartup: true...
+
+
+
+
+
+
+
+->->  DEPOIS DISSO,
+
+professor coloca 'employees', de numero 3...
+
+
+
+
+
+db.companies.insertOne({name: 'VOLVO', isStartup: true, employees: 33 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOCê PODERIA 
+
+
+PENSAR QUE 
+
+ISSO AÍ, ESSE NUMBER,
+
+É UMA 'INTEGER' ---> MAS O JAVASCRIPT,
+
+
+
+
+QUE ESTAMOS USANDO AQUI, ESSENCIALMENTE,
+
+NÃO DIFERENCIA ENTRE INTEGERS E FLOATING POINT NUMBERS (o que significa que esse 33 será considerado um FLOAT)...
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO SIGNIFICA QUE ELE NÃO SERÁ ARMAZENADO COMO UM 'NumberDecimal' (aquele type de alta precisão),
+
+
+
+E SIM 
+
+UQE 
+SERÁ 
+
+ARMAZENADO COMO UM 'FLOATING POINT NUMBER'  comum,
+
+
+com ALGUMA IMPRECISÃO NOS DECIMAL PLACES.... --> isso pode ser FINE.... 
+
+
+
+
+
+
+
+
+
+
+--> POR ENQAUNTO, VAMOS ARMAZENAR ISSO AÍ...
+
+
+
+
+
+
+
+
+
+
+
+-> DEPOIS DISSO,
+
+
+
+PROFESSOR 
+
+
+
+ADICIONA UM FIELD DE 'FUNDING',
+
+e aí 
+
+
+ARMAZENA 
+
+
+
+
+UM NÚMERO GIGANTE...
+
+
+
+
+
+
+
+12345678901234567890 
+
+
+
+
+
+,
+
+
+
+
+
+
+E AÍ 
+
+
+
+DEPOIS DISSO 
+ELE ARMAZENA 
+
+UM OBJECT 
+
+
+
+
+com nome 'details',
+
+
+
+
+em 
+
+
+que 
+
+temos 'ceo: 'mark super',
+
+
+e 
+
+aí 
+
+um 'tags',
+
+
+que terá um array de 
+
+strings,
+
+etc...
+
+
+
+
+
+
+
+VAI FICANDO TIPO ASSIM:
+
+
+
+
+
+db.companies.insertOne({name: 'VOLVO', isStartup: true, employees: 33, funding: 123467890123456790, details: {ceo: "Mark super"}, tags: [{title: "super"}, {title: "perfect"}] })
+
+
+
+
+
+
+
+
+--> AÍ O PROFESSOR VAI QUERER COLOCAR UMA KEY DE 
+
+
+'foundingDate',
+
+em que vamos colocar 
+
+
+
+UMA DATA NO FORMATO 'Date' --> para conseguir uma data neses 
+
+
+formato,
+
+
+
+basta chamar 'new Date()' 
+
+
+
+dentro dessa key, tipo assim:
+
+
+
+
+
+
+
+
+
+
+--> 
+
+db.companies.insertOne({name: 'VOLVO', isStartup: true, employees: 33,
+ funding: 123467890123456790, details: {ceo: "Mark super"}, 
+ tags: [{title: "super"}, {title: "perfect"}], 
+ 
+ foundingDate: new Date() ///EIS O CÓDIGO EM QUESTÃO.
+ 
+ 
+ })
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO VAI NOS DAR A 'CURRENT DATE'...
+
+
+
+
+
+
+
+
+O RESULTADO FICOU ASSIM:
+
+
+
+
+
+{ "_id" : ObjectId("620005d07c7cfa266b8e9ab5"), "name" : "VOLVO", 
+"isStartup" : true, "employees" : 33, "funding" : 123467890123456780, 
+"details" : { "ceo" : "Mark super" }, "tags" : [ { "title" : "super" }, { "title" : "perfect" } ], 
+
+"foundingDate" : ISODate("2022-02-06T17:30:56.589Z") }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> ALÉM DISSO, O PROFESSOR EXPLICA QUE PODEMOS 
+
+ADICIONAR UM 'TIMESTAMP'....
+
+
+
+
+
+
+
+
+
+
+
+--> eu me lembro claramente que no mongoose nós usávamos 'timestamps: true',
+
+
+
+PARA 
+
+
+
+
+HABILITAR 
+
+
+
+AS PROPRIEDADES DE 
+
+'insertedAt',
+
+
+'updatedAt',
+
+etc etc,
+
+
+lá  em nossos documents...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> mas o que o professor vai fazer é escrever manualmente 
+
+
+
+'insertedAt:'
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+db.companies.insertOne({name: 'VOLVO', isStartup: true, employees: 33,
+ funding: 123467890123456790, details: {ceo: "Mark super"}, 
+ tags: [{title: "super"}, {title: "perfect"}], 
+ 
+ foundingDate: new Date(),
+
+
+
+
+ insertedAt: ...
+ 
+ 
+ })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> PARA CONSEGUIR O FORMATO DE DATA 
+
+
+'timestamp',
+
+
+
+
+DEVEMOS CHAMAR 
+
+
+'new Timestamp()'
+
+
+
+nessa key....
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+db.companies.insertOne({name: 'VOLVO', isStartup: true, employees: 33,
+ funding: 123467890123456790, details: {ceo: "Mark super"}, 
+ tags: [{title: "super"}, {title: "perfect"}], 
+ 
+ foundingDate: new Date(),
+
+
+
+
+ insertedAt: new Timestamp()
+ 
+ 
+ })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NEW DATE E NEW TIMESTAMP SÃO FUNÇÕES 
+
+
+
+
+
+
+
+QUE SÃO PROVIDENCIADAS 
+
+
+PELA SHELL --------> E HÁ EQUIVALENTES 
+
+
+
+
+A ESSES 'new ...' (constructor functions)
+
+
+
+
+EM 
+
+
+
+CADA UMA DAS 
+
+
+
+PROGRAMMING LANGUAGES QUE POSSUEM DRIVERS do mongodb...  ------> E VOCÊ ENCONTRA 
+
+
+
+OS METHODS QUE VOCÊ PRECISA CHAMAR 
+
+
+
+LÁ NOS DOCS 
+
+
+DE 
+
+CADA 
+
+
+
+DRIVER....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MONGODB DOCS -----> na documentação,
+
+
+
+encontramos 
+
+
+
+API documentation acerca de todas as features  de cada driver....
+
+
+
+
+
+
+
+
+
+NODE.JS MONGODB DRIVER API...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> aí você também encontra coisas que te ajudam com 'timestamp',
+
+
+
+pq há uma seção para isso....
+
+
+
+
+
+
+
+
+
+
+--> EX:
+
+
+
+
+https://mongodb.github.io/node-mongodb-native/api-bson-generated/timestamp.html
+
+
+
+
+
+
+
+
+
+
+
+--------> OK... --> AÍ VEMOS AS INFORMAÇÕES SOBRE ESSE DRIVER....
+
+
+
+
+
+
+
+
+
+
+
+-----> ok... é assim que podemos usar esses types que 
+
+
+usamos na SHELL, lá nos drivers...
+
+
+
+
+
+
+
+
+
+
+
+
+--> E COM 'new Timestamp()',
+
+
+
+
+
+
+
+
+usamos isso para 
+
+
+
+
+criar uma timestamp....
+
+
+
+
+
+
+
+
+
+
+---> AÍ INSERIMOS ISSO NA NOSSA DATABASE...
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+> db.companies.insertOne({name: 'VOLVO', isStartup: true, employees: 33,
+...  funding: 123467890123456790, details: {ceo: "Mark super"}, 
+...  tags: [{title: "super"}, {title: "perfect"}], 
+...  foundingDate: new Date(),
+... insertedAt: new Timestamp()
+...
+... })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> o resultado será:
+
+
+ "foundingDate" : ISODate("2022-02-06T17:37:58.545Z"),
+ 
+ 
+  "insertedAt" : Timestamp(1644169078, 1) }
+
+
+
+
+
+
+
+
+
+
+
+  -------------------------
+
+
+
+
+
+
+
+
+
+  T1439:43.    721Z --> É A TIMEZONE....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  -> timestamp ---> É O CURRENT TIME, EM MILISSEGUNDOS.... --> O 
+
+
+
+
+  '1' é o ORDINAL COMPONENT -----> ISSO SERVE PARA QUANDO VOCÊ INSERE MÚLTIPLOS DOCUMENTS,
+
+  COM 
+
+
+  'insertMany'... --> esse numerador serve para 'IDENTIFICAR' (é um identifier, basicamente)
+
+
+  cada elemento, 1 em relação ao outro...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> OK... MAS UMA COISA SUPER INTERESSANTE PODE SER ENCONTRADA 
+
+
+
+
+
+LÁ EM 
+
+'funding':
+
+
+
+
+
+
+
+
+
+
+O FUNDING ESTARÁ COMO 
+
+
+
+
+''''
+
+
+"funding" : 123467890123456700000
+
+
+
+'
+'''''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------> ISSO ESTARÁ __ _ERRADO___....
+
+
+
+
+
+
+
+
+--> OU SEJA, EU TENTEI ARMAZENAR UM NÚMERO QUE É MT GRANDE,
+
+
+E QUE ACABOU SENDO 'ROUNDED UP' ---------> ISSO PQ 
+
+
+O NÚMERO QUE 
+
+O 
+
+JAVASCRIPT CONSEGUE ACEITAR, O LIMITE,
+
+
+É UM 
+
+'64 BIT FLOATING POINT VALUE',
+
+
+
+
+
+
+
+E ISSO __ NÃO PÔDE _ SER ARMAZENADO, AQUI.... --------> E ESSA É UMA RESTRIÇÃO QUE VOCÊ PODE 
+
+
+ENCONTRAR QUANDO TRABALHAR COM NUMBERS... --> SE VOCÊ PRECISA ARMAZENAR 
+
+
+
+NÚMEROS SUPER LONGOS,
+
+
+
+
+VOCÊ àS VEZES TERÁ DE OS ARMAZENAR SEPARADAMENTE, POR MEIO DE STRINGS, ETC....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... --> FALANDO DE NUMBERS,
+
+
+
+
+
+VIMOS UNS VALORES GERAIS NA COMPANY, como 
+
+
+
+'employees: 33'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR AGORA FALARÁ DE NUMBERS....
+
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR ADICIONA UMA NOVA COLLECTION,
+
+
+NUMBERS,
+
+
+
+
+por meio de 
+
+
+um código de 
+
+
+
+
+
+
+db.numbers.insertOne(
+    {
+        a: 1
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, SE PROCURARMOS por 'db.numbers.findOne()',
+
+
+
+VAMOS OBVIAMENTE ENCONTRAR ESSE ÚNICO DOCUMENT....
+
+
+
+
+
+
+
+
+
+
+
+
+--> EX:
+
+
+
+
+
+db.numbers.insertOne({a: 1})
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("620008ad7c7cfa266b8e9ab7")
+}
+> db.numbers.findOne()
+{ "_id" : ObjectId("620008ad7c7cfa266b8e9ab7"), "a" : 1 }
+>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS ALGO INTERESSANTE PODE SER VISTO SE DIGITARMOS 
+
+'db.stats()'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE VOCÊ DIGITA 'db.stats()',
+
+VOCÊ GANHA ALGUNS STATUS 
+
+
+SOBRE 
+
+
+A DATABASE QUE VOCê ESTÁ USANDO/ESTÁ DENTRO..
+
+
+
+
+
+
+
+EX:
+
+
+{
+        "db" : "test",
+        "collections" : 3,
+        "views" : 0,
+        "objects" : 5,
+        "avgObjSize" : 137.6,
+        "dataSize" : 688,
+        "storageSize" : 61440,
+        "indexes" : 3,
+        "indexSize" : 61440,
+        "totalSize" : 122880,
+        "scaleFactor" : 1,
+        "fsUsedSize" : 210175442944,
+        "fsTotalSize" : 238587039744,
+        "ok" : 1
+}
+
+
+
+
+
+
+
+
+
+
+--> TEMOS 3 COLLECTIONS,
+
+5 OBJECTS, NO TOTAL....
+
+
+
+
+
+
+
+--> E AÍ, NO CASO,
+
+TAMBÉM PODEMOS VER 'THE AVERAGE OBJECT SIZE' (aquele número de 137.6)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM.... O PROFESSOR EXPLICA QUE ESTAMOS COM 3 COLLECTIONS, AQUI....--> 
+
+
+
+
+
+
+
+
+
+o professor executa 'db.companies.drop()',
+
+
+
+PARA ENTÃO 
+
+
+
+
+
+
+
+
+
+
+
+
+--> '.drop()' serve para DROPPAR COLLECTIONS (é uma versão mais light de 'db.dropDatabase()', portanto)...
+
+
+
+pq db.dropDatabase() remove a database inteira, com todas as collections...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE REPETIMOS 'db.stats()',
+
+
+agora nosso 
+
+
+average object SIZE TERÁ DIMINUÍDO PARA 
+
+'37.5'...
+
+
+
+EX:
+
+
+
+{
+        "db" : "test",
+        "collections" : 2,
+        "views" : 0,
+        "objects" : 2,
+        "avgObjSize" : 37.5,
+        "dataSize" : 75,
+        "storageSize" : 40960,
+        "indexes" : 2,
+        "indexSize" : 40960,
+        "totalSize" : 81920,
+        "scaleFactor" : 1,
+        "fsUsedSize" : 210171133952,
+        "fsTotalSize" : 238587039744,
+        "ok" : 1
+}
+
+
+
+-----------------------------
+
+
+
+
+JÁ NOSSO 'dataSize' ficou como 75... (bem menos)...
+
+
+
+
+
+--> O PROFESSOR PEDE PARA QUE PRESTEMOS ATENÇÃO A ESSE VALOR....
+
+
+
+
+
+
+
+--> BEM, AGORA O PROFESSOR 
+
+
+chama 
+
+'db.numbers.deleteMany()',
+
+
+ 
+ PARA DELETAR_ O ÚNICO OBJETO QUE TEMOS EM 'numbers'...
+
+
+
+
+
+
+
+
+
+
+ -_> ok...
+
+
+
+ EX:
+
+
+
+
+
+
+
+
+ > db.stats()
+{
+        "db" : "test",
+        "collections" : 2,
+        "views" : 0,
+        "objects" : 1,
+        "avgObjSize" : 42,
+        "dataSize" : 42,
+        "storageSize" : 40960,
+        "indexes" : 2,
+        "indexSize" : 40960,
+        "totalSize" : 81920,
+        "scaleFactor" : 1,
+        "fsUsedSize" : 210171899904,
+        "fsTotalSize" : 238587039744,
+        "ok" : 1
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O AVERAGE OBJECT SIZE VAI FICAR '0'....
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA, PARA EXEMPLIFICAR,
+
+
+O PROFESSOR 
+
+NÃO VAI INSERIR 
+
+
+
+AQUELE '{a: 1}' 
+
+
+
+
+
+DE FORMA SOLTA NA NOSSA DATABASE,
+
+
+E SIM 
+
+VAI USAR _ UM METHOD__ ESPECIAL, PROVIDENCIADO PELA SHELL,
+
+PARA ESCREVER ESSE VALOR...
+
+
+
+
+
+
+ex:
+
+
+
+
+
+db.numbers.insertOne(
+    {
+        a: NumberInt(1)
+    }
+) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO, NO CASO,
+
+VAI CRIAR UM 'INT32' VALUE,
+
+em vez daquele 
+
+
+FLOATING POINT, INT64, value...
+
+
+
+
+
+
+
+
+
+------> E SE ARMAZENARMOS O EXATO MESMO NUMBER, de '1',
+
+com essa helper function,
+VOCê 
+
+PERCEBERÁ QUE O DATA SIZE __ VAI __ DIMINUIR UM POUCO.... 
+
+
+(
+
+
+    tudo por causa dessa MENOR PRECISÃO NA REPRESENTAÇÃO DESSE NUMBER,
+
+    QUE NÃO VAI MACHUCAR TANTO, AQUI...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> E ESSA É UMA DAS RAZÕES QUE PODEM TE LEVAR A USAR UM DESSES 'SPECIAL HELPER METHODS'
+
+providenciados pelo mongodb... -=--> PQ VOCÊ É CAPAZ DE MANAGEAR SEU DATA SIZE UM POUCO MAIS EFICIENTEMENTE...
+
+
+
+
+
+
+
+
+
+-----> TAMBÉM É BOM MENCIONAR QUE ISSO 
+
+AÍ 
+
+
+FOI 
+
+
+
+
+armazenado, anteriormente,
+
+nesse formato INT64,
+
+
+APENAS PQ 
+O
+ SHELL 
+
+
+
+ FOI CRIADO COM BASE NO 
+
+ JAVASCRIPT,
+
+
+ QUE NÃO DIFERENCIA ENTRE INTEGERS E FLOATS (outras linguagens diferem, aí isso não será o caso,
+ você 
+ 
+ não precisará usar esses helper methods especiais para querer armazenar seus numbers em um formato INT32)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> E ISSO É BOM, PQ AQUI O PROFESSOR PODE NOS MOSTRAR A DIFERENÇA ENTRE O 'DEFAULT NUMBER '(o FLOAT, TODOS NUMBERS SÃO FLOATS )
+
+
+
+
+
+
+ EM RELAÇÃO AO 'integer' (integer clássico, 32bits)....
+
+
+
+
+
+
+
+
+
+
+
+
+ --> VOCê TAMBÉM PODE CHECAR O VALOR DE ALGO NO MONGODB __ POR MEIO __ DO CÓDIGO DE 
+
+
+ 'typeof'...
+
+
+
+
+
+
+ ex:
+
+
+
+
+
+
+
+
+ typeof db.numbers.findOne(
+
+ ).a 
+
+
+
+
+
+
+
+
+
+
+
+ --> QUEREMOS, COM ISSO, VER O TYPE DA PROPRIEDADE de 'a', dentro desse único document...
+
+
+
+
+
+
+
+
+
+
+ --> COM ISSO, SERÁ PRINTADO NO CONSOLE A STRING DE 'number'...
+
+
+
+
+
+
+
+
+
+
+
+ -------> OK... O PROFESSOR NÃO VAI SE APROFUNDAR TANTO AQUI,
+
+ pq isso 
+ tem mt a ver com computing,
+
+ e não com o mongodb....
+
+
+
+
+
+
+
+
+ --> MAS É INTERESSANTE QUE TEMOS ESSES DIFERENTES VALORES....
+
+
+
+
+
+
+ --> AGES E PRICES --> O NUMBER  VAI SER ARMAZENADO NA DATABASE, DE QUALQUER FORMA.. -> O SIZING 
+
+
+
+
+
+ PODE NÃO IMPORTAR A NÓS,
+
+ 
+
+
+ E 
+
+
+ A 
+
+ PRECISION AUSENTE TAMBÉM PODE NÃO IMPORTAR A NÓS, só em casos mt específicso....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> BSON TYPES DOCS ----> 
+
+ PODEMOS LER SOBRE 
+
+ OS DIFFERENT DATA TYPES SUPORTADOS PELO MONGODB ---> E COMO ELE 
+
+ ARMAZENA DATA NA DATABASE .... 
+
+
+
+
+
+
+
+
+
+
+
+ --> SPECIAL DATA TYPES --> como 'ObjectId' 
+
+ e 'timeStamps'...
+
+
+
+
+
+
+
+ --> É UM BOM BACKUP PARA DESCOBRIR MAIS SOBRE 1 DATA TYPE ESPECÍFICO...
+
+
+
+
+
+
+
+
+ EX:
+
+
+
+ https://docs.mongodb.com/manual/reference/bson-types/
+
+
+
+
+
+
+
+
+ 1) DOUBLE, DOUBLE-PRECISION --> 8 BYTES --> '64-bit IEEE 754 floating point' --> COM FLOATING POINTS
+
+
+
+
+
+ 2) int --> SÃO OS 32 BITS, INTEGERS.... 'int'...
+
+
+
+
+
+
+
+ 3) string 
+
+
+
+
+
+ 4) Object 
+
+
+ 5) array 
+
+
+
+
+ 6) binary data (acho que nunca usarei)....
+
+
+
+
+
+
+ 7) objectId 
+
+
+
+ 8) boolean 
+
+
+
+ 9) date 
+
+
+
+
+ 10) null
+
+
+ 11) regular expression 'regex'...
+
+
+
+12) javascript 
+
+
+
+
+13) javascript code COM SCOPE (deprecado)....
+
+
+
+
+
+
+
+
+14) timestamp 
+
+
+
+
+15) 64-bit integer --> 'long'.. --> 8 BYTES.... --> (SEM FLOATING POINTS).....
+
+
+
+
+
+
+16) DECIMAL128 --> NOVO, É o 'NumberDecimal'.... --> HIGH PRECISIOn....
+
+
+
+
+
+
+17) min key  (número -1) 
+
+
+
+
+18) max key (número 127)....
+
+
+
+
+
+
+
+
+
+---------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+ok.... 

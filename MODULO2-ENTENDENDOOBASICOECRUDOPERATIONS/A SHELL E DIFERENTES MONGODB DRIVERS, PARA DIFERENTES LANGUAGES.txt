@@ -1,0 +1,436 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> ANTES DE ACTUALLY RODARMOS QUAISQUER COMMANDS,
+
+
+o professor diz que 
+
+podemos estar nos perguntando a razaõ de estarmos usando a SHELL....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO PQ QUANDO CONSTRUÍRMOS UM APP DE VERDADE,
+
+em que você usa o mongodb,
+
+
+
+
+VOCÊ NÃO VAI USAR 
+
+O SHELL PARA ISSO..... ---> EM VEZ DISSO,
+
+
+VOCÊ VAI USAR 
+
+
+
+
+UM DOS MONGODB DRIVERS,
+
+A DEPENDER DA 
+
+
+
+PROGRAMMING LANGUAGE QUE VOCÊ ESTARÁ USANDo...
+
+
+
+
+
+
+
+
+
+
+
+--> E NOS DOCS OFICIAIS, 
+
+
+
+
+
+VOCÊ ENCONTRA UMA _ EXTENSIVA LISTA DE TODOS OS DRIVERS QUE O 
+
+
+MONGODB OFERECE...
+
+
+
+
+
+
+
+
+
+--> HÁ AINDA DRIVERS PARA PHP,
+
+
+PHYTON,
+
+
+SCALA,
+
+
+
+C#,
+
+
+
+etc... --> OU SEJA,
+
+
+TODAS AS 
+
+
+
+'SERVERSIDE/DESKTOPSIDE PROGRAMMING LANGUAGE'  IMPORTANTES...
+
+
+
+
+
+
+
+
+
+
+
+
+------------> BEM, DEPENDENDO DO PROPÓSITO E LINGUAGEM ESCOLHIDA,
+
+VOCÊ 
+
+VAI ESCOLHER O DRIVER AQUI E AÍ VAI 
+
+'EMBED' 
+
+O DRIVER NO CÓDIGO DE SEU APP...
+
+
+
+
+
+
+
+
+
+
+
+
+-> MAS NESSE CURSO,
+
+
+QUEREMOS MOSTRAR UM APPROACH QUE 
+
+
+FUNCIONA __ COM TODA E QUALQUER LANGUAGE... --> É POR ISSO QUE USAREMOS A SHELL....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> A SHELL NOS DEIXA __ RODAR__ QUERIEs__ QUE SÃO MT SIMILARES__ ÀS QUERIES NOS DIFERENTES DRIVERS 
+
+
+(
+
+    ISSO 
+
+    PQ 
+
+    A SHELL É ACTUALLY BASEADA EM JAVASCRIPT,
+
+    o que SIGNIFICA QUE 
+
+    É EXTREMAMENTE SIMILAR 
+
+    AO NODEJS...
+)
+
+
+
+
+
+
+
+
+
+
+
+--> MAS SE CHECARMOS OS DOCS PARA OS OUTROS DRIVERS,,
+
+
+
+
+
+e SE VOCÊ ENTRAR EM 'GETTING STARTED',
+
+
+
+LÁ 
+
+
+VOCÊ 
+
+VERÁ QUE 
+
+
+ENCONTRA 
+UM
+
+
+
+DOCUMENTO SOBRE AS CRUD OPERATIONS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> MAS SE VOCÊ CHECAR QUALQUER ARTIGO NESSA SEÇÃO,
+
+
+
+como 'insert documents',
+
+
+VOCÊ PODE 
+
+
+__'SWITCH' BETWEEN THE DIFFERENT LANGUAGES (por meio daquelas tagS),
+
+o que é MUITO CONVENIENTE...
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+https://docs.mongodb.com/guides/server/insert/
+
+
+
+
+
+
+
+
+----------------------------------
+
+
+
+
+
+
+
+MAS O DEFAULT É SEMPRE O SHELL,
+
+
+ESSA É A PARTE MAIS IMPORTANTE...
+
+
+
+
+
+
+
+
+
+
+--> MAS SE SWTICHARMOS PARA O PHYTON,
+
+
+
+
+VEREMOS QUE O CÓDIGO É NA VERDADE BEM SIMILAR...
+
+
+
+
+
+
+
+
+ex de código phyton:
+
+
+
+
+
+
+
+
+
+
+
+db.inventory.insert_one (
+    {
+        "item": "canvas",
+        "qty": 100,
+        "tags": ["cotton"],
+        "size": {"h": 28", "w": 35.5, "uom": "cm"}
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESSE INSERTONE É QUASE IGUAL AO 
+
+
+DO NODEJS,
+
+
+
+
+a única diferença
+
+
+é o naming patterN....
+
+(
+
+    'insert_one'
+
+    em vez de 'insertOne'....
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E ISSO É VERDADE PARA TODAS AS PROGRAMMING LANGUAGES:
+
+
+
+
+
+
+
+EXEMPLO DE PHP:
+
+
+
+
+
+
+$insertOneResult = $db->inventory->insertOne(
+    [
+        'item' => 'canvas',
+        'qty' => 100,
+        'tags' => ['cotton'],
+        'size' => ['h' => 28, 'w' => 35.5, 'uom' => 'cm'], 
+    ]
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> TEMOS SINTAXES PARA TODAS AS LANGUAGES--> MAS A MANEIRA QUE VOCÊ 
+
+
+
+
+CONFIGURA E USA O MONGODB É SEMPRE A MESMA....
+
+
+
+
+
+
+
+
+
+
+
+
+-_> DEVEMOS COMEÇAR A USAR NOSSA SHELL, CONECTADA AO NOSSO LOCAL MONGOD SERVER,
+
+
+
+
+
+E APRENDER A MANAGEAR DATA EM GERAL....

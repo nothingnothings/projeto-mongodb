@@ -1,0 +1,1341 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PQ INDEXES?
+
+
+
+
+
+
+
+
+---> PQ USARÍAMOS INDEXES?
+
+
+
+
+
+
+
+-> O QUE SÃO INDEXES? 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> INDEXES --> PODEM ACELERAR NOSSAS QUERIES DE 'find', 'update' e 'delete' ---------> OU SEJA,
+
+
+TODAS AS QUERIES EM QUE 
+
+
+
+
+
+'WE ARE LOOKING FOR SOME DOCUMENT THAT SHOULD MATCH SOME CRITERIA''....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CONSIDERE ESTA QUERY:
+
+
+
+
+
+
+
+db.products.find({seller: 'max'}) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESTAMOS PROCURANDO POR TODOS OS PRODUCTS EM QUE A KEY 'seller' está com um valor da string 'max'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA TEMOS UMA COLLECTION DE PRODUCTS,
+
+
+
+
+tipo assim:
+
+
+
+
+
+
+
+Products 
+
+{...}
+{...}
+{...}
+{...}
+{...}
+{...}
+{...}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> POR DEFAULT,
+
+
+
+
+SE NÃO TIVERMOS UM 'index' para 'SELLER' settado,
+
+
+
+O MONGODB 
+
+
+
+
+
+
+
+VAI 'IR EM FRENTE'
+
+
+E VAI REALIZAR AQUILO QUE É CHAMADO 
+
+
+DE 
+
+
+UM 
+
+
+
+'COLLECTIONSCAN'...
+
+
+
+
+
+
+
+
+
+
+SCAN DE COLLECTION, abreviação 'COLLSCAN'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO SIMPLESMENTE SIGNIFICA QUE O MONGODB,
+PARA 
+
+
+
+SATISFAZER ESSA QUERY,
+
+
+
+VAI IR 
+
+POR DENTRO DE TODA A COLLECTION,
+
+
+
+
+
+OLHAR EM CADA DOCUMENT,
+
+E AÍ 
+
+CHECAR SE 'seller' é igual a 'Max'....  ----------> E, COMO VOCÊ PODE IMAGINAR,
+
+
+
+
+
+PARA 
+
+COLLECTIONS ENORMES, COM MILHARES/milhoes de documents,
+
+ISSO 
+
+
+PODE DEMORAR UM POUCO....  --> VEREMOS ISSO EM PRÁTICA,
+
+
+COM UM EXEMPLO,
+
+LOGO LOGo...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> O 'COLLSCAN' é o DEFAULT APPROACH DO MONGODB ----------> '''SCAN ALL DOCUMENTS, THEN FILTER'''....
+
+
+
+
+
+
+
+
+
+
+--> É O ÚNICO APPROACH QUE O MONGODB TEM, QUANDO VOCÊ NÃO TEM NENHUM 'INDEX' settado...
+
+
+
+
+
+
+
+
+
+--> vai retrievar 2 documents de seus 1000 documents, por exemplo...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> OK... ENTRETANTO,
+
+
+É CLARO QUE VOCÊ PODE CRIAR UM 'INDEX'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> UM INDEX NUNCA É UM 'REPLACEMENT' PARA SUAS COLLECTIONS,
+
+
+
+
+
+
+
+
+
+
+MAS É 
+
+UMA 
+
+'ADDITION' -----> é um COMPLEMENTO A SUA COLLECTIOn..
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... 
+
+
+
+ISSO SIGNIFICA QUE VOCÊ VAI CRIAR UM 'INDEX' 
+
+PARA 
+
+
+A 
+
+KEY DE 
+
+'seller'
+
+
+
+DA COLLECTION DE 'products'...
+
+
+
+
+
+
+
+
+
+TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Products 
+
+{...}
+{...}
+{...}
+{...}
+{...}
+{...}
+{...}
+
+
+
+
+
+
+
+
+Products Seller Index 
+
+
+"Anna"
+"Chris"
+"Manu"
+"Manu"
+"Max"
+"Max"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESSE INDEX AÍ VAI,
+
+ENTÃO,
+
+
+
+'''EXISTIR DE FORMA COMPLEMENTAR À COLLECTION''' --> E O INDEX 
+
+
+
+É 
+
+
+ESSENCIALMENTE __ UMA 'ORDERED LIST'
+ 
+
+
+
+
+ ___ DE TODOS ___ OS VALUES__ 
+
+
+ QUE 
+
+
+
+ SÃO ARMAZENADOS 
+
+ NA KEY de 'seller',
+
+ PARA TODOS OS DOCUMENTS... (uma coisa meio SQL, então)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -> ISSO QUER DIZER QUE 
+
+
+
+
+
+
+ ISSO NÃO É UMA 'ORDERED LIST FOR THE DOCUMENT',
+
+
+
+ e sim que 
+
+
+ É UMA ORDERED LIST PARA __ OS VALUES_ DAQUELE FIELD_ CUJO INDEX VOCÊ CRIOU...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ----> E É EVIDENTE QUE NÃO É APENAS UMA 'ORDERED LIST DOS VALUES',
+
+
+
+
+
+ PQ __ CADA___ ITEM/ENTRY NO 'INDEX' 
+
+
+
+
+
+
+ __ TEM UM _ POINTEr__ AO DOCUMENT A QUE PERTENCE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> ISSO TUDO 
+
+
+
+POSSIBILITA O 
+
+
+
+MONGODB 
+
+
+
+REALIZAR ALGO CHAMADO DE 
+
+
+
+'INDEX SCAN',
+
+
+
+
+
+
+
+abreviação 'IXSCAN',
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+ E ESSE 'INDEX SCAN'
+
+
+ VAI 
+
+
+
+
+ SER USADO 
+
+
+ PARA 
+
+
+ 'FULFILL' QUERIES 
+
+
+
+ como 
+
+
+
+
+ 'db.products.find({seller: 'Max'})' 
+
+
+
+
+
+
+
+
+
+
+
+
+ --> ISSO SIGNIFICA QUE O MONGODB VAI DETECTAR QUE 1 INDEX PARA 
+
+
+
+
+
+ a key de 'Seller'
+
+ __EXISTE_, 
+
+
+ E AÍ 
+
+
+ VAI 
+
+
+
+
+
+
+
+
+ SIMPLESMENTE __ 'IR ATÉ ESSE SELLER INDEX' 
+
+
+
+
+
+
+ E ENTÃO _ _________ PULAr______ ATÉ OS VALUES CORRETOS (
+
+
+
+     isso pq LÁ, NO INDEX,
+
+
+AO CONTRÁRIO DA COLLECTION,
+
+
+
+
+O MONGODB _________saBE______ QUE OS VALUES __ 
+
+
+
+NESSA LIST __ VÃO ESTAR 'SORTED' 
+
+POR ESSA KEY AÍ...
+
+
+
+
+ ) ---------> ISSO SIGNIFICA QUE O MONGODB NÃO VAI PERDER TEMPO PROCURANDO PELOS 3 PRIMEIROS RECORDS,
+
+
+ QUANDO ELE __ JÁ SABE/SABERÁ __ QUE 
+
+
+
+
+
+ O VALUE DE 'seller' começa com 'M',
+
+ por exemplo (
+
+     ele vai direto no trecho do 'products seller index' 
+
+
+
+     que tem nomes que começam com 'M', sem perder tempo...
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> ISSO SIGNIFICA QUE O MONGODB VAI IR POR DENTRO DESSES INDEXES _ SUPER EFICIENTEMENTE,
+
+
+
+
+
+
+ E QUE 
+
+
+
+ AÍ VAI 'FIND THE MATCHING PRODUCTS',
+
+
+
+
+
+
+
+
+
+
+ TUDO POR MEIO DESSA 
+
+
+
+ 'ORDERING' INTERNA DOS INDEXES,
+
+
+
+
+ E 
+
+ DEVIDO 
+
+
+
+
+
+ AOS 'pointers' ENFIADOS DENTRO DE CADA INDEX,
+
+ QUE APONTAM AOS DOCUMENTS CORRETOS....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> OK.... --> RESUMINDO: 
+
+
+ O 
+
+ MONGODB 
+
+ ENCONTRA O 'value' pARA ESSA QUERY LÁ NOS indexes,
+
+
+ E AÍ 
+
+ ENCONTRA O 
+
+
+
+ 'RELATED DOCUMENT', conectado ao pointer,
+
+ que é 
+
+ RETORNADO...
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+ --------> E É ESSE O 'DIRECT ACCESS' que o mongodb pode usar, aqui, 
+
+
+
+
+ E QUE 
+
+
+ ACELERA SUAS QUERIES...
+ .
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ---> OK.... É ASSIM QUE UM INDEX FUNCIONA, E ISSO RESPONDE A PERGUNTA DE 
+
+ 'pq você usaria um',
+
+
+
+ PQ 
+
+
+ O CREATE 
+
+ DE 
+
+
+ INDEXES 
+
+
+ PODE
+
+
+
+
+
+
+
+
+ ACELERAR SUAS QUERIES TREMENDAMENTE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -> MAS VOCÊ NUNCA PODE ABUSAR COM OS INDEXES... -->  NÃO USE TANTOS INDEXES ASSIM..
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> COMO ASSIM... PQ É RUIM FAZER ISSO?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ bem, veja o exemplo:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ tenho uma collection de 'products'...
+
+
+
+
+
+
+
+
+ ex:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ PRODUCTS COLLECTION 
+
+ _id name age hobbies....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> CADA PRODUCT TEM ESSAS KEYS AÍ.... -----> aí o professor propõe a criação de INDEXES PARA CADA 1 DESSES FIELDS/PROPRIEDADES,
+
+
+
+
+
+
+
+
+
+
+ tipo assim:
+
+
+
+
+
+
+
+
+ 
+ PRODUCTS COLLECTION 
+
+ _id name age hobbies....
+
+
+
+
+
+PRODUCT INDEXES 
+
+
+ _id name age hobbies....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> OK, ISSO VAI ME DAR A 'MELHOR PERFORMANCE DE TODOS',
+
+
+
+ pq 
+
+
+
+
+ NÃO IMPORTA A COISA QUE EU ESTOU PROCURANDO,
+
+ SEMPRE 
+ 'TEREI UM INDEX PARA ISSO, CERTO"? 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -> BEM,
+
+ ISSO REALMENTE PODERÁ 'SPEED UP' suas queries de 
+
+ FIND,
+
+
+ ISSO É VERDADE... -->  INDEXES EM TODOS OS FIELDS 
+
+
+
+
+
+
+
+
+ REALMENTE 
+
+
+ MELHORARIAM A SPEED DAS FIND QUERIES,
+
+
+
+ PQ VOCÊ PODE 'QUERY FOR EVERY FIELD EFFICIENTLY' --------> MAS O PROBLEMA,
+
+
+
+ SEMPRE,
+
+
+ É QUE 
+
+
+
+
+
+
+ 'INDEXES NÃO SÃO DE GRAÇA' --------> VOCÊ SEMPRE PAGARÁ 
+
+
+
+
+
+
+
+
+
+
+
+ CARO.... -----> VAI PAGAR CARO, COM PERFORMANCE COSTS,
+
+
+
+
+
+
+
+
+
+NA ÁREA DOS 'inserts'.... ---------> ISSO PQ 
+
+
+
+
+
+
+
+ESSE 'EXTRA INDEX'
+
+
+
+QUE PRECISA SER __ MANTIDO__ 
+
+
+
+
+
+
+EM 1 'pseudo-collection' de 
+
+indexes,
+
+separada,
+
+
+
+
+
+
+
+
+ELA __ PRECISA__ SER ____ UPDATA__ 
+
+
+
+PARA 
+
+
+
+CADA INSERT QUE VOCÊ FAZ NA SUA DATABASE.... -----> ISSO FAZ TOTAL SENTIDO,
+
+
+
+
+
+
+
+
+PQ 
+
+
+
+'WE HAVE AN ORDERED LIST OF ELEMENTS, WITH POINTERS TO THE DOCUMENTS'' --> isso significa que 
+
+
+
+
+SE VOCÊ ADICIONA 1 NOVO DOCUMENT,
+
+
+
+VOCÊ TERÁ DE ADICIONAR UM NOVO ELEMENT/VALUE correspondente a ele,
+
+
+
+LÁ 
+
+
+NO 'index'
+
+DESSE FIELD...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> E ISSO REALMENTE 
+
+
+__ PARECE__ SIMPLES,
+
+
+
+E ESSA OPERAÇÃO 
+
+
+
+''NÃO VAI DEMORAR TANTO'',
+
+
+
+
+MAS SE VOCÊ TIVER 10 INDEXES 
+
+
+
+
+
+
+
+
+
+PARA OS DOCUMENTS NA SUA COLLECTION,
+
+
+E AÍ VOCê 
+
+
+
+TIVER QUE __ UPDATAR TODOS OS 10 INDEXES __ PARA _ CADA INSERT DO SEU CÓDIGo,
+
+
+
+AÍ 
+
+VOCÊ 
+
+
+
+
+
+
+
+
+VAI RAPIDAMENTE 
+
+
+
+ACABAR ENCONTRANDO UM ___MONTE DE PROBLEMAS ___ _---> 
+
+
+
+
+
+problemas pq 
+
+VOCÊ 
+
+
+TERÁ DE FAZER 
+
+UM MONTE DE TRABALHO PARA __ TODOS ESSES FIELDS,
+
+
+PARA CADA 'INSERT'
+
+
+
+
+e para cada 'UPDATE',
+
+também...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> ISSO SIGNIFICA QUE 'indexes'
+
+
+REALMENTE NÃO 
+
+
+
+
+SÃO DE GRAÇA,
+
+
+
+
+E VOCÊ REALMENTE TEM QUE DESCOBRIR 
+
+
+
+QUAIS INDEXES FAZEM SENTIDO, E QUAIS _ NÃO FAZEM...
+
+
+
+
+
+
+
+
+
+
+--> É POR ISSO QUE NESSE MÓDULO O PROFESSOR VAI NOS MOSTRAR 
+
+
+
+
+
+
+TODOS OS INDEXES TYPES NO MONGODB,
+
+
+
+e 
+
+
+
+
+VAI NOS AJUDAR A 'MEDIR' 
+
+se 1 
+
+determinado index faz sentido ou não....

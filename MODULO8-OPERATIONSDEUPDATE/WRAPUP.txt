@@ -1,0 +1,302 @@
+
+
+
+
+
+
+
+
+
+
+
+ACABAMOS COM ESTE MÓDULO..
+
+
+
+
+
+
+
+
+
+VIMOS BASTANTE COISA:
+
+
+
+
+
+
+
+
+
+
+1) updateOne e updateMany ------> VOCê PODE USÁ-LOS PARA UPDATAR OU 1 OU VÁRIOS DOCUMENTS EM 1 COLLECTION...
+
+
+ 
+1o argumento é um filter, que NARROWS DOWN quais objects devem ser updatados.... ("filter" --> query selector, COM OS MESMOS OPERATORS QUE CONHECEMOS EM 'find')...
+
+
+
+
+
+
+
+O SEGUNDO ARGUMENTO É USADO PARA '''DESCREVER O UPDATE'' (por meio de '$set' e outros UPDATE OPERATORS)...
+
+
+
+
+
+
+
+
+
+
+
+ 
+2) TAMBÉM HÁ A OPÇÃO DE 'ENTIRELY REPLACE A DOCUMENT'  ----> ISSO PODE SER FEITO COM O __ VELHO ___ METHOD DE 
+
+'update()',
+
+
+
+E NÃO 'updateOne()' ou 'updateMany()' 
+
+
+
+
+
+
+
+--------------> OUTRO METHOD QUE CUMPRE O MESMO PROPÓSITO DE 'entirely replace A document'
+
+
+
+
+
+É O USO DE 'replaceOne()' ........
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> USE 'replaceOne()"
+
+
+SE VOCê DESEJA SUBSTITUIR UM DOCUMENT POR INTEIRO, POR OUTRO DOC...  ----> O 'replaceOne'  MANTÉM O 'ObjectId()",
+
+AO PASSO 
+
+que 
+
+
+
+'db.users.update()',
+
+
+NÃO ....
+
+
+
+
+
+
+
+
+
+
+
+OK... MAS DE VOLTA AOS UPDATE OPERATORS:
+
+
+
+
+
+
+
+
+
+
+3) APRENDEMOS UM MONTE DE OPERATORS PARA UPDATAR OS FIELDS DE SEUS DOCUMENTS...
+
+
+
+
+operators como 
+
+
+
+$set 
+
+
+
+$inc 
+
+
+$min e max,
+
+
+
+etc...
+
+
+
+$unset 
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, SE VOCê TRABALHAR COM ARRAYS,
+
+VOCê __ DEFINITIVAMENTE TEM QUE APRENDER A 
+
+TIRAR VANTAGEM DOS ATALHOS (
+
+    como 
+
+    '.$', ".$[]' (todos elements em um dado array) e      "$[identifier]" (elemento específico em 1 array)
+),
+
+
+
+
+ATALHOS QUE SÃO USADOS 
+
+com o 'arrayFilters',
+
+QUE É UMA OPTION QUE É USADO 
+
+NO TERCEIRO PARÂMETRO DE calls de updateOne e updateMany...
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+db.users.updateOne(
+
+    {},
+
+
+    {$set: {"hobbies.$[].isGood": true}}
+)
+
+
+
+
+
+
+
+
+
+
+
+E EX:
+
+
+
+
+
+db.users.updateOne(
+
+    {},
+
+
+    {$set: {"hobbies.$[el].isGood": true}},
+
+
+
+
+    {
+
+        arrayFilters: [
+            {
+                "el.frequency": 5
+            }
+        ]
+    }
+)
+
+
+
+
+
+
+
+
+---> agora aquele element de '[el]' 
+
+SÓ VAI SER CONSIDERADO COMO AQUELES EMBEDDED DOCUMENTS QUE TENHAM 'frequency' de 5... (equality operator)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> NO TERCEIRO PARÂMETRO VOCê TAMBÉM PODE COLOCAR OPTIONS COMO 
+
+'upsert: true' 
+(
+
+
+    mistura a funcionalidade de insert e update,
+
+
+
+
+
+    PQ SE ESSE DOCUMENT AINDA NÃO EXISTE NA SUA DATABASE, ELE SERÁ INSERTADO... SE ELE JÁ EXISTE, SERÁ UPDATADO...
+)
+
+
+
+
+
+
+
+
+
+
+
+4) USE ARRAY UPDATE OPERATORS COMO $pull, $push e pop: 1 / pop: -1
+
+
+
+PARA EFICIENTEMENTE ADICIONAR OU REMOVER ELEMENTS DE ARRAYS...

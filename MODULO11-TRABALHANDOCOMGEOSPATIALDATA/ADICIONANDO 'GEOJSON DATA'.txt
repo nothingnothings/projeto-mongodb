@@ -1,0 +1,793 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> DE VOLTA AO NOSSO TERMINAL DO MONGOSHELL,
+
+
+
+PROFESSOR 
+
+CRIA UMA NOVA DATABASE
+,
+
+
+
+
+
+de 
+
+'awesomeplaces'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NESSA DATABASE,
+
+PROFESSOR VAI QUERER ADICIONAR UNS NICE PLACES (locations) 
+
+QUE 
+
+
+PODEREMOS 
+
+
+ENTÃO FAZER QUERY...
+
+
+
+
+
+
+
+
+
+
+-> VAMOS 
+
+ADICIONAR ESSES NEGÓCIOS LÁ DO INÍCIO,
+
+
+
+
+
+
+
+
+PARA ENTENDER COMO GEOSPATIAL DATA PRECISA SER ARMAZENADA,
+
+PARA QUE 
+VOCÊ CONSIGA TRABALHAR COM ELA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NOS DOCS DO MONGODB,
+
+
+VOCÊ ENCONTRA UM ARTIGO SOBRE 
+
+'GEOJSON data/objects' --> SUA ESTRUTURA 
+
+
+E 
+QUAAL 
+
+
+
+TIPO 
+
+DE 
+
+
+
+GEOJSON OBJECT É SUPORTADO 
+
+
+PELO 
+
+MONGODB...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> PQ O GEOJSON NÃO É UM PADRÃO INVENTADO PELO MONGODB,
+
+ELE EXISTE FORA DO MONGODB,
+
+E LÁ 
+
+VOCÊ TEM OUTROS 
+
+
+
+OBJECTS,
+
+NAÕ SUPORTADOS 
+
+
+PELO MONGODB...
+
+
+
+
+
+(
+
+    TEMOS OBJECTS COMO POINT,
+
+    LINESTRING,
+
+    POLYGON,
+
+    MULTIPOINT,
+
+
+    MULTILINESTRING,
+
+
+    MULTIPOLYGON....
+)
+
+
+
+
+
+
+
+
+
+
+
+--> A COISA MAIS IMPORATNTE É ENTENDER COMO UM 'GEOJSON OBJECT'
+
+É CRIADO...
+
+
+
+
+
+
+
+
+
+
+
+
+-> E PARA CRIAR 1 OBJECT DESSES, É BEM SIMPLES...
+
+
+
+ABRA GOOGLE MAPS.. --> 
+
+
+
+PEGUE UMA LOCALIZAÇÃO....
+
+
+
+
+
+
+
+
+
+--> 'VALIDATE' se nossas queries funcionam corretamente....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR ESCOLHA 
+
+UM LUGAR DO GOLDEN LAKE PARK...
+
+
+
+
+
+
+
+
+
+
+--> ELE ESCOLHE A  'CALIFORNIA ACADEMY OF SCIENCES'...
+
+
+
+
+
+
+
+O LINK É ESTE:
+
+
+
+
+
+https://www.google.com.br/maps/place/California+Academy+of+Sciences/@37.7689999,-122.4757474,16z/data=!3m1!5s0x80858743a90cd067:0xba7e223a6834f740!4m12!1m6!3m5!1s0x808587726045f763:0x71be8b68ef3ba730!2sGolden+Gate+Park!8m2!3d37.7694208!4d-122.4862138!3m4!1s0x80858743acfb4421:0x1b8487cfc077cab9!8m2!3d37.7698646!4d-122.4660947
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR EXPLICA QUE PODEMOS FACILMENTE 
+
+ENCONTRAR AS COORDENADAS 
+
+
+DE QUALQUER LUGAR,
+
+
+DENTRO DA URL...
+
+
+
+
+
+
+
+@37.7689999,-122.4757474
+
+
+
+
+
+
+
+
+
+
+--> O PRIMEIRO VALOR É A LATITUDE,
+
+
+
+O SEGUNDO É A LONGITUDE...
+
+
+
+
+
+
+
+
+
+
+--> E VAMOS PRECISAR 
+
+
+
+LEMBRAR DISSO,
+
+PARA 
+
+ARMAZENAR ESSES VALUES CORRETAMENTE NO MONGODB....
+
+
+
+
+
+
+
+
+
+
+
+--> COORDINATES SÃO SEMPRE EXPRESSAS 
+
+COMO PARES de 
+
+'lat + long'... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> LATITUDE --> DESCREVE A POSIÇÃO NO EIXO X.... (horizontal)
+
+
+
+
+
+--> LONGITUDE -->  POSIÇAÕ VERTICAL.... --> posição eixo Y....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> COM ESSE COORDINATE SYSTEM,
+
+PODEMOS 
+
+MAPEAR QUALQUER PONTO NA NOSSA TERRA..
+
+
+
+
+
+
+
+
+
+
+
+
+--> ok...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ADICIONAMOS UMA NOVA COLLECTION DE PLACES,
+
+
+
+com 
+
+
+
+db.places.insertOne() 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.places.insertOne(
+    {
+        name: "California Academy of Sciences"
+    }
+)
+
+
+
+
+
+
+
+
+
+-------> AÍ VAMOS QUERER ADICIONAR NOSSAS COORDINATES COMO UM 'GEOSJON OBJECT.'...
+
+
+
+
+
+
+-> E NÃO HÁ NADA DE ESPECIAL SOBRE 'GEOJSON'. ..--> vocÊ pode 
+
+
+
+
+NOMEAR 
+
+
+SUA 
+
+KEY DE QUALQUER NOME,
+
+ISSO NÃO INTERESSA... -> O QUE INTERESSA 
+É 
+
+A 
+ESTRUUTRA 
+
+
+
+DESSE DOCUMETN...
+
+
+
+
+
+
+
+
+
+--> SERÁ 1 EMBEDDED DOCUMENT,
+
+
+
+
+E ESSE EMBEDDED DOCUMENT SEMPRE SEGURARÁ 
+
+
+
+'TWO PIECES OF INFORMATION' ------>  E ESSAS INFORMATIONS 
+
+
+SERÃO:
+
+
+
+
+
+
+
+1) 1 FIELD CHAMADO DE 'type',
+
+QUE 
+
+VAI ESPECIFICAR O OBJECT TYPE DESSE GEOJSON OBJECT...
+
+
+
+
+
+
+
+
+
+2) UM ARRAY CHAMADO DE 'coordinates',
+
+
+COM NOSSAS COORDINATES DE Y E X... (primeiro value será a LONGITUDE, E O SEGUNDO  SERÁ _ A LATITUDE, SEMPRE)......
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK....VAMOS ESCREVER NOSSO OBJECT TIPO ASSIM:
+
+
+{
+
+    type: "Point",
+
+    coordinates: [
+        40, 5
+    ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESCREVEMOS TIPO ASSIM:
+
+
+
+
+db.places.insertOne(
+    {
+        name: "California Academy of Sciences",
+
+
+        location: {
+            type: "Point",
+            coordinates: [  
+                     -122.4757474 , 37.7689999
+            ]
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> O TYPE SERá DE 'POINT',
+
+jsutamente 
+
+pq 
+
+
+
+ADICIONAMOS UMA 'KEY/SINGLE POINT'... 
+
+
+
+
+
+
+
+
+
+
+--> O 'type'
+
+TEM QUE SER ESCRITO COMO 'POint' (que é um dos TYPES DISPONÍVEIS, para 1 object GEOJSON)..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> E O 'coordinates' TEM QUE TER ESSE NOME,
+
+E DEVE 
+
+SER 
+
+1 
+aRRAY 
+
+
+
+EM QUE 
+
+COLOCAMOS:
+
+
+
+1) NOSSA LONGITUDE,
+
+
+
+
+2) NOSSA 'LATITUDE'..
+
+
+
+
+
+
+
+
+
+
+
+---------------> COM ISSO,
+
+
+ADICIONAMOS ESSE DOCUMENT 
+
+
+
+NA NOSSA DATABAS.E..
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+db.places.insertOne(
+    {
+        name: "California Academy of Sciences",
+
+
+        location: {
+            type: "Point",
+            coordinates: [  
+                     -122.4757474 , 37.7689999
+            ]
+        }
+    }
+)
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+db.places.insertOne({
+  name: 'California Academy of Sciences',
+  location: {
+    type: 'Point',
+    coordinates: [-122.4757474, 37.7689999],
+  },
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------- ok.... --> ISSO SERÁ TRATADO COMO 'GEOJSON DATA',
+
+JUSTAMENTE 
+
+
+PQ 
+
+SATISFEZ AS 2 CONDIÇÕES,
+
+
+
+
+1 key de 'type'  (em que colocamos 'Point', que é um dos OBJECTS SUPORTADOS)....
+
+
+
+
+
+
+
+
+
+
+
+--> O OUTRO REQUISITO É  'cordinates', ARRAY em que PASSAMOS O PRIMEIRO VALOR COMO LONGITUDE,
+
+E O SEGUNDO COMO LATITUDE..
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA QUE JÁ SABEMOS COMO 
+
+
+
+
+
+
+
+
+
+'GEOJSON' se parece,
+
+DEVEMOS 
+
+
+
+
+
+INVESTIGAR COMO PODEMOS QUERIAR ESSA 'GEOJSON DATA' 
+
+
+por meio 
+
+de 
+
+'find()'...

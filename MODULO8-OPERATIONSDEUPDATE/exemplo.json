@@ -1,0 +1,70 @@
+db.users.insertOne({
+
+    "name" : "Chris",
+    "hobbies" : [
+            {
+                    "title" : "Sports",
+                    "frequency" : 2
+            },
+            {
+                    "title" : "Cleaning",
+                    "frequency" : 3
+            },
+            {
+                    "title" : "Souji",
+                    "frequency" : 3
+            }
+    ]
+}
+)
+
+
+
+
+
+
+
+
+
+db.users.updateOne(
+{
+        "name": "Chris",
+}, {
+        $set: {
+                "phone": 120212012108,
+                "age": 30
+        }
+    
+}
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.users.updateMany(
+{
+    hobbies: {
+        $elemMatch: {
+            title: "Sports",
+            frequency: {$gt: 3}
+        }
+    }
+},
+{
+$set: {
+    {"hobbies.$.highFrequency": "true"}
+}
+}
+)

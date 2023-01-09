@@ -1,0 +1,220 @@
+
+
+
+
+
+
+
+
+OK... --> O PROFESSOR ESTÁ NO ATLAS CLUSTER,
+
+lá no site do mongodb...
+
+
+
+
+
+
+
+
+
+
+
+--> O ATLAS É UMA FERRAMENTA BOA PARA LIGAR SEU MONGODB SERVER NA WEB... 
+
+
+
+
+
+
+
+
+
+
+--> OK... OUTRA FEATURE:
+
+
+
+
+
+
+SE VOCÊ É RIQUINHO/TEM O PLANO PAGO,
+
+
+
+
+
+VOCÊ 
+
+
+PODERÁ TER A SETTING DOS 'BACKUPS'
+
+ligada... --> se você tiver essa setting ligada,
+
+
+
+você 
+
+pode ir 
+
+até a 
+
+aba 
+
+'Backup' E AÍ RESTAURAR SUA DATABASE A 1 BACKUP ANTERIOR...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOCê TAMBÉM PODE DEFINIR 'alerts'  ------> ALERTS TE DEIXAM '''VER O QUE ACONTECEU''...
+
+
+
+
+
+
+
+
+
+
+--> ALERTS TAMBÉM  TE DEIXA CRIAR NOVOS ALERTS ,COM  'add new alert'...
+
+
+
+
+
+
+
+
+
+-> COM ADD NEW ALERT,
+
+ 
+ VOCê 
+
+ PODE 
+
+
+ '''RECEBER 1 EMAIL QUANDO 1 DETERMINADO EVENT ACONTECE''' (por exemplo, quando um determinado user faz login)....
+
+
+
+
+
+
+
+
+ ou entaõ 
+
+
+ quando o EXECUTION TIME PARA 'READS'
+
+ é maior do que 
+ um certo
+  
+
+
+  threshold, etc.. -------> OU SEJA,
+
+
+  SEUS 
+
+  READS ESTÃO LEVANDO MT
+   
+
+   TEMPO ,
+
+
+
+
+
+
+   E AÍ VOC~E QUER CHECAR 
+
+
+   SE 
+
+   ALGUMA COISA ESTÁ ACONTECENDO...
+
+
+
+
+
+
+
+   --->  VOCê PODE SETTAR 1 MONTE DE ALERTS 
+
+   AQUI,
+    
+    PARA 
+
+
+    SEMPRE  
+
+
+
+    SABER O QUE ESTÁ ACONTECENDO 
+
+    NOS SEUS CLUSTERS, ALGO SUPER ÚTIL....
+
+
+
+
+
+
+
+
+
+
+
+
+------> USE 
+
+MONGODB ATLAS COMO UMA 'MANAGED SOLUTION' PARA FAZER SEU MONGODB ENVIRONMENT 'UP AND RUNNING',
+
+
+a não 
+
+ser que 
+
+
+vocÊ SEJA UM SYSTEM ADMIN E VOCê SABE 
+
+EXATAMENTE O QUE VOCê ESTÁ FAZENDO,
+
+
+
+quer configurar tudo por coisa própria,
+
+
+
+que é algo que você pode fazer,
+
+
+ 
+
+
+ MAS __ QUE __ NÃO É O FOCO DESSE CURSO,
+
+ PQ 
+ ESSE CURSO  É PARA DEVELOPERS...
+
+
+
+
+
+
+
+
+
+
+ --> AGORA VAMOS VER COMO PODEMOS NOS CONECTAR AO SERVIDOR MONGODB ATLAS, no nosso shell...

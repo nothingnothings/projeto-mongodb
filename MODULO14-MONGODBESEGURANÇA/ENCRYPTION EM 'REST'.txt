@@ -1,0 +1,282 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA QUE 
+
+ADICIONAMOS 'ENCRYPTION DURANTE A TRANSPORTATION',
+
+
+
+TRANSPORTE DE ARQUIVOS NA WEB,
+
+
+
+
+
+
+
+
+
+PRECISAMOS FALAR DE OUTRO TIPO DE ENCRYPTION,
+
+
+
+QUE É 
+
+
+A 
+
+'REST'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> O QUE É A 'ENCRYPTION AT REST' ------> isso simplesmnente SIGNIFICA QUE A DATA QUE 
+
+NÓS ARMAZENAMOS 
+
+
+
+
+
+
+NO NOSSO MONGODB SERVER ,
+
+
+
+
+
+
+
+em uma FILE,
+ 
+
+
+
+
+
+ESSA FILEZINHA __ TAMBÉM__ PODE SER/ESTAR ENCRIPTADA__....
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE ELA ESTIVER ENCRIPTADA, TODOS OS DOCUMENTS DENTRO DESSA STORAGE TAMBÉM
+
+FICARÃO ENCRIPTADOS..
+
+
+
+
+
+
+STORAGE
+
+
+
+{
+    email: 'test@test.com',
+    password: "asijasiasjais2ji2j12i"
+
+}
+
+
+
+
+
+
+{
+    email: 'test@test.com',
+    password: "...."
+    
+}
+
+
+
+
+
+
+-----> TODOS OS DOCUMENTS QUE EXISTEM DENTRO DE 'STORAGE'
+
+
+podem estar  encRypted.......
+
+
+
+
+
+
+
+
+
+
+-> E O QUE PODEMOS FAZER SÃO 2 COISAS:
+
+
+
+
+
+
+
+
+
+
+1) ENCRYPT   O 'OVERALL STORAGE',
+
+OU SEJA,
+
+AS 
+
+FILES EM SI... ---> essa é uma feature que existe BUILTIN para o mongodb enterprise --> LÁ, NO MONGODB ENTERPRISE,
+
+
+VOCÊ 
+
+
+
+
+
+PODE FACILMENTE 
+
+
+
+HABILITAR ESSA OPTION PARA ENCRIPTAR 
+
+
+
+
+
+ SEU ARQUIVO DA DATABASE COMO UM TODO ------> VOCÊ ENCONTRARÁ INSTRUÇÕES SOBRE COMO O ENABLAR NO ENTERPRISE 
+
+
+
+NA ÚLTIMA AULA DESSE MÓDULO...
+
+
+
+
+
+
+
+
+
+
+
+2) a coisa QUE PODEMOS FAZER, COMO 
+
+DESENVOLVEDORES,
+
+
+OBVIAMENTE,
+
+
+É 
+
+
+
+'ENCRYPT ALGUNS VALUES NOS FIELDS DE SEUS DOCUMENTS' --------> isso é algo que já conhecemos,
+
+
+
+
+são coisas como 'bcrypt',
+
+QUE HASHAM
+ 
+
+ O
+  
+
+  PASSWORD,
+
+
+
+  encryptam, etc etc... ...  -------> ISSO É ALGO BOM, QUE PODE SER FEITO ATÉ MESMO COM TODA DATA DE SEU CÓDIGO,
+
+
+
+
+  mas 
+
+
+  que 
+
+
+  é melhor de ser aplicado somente nos passwords..
+
+
+
+
+
+
+
+
+
+
+
+
+
+RESUMINDO:
+
+
+
+
+
+
+
+SEMPRE ENCRIPTE TANTO A 'OVERALL FILE' como SUA 'DATA/documents' ,
+
+
+
+PARA TER A MAIOR SEGURANÇA POSSÍVEL..
+
+
+
+
+
+
+
+
+
+
+
+
+FILE ENCRYPTION --> É BUILTIN NO 'MONGODB ENTERPRISE'...
+
+
+
+
+
+
+
+
+HASHING DE UM PASSWORD --> É ALGO QUE VEREMOS NO MÓDULO 'FROM SHELL TO DRIVER', e provavelmente será o BCRYPT....

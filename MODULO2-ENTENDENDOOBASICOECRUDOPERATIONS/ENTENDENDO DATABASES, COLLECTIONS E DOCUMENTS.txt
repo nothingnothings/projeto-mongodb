@@ -1,0 +1,579 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+DATABASES, COLLECTIONS E DOCUMENTS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> 
+
+
+
+
+
+
+
+
+
+
+
+EM UM MONGODB WORLD,
+
+
+VOCÊ TEM 1 OU MAIS DATABASES NO SEU DATABASE SERVER....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1 database pode conter 1 ou mais COLLECTIONS...
+
+
+
+
+
+
+
+
+1 COLLECTION É UMA TABLE EM UMA SQL DATABASE....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> EM CADA COLLECTION TEMOS MÚLTIPLOS DOCUMENTS..
+
+
+
+
+
+
+
+
+
+
+
+
+--> DOCUMENTS SÃO AS DATA PIECES QUE VOCÊ ARMAZENA NAS SUAS COLLECTIONS...
+
+
+
+
+
+
+
+
+
+
+
+--> QUANDO VOCÊ TRABALHA COM O MONGODB,
+ 
+
+
+
+
+ você vai perceber que 
+
+
+ AS DATABASES,
+
+
+
+ AS COLLECTIONS E OS DOCUMENTS SÃO TODOS 
+
+ CRIADOS IMPLICITAMENTE 
+
+
+
+
+
+
+
+ PARA VOCÊ, PELO MONGODB SERVER,
+
+ QUANDO VOCÊ COMEÇA A TRABALHAR COM ELES (quando você começa a trabalhar com a data, inserir coisas, etc etc)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ =======> ISSO É BEM CONVENIENTE....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -> MAS MAIS TARDE NO CURSO DESCOBRIREMOS UMA MANEIRA__ DE CRIAR __ eXPLICITAMENTE COLLECTIONS (sem inserir nada),
+
+
+ O QUE NOS DEIXARÁ 
+
+
+ CONFIGURÁ-LAS UM POUCO MAIS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -> MAS ESSA É UMA FEATURE, QUE DEIXA O GET STARTED SUPER SIMPLES...
+
+
+
+
+
+
+
+
+
+
+
+
+ --> OK.... ESSE É O CONCEITO BÁSICO,
+
+
+
+ A CONEXÃO ENTRE ESSES CONCEITOS...
+
+
+
+
+
+
+
+
+
+
+
+ AGORA DEVEMOS COMEÇAR NOSSO MONGODB SERVER, CONECTAR A ELE COM NOSSO MONGO SHELL,
+
+
+
+
+
+
+
+
+
+ E AÍ 
+
+
+
+
+ VER COMO PODEMOS ARMAZENAR DATA LÁ DENTOR, E QUAL TIPO DE DATA É ESSA...
+
+
+
+
+
+ -_> para ISSO,
+
+
+ abra o terminal e execute:
+
+
+
+
+
+ 1) em 1 terminal, 'mongod' (executa o mongodbserver)
+
+
+
+
+
+ 2) em outro terminal, 'mongo'  (conecta o shell de sua local machine a esse mongodb server)....
+
+
+
+
+
+ 3) depois, você já pode executar coisas como 'db.nomeDaSuaCollection.insertOne({})' para CRIAR UMA COLLECTION, E UM DOCUMENT DENTRO DESSA COLLECTION..
+
+
+
+
+
+
+ The server generated these startup warnings when booting: 
+        2022-02-05T15:43:50.994-03:00: Access control is not enabled for the database.
+        
+        Read and write access to data and configuration is unrestricted
+
+
+
+
+
+
+
+---
+The server generated these startup warnings when booting: 
+        2022-02-05T15:43:50.994-03:00: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+---
+---
+        Enable MongoDB's free cloud-based monitoring service, which will then receive and display
+        metrics about your deployment (disk utilization, CPU, operation statistics, etc).
+
+        The monitoring data will be available on a MongoDB website with a unique URL accessible to you
+        and anyone you share the URL with. MongoDB may use this information to make product
+        improvements and to suggest MongoDB products and deployment options to you.
+
+        To enable free monitoring, run the following command: db.enableFreeMonitoring()
+        To permanently disable this reminder, run the following command: db.disableFreeMonitoring()
+---
+> db.exemplos.insertOne({title: 'EXEMPLO1'})
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("61feed890f4fe7e14ed59fb2")
+}
+> showdbs
+uncaught exception: ReferenceError: showdbs is not defined :
+@(shell):1:1
+> help
+        db.help()                    help on db methods
+        db.mycoll.help()             help on collection methods
+        sh.help()                    sharding helpers
+        rs.help()                    replica set helpers
+        help admin                   administrative help
+        help connect                 connecting to a db help
+        help keys                    key shortcuts
+        help misc                    misc things to know
+        help mr                      mapreduce
+
+        show dbs                     show database names
+        show collections             show collections in current database
+        show users                   show users in current database
+        show profile                 show most recent system.profile entries with time >= 1ms
+        show logs                    show the accessible logger names
+        show log [name]              prints out the last segment of log in memory, 'global' is default
+        use <db_name>                set current database
+        db.mycoll.find()             list objects in collection mycoll
+        db.mycoll.find( { a : 1 } )  list objects in mycoll where a == 1
+        it                           result of the last line evaluated; use to further iterate
+        DBQuery.shellBatchSize = x   set default number of items to display on shell
+        exit                         quit the mongo shell
+> db.showdbs
+test.showdbs
+
+
+> show dbs
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+shop    0.000GB
+test    0.000GB
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------
+
+
+
+
+
+
+
+
+
+
+
+CERTO....
+
+
+
+
+
+
+
+
+DEIXE O SERVER RODANDO...
+
+
+
+
+
+
+
+
+
+
+--> 'WAITING FOR CONNECTIONS ON PORT 27017'...
+
+
+
+
+
+
+
+
+
+
+--> SE VOCÊ QUISER USAR UMA PORT DIFERENTE, SE ESTÁ TENDO PROBLEMAS COM ESSA,
+
+
+
+VOCê PODE ALTERAR A PORT UTILIZADA,
+
+
+POR MEIO DO COMANDO
+
+
+
+
+
+
+
+
+
+
+
+
+'mongod --port 27018'  (ISSO VAI USAR OUTRA PORTA)...
+
+
+
+
+
+
+
+
+
+
+--> mas para isso, você precisa QUITAR O MONGOD (mongo database server) E O INICIAR DE NOVO...
+
+
+
+
+
+
+
+
+
+------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... ESSA INFORMAÇÃO PODE SER ÚTIL,
+
+CASO VOCÊ ESTEJA USANDO ESSA PORT PARA OUTRA COISA....
+
+
+
+
+
+
+
+
+
+--> OK.... DEPOIS ABRA OUTRA JANELA,
+
+E AÍ RODE '
+
+mongo'
+
+
+
+
+PARA USAR 
+
+
+O MONGOSHELL E AUTOMATICAMENTE SE CONECTAR AO UP AND RUNNING SERVER...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS SE RODAMOS SÓ 
+
+
+'mongo',
+
+
+VAMOS _ rECEBER UM __ ERRO,
+
+AGORA... --------> VAMOS RECEBER UM ERRO JUSTAMENTE PQ 
+
+
+
+
+O COMNADO 
+
+
+'mongo' 
+
+
+_ AUTOMATICMAENTE PROCURA SE CONECTAR 
+
+
+
+
+AO SEU MONGODB SERVER POR MEIO DA PORT 27017, que é o DEFAULT.... ( e como alteramos esse default, por meio de 'mongod --port 27015', agora ficamos com um problema).,..
+
+
+
+
+
+
+
+
+
+
+
+PARA CONSERTAR ISSO AÍ,
+
+
+você deve rodar 
+
+
+
+'mongo --port 27015'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... ISSO VAI SE CONECTAR COM SUCESSO 
+
+
+
+A NOSSA PORT ESPECÍFICA...
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA PODEMOS RODAR 'cls' 
+
+PARA LIMPAR 
+
+
+
+A NOSSA JANELA...
+
+
+
+
+
+
+
+
+
+-> PODEMOS COMEÇAR A RODAR COMANDOS DE NOVO, E AÍ TRABALHAR COM NOSSA DATABASE....

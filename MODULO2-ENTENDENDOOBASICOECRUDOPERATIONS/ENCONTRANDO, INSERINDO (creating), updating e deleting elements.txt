@@ -1,0 +1,549 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> DE VOLTA AO SHELL,
+
+E AINDA CONECTADOS àQUELA MESMA INSTANCE MONGODB USADA ANTERIORMENTE,
+
+
+
+
+
+
+
+
+
+executamos 
+
+
+
+
+db.flightData.find().pretty()
+ 
+
+
+
+ PARA VER 
+
+
+
+
+ TODOS NOSSOS VOOS EM 'flightData'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ------> OK, MAS O PROFESSOR QUER __ _ LIMPAR A NOSSA DATABASE DE 'flights'
+
+
+
+ INTEIRA...
+
+
+
+
+
+
+
+
+
+ --> NO CASO, 
+ ELE NÃO VAI QUERER APAGAR A DATABASE DE 'flights' em si,
+
+
+
+
+ E SIM SÓ VAI QUERER DELETAR A COLLECTION DE 'flightData'...
+
+
+
+
+
+
+
+
+
+
+ --> PARA ISSO,
+
+ ELE VAI EXECUTAR O COMANDO 
+
+
+
+ db.flightData.deleteMany({})
+
+
+
+
+
+
+
+
+
+ --> A FALTA DE PARÂMETROS FARÁ COM QUE TODOS OS DOCUMENTS 
+
+
+
+
+ SEJAM APAGADOS...
+
+
+
+
+
+
+
+ EX:
+
+
+
+
+
+
+
+ > use flights
+switched to db flights
+> db.flightData.deleteMany({})
+{ "acknowledged" : true, "deletedCount" : 3 }
+>
+
+
+
+
+
+
+
+
+
+
+
+
+--------> ISSO DELETOU TODOS NOSSOS DOCUMENTS....
+
+
+
+
+
+
+
+--> PROFESSOR TAMBÉM USOU O 'db.flightData.deleteOne({})',
+
+
+
+E AÍ PASSOU o valor de '{
+    departureAirport: 'MUC' 
+}
+'
+
+
+
+
+
+
+
+
+--> ELE ENCONTRA O PRIMEIRO DOCUMENT 
+
+NA NOSSA DATABASE EM QUE departureAirport é 'MUC',
+
+e aí o deleta...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AÍ ELE FALA DO deleteMany....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> MAS AÍ O PROFESSOR QUER ZOAR UM POUCO, QUER UPDATAR TODOS 
+
+
+
+NOSSOS DOCUMENTS,
+
+ADICIONAR 1 FIELD EM COMUM A TODOS ELES, PARA ENTÃO OS DELETAR DE UMA SÓ VEZ COM 'deleteMany'...
+
+
+
+
+
+
+
+
+
+
+--> acho que consigo fazer isso...
+
+
+
+
+
+
+
+
+
+ESCREVO ASSIM:
+
+
+
+
+
+db.flightData.updateMany({}, {test: true},) 
+
+
+
+
+
+
+
+
+
+
+--> MAS AÍ RECEBO UM ERROR:
+
+
+
+uncaught exception: Error: the update operation document must contain atomic operators :
+
+
+
+
+
+
+
+
+
+
+--> PROVAVELMENTE É PQ PRECISO DE 
+
+
+UM PARAMETER nº 2 válido.... --> a sintaxe válida é algo como 
+
+
+
+
+"$set: {test: true}" 
+
+
+
+
+
+
+
+
+
+ISTO AQUI FUNCIONOU:
+
+
+
+
+
+
+
+> db.flightData.updateMany({},{ $set:  {test: true}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> OK, DEU CERTO, MEUS DOCUMENTS FICARAM ASSIM:
+
+
+
+
+
+
+
+
+{ "_id" : ObjectId("61ff0136156a623d98a99133"), "name" : "Max", "test" : true }
+{ "_id" : ObjectId("61ff013a156a623d98a99134"), "name" : "Manu", "test" : true }
+{ "_id" : ObjectId("61ff013e156a623d98a99135"), "name" : "Maria", "test" : true }
+
+
+
+
+
+
+--------------------------------------------------
+
+
+
+AGORA PODEMOS DELETÁ-LOS EM MASSA,
+
+POR MEIO DESTE CÓDIGo:
+
+
+
+
+> db.flightData.deleteMany({test: true})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR ESCREVE UNS CÓDIGOS BEM PARECIDOS...
+
+
+
+
+
+
+
+db.flightData.updateOne({distance: 12000}, $set: {})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ATOMIC OPERATORS... --> ESSE É um erro bem comum... --> 
+
+
+
+É UM INCORRECT TYPE OF DATA PARA O UPDATING... --> 
+
+
+VOCÊ NÃO VAI ESCREVER 
+
+
+COISAS COMO 
+
+
+'{marker: "delete" }' 
+
+
+
+
+
+COMO SEGUNDO PARÂMETRO....
+
+
+
+
+
+
+--> EM VEZ DISSO,
+
+VOCÊ DEVE USAR 
+
+
+
+ALGO COMO 
+
+
+{
+    $set: {
+        marker: "delete" 
+    }
+}
+
+
+
+
+
+
+
+
+
+
+--> $set --> ISSO É ALGO QUE VOCÊ DEVE LEMBRAR...
+
+
+
+
+
+
+
+
+
+
+
+
+-> SEMPRE QUE VOCÊ ENCONTRAR UM '$' 
+
+
+NO MONGODB,
+
+
+ISSO SERÁ RELATIVO A UM 'RESERVED OPERATOR', ou uma RESERVED WORD.....
+
+
+
+
+
+
+
+
+
+
+
+--> $set é SIMPLESMNETE IDENTIFICADO, PELO MONGODB,
+
+
+quando USADO EM UMA OPERATION DE 'updateOne',
+
+
+
+
+COMO SINALIZADOR _ DAS _ MUDANÇAS QUE VOCÊ QUER APLICAR NESSE DOCUMENT...
+
+
+
+
+
+
+
+
+
+
+
+
+--> O VALOR DE '$set',
+
+
+no caso,
+
+
+
+SERÁ 
+
+
+
+
+
+de 
+
+
+
+'{marker: "delete"}' 
+
+
+
+
+
+
+
+
+
+
+--> 'POR FAVOR, SETTE ESSA KEY DE MARKER, COM VALOR DE DELETE,
+
+
+dentro desse document'...
+
+
+
+
+
+
+
+---> E SE ESSA KEY JÁ EXISTIA, ELE VAI ALTERAR O VALOR DA KEY... é assim que ele funciona...
+
+
+
+
+
+
+
+
+
+
+
+--> OUTRA COISA QUE PODERÍAMOS FAZER AQUI, BEM MAIS SIMPLES,
+
+É SÓ CHAMAR 
+
+
+
+'db.flightData.deleteMany({})' (empty query).... 
+
+
+
+
+
+
+
+--> OK, É ASSIM QUE REALIZAMOS AS CRUD OPERATIONS BÁSICAS...

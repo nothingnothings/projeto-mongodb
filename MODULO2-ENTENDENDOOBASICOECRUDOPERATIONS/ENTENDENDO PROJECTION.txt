@@ -1,0 +1,606 @@
+
+
+
+
+
+
+
+
+
+JÁ ESTUDAMOS BASTANTE SOBRE O RETRIEVE, UPDATE E DELETE DE DATA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> estamos no fim deste módulo...
+
+
+
+
+
+
+
+
+
+-_> MAS ANTES DE CONCLURI ESTE MÓDULO,
+
+
+HÁ 2 OUTRAS COISAS IMPORTNATES QUE DEVEMOS SABER...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1) PROJECTION....
+
+
+
+
+
+
+
+
+
+O QUE É PROJECTION?
+
+
+
+
+
+
+
+
+
+
+-_> IMAGINE  QUE VOCÊ TEM UM PEDAÇO DE DATA TIPO ASSIM NA SUA DATABASE:
+
+
+
+
+
+
+
+
+
+{
+
+    "_id": "...",
+    "name": "Max",
+    "age": 29,
+    "job": "instructor"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... --> IMAGINE QUE EM SEU APP __ VOCÊ _ NÃO PRECISA __ DE TODA __ ESSA DAT.A..
+
+
+
+
+
+
+
+--> DIGAMOS QUE VOCê SÓ PRECISE DE 'name' e 'age',
+
+
+
+e não precise de 'job'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------> é para isso que existe a graphql api, no caso, mas tudo bem...
+
+
+
+
+
+
+
+
+
+
+--> no  caso do MONGODB,
+
+
+
+
+acho que é possível fazer a MESMA COISA, mas com
+
+
+
+a shell....
+
+
+
+
+
+
+
+
+
+
+
+
+-> talvez tenhamos que rodar algum critério em 'find'....
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+db.jobs.find(
+    {
+    },
+
+OUTRO CRITÉRIO....
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> É CLARO QUE VOCÊ PODERIA FETCHEAR TODA A DATA E FILTERIZAR MANUALMENTE, NO SEU APP,
+
+
+MAS ISSO CONSOME RECURSOS/DATA, E A DATA AINDA SERIA 
+
+
+TRANSFERIDA 'OVER THE WIRE' (impacta a bandwidth)...
+
+
+
+
+
+
+
+
+
+
+
+
+------> E É EXATAMENTE ISSO QUE PROJECTION TE DEIXA FAZER....
+
+
+
+
+
+
+
+
+
+OK, DIGAMOS QUE TEMOS OS PASSENGERS,
+
+
+
+e queremos pegar ´so 
+
+os 
+
+names....
+
+
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+db.passengers.find(
+    {},
+
+    {}
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+O SEGUNDO PARÂMETRO SERÁ PARECIDO COM AQUELE DE 'update' que usamos anteriormente...
+
+
+
+
+
+
+
+será um '{}', com um SPECIAL OPERATOR no interior... --> (talvez '$in' ? )...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR EXPLICA QUE AQUI VOCê DEVE ESPECIFICAR SIMPLESMENTE QUAIS PARES DE KEY-VALUE PAIRS 
+
+VOCÊ QUER RECEBER...
+
+
+
+ex:
+
+
+
+
+
+
+
+db.passengers.find(
+    {},
+
+    {
+
+        name: 1
+
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> VOCÊ VAI DIGITAR 
+
+
+'''''O NOME DA PROPRIEDADE QUE VOCÊ QUER RETRIEVAR'''',
+
+
+
+aí colocar um ':', e aí  UM NÚMERO '1' (que indica que você QUER que esse negócio seja retrievado)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+db.passengers.find(
+    {},
+    {
+        name: 1
+    }
+).pretty();
+
+
+
+
+
+
+----------------------------------
+
+
+
+
+
+OK, COM ISSO,
+
+RECEBEREMOS NOS NOSSOS OBJECTS/DOCUMENTS RETRIEVADOS 
+
+
+APENAS: 
+
+
+
+1) O _id 
+
+
+
+
+
+2) o 'name'
+
+
+
+
+
+(
+
+    JÁ a 'age', ou qualquer outra coisa, será 
+
+
+    OMITIDA/não será retrievada...
+)
+
+
+
+
+
+
+
+
+
+--> e é claro que isso será um cursor,
+
+evidenciado 
+
+
+por 
+
+'type It for more'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------> '_id' ----> ID É UM FIELD ESPECIAL NA SUA DATA---> POR DEFAULT,
+
+SEMPRE SERÁ INCLUÍDO... ------> MESMO SE VOCê USAR PROJECTION,
+
+
+
+
+O ID __ SEMPRE__ SERÁ INCLUÍDO ---->   SE VOCÊ QUER 
+
+
+
+
+
+__REMOVER__ O ID__ 
+
+
+
+
+do retrieve por meio de projection,
+
+
+
+
+
+
+VOCÊ PRECISA EXPLICITAMENTE EXCLUÍ-LO....  --> COMO FAZER ISSO?
+
+
+
+
+
+VOCÊ DEVE ESCREVER 
+
+
+
+'_id: 0' ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+db.passengers.find(
+    {},
+    {
+        name: 1,
+        _id: 0
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+--> VOCÊ PODERIA FAZER A MESMA COISA COM 'age',
+
+
+
+MAS ISSO NÃO É NECESSÁRIO, PQ O COMPORTAMENTO PARA TUDO QUE NÃO É '_id'
+ 
+
+ é 
+
+
+
+
+
+JUSTAMENTE a omissão...
+
+
+
+
+
+
+
+
+
+
+
+
+---------> MAS PARA O ID, TEMOS QUE SER BEM CLAROS, TEMOS QUE ESCREVER '_id: 0'.....
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------------------
+
+
+
+
+
+
+
+
+OK, CONSEGUIMOS OS OBJECTS COM OS NAMES...
+
+
+
+
+
+
+
+--> E A PARTE IMPORTANTE DE ENTENDER, AQUI, É QUE ESSA FILTERING/DATA TRANSFORMATION ESTÁ 
+
+ACONTECENDO 
+
+
+
+NO MONGODB SERVER;
+
+
+
+
+OU SEJA,
+
+ATÉ mesmo antes 
+
+da data ser transferida a vocÊ (
+
+    sua bandwidth não é impactada, você não trabalha com data desnecessária...
+)

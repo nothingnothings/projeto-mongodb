@@ -1,0 +1,1245 @@
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA QUE FALAMOS 
+
+
+
+UM MONTE SOBRE RELATIONS,
+
+
+
+
+
+O PROFESSOR QUER NOS MOSTRAR UMA OPERATION ÚTIL QUE 
+
+O 
+
+
+
+__MONGODB__ OFERECE __ PARA O 
+
+
+'MERGING' 
+
+
+
+DE RELATED DOCUMENTS 
+
+
+que VOCê SPLITTOU POR MEIO DO 'REFERENCE APPROACH'... 
+
+
+
+
+(
+
+
+    ou seja,
+
+    hipótese em que você NÃO TEM EMBEDDED DOCUMENTS presentes....
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> JOINING WITH $LOOKUP:
+
+
+
+
+
+
+
+
+
+
+
+CUSTOMERS:
+
+
+
+{
+    userName: 'max',
+    favBooks: ['id1', 'id2']
+}
+
+
+
+
+
+
+
+
+
+BOOKS:
+
+
+
+
+{
+    _id: 'id1',
+    name: 'Lord of the Rings 1'
+}
+
+
+
+
+
+
+
+
+
+QUERY USANDO O 'lookup operator':
+
+
+
+
+
+
+
+customers.aggregate(
+    [
+        {
+            $lookup: {
+                from: "books",
+                localField: "favBooks",
+                foreignField: "_id",
+                as: "favBookData"
+            }
+        }
+    ]
+)
+
+
+
+
+
+
+
+
+
+
+-----> OK, MAS PARA QUE SERVE ISSO?
+
+
+
+
+
+
+
+
+
+-> O OPERATOR DE '$lookup'
+
+
+
+UTILIZA/É UTILIZADO COM O METHOD DE 
+
+
+'.aggregate()' (
+
+    QUE AINDA NÃO APRENDEMOS
+)
+
+
+
+
+
+
+
+
+
+
+
+--> TEREMOS UM MÓDULO INTEIRO SOBRE A 'AGGREGATION FRAMEWORk'...
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR NÃO QUER FALAR MT SOBRE ISSO....
+
+
+
+
+
+
+
+
+
+--> MAS o que interessa é que '$lookup' é uma FERRAMENTA INTERESSANTE QUE 
+
+
+TE DEIXA 
+
+
+
+
+
+'''TO FETCH 2 RELATED DOCUMENTS''',
+
+
+
+
+PARA ENTÃO MERGEAR ESSES 
+
+
+
+2 DOCUMENTS EM
+
+
+1 ÚNICO 
+
+
+
+'DOCUMENT',
+
+
+
+em 
+
+
+
+apenas 1 única etapa,
+
+
+
+EM VEZ DE TER DE FAZER 2 ETAPAS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO, O OPERATOR DE '$lookup',
+
+
+MITIGA __ UM POUCO __ DAS 
+
+
+DESVANTAGENS DE SPLITTAR SEUS DOCUMENTS EM MÚLTIPLAS COLLECTIONS... ---------> ISSO PQ AGORA 
+
+
+VOCÊ PODE, PELO MENOS,
+
+
+MERGEAR 
+
+
+ESSAS 2 COLLECTIONS 'IN ONE GO' (em vez de 2 etapas)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR VAI DEMONSTRAR COMO ISSO FUNCIONA...
+
+
+
+
+
+
+
+
+--> VAMOS NOS UTILIZAR DO 
+
+
+
+
+
+EXEMPLO DO BOOK-AUTHOR...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA DIGAMOS QUE 
+
+
+
+QUEREMOS__ FETCHEAR__ tODOS NOSSOS BOOKS,
+
+MAS COM A 'AUTHOR DATA'
+
+
+
+incluída....
+
+
+
+
+
+
+
+
+
+NOSSA BOOK DATA ESTÁ ASSIM (approach da related data)...
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+{ "_id" : ObjectId("6201ed3d45f645f6267d1090"), "name" : "My favorite Book", "authors" : [ ObjectId("5b98d9e44d01c52e1637a9a6") , ObjectId("5b98d9e44d01c52e1637a9a6") ] }
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+{ "_id" : ObjectId("6201ed3d45f645f6267d1090"), "name" : "My favorite Book", "authors" : [ ObjectId("5b98d9e44d01c52e1637a9a6"), ObjectId("5b98d9e44d01c52e1637a9a7") ] }
+
+
+
+
+
+
+------------------------------
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+{ "_id" : ObjectId("6201ed3d45f645f6267d1090"), "name" : "My favorite Book", "authors" : [ObjectId("6201de9b45f645f6267d108e"), ObjectId("6201de9b45f645f6267d108f") ] }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E TAMBÉM TEMOS OS AUTHORS DE:
+
+
+
+
+
+> db.authors.find().pretty()
+{
+        "_id" : ObjectId("6201de9b45f645f6267d108e"),
+        "name" : "Max Schwarz",
+        "age" : 20,
+        "address" : {
+                "street" : "main"
+        }
+}
+{
+        "_id" : ObjectId("6201de9b45f645f6267d108f"),
+        "name" : "Manu lore",
+        "age" : 30,
+        "address" : {
+                "street" : "treet"
+        }
+}
+
+
+
+
+------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+--> OK... AGORA DIGAMOS QUE QUEREMOS FETCHEAR TODOS NOSSOS BOOKS,
+
+mas com a 'author data'
+
+JÁ INCLUÍDA 
+
+NAQUELE FIELD DE 'authors'...
+
+
+
+
+
+
+
+----> PARA ISSO, VAMOS PRECISAR 
+
+
+DO METHOD DE '.aggregate()',
+
+
+
+que deve ser CHAMADO ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+
+db.books.aggregate(
+
+
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> ISSO USA A AGGREGATION FRAMEWORk...
+
+
+
+
+
+
+
+
+----> O PRIMEIRO PARÂMETRO É 1 ARRAY... --> É 1 ARRAY PQ NELE PODEMOS DEFINIR MÚLTIPLAS ETAPAS DE AGGREGATION DE NOSSA DATA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> COMO ESTAMOS INTERESSADOS EM '''APENAS 1 ÚNICA ETAPA''',
+
+passamos 1 ÚNICO OBJECT (cada object´e uma 'step') 
+
+
+
+
+A ESSE ARRAY....
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+db.books.aggregate(
+[
+    {}
+]
+
+
+
+)
+
+
+
+
+--------------------------------
+
+
+
+
+
+
+NESSA PRIMEIRA 'step',
+
+
+
+PASSAMOS O OPERATOR DE '$lookup'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> ESSA STEP, POR SUA VEZ,
+É CONFIGURADA POR MEIO DO PASS DE 
+
+UM 
+
+'DOCUMENT' como valor...
+
+
+
+
+
+eX:
+
+
+
+
+
+
+db.books.aggregate(
+[
+    {$lookup: {
+
+    }}
+]
+
+
+
+)
+
+
+
+----------------------------------
+
+
+
+
+
+
+
+NESSE 
+
+
+
+'document' de 'lookup',
+
+
+VOCÊ PRECISA ESPECIFICAR __ _QUATRO DIFERENTES COISAS:
+
+
+
+
+
+
+
+
+1) o argumento 'from' --> A QUESTÃO É: '''''DE QUAL OUTRA COLLECTION VOCÊ QUER RELATE DOCUMENTS???'''' --------> 
+
+
+COMO JÁ ESTAMOS RODANDO AGGREGATE LA NA COLLECTION DE 'books',
+
+É ÓBVIO QUE VAMOS QUERER 'PULL IN' 
+
+
+__ DOCUMENTS, OUTROS DOCUMENTS, DE OUTRAS COLLECTIONS... --------> VAMOS QUERER PULLAR 
+
+
+
+
+
+
+DOCUMENTS/1 DOCUMENT LÁ _ DA COLLECTION DE 'authors',
+
+POR ISSO ESCREVEMOS ASSIM:
+
+
+
+
+
+
+
+
+db.books.aggregate(
+[
+    {$lookup: {
+        from: "authors"
+    }}
+]
+
+
+
+)
+
+
+
+------------------------------
+
+
+
+
+
+ISSO PQ ESSA É 'THE NAME OF THE COLLECTION WHERE YOUR RELATED DOCUMENTS LIVE IN'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK.... HORA DO SEGUNDO PARÂMETRO:
+
+
+
+
+
+
+
+
+2) 'localField' ---> isso é relativo à COLLECTION EM QUE VOCÊ ESTÁ/ESTARÁ RODANDO ESSE METHOD DE 'aggregate' ---> isso 
+
+SERÁ, NO NOSSO EXEMPLO,
+
+
+NOSSA COLLECTION DE 'books'... ----------> 
+
+
+
+
+
+
+o localField pergunta ''''EM QUE LUGAR DESSES DOCUMENTS 'book' NESSA COLLECTION  __ A __ REFERENCE/REFERENCES __ 
+
+àQUELA OUTRA COLLECTION, COLLECTION DE "authors", pode ser encontrada????"
+
+
+
+
+
+
+
+
+--> como os IDs de nossos authors ficarão naquele array de "authors',
+
+
+
+
+É ISSO QUE PASSAMOS A ESSA PRORPIEDADE:
+
+
+
+
+
+
+
+db.books.aggregate(
+[
+    {$lookup: {
+        from: "authors",
+
+        localField: "authors"
+    }}
+]
+
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK... ISSO FEITO, O MONGODB VAI DIZER '''OK, AGORA EU SEI ONDE SUAS KEYS VÃO ESTAR ARMAZENADAS..."..
+
+
+
+
+
+3) MAS AÍ O MONGODB VAI TE PERGUNTAR:
+
+
+
+
+"""QUAL É O FIELD QUE VOCÊ ESTÁ ''RELATING TO'',
+
+
+LÁ NA SUA TARGET COLLECTION... (
+
+
+
+    OU SEJA, QUAL É O FIELD NAQUELA TARGET COLLECTION CUJO VALOR É 
+
+
+
+    ENCONTRADO LÁ NAQUELE FIELD expresso em 'localField' 
+) -----> NO NOSSO CASO,
+
+
+
+
+SERÁ 
+
+
+'_id',
+
+
+
+PQ É O VALOR DE '_id'
+
+QUE 
+
+
+APARECE LÁ 
+
+
+
+NO ARRAY DE 'authors'...
+
+
+
+
+
+
+
+
+OK, MAS QUAL É O NOME DA KEY QUE É ESSE TERCEIRO PARÂMETRO? 
+
+
+é 
+
+
+'foreignField'.....
+
+
+
+
+
+
+
+
+
+db.books.aggregate(
+[
+    {$lookup: {
+        from: "authors",
+
+        localField: "authors",
+
+
+        foreignField: "_id",
+
+
+
+    
+    }}
+]
+
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--------------------------------------------
+
+
+
+
+
+
+
+
+
+OK... ISSO VAI DIZER:
+
+
+
+
+
+'EM authors (Array), eu sei que há 
+
+
+ObjectIds armazenados, objectIds CUJOS VALORES SÃO EQUIVALENTES/IGUAIS/podem ser encontrados 
+
+no field 
+
+de 
+
+"_id', lá em "authors" (collection)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> POR FIM, 'LAST BUT NOT LEAST',
+
+
+
+você 
+
+
+
+VAI 
+
+ADICIONAR UM 'alias' ('as'),
+
+
+
+
+
+QUE SERÁ UM 'ALIAS'
+
+
+
+
+
+'under which this will be merged'...
+
+
+
+
+
+
+
+
+
+
+
+---> O PROFESSOR, NO CASO, VAI COLOCAR O ALIAS de 'creators':
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.books.aggregate(
+[ {$lookup: {
+        from: "authors",
+        localField: "authors",
+        foreignField: "_id",
+        as: 'creators'
+    }}
+]
+)
+
+
+----------------------------------
+
+
+
+
+
+
+
+
+
+
+--> SE VOCê PRINTAR O REUSLTADO DISSO AÍ,
+
+
+VOCÊ VERÁ:
+
+
+
+
+
+
+
+
+
+> db.books.aggregate( [ {$lookup: {         from: "authors",         localField: "authors",         foreignField: "_id",   
+      as: 'creators'     }} ] ).pretty()
+{
+        "_id" : ObjectId("6201ed3d45f645f6267d1090"),
+        "name" : "My favorite Book",
+        "authors" : [
+                ObjectId("6201de9b45f645f6267d108e"),
+                ObjectId("6201de9b45f645f6267d108f")
+        ],
+        "creators" : [
+                {
+                        "_id" : ObjectId("6201de9b45f645f6267d108e"),
+                        "name" : "Max Schwarz",
+                        "age" : 20,
+                        "address" : {
+                                "street" : "main"
+                        }
+                },
+                {
+                        "_id" : ObjectId("6201de9b45f645f6267d108f"),
+                        "name" : "Manu lore",
+                        "age" : 30,
+                        "address" : {
+                                "street" : "treet"
+                        }
+                }
+        ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> OU SEJA,
+
+
+
+
+VEREMOS QUE 
+
+
+O call de 'aggregate' 
+
+
+
+VAI FUNDIR/MERGEAR NOSSAS 2 COLLECTIONS EM 1 ÚNICA SÓ,
+
+
+
+
+SENDO COLOCADOS OS 'AUTORES DETALHADOS' (extraídos la da collection de 'authors')
+
+
+
+
+
+
+
+NAQUELE ARRAY DE 'creators' (cujo nome é colocado em 'as'...)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> OK... GANHAMOS DE VOLTA ESSE RESUTLADo...
+
+
+
+
+
+
+
+
+
+-----> GANHAMOS DE VOLTA ESSE LIVRO,
+
+
+MAS AÍ UMA KEY NOVA FOI ADICIONADA.... --> 
+
+
+AQUELA 'creators',
+
+
+
+QUE ACTUALLY SEGURA 
+
+
+
+
+A  'AUTHOR DATA QUE VIVIA EM OUTRA COLLECTION',
+
+
+
+
+
+
+
+
+
+E QUE FOI MERGEADA NO NOSSO RESULT,
+
+TUDO POR MEIO DA FUNCTION 
+
+
+
+
+
+
+
+'.aggregate()', USADA EM CONJUNTO COM '$lookup'..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... ESSA E´UMA MANEIRA BEM ÚTIL DE 
+
+
+
+'MERGE DATA IN ONE SINGLE STEP ''' -----> ISSO TE DEIXA TER 
+
+
+
+''O MELHOR DOS 2 MUNDOS''' ---> 
+
+
+
+
+ISSO PQ ''''WE STILL WILL HAVE IT SPLIT UP,
+
+
+BUT WE'LL BE ABLE TO FETCH IT IN ONE GO''''.....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... MAS É ÓBVIO QUE ISSO __ NÃO É UMA DESCULPA PARA __ SEMPRE _ USRA REFERENCES,
+
+
+
+PQ 
+
+OBVIAMENTE 
+
+
+
+
+o uso desse '.aggregate()' 
+
+
+com
+
+
+
+'$lookup'
+
+
+GASTA MAIS RECURSOS DO QUE O SIMPLES USO DE 'EMBEDDED DOCUMENTS' nos nossos documents...
+
+(
+
+
+    OK, ISSO SIGNIFICA QUE SE SEU APP É CAPAZ DISSO,
+
+    USE EMBEDDED DOCUMENTS,
+    PQ ELES TE AJUDAM, POSSUEM MAIS PERFORMNACE....
+
+
+)
+
+
+
+
+
+
+
+
+-> SE VOCÊ __ QUER __ OBRIGATORIAMENTE USAR REFERENCES,
+
+
+AÍ ESSA ETAPA DE 'LOOK'UP
+
+pode te ajudar a conseguir a data que você quer....
+
+
+
+
+
+
+
+
+
+-> DAREMOS UMA EXAMINADA APROFUNDADA ACERCA DE 'aggregate'...
+
+
+
+
+
+
+
+
+
+
+-> E TENHA EM MENTE QUE O 'LOOKUP' é usado para o MERGE DE RELATIONS...

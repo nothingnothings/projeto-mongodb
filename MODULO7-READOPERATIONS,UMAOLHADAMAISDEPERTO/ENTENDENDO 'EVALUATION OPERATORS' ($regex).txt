@@ -1,0 +1,811 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> AGORA VAMOS VOLTAR AOS OPERATORS DE 'EVALUATION'...
+
+
+
+
+
+
+SÃO ELES:
+
+
+
+
+
+
+
+
+
+
+
+$expr 
+
+
+
+
+$jsonSchema 
+
+
+
+
+
+
+$mod 
+
+
+
+
+
+
+$regex 
+
+
+
+
+$text 
+
+
+
+
+$where  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> JSONSCHEMA É ALGO QUE VIMOS NO MÓDULO DE 'DOCUMENT SCHEMA'... (usado para definir a validation de nossos schemas, essencialmente)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ENTRETANTO, 
+VOCÊ 
+
+
+
+
+TAMBÉM PODE USAR O '$jsonSchema' 
+
+
+
+
+EM QUERIES,
+
+PARA ENTÃO 
+
+
+
+'''ENCONTRAR DOCUMENTS QUE TEM UM CERTO DOCUMENT SCHEMA'''' --->  OU SEJA,
+
+
+
+VOCê 
+
+
+SETTA UMA SCHEMA 
+
+
+
+
+
+NA SUA QUERY EXATAMENTE COMO O PROFESSOR FEZ QUANDO FORMATOU A VALIDATION de nosso document...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$mod -------> 'MODULUS OPERATOR' --> AQUI VOCê PODE BASICAMENTE 'DIVIDE' 
+
+
+
+
+UM FIELD VALUE POR UM CERTO NUMBER,
+
+
+E AÍ 
+
+CHECAR 
+
+SE O VALUE É OK PARA VOCÊ....
+
+
+
+
+
+
+
+
+
+
+
+$text -->  É ALGO QUE VEREMOS MAIS TARDE,
+
+
+NO MÓDULO DE 'INDEXES'..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> 'where' FOI DEPRECADO (matches documents that satisfy a javascript expression)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> $expr ---> SUBSTITUIU O 'WHERE' ---> É O 'EXPRESSION OPERATOR'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> '$expr' --> allows use of aggregation expressions within the query language...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> TAMBÉM TEMOS O REGEX---> vamos começar por ele...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> REGEX LIDA COM REGULAR EXPRESSIONS ----> 
+
+
+
+
+
+'''seleciona documents em que os values MATCHAM uma regular expression especificada'''.....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> COMEÇAMOS COM REGEX ----> 
+
+
+
+
+
+REGEX TE DEIXA 'LOOK FOR TEXT'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO,
+
+O PROFESSOR TROCA PARA A DATABASE DE MOVIEDATA,
+
+E AÍ 
+
+
+
+
+RODA UMA QUERY NOS NOSSOS MOVIES, COM FIND....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> roda 'findOne'... --> temos um 
+
+field de 'summary'
+
+nos 
+
+
+
+nossos documents...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA DIGAMOS QUE QUEREMOS PROCURAR POR UMA EXPRESSÃO NOS NOSSOS 'TEXT' 
+
+dentro de 'summary'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> DIGAMOS QUE QUEREMOS PROCURAR POR TODOS OS DOCUMENTS QUE TENHAM 'musical'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> PODERÍAMOS PENSAR QUE 
+
+
+
+
+FUNCIONARIA ESCREVER ALGO ASSIM:
+
+
+
+
+
+
+
+
+
+
+db.movies.find(
+    {
+        summary: "musical"
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS ISSO NÃO VAI FUNCIONAR,
+
+
+PQ COM ISSO ESTARÍAMOS PROCURANDO POR 'FULL EQUALITY' --> estaríamos procurando por documents em que 
+
+
+
+'summary'
+
+É 
+
+
+EXATAMENTE 'musical'..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------------------------> PARA ACHAR TEXT SNIPPETS,
+
+NO CASO,
+
+
+O PROFESSOR NOS EXPLICA QUE 
+
+A MANEIRA MAIS EFICIENTE É USAR UM CHAMADO 
+
+
+
+''text index''' --> TEXT INDEXES SÃO ALGO QUE APRENDEREMOS NO MÓDULO DE INDEXING...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS SE VOCÊ NÃO TEM UM TEXT INDEX,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1) NÃO TEM UM TEXT INDEX 
+
+
+
+2) NÃO PODE USAR UM TEXT INDEX 
+
+
+
+
+
+
+
+3) SE VOCê SÓ TEM TEXT SNIPPETS BEM CURTOS,
+ 
+
+
+
+ um pouquinho menores do que esse nosso 'summary',
+
+ que é assim:
+
+
+        "summary" : "<p><b>Under the Dome</b> is the story of a small town that is suddenly and inexplicably sealed off from the rest of the world 
+by an enormous transparent dome. The town's inhabitants must deal with surviving the post-apocalyptic conditions while searching for answers about 
+the dome, where it came from and if and when it will go away.</p>",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE VOCê TIVER CASES COMO ESSES,
+
+
+VOCÊ PODE USAR UM 'REGEX QUERY'...
+
+
+
+$regex 
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS VOCÊ DEVE TER EM MENTE QUE CHECKS/QUERIES POR 'regex expressions'
+
+
+
+NUNCA SERÃO TÃO PERFORMANT ASSIM...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO SIGNIFICA QUE O QUE VOCê PODE FAZER, AQUI,
+
+
+é especificar 
+
+
+
+
+
+
+:
+
+
+
+
+
+
+
+
+
+
+
+
+db.movies.find(
+    {summary: {$regex: }}
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> REGULAR EXPRESSION --> É UMA MANEIRA DE PROCURAR POR TEXT, POR MEIO DE CERTOS PADRÕES... (TENHO QUE APRENDER ISSO)...
+
+
+
+
+
+
+regex podem ser bem complexos...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> professor escreve assim:
+ 
+ / /  -------> DENTRO DOS SLASHES VOCÊ DEFINE SEU PADRÃO....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ---> O PADRÃO MAIS SIMPLES DE TODOS É VOCÊ ESCREVER SÓ UMA PALAVRA,
+
+ TIPO ASSIM:
+
+
+
+ '/musical/' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ O CÓDIGO FULL FICA ASSIM:
+
+
+
+
+
+
+
+
+ 
+db.movies.find(
+    {summary: {$regex: /musical/ }}
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------> isso, NO CASO,
+
+
+NÃO VAI 
+
+
+
+PROCURAR POR FULL EQUALITY,
+
+E SIM 
+
+
+VAI BUSCAR POR ESSA 
+
+
+PALAVRA, 'musical',
+
+
+
+NO MEIO 
+
+
+DO TEXTO DE 'summary'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> OK.... ---> VAI PROCURAR 
+
+
+
+ESSA PALAVRA EM TODOS OS DOCUMENTS, EM 'summary'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------> ok...
+
+
+
+
+
+
+ESSE É O REGEX,
+
+
+
+QUE É BOM PARA PROCURAR TEXT,
+
+MAS QUE NÃO É A MELHOR MANEIRA DE FAZÊ-LO...
+
+
+
+
+
+
+
+
+
+
+-> É POR ISSO QUE DEVEMOS USAR OS 'TEXT INDEXES',
+
+
+lá no módulo de indexes....
+
+
+
+
+
+
+
+
+OK.... ESSE É O '$regex',
+
+
+
+MAS O QUE FAZ 
+
+'$expr'? 

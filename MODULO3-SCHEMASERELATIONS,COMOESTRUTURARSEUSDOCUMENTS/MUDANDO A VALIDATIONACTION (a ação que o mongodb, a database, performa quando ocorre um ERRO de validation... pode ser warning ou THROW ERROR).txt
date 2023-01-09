@@ -1,0 +1,1327 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ADICIONAMOS VALIDATION, POR MEIO DESTE CÓDIGO NO TERMINAL DO MONGO SHELL:
+
+
+
+
+
+
+
+db.createCollection('posts', {
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['title', 'text', 'creator', 'comments'],
+
+      properties: {
+        title: {
+          bsonType: 'string',
+          description: 'must be a string, and is required',
+        },
+        text: {
+          bsonType: 'string',
+          description: 'must be a string, and is required',
+        },
+
+        creator: {
+          bsonType: 'objectId', ///essa é a escrita aceita pelo mongodb para esse tpye....
+          description: 'must be an objectId , and is required',
+        },
+        comments: {
+          bsonType: 'array',
+          description: 'must be an array of objects/documents, and is required',
+          items: {
+            bsonType: 'object',
+            required: ["text", "author"],
+            properties: {
+              text: {
+                bsonType: 'string',
+                description: 'must be a string and is required.',
+              },
+              author: {
+                bsonType: 'objectId', 
+                description: 'must be an objectId and is required'
+            }
+            },
+          },
+        },
+      },
+    },
+  },
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> aGORA SE ADICIONAMOS POSTS QUE NÃO SATISFAZEM ESSES CRITÉRIOS,
+
+
+
+
+É ATIRADO 1 ERROR, E O DOCUMENT NÃO É INCORPORADO À COLLECTION...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA NÓS DEVEMOS BRINCAR COM AS SETTINGS ADICIONAIS QUE PODEMOS SETTAR....
+
+
+
+
+
+
+
+
+
+
+
+
+--> VAMOS VER AS SETTINGS DE 'validationAction'...
+
+
+
+
+
+
+
+
+
+
+--> PARa que AS SETTINGS 
+
+
+
+ATIVEM,
+
+PROFESSOR 
+
+
+
+DIZ QUE TERÍAMOS DE SETTAR NOSSA COLLECTION DE NOVO,
+
+E AÍ 
+
+SETTAR A VALIDATION DE NOVO... -----------> O PROBLEMA,
+ 
+ É CLARO ,
+
+
+
+
+ É QUE 
+
+
+
+ ___ NÓS __ JÁ _ ESTAMOS COM ESSA VALIDATION 'TURNED ON'
+
+
+ aqui...
+
+
+
+
+
+
+
+
+
+
+ --> OK, ENTÃO O QUE PODEMOS FAZER? 
+
+
+
+
+
+
+
+
+
+
+
+ --> BEM, EU JÁ FUI LÁ E DROPPEI MINHA DATABASE,
+
+ com 
+
+
+ 'db.posts.drop()'...
+
+
+
+
+
+
+
+
+
+ --> ENTRETANTO, O PROBLEMA É QUE ESSA DATABASE __ CONTINUA EXISTINDO__... (
+
+
+
+
+     como observei com 
+
+     'show collections' --> mostrou 'posts' e 'users'....
+ )
+
+
+
+
+
+
+
+
+ OK, ENTAÕ COMO POSSO 
+
+
+ APAGAR COMPLETAMENTE ESSA COLLECTION AÍ,
+
+ QUE 
+
+ ESTÁ VAZIA,
+
+ MAS CONTINUA EXISTINDO?
+
+
+
+
+
+
+
+
+
+-----> UM JEITO DE FAZER ISSO, EU DESCOBRI,
+
+
+É 
+
+
+
+RODAR 'use shop' --> depois 'db.dropDatabase()' -----> ISSO VAI DROPPAR NOSSA DATABASE INTEIRA (vai apagar o shop inteiro, tanto a 'posts collection' como o 'users' serão APAGADOS)....
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+ ---------->  PARA 
+
+
+
+
+
+
+
+
+REPLICARMOS O QUE O PROFESSOR QUER FAZER,
+
+RECRÍAMOS NOSSA DATABASE DE 'shop',
+
+e aí recríamos 
+
+
+
+
+
+'posts',
+
+
+por meio de 
+
+
+
+'
+db.createCollection('posts', {
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['title', 'text', 'creator', 'comments'],
+
+      properties: {
+        title: {
+          bsonType: 'string',
+          description: 'must be a string, and is required',
+        },
+        text: {
+          bsonType: 'string',
+          description: 'must be a string, and is required',
+        },
+
+        creator: {
+          bsonType: 'objectId', ///essa é a escrita aceita pelo mongodb para esse tpye....
+          description: 'must be an objectId , and is required',
+        },
+        comments: {
+          bsonType: 'array',
+          description: 'must be an array of objects/documents, and is required',
+          items: {
+            bsonType: 'object',
+            required: ["text", "author"],
+            properties: {
+              text: {
+                bsonType: 'string',
+                description: 'must be a string and is required.',
+              },
+              author: {
+                bsonType: 'objectId', 
+                description: 'must be an objectId and is required'
+            }
+            },
+          },
+        },
+      },
+    },
+  },
+});
+
+
+
+'''''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ISSO FEITO, VAMOS QUERER EDITAR A 'validationAction'
+
+
+
+DESSA COLLECTION, POR MEIO 
+
+
+
+
+DESTE COMANDO AQUI:
+
+
+
+
+ 'db.runCommand()'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOCê 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+DEVE RODAR 'db.runCommand()' 
+
+
+lá 
+
+
+
+no mongoshell,
+
+
+
+
+
+
+
+QUE É 
+
+UM COMANDO USADO PARA 'RUN ADMINISTRATIVE COMMANDS'... ------> 
+
+
+
+
+
+ISSO FEITO,
+
+
+
+
+VOCÊ VAI PASSAR 1 DOCUMENT ({}) 
+
+
+
+
+COMO PARÂMETOR,
+
+
+
+QUE SERÁ 
+
+1 OBJECT COM __ INFORMAÇÕES SOBRE O COMMAND- ----> 
+
+
+
+
+
+
+
+
+
+dentro desse object,
+
+
+
+vamos escrever 
+
+
+
+'collMod' ( abreviação de COLLECTION MODIFIER) --------> E AÍ VAMOS ESPECIFICAR, NESSA KEY,
+
+
+QUAL COLLECTION VAMOS QUERER 
+
+MODIFICAR (no caso, 'posts')...
+
+
+
+
+
+
+
+
+
+
+
+eX:
+
+
+
+
+
+
+
+
+db.runCommand({collMod: "posts"})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------> OK... COMO SEGUNDO PARÂMETRO,
+
+
+VAMOS NOVAMENTE PASSAR 1 'validator'.....
+
+
+
+
+
+
+
+
+
+
+
+
+--> E AÍ, VAMOS PASSAR PRECISAMETE AQUELE CÓDIGO DE 
+
+
+'validator'
+ 
+
+ que temos 
+
+ lá 
+
+ em 
+
+
+
+ '''
+
+ db.createCollection('posts', {
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['title', 'text', 'creator', 'comments'],
+
+      properties: {
+        title: {
+          bsonType: 'string',
+          description: 'must be a string, and is required',
+        },
+        text: {
+          bsonType: 'string',
+          description: 'must be a string, and is required',
+        },
+
+        creator: {
+          bsonType: 'objectId', ///essa é a escrita aceita pelo mongodb para esse tpye....
+          description: 'must be an objectId , and is required',
+        },
+        comments: {
+          bsonType: 'array',
+          description: 'must be an array of objects/documents, and is required',
+          items: {
+            bsonType: 'object',
+            required: ["text", "author"],
+            properties: {
+              text: {
+                bsonType: 'string',
+                description: 'must be a string and is required.',
+              },
+              author: {
+                bsonType: 'objectId', 
+                description: 'must be an objectId and is required'
+            }
+            },
+          },
+        },
+      },
+    },
+  },
+});
+
+
+
+
+'''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+VAI FICAR TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+
+db.runCommand({collMod: "posts", 
+
+
+      validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['title', 'text', 'creator', 'comments'],
+
+      properties: {
+        title: {
+          bsonType: 'string',
+          description: 'must be a string, and is required',
+        },
+        text: {
+          bsonType: 'string',
+          description: 'must be a string, and is required',
+        },
+
+        creator: {
+          bsonType: 'objectId', ///essa é a escrita aceita pelo mongodb para esse tpye....
+          description: 'must be an objectId , and is required',
+        },
+        comments: {
+          bsonType: 'array',
+          description: 'must be an array of objects/documents, and is required',
+          items: {
+            bsonType: 'object',
+            required: ["text", "author"],
+            properties: {
+              text: {
+                bsonType: 'string',
+                description: 'must be a string and is required.',
+              },
+              author: {
+                bsonType: 'objectId', 
+                description: 'must be an objectId and is required'
+            }
+            },
+          },
+        },
+      },
+    },
+  }
+
+
+
+
+})
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+-> OK... MAS AINDA NÃO ACABAMOS.... --> SE O PROFESSOR DIGITAR 
+
+'enter',
+
+o
+ negócio vai retornar 
+
+
+
+ { "ok": 1},
+
+
+
+
+
+
+
+
+
+ MAS O PROBLEMA É QUE ISSO VAI SÓ 'SET THE SAME VALIDATION AGAIN' ( a mesma validation que havíamos settado anteriormente, será RE-SETTADA, AGORA)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> O QUE O PROFESSOR QUER FAZER, EM VEZ DISSO,
+
+
+
+
+ É __ ''CHANGE THE VALIDATION SETTINGS'''' ---> PARA ISSO,
+
+
+ ELE CRIA 1 NOVO ARQUIVO,
+
+
+
+
+
+ de nome 
+
+
+ 'validation-2.js',
+
+
+
+
+
+ EM QUE VAMOS ESCREVER ESSE CÓDIGO DE 
+
+
+
+ '''SET DA VALIDATION/SCHEMA + (MAIS) O SET DAS VALIDATIONACTIONS''''....
+
+
+
+
+
+
+
+
+
+
+ ------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> PARA ISSO,
+
+ VAMOS ESCREVER EXATAMENTE O QUE HAVÍAMOS ESCRITO AGORA:
+
+
+
+
+
+
+
+
+
+
+
+
+
+ db.runCommand({
+  collMod: 'posts',
+
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['title', 'text', 'creator', 'comments'],
+
+      properties: {
+        title: {
+          bsonType: 'string',
+          description: 'must be a string, and is required',
+        },
+        text: {
+          bsonType: 'string',
+          description: 'must be a string, and is required',
+        },
+
+        creator: {
+          bsonType: 'objectId', ///essa é a escrita aceita pelo mongodb para esse tpye....
+          description: 'must be an objectId , and is required',
+        },
+        comments: {
+          bsonType: 'array',
+          description: 'must be an array of objects/documents, and is required',
+          items: {
+            bsonType: 'object',
+            required: ['text', 'author'],
+            properties: {
+              text: {
+                bsonType: 'string',
+                description: 'must be a string and is required.',
+              },
+              author: {
+                bsonType: 'objectId',
+                description: 'must be an objectId and is required',
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------> MAS AGORA VAMOS QUERER LIGAR UMA 'ADDITIONAL SETTING'....  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------> VAMOS QUERER ADICIONAR UMA PROPRIEDADE/KEY ADICIONAL EM 'validator'... 
+
+
+
+
+
+
+
+
+
+---> é justamente a key de 'validationAction' 
+
+
+
+
+
+
+
+
+
+
+
+
+-> na verdade, podemos escrever 'validationLevel' para 
+
+
+CHECAR SE __ TODOS __ OS __ INSERTS/UPDATES SÃO 
+
+CHECADOS (
+
+
+ou se apenas 
+
+
+são checados inserts EM CIMA de elementos que já eram válidos anteriormente...
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS O PROFESSOR  QUER DEFINIR 'validationAction',
+
+
+que 
+
+
+
+
+
+
+pode ser settada como 'warn' ou 'error'...
+
+
+
+
+
+
+
+
+
+-_> ERROR VAI BLOQUEAR A OPERAÇÃO DE UPDATE/INSERT,
+
+
+CASO FOR CONSTATADO ERRO DE VALIDATION...
+
+
+
+
+
+
+
+
+
+--> JÁ 'warn' 
+
+FARÁ COM QUE SEJA AVISADO QUE HOUVE UM ERRO DE VALIDATION,
+
+MAS A OPERAÇÃO AINDA OCORRERÁ (A data inválida será inserida na sua  database)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... EXECUTE ESSE CÓDIGO NO SEU SREVER, COM ESSE FORMATO:
+
+
+
+
+
+
+
+db.runCommand({
+  collMod: 'posts',
+
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['title', 'text', 'creator', 'comments'],
+
+      properties: {
+        title: {
+          bsonType: 'string',
+          description: 'must be a string, and is required',
+        },
+        text: {
+          bsonType: 'string',
+          description: 'must be a string, and is required',
+        },
+
+        creator: {
+          bsonType: 'objectId', ///essa é a escrita aceita pelo mongodb para esse tpye....
+          description: 'must be an objectId , and is required',
+        },
+        comments: {
+          bsonType: 'array',
+          description: 'must be an array of objects/documents, and is required',
+          items: {
+            bsonType: 'object',
+            required: ['text', 'author'],
+            properties: {
+              text: {
+                bsonType: 'string',
+                description: 'must be a string and is required.',
+              },
+              author: {
+                bsonType: 'objectId',
+                description: 'must be an objectId and is required',
+              },
+            },
+          },
+        },
+      },
+    },
+  
+    validationAction: 'warn'
+
+
+},
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------> QUANDO VOCÊ EXECUTAR ISSO AÍ,
+
+
+
+
+
+ESTARÁ CONFIGURADO O COMPORTAMENTO DE VALIDATION...
+
+
+
+
+
+
+--> AGORA QUANDO VOCÊ TENTAR INSERIR 1 DOCUMENT INVÁLIDO,
+
+
+
+você será 'warned' (mas a operation ainda continuará..)
+
+
+
+
+
+
+
+
+--> OK, MAS EU RODEI ISSO AÍ,
+
+
+E O MEU COMPORTAMENTO AINDA ESTÁ SENDO DE 'ERROR' (é thrwon um error, e aí nada é adicionado à database)....
+
+
+
+
+
+
+
+
+
+
+
+
+--> talvez seja pq NAÕ COLOQUEI NENHUM DOS FIELDS QUE ESTÃO COMO 'required'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> eu vou lá e insiro 1 document com todos os fields necessários,
+
+mas com 1 field no formato inválido..
+
+
+
+
+
+
+
+
+
+
+
+--> NÃO, AINDA ESTOU RECEBENDO ERROR...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK... CONSEGUI... O POSICIONAMENTO do 
+
+
+
+'validationAction' estava errado...
+
+
+
+
+
+
+
+
+
+
+
+
+a posição correta ficou assim:
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.runCommand({
+  collMod: "posts",
+
+  validator: {
+    $jsonSchema: {
+      bsonType: 'object',
+      required: ['title', 'text', 'creator', 'comments'],
+
+      properties: {
+        title: {
+          bsonType: 'string',
+          description: 'must be a string, and is required',
+        },
+        text: {
+          bsonType: 'string',
+          description: 'must be a string, and is required',
+        },
+
+        creator: {
+          bsonType: 'objectId', ///essa é a escrita aceita pelo mongodb para esse tpye....
+          description: 'must be an objectId , and is required',
+        },
+        comments: {
+          bsonType: 'array',
+          description: 'must be an array of objects/documents, and is required',
+          items: {
+            bsonType: 'object',
+            required: ['text', 'author'],
+            properties: {
+              text: {
+                bsonType: 'string',
+                description: 'must be a string and is required.',
+              },
+              author: {
+                bsonType: 'objectId',
+                description: 'must be an objectId and is required',
+              },
+            },
+          },
+        },
+      },
+    },
+   
+},
+validationAction: 'warn'
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA NOSSO CÓDIGO ESTÁ SEMPRE ACEITANDO INSERTS COM DATA ERRADA,
+
+
+
+
+e so´vai nos dar um 'warning' ---> MAS ESSE WARNING NÃO É VISTO NO NOSSO TERMINAL, E SIM 
+
+
+
+
+EM UM ARQUIVO 'log' separado,
+
+que estudaremos mais tarde... 
+
+
+
+
+(
+
+
+
+
+    LOG FILE... ---> LOG FILE É ARMAZENADA NO NOSSO SYSTEM, VAMOS A EXAMINAR QUANDO  FALARMOS SOBRE CONFIGURAR NOSSO SERVER E ASSIM POR DIANTE...
+)
+
+
+
+
+
+
+
+
+
+
+--> OK... E O QUE VOCÊ QUER USAR, AQUI, DEPENDE DO QUE VOCê QUER NO SEU APP...
+
+
+
+
+
+
+
+
+
+
+--> E COLOCAR 'validation' no lugar FAZ MT SENTIDO, DEPENDENDO DE COMO SEU APP FUNCIONA, E QUÃO IMPORTANTE 
+
+É PARA VOCÊ TER UM SCHEMA CONSISTENTE DE DATA...
+
+
+
+
+
+
+
+
+
+
+
+--> TAMBÉM APRENDEMOS QUE 
+
+
+PDEMOS DEFINIR ESSE 'VALIDAITON SCHEMA'
+
+
+QUANDO __ CRIAMOS A COLLECTION (
+
+    com 'db.createCollection('posts', {})',
+
+
+    por exemplo
+)
+
+
+, 
+
+
+OU ENTÃO 
+
+
+POR MEIO DO 
+
+CÓDIGO DE 
+
+'db.runCommand(
+    {
+        collmod: 'posts', 
+        validator: {
+
+        },
+
+        validationLevel,
+        validationAction
+    }
+)
+
+',
+
+
+
+_ EXECUTADO __ APÓS__ A 
+
+
+
+COLLECTION TER SIDO CRIADA...

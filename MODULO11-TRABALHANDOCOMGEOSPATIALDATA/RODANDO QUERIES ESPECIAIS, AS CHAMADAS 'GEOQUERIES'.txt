@@ -1,0 +1,854 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> AGORA VAMOS RODAR NOSSA PRIMEIRA 'GEOQUERY'..
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO,
+
+
+
+PROFESSOR QUER TRABALHAR COM NOSSOS PLACES,
+
+
+QUE SÃO ESTES:
+
+
+
+
+
+
+
+> db.places.insertOne({
+...   name: 'California Academy of Sciences',
+...   location: {
+...     type: 'Point',
+...     coordinates: [-122.4757474, 37.7689999],
+...   },
+... })
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("6211d26f4bf425539a521037")
+}
+>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR
+
+
+VAI QUERER 
+
+FAZER 
+
+'find()'
+
+
+
+
+DOS 
+
+PLACES
+
+
+QUE __ SÃO/ESTÃO MAIS __PRÓXIMOS
+
+
+
+
+
+
+DE SUA 'CURRENT LOCATION'.. --------> OK,
+
+
+
+MAS QUAL 
+É 
+
+
+MINHA 'CURRENT LOCATION', onde vejo isto...?
+
+
+
+
+
+
+
+
+
+
+
+BEM, O PROFESOR EXPLCIA QUE QUASE NUNCA VOCÊ VAI USAR A SHELL COMO ESTAMOS FAZENDO AGORA... --> EM VEZ DISSO,
+
+
+VOCÊ PROVAVELMENTE, NA MAIORIA DOS CASOS,
+
+
+VOCÊ VAI 
+
+
+
+'WRITE AN APPLICATION'
+
+
+
+QUE 
+
+VAI 
+
+ACTUALLY fazer isso que está sendo feito agora, com o mongoShell,
+
+
+
+
+
+
+
+
+
+
+
+
+
+MAS 
+
+
+
+
+DE UM JEITO QUE USA SEU DRIVER (e não o javascritp)...
+
+
+
+
+
+
+
+sim, faz sentido..
+
+
+
+
+
+----> portanto, você 
+
+
+
+terá um 
+
+
+webApp
+
+
+em que 
+
+
+
+
+users provavelmente encontrarão sua própria localização, você fará isso 
+
+
+
+através 
+
+de 
+
+
+
+web APIs,
+
+
+
+
+
+
+
+ou você tem um mobile app 
+
+
+
+em que 
+
+users 
+
+se 
+
+encontram, pegam suas localizações...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> E ESSAS 'LOCATION APIs'
+
+
+sempre 
+
+
+retornarão 
+
+
+COORDENADAS,
+
+
+
+
+
+
+
+
+
+NO FORMATO DE LATITUDE E LONGITUDE --> esse é o formato padrão... --> AÍ SEU APP VAI TE DAR 
+
+
+
+
+
+
+LAT E LONG PARA QUALQUER COISA QUE O USER FEZ...
+
+(
+
+
+
+
+        por exemplo, 'locate himself'....
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> DEVEMOS FAKAR ISSO, ESSE 'LOCATE YOURSELF'..
+
+
+
+
+
+
+
+
+
+
+
+
+--> clicamos em algum lugar do google maps,
+
+
+
+e aí 
+
+
+
+pegamos as coordinates desse local...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... AGORA PODEMOS 
+
+
+
+
+
+
+
+
+USAR ESSA LOCATION ALEATÓRIA PARA PROCURAR 
+
+
+
+SE 
+
+
+
+
+'''ESTAMOS PERTO OU NÃO DESSE LOCAL AÍ'''.... 
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO, 
+
+
+COMEÇAMOS 
+
+USANDO 
+
+
+'find()"....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> vamos usar 'find',
+
+
+PROVAVELMENTE 
+
+
+
+com o 
+
+
+
+'$score', 
+
+para 
+
+SORTAR 
+
+QUAIS 
+
+
+LOCALIZAÇÕES 
+
+
+
+
+SÃO PRÓXIMAS DAQUELA ALI...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------------> 
+
+
+
+
+
+
+
+
+
+em find,
+
+
+
+
+o professor vai escrever assim:
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.places.find(
+        {
+
+        }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> ERREI... --> PROFESSOR VAI USAR UM OPERATOR NOVO, o 
+
+
+'$near',
+
+
+
+
+
+
+
+
+
+QUE É UM DOS OPERATORS PROVIDENCIADOS PELO MONGODB PARA FAZER TRABALHO COM GEOJSON DATA...
+
+
+
+
+
+
+
+
+
+
+
+
+fica tipo assim, inicialmente:
+
+
+
+
+db.places.find(
+        {
+
+                        location: {
+                                $near: 
+                        }
+        }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> DENTRO DESSE '$near',
+
+
+
+VOCÊ 
+
+ESPECIFICARÁ 
+
+UM __ OBJECT,
+
+
+
+object em que você colocará um operator de 
+
+
+
+'$geometry' -------->
+
+
+
+
+
+
+
+VOCÊ VAI CHECAR SE A 'GEOMETRIA' 
+
+
+
+das coordenadas que vocÊ inputtará 
+
+
+É _ _SEMELHANTE__ À GEOMETRIA __ 
+
+
+
+da coordinate que já está na database (da 'California Academy of Sciences')....
+
+
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+db.places.find(
+        {
+
+                        location: {
+                                $near: {$geometry: }
+                        }
+        }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> $geometry __ TAMBÉM EXIGE 1 DOCUMENT,
+
+
+
+QUE VAI DESCREVER UM 'GEOJSON OBJECT'.... 
+
+
+
+
+
+
+
+
+
+--> E AÍ PODEMOS CHECAR,
+
+
+NESSE LUGAR,
+
+
+
+
+SE 1 POINT QUE ADICIONAMOS 
+
+
+
+
+NESSE FIND É PRÓXIMO À LOCATION QUE JÁ TEMOS NA DATABASE...
+
+
+
+
+
+
+
+
+
+
+
+
+para isso,
+
+escrevemos isto:
+
+
+
+
+
+
+{
+        type: "Point",
+        coordinates: [-52.5466813, -27.724483256429384]
+}
+
+
+
+
+
+
+
+
+
+
+---------------------
+
+
+
+
+
+
+
+
+
+--> PRIMEIRO VALOR É A LONGITUDE,
+
+SEGUNDO VALOR É A LATITUDE....
+
+
+
+
+
+
+
+---------> FICA TIPO ASSIM:
+
+
+
+db.places.find(
+        {
+
+                        location: {
+                                $near: {$geometry: {
+        type: "Point",
+        coordinates: [-52.5466813, -27.724483256429384]
+}
+
+
+
+
+ }
+                        }
+        }
+)
+
+
+
+
+
+
+
+
+
+
+BONITO FICA ASSIM:
+
+
+
+
+
+
+db.places.find({
+  location: {
+    $near: {
+      $geometry: {
+        type: 'Point',
+        coordinates: [-52.5466813, -27.724483256429384],
+      },
+    },
+  },
+});
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE COLOCAMOS ENTER,
+
+
+
+RECEBEMOS 
+
+UM 
+
+
+ERRORDE 
+
+
+
+
+
+
+
+'unable to find index for geoNear query'....
+
+
+
+
+
+
+
+
+
+> db.places.find({
+...   location: {
+...     $near: {
+...       $geometry: {
+...         type: 'Point',
+...         coordinates: [-52.5466813, -27.724483256429384],
+...       },
+...     },
+...   },
+... });
+Error: error: {
+        "ok" : 0,
+        "errmsg" : "error processing query: ns=maps.placesTree: GEONEAR  field=location maxdist=1.79769e+308 isNearSphere=0\nSort: {}\nProj: {}\n planner returned error :: caused by :: unable to find index for $geoNear query",
+        "code" : 291,
+        "codeName" : "NoQueryExecutionPlans"
+}
+>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------------> 'GEONEar' --> é  SIMPLESMENTE O 'BEHIND THE SCENES' NAME 
+
+
+
+de nossa 
+
+QUERY de '$near'...
+
+
+
+
+
+
+
+
+
+
+
+-------> ISSO SIGNIFICA QUE ESSA QUERY DE '$near: {$geometry: {}}' 
+
+
+
+
+
+
+
+
+
+EXIGE __ O USO _ DE UM
+
+'GEOSPATIAL INDEX'
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> MAS NEM TODAS AS GEOSPATIAL QUERIES __ PRECISMA _DE UM INDEX,
+
+
+MAS QUASE TODAS ELAS SE BENEFICIAM DE TER 1 INDEX....
+
+
+
+
+
+
+
+
+
+
+
+
+-_> É POR ISSO QUE ADICIONAREMOS UM 'GEOSPATIAL INDEX',
+
+
+lá na próxima aula...

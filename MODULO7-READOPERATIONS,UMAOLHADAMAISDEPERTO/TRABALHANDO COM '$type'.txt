@@ -1,0 +1,403 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> vimos o operator de "$exists'....
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA VAMOS VER O 
+
+
+
+OPERATOR DE '$type'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> VAMOS QUERER ENCONTRAR TODOS OS USERS EM QUE O 'type'
+
+do phone number 
+
+
+É UM NUMBER, E NÃO UMA STRING...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> para isso,
+
+
+
+escrevemos:
+
+
+
+
+
+
+
+
+
+
+
+
+db.users.find(
+    {
+        phone {$type: }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> TEMOS QUE ESCREVER ALGUM DOS TYPES DISPONÍVEIS, ESCRITOS LÁ NOS DOCS....
+
+
+
+
+
+
+
+
+
+
+
+-- >temos types como:
+
+
+
+
+
+
+
+
+
+
+
+
+1) double 
+
+
+
+2) string 
+
+
+3) object 
+
+
+4) array 
+
+
+
+5) binData 
+
+
+
+6) undefined (deprecated)
+
+7) objectId 
+
+
+
+8) bool 
+
+
+
+
+9) date
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> também temos 10) decimal...
+
+
+
+
+
+
+
+
+11) int...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ESCREVER SUA QUERY,
+
+COLOQUE ASSIm;
+
+
+
+
+db.users.find(
+    {
+        phone {$type: "number"}
+    }
+)
+
+
+
+
+
+
+
+
+
+
+--> ACHAR TODOS 
+
+
+
+
+OS DOCUMENTS QUE TENHAM UM TYPE DE 'number'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+db.users.find(
+    {
+        phone {$type: "double"}
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE EU FAÇO SEARCH PELOS DOCUMENTS EM QUE ISSO AÍ É UM DOUBLE,
+
+
+
+
+VOU RETORNAR TODOS MEUS DOCUMENTS,
+
+PQ POR DEFAULT 
+
+
+
+
+,
+
+
+
+
+
+
+
+
+COMO A SHELL É BASEADA NO JAVASCRIPT,
+
+
+QUALQUER NUMBER QUE INSERIRMOS NA NOSSA DATABASE
+
+
+
+
+SERÁ 
+
+
+'STORED AS A FLOATING POINT/DOUBLE,
+
+
+
+PQ __ O JAVASCRIPT NÃO CONHECE INTEGERS E DOUBLES,
+
+CONHECE APENAS DOUBLES''''' (por isso ele armazena como DOUBLE)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------> É CLARO QUE VOCÊ PODE ESPECIFICAR MÚLTIPLOS TYPES NO SEU 
+
+
+
+
+FILTER....
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+
+
+db.users.find(
+    {
+        phone: {
+            $type: [
+                "double",
+                "string"
+            ]
+        }
+    }
+)
+.pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO VAI ENCONTRAR TODOS OS DOCUMENTS, PQ 
+
+
+
+VAMOS CONTEMPLAR TNATO 
+
+
+AS HIPÓTESES EM QUE O TYPE DESSE NEGÓCIO É UM 'double' quanto as hipóteses em que isso é uma string...

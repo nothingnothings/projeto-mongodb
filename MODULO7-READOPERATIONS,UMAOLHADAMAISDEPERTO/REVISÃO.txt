@@ -1,0 +1,2779 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+nesse módulo, aprendi algumas coisas....
+
+
+
+
+
+
+
+
+
+
+
+--> a primeira coisa foram COMPARISON QUERY OPERATORS....
+
+
+
+
+
+
+
+
+
+são eles:
+
+
+
+
+
+
+
+
+
+
+$eq --> equality.... ---> escrever db.movies.find({name: 'Max'}) é a MESMA COISA QUE ESCREVER db.movies.find({name: {$eq: "Max"}})
+
+
+
+
+
+
+
+
+
+
+
+
+$gt --> greater than... --> usado com NUMBERS.... --> db.movies.find({duration: {$gt: 60}})
+
+
+
+
+
+
+
+
+$lt ---> mesma coisa..., mas LOWER THAN...
+
+
+
+
+
+
+
+$gte --> mesma coisa, mas 'IGUAL E MAIOR'...
+
+
+
+
+$lte --> mesma coisa....
+
+
+
+
+
+
+$ne --> not equal... é o CONTRÁRIO de '$eq' --->  escrever   db.movies.find({name: {$not: {$eq: "Max"}}})   É A MESMA COISA QUE ESCREVER db.movies.find({name: {$ne: "Max"}})
+
+
+
+
+
+
+
+
+
+
+
+você pode ESPECIFICAR MÚLTIPLOS FILTERS em um find....
+
+
+
+
+
+
+
+eX:
+
+
+
+
+
+
+
+
+
+
+
+db.movies.find(
+    {
+        $and: [
+            {name: "Max"},
+            {age: "59"}
+        ]
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> para acessar NESTED DOCUMENTS/EMBEDDED DOCUMENTS, USE A DOT NOTATION COM ""....
+
+
+
+ex:
+
+
+
+
+db.movies.find(
+    {
+        $and: [
+            
+            {"rating.average": {$gt: 5}},
+
+            {"genres": "Drama"}
+        ]
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OBS: {"genres": "Drama"} -----> quando escrevemos assim, queremos encontrar ESSA STRING DENTRE AS STRINGS NAQUELE ARRAY ESPECÍFICO....
+
+
+
+
+
+
+
+
+
+
+caso você queira encontrar 1 ARRAY ESPECÍFICO (com aquele exato string no interior, naquela exata disposição),
+
+
+
+
+ESCREVA ASSIM:
+
+
+
+
+db.movies.find(
+    {
+        $and: [
+            
+            {"rating.average": {$gt: 5}},
+
+            {"genres": ["Drama"]}
+        ]
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+            {"genres": ["Drama"]}
+
+
+
+
+
+
+-------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+POR FIM, DENTRE OS COMPARISON OPERATORS, temos 
+
+
+
+
+'$in' 
+
+
+
+
+e "$nin"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+eu ACHO que 
+
+
+
+são a mesma coisa que escrever "genres": "Drama"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> NÃO.... EU HAVIA ME ESQUECIDO,
+
+mas 
+
+
+
+"$in' 
+
+
+
+e 
+
+"$nin" 
+
+
+SÃO USADOS 
+
+
+
+
+QUANDO VOCÊ 
+
+
+
+'''ACEITA''''
+
+
+
+
+
+múltiplos valores para 1 mesmo field em uma query...
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+db.movies.find(
+    {
+        name: {$in: ["Max", "Manu"]}
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> COM ISSO, DIZEMOS '''SE ESSE VALOR DE NAME FOR OU MAX OU MANU, RETORNE ESSE DOCUMENT'''...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->  e o ''''$nin'''' é o OPOSTO,
+
+tudo que não for igual a esses 2 negócios....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> ok.... ESSES FORAM OS QUERY COMPARISON OPERATORS...
+
+
+
+
+
+
+
+
+
+
+
+
+--> agora é hora de ver o "$or' 
+
+
+e 
+
+'$nor'....
+
+
+
+
+
+
+
+
+
+
+
+
+o "$or' 
+
+
+e o "$nor'
+
+
+SÃO 
+
+
+
+LOGICAL OPERATORS, E NÃO COMPARISON...
+
+
+
+
+
+
+
+
+
+
+--> são usados para que vocÊ possa estabelecer MÚLTIPLOS FILTERS... caso 1 filter seja satisfeito, aquele document será retornado..
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+db.movies.find(
+    {
+    $or: [
+        {duration: 60},
+        {duration: 30}
+    ]
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> OK... 'OR' SIGNIFICA ALTERNATIVAS, no caso...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------> $nor -----> 
+
+
+
+
+
+
+
+
+
+VAI RETORNAR 'TUDO AQUILO QUE NÃO SATISFAÇA A PRIMEIRA CONDIÇÃO/FILTER, 
+
+OU QUE NÃO SATISFAÇA A SEGUNDA CONDIÇÃO/FILTER'''....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> JÁ AND É O CONTRÁRIO, ELE EXIGE QUE TODOS OS FILTERS SEJAM SATISFEITOS, NAQUELE DOCUMENT, PARA QUE ELE SEJA RETORNADO...
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+db.movies.find(
+    {
+    $and: [
+        {duration: 60},
+        {name: "Max"}
+    ]
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.movies.find(
+    {
+        duration: {$gt: 30}
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--- OK.... AÍ PASSAMOS A 'ELEMENT OPERATORS'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> TEMOS 2 ELEMENT OPERATORS, QUE SÃO 
+
+
+'$exists'
+
+
+e "$type'...
+
+
+
+
+
+
+
+
+
+
+
+
+exists é bem simples, e geralmente funciona...
+
+
+
+
+
+
+
+
+--> 
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+db.movies.find(
+    {
+ 
+        age: {
+            $exists: true,
+            $gte: 20
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O ÚNICO PROBLEMA ACONTECE 
+
+
+
+
+
+
+
+SE VOCê 
+
+TENTA CHECAR pelo 'exists' 
+
+
+DE UM FIELD QUE ESTÁ COM VALOR DE 'null'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE VOCÊ QUER RETORNAR TODOS OS DOCUMENTS QUE _ NÃO POSSUEM UM DETERMINADO FIELD,
+
+você pode escrever assim:
+
+
+
+
+
+
+
+
+db.movies.find(
+    {
+ 
+        age: {
+            $exists: false
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------> SE VOCÊ QUER CHECAR SE UM DETERMINADO FIELD __ EXISTE__ E 
+
+
+
+SE SEU TYPE NÃO É DE 'null',
+
+DEVE USAR 
+
+
+O 
+
+
+
+
+
+COMPARISON OPERATOR DE '$ne' 
+
+
+
+
+
+COM VALUE DE 'null' (pq aí será checado por 'NÃO NULL')...
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+db.movies.find(
+    {
+ 
+        age: {
+            $exists: true,
+            $ne: null 
+        }
+    }
+)
+
+
+
+
+
+
+
+-----------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK... E COMO É USADO O OPERATOR DE '$type'?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+DEVEMOS ESCREVER ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.movies.find(
+    {
+        phone: {$type: "string"}
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+e também:
+
+
+
+
+
+
+
+
+
+
+db.movies.find(
+    {
+        phone: {$type: "number"}
+    }
+)
+
+
+
+
+
+e também:
+
+
+
+
+
+
+
+
+
+
+db.movies.find(
+    {
+        phone: {$type: "double"}
+    }
+)
+
+
+
+
+------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+--> podemos, além disso,
+
+checar por MÚLTIPLOS TYPES:
+
+
+
+
+
+
+
+
+
+db.movies.find(
+    {
+        phone: {$type: ["double", "int"] }
+    }
+)
+
+
+
+
+
+
+
+
+-------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+DEPOIS DISSO, PASSAMOS AOS EVALUATION OPERATORS.... 
+
+
+
+
+
+
+
+
+
+
+--> como $regex 
+
+
+
+e $expr (expression)
+
+
+
+
+
+
+
+
+
+
+
+--> o $regex é um pouco MENOS UTILIZADO,
+
+
+
+
+
+
+
+
+
+menos usado do que 'text indexes'...
+
+
+
+
+
+
+
+
+
+--> O REGEX TE DEIXA PROCURAR POR TERMOS ESPECÍFICOS DENTRO DE SUAS STRINGS, nos seus fields...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+também 
+
+
+$jsonSchema --> usado para DEFINIR UM 'SCHEMA' DE DOCUMENT, USADO NO VALIDATION...
+
+
+
+
+
+
+
+
+
+
+
+$mod ---> é o MODULUS OPERATOR --> TE DEIXA DIVIDIR O VALUE DE UM FIELD POR 1 
+
+
+
+CERTO NÚMERO, E AÍ CHECAR SE O RESULT É 'OK PARA NÓS'...
+
+
+
+
+
+
+
+
+
+
+
+$text --> É ALGO QUE VEREMOS NO MÓDULO DE 'INDEXES',
+
+
+
+e realiza 'TEXT SEARCH'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$where é DEPRECADO, E SUBSTIUÍDO POR $expr....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> $REGEX 
+
+
+
+
+
+
+
+
+
+
+
+
+
+SUA SINTAXE É ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+db.movies.find(
+    {
+        summary: {$regex: /musical/}
+    }
+)
+
+
+
+
+
+
+
+
+
+
+------------------
+
+
+AÍ EU PAREI EM 
+
+
+
+'$expr',
+
+
+
+
+QUE É EXPRESSION....
+
+
+
+
+
+
+
+
+é bem confusa....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> EXPRESSION É ÚTIL SE VOCê QUER 
+
+
+COMPARAR 2 FIELDS DENTRO DE 1 DOCUMENT,
+
+
+
+
+E ENTÃO ENCONTRAR TODOS OS DOCUMENTS EM QUE 
+
+ESSA COMPARISON RETORNA UM DETERMINADO RESULT...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+> db.sales.find({})
+{ "_id" : ObjectId("620830c6171f9e71c019b2ad"), "volume" : 100, "target" : 120 }
+{ "_id" : ObjectId("620830c6171f9e71c019b2ae"), "volume" : 89, "target" : 80 }
+{ "_id" : ObjectId("620830c6171f9e71c019b2af"), "volume" : 200, "target" : 177 }
+{ "_id" : ObjectId("620830d0171f9e71c019b2b0"), "volume" : 100, "target" : 120 }
+{ "_id" : ObjectId("620830d0171f9e71c019b2b1"), "volume" : 89, "target" : 80 }
+{ "_id" : ObjectId("620830d0171f9e71c019b2b2"), "volume" : 200, "target" : 177 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... TEMOS ESSES DOCUMENTS AÍ...
+
+
+
+
+
+
+6 documents...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> COMO USAMOS o $EXPR....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+escrevemos 
+
+
+
+
+
+uma query de find, coisa normal...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.sales.find(
+    {
+        $expr 
+    }
+)
+
+
+
+
+
+
+
+
+
+
+--> COMEÇAMOS COM O TERMO "$expr'...
+
+
+
+
+
+
+
+
+
+
+
+
+aí 
+
+,
+
+
+depois de 
+
+
+
+'$expr',
+
+
+
+você  escreve 
+
+
+
+
+um OBJECT/DOCUMENT....
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+db.sales.find(
+    {
+        $expr: {
+
+                    $gt: 
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> AÍ, DENTRO DE '$expr', que é o DELIMITADOR DE EXPRESSIONS,
+
+
+
+
+
+o professor escreve um '$gt'...
+
+
+
+
+
+
+
+
+
+
+--> MAS AGORA NÃO VAMOS USAR ESSE '$gt' normalmente.... --> não, em vez disso,
+
+
+
+
+vamos usar sua SINTAXE DE 'EXPRESSION',
+
+
+que 
+
+
+
+EXIGE QUE VOCê PASSE 
+
+UM __ ARRAY___ A ESSE operator.... (pq você vai realizar uma comparison ENTRE 2 FIELDS 
+
+
+em 1 mesmo document.... você deve passar os NAMES desses fields...
+
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+db.sales.find(
+    {
+        $expr: {
+                    $gt: [
+
+                        "volume",
+                        "target"
+                    ]
+
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> vamos fazer com que 'VOLUME' E 'TARGET'
+
+
+
+sejam alvos de uma COMPARISON...
+
+
+
+
+
+
+
+
+
+
+
+('''volume deverá ser maior do que target''')....
+
+
+
+
+
+
+
+
+
+
+ENTRETANTO,
+
+
+
+ISSO AINDA NÃO FUNCIONARÁ...
+
+
+
+
+
+
+
+
+---> NÃO FUNCIONARÁ PQ ELE NÃO VAI CONSIDERAR O 'VALUE' contido 
+
+dentro 
+
+dessas keys,
+
+e sim 
+
+
+vai considerar AS PRÓPRIAS STRINGS DAS KEYS como 
+
+
+
+alvo de comparison ('volume' e 'target')...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> para que OS VALUES DOS FIELDS SEJAM OBJETIVADOS, VOCÊ PRECISA ADICIONAR um '$' ao início de cada key,
+
+tipo assim:
+
+
+
+
+
+
+db.sales.find(
+    {
+        $expr: {
+                    $gt: [
+
+                        "$volume",
+                        "$target"
+                    ]
+
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO DIZ AO MONGODB 
+'''hey, use o VALUE DESSE FIELD AÍ, e não a key name''....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> ok... agora estamos nos referindo aos VALUES DOS FIELDS,
+
+
+e não aos NAMES DE SEUS FIELDS...
+
+
+
+
+
+
+
+
+
+
+
+
+ISSO É SUPER ÚTIL, O 'EXPR',
+
+
+
+
+
+PQ TEMOS UM EASY TIME DE 'FETCHING THE DATA',
+
+em que 
+
+
+
+
+
+ALGUMA CONDITION __DENTRO __ DO __ DOCUMENT É 'met'... --> AÍ PODEMOS FAZER COM QUE 
+
+
+
+
+2 'KINDA RELATED FIELDs' podem ser alvo de uma RELATION QUE 
+
+
+
+
+
+
+EXECUTAMOS AQUI, por meio de '$expr'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------> MAS TAMBÉM HÁ UMA FORMA MAIS COMPLEXA DE EXPRESSION QUE VOCÊ PODE USAR....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> DIGAMOS QUE 
+
+
+QUEREMOS RETORNAR O DOCUMENT
+
+SÓ 
+
+
+
+
+
+
+
+
+SE 
+
+
+'''O  VOLUME É ACIMA DE 190, MAS A DIFERENÇA AO TARGET TEM DE SER 
+DE PELO MENOS 10'...
+
+
+
+
+
+
+
+
+
+
+
+ 
+ OK, MAS COMO ESCREVEMOS ISSO?
+
+
+
+
+
+
+
+
+
+
+
+
+ --> para isso,
+
+ VOCÊ PRECISA AJUSTAR A PARTE NO INTERIOR de "$gt' (ou o operator qualquer que você estiver utilizando)....
+
+
+
+
+
+
+
+
+
+
+
+
+ --> O PRIMEIRO VALUE, NO CASO, DENTRO DESSE OPERATOR '$gt', do seu array, SERÁ 1 DOCUMENT...
+
+
+
+
+
+
+
+
+
+ EX:
+
+
+
+
+
+
+ 
+
+db.sales.find(
+    {
+        $expr: {
+                    $gt: [
+                        {}
+                    ]
+
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+ESSE DOCUMENT CONTERÁ 
+
+
+
+1 OPERATOR DE "$cond',
+
+
+
+de condition,
+QUE TERÁ RELAÇÃO 
+
+
+
+
+
+
+COM SUA EXPRESSIOn....
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+ 
+
+db.sales.find(
+    {
+        $expr: {
+                    $gt: [
+                        {$cond}
+                    ]
+
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> A CONDITION TE DEIXA ESPECIFICAR 1 '''''DOCUMENT ''''
+
+
+
+
+QUE DESCREVE 
+
+
+
+
+O 
+
+
+'CONDITIONAL VALUE'
+
+que ele 
+
+vai DERIVAR DA COMPARISON...
+
+
+
+
+
+
+
+COMO ASSIM?
+
+
+
+
+
+
+
+BEM, LEMBRE-SE:
+
+
+
+
+
+
+
+1) ainda estmaos procurando por um VALUE QUE __ PODEMOS USAR COMO 1 PRIMEIRO ELEMENT no NOSSO ARRAY DE 'greater than'...
+
+e aí, nós APENAS VAMOS QUERER __ CALCULAR ESSE VALUE DINAMICAMENTE...
+
+
+
+
+
+
+
+
+
+2) para isso, dentro desse document de '$cond',
+ 
+ NÓS PRIMEIRAMENTE ESPECIFICAREMOS UMA CONDITION, com 'if'...
+
+
+
+
+
+
+
+
+
+ ex:
+
+
+
+
+
+
+
+
+
+ 
+db.sales.find(
+    {
+        $expr: {
+                    $gt: [
+                        {$cond: {if: }}
+                    ]
+
+        }
+    }
+)
+
+
+----------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+IF, NO CASO,
+
+É __ __ OUTRO__ 'COMPARISON OPERATOR'... ---> AÍ, DENTRO DO IF, VAMOS CHECAR POR 
+
+
+'$gte' (greater or equal),
+
+
+
+
+
+
+
+E AÍ 
+
+
+DENTRO DESSE OPERATOR VAMOS COLOCAR 
+
+
+
+2 VALORES, EXATAMENTE COMO ANTES (pq é uma comparison, no caso) ---> VAMOS CHECAR 
+
+
+
+
+
+SE 
+
+
+"$volume", 190 
+
+
+
+
+
+
+
+(SE VOLUME É MAIOR DO QUE 190)...
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+ 
+db.sales.find(
+    {
+        $expr: {
+                    $gt: [
+                        {$cond: {if: {$gte: ['$volume', 190]
+                        }
+                        }
+                        
+                        }
+                    ]
+
+        }
+    }
+)
+
+
+
+
+
+
+
+
+----------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+BEM.... SE ESSE 'if' FOR SATISFEITO,
+
+
+
+AÍ VAMOS QUERER RODAR UM 'then',
+
+
+
+
+pq 
+
+AÍ __ TEREMOS UM CERTO VALUE QUE VAMOS QUERER __ USAR/UTILIZAR COMO FILTER nesse field.... --> 
+
+
+
+
+
+
+
+
+
+'THEN',
+
+
+NÓS VAMOS OU __ HARDCODAR__ UM VALOR AQUI (como '190', dizendo que ),
+
+
+
+
+
+
+
+
+
+OU ENTÃO PODEMOS CALCULAR ESSE VALOR DINAMICAMENTE.... --> 
+
+
+
+
+
+
+
+PARA CALCULAR DINAMICAMENTE,
+
+
+
+PASSAMOS AINDA OUTRO DOCUMENT AO 'then'... ---> AÍ O PROFESSOR USA UM OPERATOR DE 
+
+'$subtract',
+
+
+
+QUE VOCÊ PODE USAR PARA __ SUBTRAIR/REDUZIR 2 VALUES.... ---> 
+
+
+
+
+
+
+VOCÊ PASSA 1 ARRAY DE VALUES A ESSE SUBTRACT, TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+
+db.sales.find(
+    {
+        $expr: {
+                    $gt: [
+                        {$cond: {if: {$gte: ['$volume', 190]
+                        }
+                        }
+                        
+                        },
+
+                        then: {$subtract: []}
+                    ]
+
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+BTW ---> "$subtract" e todos esses tipos de operators são 'AGGREGATION PIPELINE' operators....  -------> N SE PREOCUPE SE TUDO ISTO É COISA DEMAIS, NO MOMENTO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO TUDO FICARÁ MAIS CLARO NO MÓDULO DE 'AGGREGATION FRAMEWORK'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SUBTRACT VAI SUBTRAIR O SEGUNDO PARAMETRO QUE PASSARMOS NESSE ARRAY, DO PRIMEIRO ELEMENTO...
+
+
+
+
+
+
+
+
+
+Ex:
+
+
+
+
+
+
+
+
+
+
+
+db.sales.find(
+    {
+        $expr: {
+                    $gt: [
+                        {$cond: {if: {$gte: ['$volume', 190]
+                        }
+                        }
+                        
+                        },
+
+                        then: {$subtract: []}
+                    ]
+
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> DENTRO DESSE 'subtract',
+
+
+VAMOS QUERER SUBTRAIR '10' 
+
+
+
+LÁ DO VALOR DE 'volume'.... ( que será repreesntado por '$volume')...
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+db.sales.find(
+    {
+        $expr: {
+                    $gt: [
+                        {$cond: {if: {$gte: ['$volume', 190]
+                        }
+                        }
+                        
+                        },
+
+                        then: {$subtract: ["$volume", 10 ]}
+                    ]
+
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... ISSO SIGNIFICA QUE _ __ PARA TODOS ___ OS DOCUMENTS EM QUE VOLUME É MAIOR DO QUE 190,
+
+
+VAMOS SUBTRAIR 10 do valor desse 'volume'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, ESSE É 1 DOS CASES... --> MAS E QUANTO AO 'ELSE CASE'? -----. ou seja,
+
+e quanto àqueles casos 
+
+
+
+
+EM QUE __ O VOLUME __ NÃO É SUPERIOR A 190... -------> BEM, NESSES CASOS,
+
+
+VAMOS QUERER SIMPLESMENTE USAR 
+
+
+
+
+'$volume',
+
+
+o valor do volume normalzinho,
+
+
+SEM QUAISQUER CHANGES...
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+db.sales.find(
+    {
+        $expr: {
+                    $gt: [
+                        {$cond: {if: {$gte: ['$volume', 190]
+                        }
+                        }
+                        
+                        },
+
+                        then: {$subtract: ["$volume", 10 ]},
+
+
+
+                        else: "$volume"
+                    ]
+
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> OK.... COM ISSO, TEREMOS TERMINADO NOSSA 'CONDITION' dessa expression... --> e a condition SEMPRE SERÁ 
+
+O 
+
+
+__PRIMEIRO VALOR/PARÂMETRO DE '$expr'...
+
+
+
+
+
+
+
+
+
+--> ok.... ISSO SIGNIFICA QUE O PRIMEIRO 'VALUE' 
+
+
+SERÁ IGUAL A '$volume', ou então será igual ao '$volume - 10' (se o value for maior do que 190)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... MAS O 'VALUE' A QUE VAMOS COMPARAR ESSE 'VALUE' da primeira condition,
+
+
+
+
+O VALUE 
+
+
+AINDA SERÁ "$target',
+
+
+
+
+EXATAMENTE COMO ANTES...
+
+
+
+
+
+
+
+
+--> LEMBRE-SE DA EXPRESSÃO ORIGINAL:
+
+
+
+
+
+
+
+DIGAMOS QUE 
+
+
+QUEREMOS RETORNAR O DOCUMENT
+
+SÓ 
+
+SE 
+
+
+'''O  VOLUME É ACIMA DE 190, MAS A DIFERENÇA AO TARGET TEM DE SER 
+DE PELO MENOS 10'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EXPRESSÃO COMPLETA:
+
+
+
+
+
+
+
+db.sales.find(
+    {
+        $expr: {
+                    $gt: [
+                        {$cond: {if: {$gte: ['$volume', 190]
+                        }
+                        }
+                        
+                        },
+
+                        then: {$subtract: ["$volume", 10 ]},
+
+
+
+                        else: "$volume"
+        }}
+                    ]
+
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+VERSÃO BONITA E CORRETA DESSA EXPRESSÃO FICA ASSIM:
+
+
+
+
+
+
+
+
+
+
+db.sales.find({
+  $expr: {
+    $gt: [
+      {
+        $cond: {
+          if: { $gte: ['$volume', 190] },
+          then: { $subtract: ['$volume', 10] },
+          else: '$volume',
+        },
+      },
+      '$target',
+    ],
+  },
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> OK... ACHO QUE ENTENDI.... 
+
+
+mas é bem confuso...
+
+
+
+
+
+
+
+
+se dermos uma fuçada na expressão, fica assim:
+
+
+
+
+
+
+
+
+
+
+db.sales.find({
+  $expr: {
+    $gt: [
+      {
+        $cond: {
+          if: { $gte: ['$volume', 190] },
+          then: { $subtract: ['$volume', 30] },
+          else: '$volume',
+        },
+      },
+      '$target',
+    ],
+  },
+});
+
+
+
+
+
+
+
+
+
+                                                                                                    $gt...
+E VAI RETORNAR SÓ ESTE DOCUMENT AQUI, PQ É O ÚNICO QUE SATISFAZERÁ A condition de return ('aquele value daquela condition deve ser maior do que target')...
+
+
+
+
+ex:
+
+
+> db.sales.find({
+  $expr: {
+    $gt: [
+      {
+        $cond: {
+          if: { $gte: ['$volume', 190] },
+          then: { $subtract: ['$volume', 30] },
+          else: '$volume',
+        },
+      },
+      '$target',
+    ],
+  },
+});
+
+
+
+RETORNA:
+
+
+{ "_id" : ObjectId("620830c6171f9e71c019b2ae"), "volume" : 89, "target" : 80 }
+{ "_id" : ObjectId("620830d0171f9e71c019b2b1"), "volume" : 89, "target" : 80 }
+
+
+
+
+
+
+
+
+
+----------
+
+
+
+
+
+
+
+
+
+ESSE É UM CASE BEM COMPLEXO,
+
+
+
+MAS PODE EXISTIR....
+
+
+
+
+
+
+
+
+
+
+
+--> opreator de '$gt' e '$subtract' --> veremos isso no AGGREGATION FRAMEWORK MODULE...
+
+
+
+
+
+
+
+
+
+--> É UM COMANDO BEM FORTE, O '$expr'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR SÓ QUERIA NOS MOSTRAR COMO ELE FUNCIONA EM GERAL, E COMO DEVEMOS PENSAR SOBRE ELE....

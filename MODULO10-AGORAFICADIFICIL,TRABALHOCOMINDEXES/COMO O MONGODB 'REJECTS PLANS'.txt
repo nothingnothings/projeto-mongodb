@@ -1,0 +1,1755 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> agora que demos uma olhada em 'covered queries', que são o tipo de query mais rápido, mas DIFÍCIL DE SER ALCANÇADO (e que utiliza o potencial máximo dos indexes),
+
+
+
+
+DEVEMOS VER COMO O MONGODB ACTUALLY __ REJEITA__ 1 PLAN... (ou vários plans)..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO,
+
+
+PRIMEIRAMENTE VEREMOS OS INDEXES QUE TEMOS 
+
+
+LÁ 
+
+
+
+
+
+NA COLLECTION DE 'customers',
+
+
+
+por meio do código 
+
+
+
+
+
+
+
+
+
+
+db.customers.getIndexes()
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+> db.customers.getIndexes()
+[
+        {
+                "v" : 2,
+                "key" : {
+                        "_id" : 1
+                },
+                "name" : "_id_"
+        },
+        {
+                "v" : 2,
+                "key" : {
+                        "name" : 1
+                },
+                "name" : "name_1"
+        }
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> 2 INDEXES, O 'padrão' (de _id)
+
+
+
+
+E O 
+
+
+
+QUE ADICIONAMOS, de 'name'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> OK.. AÍ O PROFESSOR TAMBÉM ADICIONA UM INDEX ADICIONAL,
+
+UM 'COMPOUND INDEX',
+
+
+
+
+
+
+
+
+
+
+
+
+NESSA NOSSA COLLECTION DE 'customers'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> será um index sobre o field de 'age'...
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+db.customers.createIndex(
+    {
+        age: 1,
+        name: 1
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> LEMBRE-SE: A 
+
+
+
+___ORDEM__ DA ESCRITA DOS FIELDS, aí nesse create do compound index,
+
+FAZ TODA A DIFERENÇA (field primário e secundário, tipo isso)....
+
+
+
+
+
+
+
+
+
+
+
+
+----> SE COLOCÁSSEMOS 'name' PRIMEIRO, 
+
+
+
+
+
+NESSA ORDER,
+
+
+
+nosso index anterior de 'name', PURO (simples, 1 field only) 
+
+
+
+NÃO FARIA MT SENTIDO... (redundante)...
+
+
+
+
+
+
+
+
+
+
+
+----> COMPOUND INDEXES SÃO USADOS 'from left to right ' ---> E CADA 
+
+
+FIELD PODE SER 
+
+USADO 
+
+
+'standalone',
+
+
+from left to right ... ->  COMO AGE 
+
+
+
+
+VEM PRIMEIRO, NA _ ESQUERDA_,
+
+
+
+
+
+poderíamos/podemos fazer filter por 'age' 
+
+
+E AINDA 
+
+
+TOMAR VANTAGEM 
+
+DESSE 
+
+COMPOUND INDEX (index misto) de age e name....
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS PARA O 'NAME',
+
+
+NÃO PODEMOS TIRAR VANTAGEM DESSE COMPOUND INDEX,
+
+
+pq 
+
+
+
+
+ELE É O SEGUNDO VALUE NESSE COMPOUND INDEX,
+
+
+
+
+
+E ESTÁ MAPPEADO AO 'age',
+
+
+
+
+E APENAS FAZ 'SORT'
+ 
+
+
+ DENTRO DA CATEGORIA/SORTING DE 'age' (primário)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> SE FILTRARMOS POR APENAS 'name', 
+
+
+
+ apenas tendo esse compound index de 'age, name',
+
+
+
+
+ NAME NÃO PODERIA/NÃO PODE SER SUPORTADO 
+
+
+
+
+
+ POR ESSE COMPOUND INDEX...
+
+
+
+
+
+
+
+
+
+
+
+
+ -> mas aqui, no nosso caso,
+
+
+
+ estamos com 2 INDEXES DIFERENTES: 
+
+
+
+
+
+
+
+ 1) index PURO/SIMPLES/SINGLE-FIELD de 'name' 
+
+
+
+2) compound index de 'age + name' 
+
+
+
+
+
+
+
+
+--> SE TENTARMOS TIRAR VANTAGEM DE ALGUM INDEX de 'name',
+
+
+OPTAR-SE-Á PELO INDEX puro de 'name',
+
+
+
+CONFORME EXPLICAÇÃO LOGO ACIMA...
+
+
+
+
+
+
+
+
+
+
+
+
+-------> OK.... AGORA TEMOS 3 INDEXES:
+
+
+
+
+
+
+
+
+1) COMPOUND INDEX 
+
+
+2) INDEX PURO DE 'name' 
+
+
+3) INDEX DEFAULT,  de '_id'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------->  COM ISSO, AGORA FAREMOS FIND DE TODAS AS PERSONS COM 'name' de 'max' e age de '30'....
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+db.customers.explain().find(
+    {
+        name: "Max",
+        age: 30
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NOSSO OUTPUT DO EXPLAIN SERÁ ESTE:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{
+        "explainVersion" : "1",
+        "queryPlanner" : {
+                "namespace" : "newSessions.customers",
+                "indexFilterSet" : false,
+                "parsedQuery" : {
+                        "$and" : [
+                                {
+                                        "age" : {
+                                                "$eq" : 30
+                                        }
+                                },
+                                {
+                                        "name" : {
+                                                "$eq" : "Max"
+                                        }
+                                }
+                        ]
+                },
+                "queryHash" : "2A9321A4",
+                "planCacheKey" : "93CE1EB0",
+                "maxIndexedOrSolutionsReached" : false,
+                "maxIndexedAndSolutionsReached" : false,
+                "maxScansToExplodeReached" : false,
+                "winningPlan" : {
+                        "stage" : "FETCH",
+                        "inputStage" : {
+                                "stage" : "IXSCAN",
+                                "keyPattern" : {
+                                        "age" : 1,
+                                        "name" : 1
+                                },
+                                "indexName" : "age_1_name_1",
+                                "isMultiKey" : false,
+                                "multiKeyPaths" : {
+                                        "age" : [ ],
+                                        "name" : [ ]
+                                },
+                                "isUnique" : false,
+                                "isSparse" : false,
+                                "isPartial" : false,
+                                "indexVersion" : 2,
+                                "direction" : "forward",
+                                "indexBounds" : {
+                                        "age" : [
+                                                "[30.0, 30.0]"
+                                        ],
+                                        "name" : [
+                                                "[\"Max\", \"Max\"]"
+                                        ]
+                                }
+                        }
+                },
+                "rejectedPlans" : [
+                        {
+                                "stage" : "FETCH",
+                                "filter" : {
+                                        "age" : {
+                                                "$eq" : 30
+                                        }
+                                },
+                                "inputStage" : {
+                                        "stage" : "IXSCAN",
+                                        "keyPattern" : {
+                                                "name" : 1
+                                        },
+                                        "indexName" : "name_1",
+                                        "isMultiKey" : false,
+                                        "multiKeyPaths" : {
+                                                "name" : [ ]
+                                        },
+                                        "isUnique" : false,
+                                        "isSparse" : false,
+                                        "isPartial" : false,
+                                        "indexVersion" : 2,
+                                        "direction" : "forward",
+                                        "indexBounds" : {
+                                                "name" : [
+                                                        "[\"Max\", \"Max\"]"
+                                                ]
+                                        }
+                                }
+                        }
+                ]
+        },
+        "command" : {
+                "find" : "customers",
+                "filter" : {
+                        "name" : "Max",
+                        "age" : 30
+                },
+                "$db" : "newSessions"
+        },
+        "serverInfo" : {
+                "host" : "DESKTOP-V43A7S1",
+                "port" : 27017,
+                "version" : "5.0.6",
+                "gitVersion" : "212a8dbb47f07427dae194a9c75baec1d81d9259"
+        },
+        "serverParameters" : {
+                "internalQueryFacetBufferSizeBytes" : 104857600,
+                "internalQueryFacetMaxOutputDocSizeBytes" : 104857600,
+                "internalLookupStageIntermediateDocumentMaxSizeBytes" : 104857600,
+                "internalDocumentSourceGroupMaxMemoryBytes" : 104857600,
+                "internalQueryMaxBlockingSortMemoryUsageBytes" : 104857600,
+                "internalQueryProhibitBlockingMergeOnMongoS" : 0,
+                "internalQueryMaxAddToSetBytes" : 104857600,
+                "internalDocumentSourceSetWindowFieldsMaxMemoryBytes" : 104857600
+        },
+        "ok" : 1
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> COMO VOCÊ PODE OBSERVAR, AGORA A ENTRY DE 
+
+'rejectedPlans'
+
+
+
+FOI PREENCHIDA:
+
+
+
+
+
+
+
+
+
+
+
+
+ "rejectedPlans" : [
+                        {
+                                "stage" : "FETCH",
+                                "filter" : {
+                                        "age" : {
+                                                "$eq" : 30
+                                        }
+                                },
+                                "inputStage" : {
+                                        "stage" : "IXSCAN",
+                                        "keyPattern" : {
+                                                "name" : 1
+                                        },
+                                        "indexName" : "name_1",
+                                        "isMultiKey" : false,
+                                        "multiKeyPaths" : {
+                                                "name" : [ ]
+                                        },
+                                        "isUnique" : false,
+                                        "isSparse" : false,
+                                        "isPartial" : false,
+                                        "indexVersion" : 2,
+                                        "direction" : "forward",
+                                        "indexBounds" : {
+                                                "name" : [
+                                                        "[\"Max\", \"Max\"]"
+                                                ]
+                                        }
+                                }
+                        }
+                ]
+        },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        -------> OU SEJA,
+
+
+
+        O 
+
+
+
+        INDEX PURO DE 'name' 
+
+        FOI REJEITADO... (pq aqui foi utilizado o COMPOUND INDEX DE 'age' e 'name')...
+
+
+
+
+
+
+
+
+
+
+        --------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+A ORDEM NA FIND QUERY NÃO IMPORTA, para os compound indexes... 
+
+
+(
+    pq escrever isto:
+
+    > db.customers.explain().find(
+    {
+        name: "Max",
+       age: 30
+    }
+ )
+    
+
+
+
+
+
+É EXATAMENTE A MESMA COISA QUE ESCREVER ISTO:
+
+
+
+db.customers.explain().find(
+    {
+        $and: [
+            {name: "Max"},
+            {age: 30}
+        ]
+    }
+ )
+    
+
+
+
+
+
+
+
+
+
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> OK..... --> PORTANTO, 
+O WINNING PLAN 
+
+
+
+
+FOI 'IXSCAN',
+
+usando esse COMPOUND INDEX...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> OK... AGORA O QUE PODEMOS VER, AQUI,
+
+É QUE TEMOS UM 'REJECTED PLAN'.. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E O REJECTED PLAN FOI USAR 1 'IXSCAN' APENAS DO FIELD DE 
+
+'name'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> CLARO QUE FEZ SENTIDO PARA O MONGODB __ TAMBÉM __ CONSIDERAR ESSA OPÇÃO, ANTES DE A REJEITAR --> PQ 
+
+
+
+
+
+NÓS TAMBÉM 
+
+
+TÍNHAMOS ESSE FIELD aí, destinada a queries SOLO de 'NAME'.. --> MAS COMO TEMOS 
+
+
+
+
+
+
+ESSE COMPOUND INDEX de 'name + age',
+
+
+QUE 
+
+
+
+'FITS'
+
+
+essa nossa query MELHOr,
+
+
+
+
+
+
+
+
+O MONGODB OPTOU POR ELE COMO 'WINNINGPLAN'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E ISSO É INTERESSANTE DE SE SABER,
+
+
+
+ESSA DECISÃO DE 'isso é um rejectplan'....
+
+
+
+
+
+
+
+
+
+--> A PERGUNTA É:
+
+
+
+
+
+'''COMO O MONOGDB SABE/FIGURES OUT QUAL _ PLAN É MELHOR? ''' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO,
+
+
+O MONGODB 
+
+
+
+
+
+
+
+USA 1 APPROACH EM QUE ELE SIMPLESMENTE 'LOOKS FOR INDEXES' 
+
+
+QUE 
+
+
+PODEM/PODERIAM 
+
+
+TE AJUDAR COM 'A QUERY EM MÃOS'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> no nosso exemplo,
+
+
+TÍNHAMOS
+
+
+
+
+
+
+
+
+1) o INDEX PURO DE 'name' 
+
+
+
+
+2) O COMPOUND INDEX DE 'name + age'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> COMO NOSSO QUERY, FIND METHOD, INCLUÍA O field de 'name',
+
+
+
+
+
+MONGODB AUTOMATICAMENTE DERIVOU 
+
+
+QUE 
+
+
+
+
+os 2 indexes:
+
+
+
+1) o INDEX PURO DE 'name' 
+
+
+
+
+2) O COMPOUND INDEX DE 'name + age'....
+
+
+
+
+
+
+
+
+
+SERIAM ADEQUADOS/helpful....--------> OU SEJA,
+
+
+ELE 
+
+
+'CAME UP' 
+
+
+
+
+
+
+COM 2 APPROACHES POSSÍVEIS...
+
+
+
+
+
+
+
+
+
+
+
+-> PARA CENÁRIOS MAIS COMPLEXOS,
+
+
+
+VOCÊ PROVAVELMENTE TERÁ MAIS APPROACHES...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> DIGAMOS QUE TEMOS 3 APPROACHES...
+
+
+
+
+
+
+
+
+
+
+O MONGODB ENTÃO SIMPLESMENTE DEIXA ESSES 3 APPROACHES ''APOSTAR 1 CORRIDA 1 CONTRA O OUTRO''',
+
+
+
+
+
+
+
+
+
+
+MAS NÃO PARA O 'FULL DATA SET',
+
+
+
+pq isso demoraria demais.... --> EM VEZ DISSO,
+
+
+
+
+
+
+
+
+ELE SETTA UMA 'LINHA', UMA CERTA 'WINNING CONDITION' .... ---> por enquanto,
+
+
+
+
+
+isso pode ser o 'FIND DE 100 DOCUMENTS'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+APPROACH 1        APPROACH 2           APPROACH 3 
+
+
+
+|                   |
+                    V                      |
+|                                           |
+|                                           V
+|
+|
+|
+V 
+
+
+----------------------------------------------- FINISH LINE 
+
+
+
+
+
+
+
+
+
+
+
+-----> DOS 3, UM SERÁ O VENCEDOR... (o que atingir esse threshold primeiro)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> O MONGODB VAI USAR ESSE APPROACH PARA A 'QUERY DE VERDADE'....
+
+
+
+
+
+
+
+
+--> MAS É CLARO QUE SERIA BEM CUMBERSOME SE 
+
+O 
+
+
+MONGODB TIVESSE QUE REPETIR ESSA 'CORRIDA' PARA TODA E CADA 
+
+
+
+QUERY APPROACH QUE VOCÊ ENVIASSE A ELE...
+
+
+(
+
+
+
+    PQ É ÓBVIO QUE ISSO AÍ CUSTA UM POUQUINHO DE PERFORMANCE...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> É POR ISSO QUE O 
+
+
+
+MONGODB É ESPERTO E VAI__ CACHEAR__ ESSE 'WINNING PLAN'... --> PARA ESSA EXATA QUERY,
+
+
+
+
+SERÁ CACHEADA UMA 'CÓPIA/INFO'... ----> A QUERY QUE VOCê ENVIOU,
+
+
+
+COM OS FIELDS QUE VOCÊ PROCUROU,
+
+E 
+
+
+OS VALUES DOS FIELDS QUE VOCê PROCUROU...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> OK.... AÍ PARA ESSA EXATA QUERY QUE VOCÊ ENVIOU,
+
+
+
+
+ELE VAI 'CACHEAR ESSE PLAN COMO O __ WINNING PLAN, PARA ESSA EXATA QUERY''....
+
+
+
+
+
+
+
+
+
+--> 
+
+
+
+E PARA FUTURAS QUERIES, QUERIES QUE SEJAM EXATAMENTE IGUAIS,
+
+
+
+
+
+O 
+
+MONGODB 
+VAI __ REUTILIZAR ESSE 'WINNING PLAN' --> 
+
+
+
+
+
+
+
+
+JÁ PARA 
+
+
+
+
+
+QUERIES FUTURAS QUE UTILIZAREM VALUES DIFERENTES, KEYS DIFERENTES,
+
+
+
+
+
+ELE VAI fazer essa CORRIDA DE NOVO,
+
+
+para então determinar QUAL É O WINNING PLAN PARA ESSE TIPO DE QUERY ESPECÍFICO....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS É CLARO QUE ESSE CACHE DE 'winningPlans' 
+
+
+NÃO EXISTE PARA SEMPRE... -------> ELE É LIMPO DEPOIS __ DE UMA CERTA QUANTIDADE DE 'inserts',
+
+
+
+
+
+OU QUANDO OCORRE UM RESTART DA SUA DB...
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA SER MAIS PRECISO:
+
+
+
+
+
+
+
+
+EM VEZ DE SER ARMAZENADO PARA SEMPRE,
+ESSE 'WINNINGPLAN'
+
+
+
+É REMOVIDO DO CACHE:
+
+
+
+
+
+
+
+
+
+
+A) QUANDO VOCÊ ESCREVE CERTA QUANTIDADE DE DOCUMENTS (write threshold) -----> o threshold ATUAL É '1000' documents....
+
+
+DEPOIS DE ADICIONAR 1000 DOCUMENTS,
+
+O MONGODB PODE 
+
+'reconsider', pode mudar de ideia, fazer a 'race' de novo...
+
+
+
+
+--> ISSO ACONTECE PQ NESSE MOMENTO, A COLLECTION JÁ TERÁ MUDADO 1 MONTÃO DE VEZES, por isso 
+
+
+é possível que seja melhor 'reconsider' os winningplan....
+
+
+
+
+
+
+B) A MESMA COISA ACONTECE SE VOCê 'REBUILD' 
+
+
+o index.... -> ou seja,
+
+se vocÊ DROPPAR E RECRIAR O INDEX.... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+C) OS WINNINGPLANS TAMBÉM SÃO DELETADOS DO CACHE _ SE OUTROS_ 
+
+INDEXES SÃO ADICIONADOS/REMOVIDOS NA SUA COLLECTION... (
+
+        isso pq o NOVO INDEX PODE SER __ MELHOR__ DO QUE 
+
+        O antigo/antigos,
+
+
+        por isso o 
+
+
+        CACHE PARA WINNINGPLANS 
+
+
+        ACABA 'CLEARED' QUANDO VOCÊ 
+
+        ADICIONA NOVOS INDEXES/REMOVE INDEXES...
+
+)
+
+
+
+
+
+
+
+
+
+
+
+D) QUANDO O MONGODB SERVER É REINICIADO,
+
+
+
+SEU CACHE DE WINNINGPLANS __ TAMBÉM _ É LIMPO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> OK, É ASSIM QUE O MONGODB DERIVA O 'WINNINGPLAN',
+
+E É ASSIM QUE ELE O ARMAZENA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> É INTERESSANTE PARA VOCÊ, COMO DESENVOLVEDOR,
+
+
+
+
+
+
+REGULARMENTE _ CHECAR__ SUAS QUERIES (find, update e delete queries) PARA 
+
+
+VER 
+
+
+O QUE O MONGODB ACTUALLY FAZ,
+
+SE ELE ESTÁ USANDO INDEXES DE FORMA EFICIENTE,
+
+
+ 
+
+ SE UM NOVO INDEX DEVE SER ADICIONADO (algo que você pode fazer por CONTA PRÓPRIA, se você É DONO DA DATABASe,
+  
+  
+  
+  OU ENTÃO VOCÊ PASSA ESSA INFORMAÇÃO AO 'DB ADMINISTRATOR')
+
+
+
+
+
+
+
+
+
+
+------> você também vai checar regularmente para SABER SE VOCê PRECISA 
+
+
+''''MAYBE NEED TO ADJUST THE QUERY''' ----> ex: casos em que vocÊ fetcheia dados de que 
+
+
+
+você não precisa de verdade,
+
+
+
+
+
+E AÍ VOCÊ PODERIA CONSEGUIR UMA 'covered query' 
+
+
+
+SE VOCÊ APENAS FOSSE FAZER 'PROJECT' 
+
+DA 
+
+
+DATA QUE VOCê PRECISAVA/PRECISA (data que já estaria armazenada no seu index, para alguns fields em que você criou indexes...  )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> É POR ISSO QUE VOCÊ, COMO DESENVOLVEDOR,
+
+PRECISA SABER 
+
+
+''COMO INDEXES FUNCIONAM''' -> ISSO PQ VC:
+
+
+
+
+
+
+
+
+1) OU VAI TER QUE SABER CRIAR ESSES INDEXES POR CONTA PRÓPRIA (seu projeto solo, standalone)...
+
+
+
+
+
+
+
+
+
+2) PARA OPTIMIZAR SUAS QUERIES 
+
+
+
+
+
+
+
+
+
+3) OU, PARA DIZER AO SEU ADMIN PARA OPTIMIZAR OS INDEXES....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... AGORA VEREMOS O ÚLTIMO 'NÍVEL' DE VERBOSITY
+
+
+que o 
+
+
+
+method de 'explain()'
+
+nos dá..
+
+
+
+
+
+
+
+
+
+
+------> você adquire esse nível por meio do pass do parâmetro 
+
+
+
+
+
+
+"allPlansExecution'" 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O QUE ISSO VAI FAZER É __ DAR UM __ OUTPUT __ GIGANTE___. ... SERÁ GIGANTE 
+
+
+
+
+
+
+
+
+PQ OBTEREMOS 'DETAILED STATISTICS'
+
+PARA TODOS OS PLANS,
+
+INCLUSIVE 
+
+
+
+OS 
+
+PLANS QUE FORAM REJEITADOS (
+
+
+        veremos 
+
+
+
+
+        em detalhes como cada SCAN performou,
+
+
+
+
+
+
+        MAS TAMBÉM TEREMOS DETALHES SOBER 
+
+
+
+        QUANTO CADA 1 DESSES SCANS DEMORARIA 
+
+
+
+
+        COM NOSSOS INDEXES,
+
+
+
+todas as hipóteses....
+
+)
+
+
+
+
+
+
+
+
+
+
+
+--> POR MEIO DE 'allPlansExecution',
+
+
+
+VOCê GANHA 'DETAILED ANALYTICS' 
+
+
+
+
+
+
+
+ACERCA DOS DIFERENTES 'INDEXEs', 
+
+
+'queries'
+
+
+E 
+
+
+
+
+MANEIRAS POSSÍVEIS DE RODAR SUAS QUERIES... --> e essa é a ferramenta principal que vai te ajudar 
+
+a optimizar suas queries e indexes..

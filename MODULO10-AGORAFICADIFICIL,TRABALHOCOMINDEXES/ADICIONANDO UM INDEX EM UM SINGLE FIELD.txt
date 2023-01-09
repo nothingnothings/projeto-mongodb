@@ -1,0 +1,2215 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> OK... AGORA DEVEMOS DAR UMA OLHADA NESSA COISA de 'index'
+
+
+
+NA PRÁTICA,
+
+
+
+VER QUE IMPACTO ELES TÊM,
+
+
+
+
+
+E 
+
+
+
+COMO OS CRIAR...
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO,
+
+
+TENHA UM RUNNING MONGODB SERVER,
+
+
+
+tanto com 
+
+
+
+net start mongoDB
+
+
+
+
+
+ou 
+
+
+
+mongod 
+
+
+
+
+no terminal...
+
+
+
+
+
+
+
+
+-------------------------------
+
+
+
+
+
+
+
+
+--> AÍ, ISSO FEITO,
+
+
+VOCÊ ENCONTRARÁ UM 'STARTING DATASET'
+
+
+anexado a esse video,
+
+
+
+um arquivo de 'persons.json'... --> 
+
+
+
+
+
+
+
+
+
+
+
+IMPORTE ESSE ARQUIVO NA SUA DATABASE, COM 
+
+
+
+'mongoimport + alguns comandos'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ESCREVI ASSIM:
+
+
+
+
+
+
+
+
+PS A:\projeto6-MONGODB\MODULO10-AGORAFICADIFICIL,TRABALHOCOMINDEXES> mongoimport persons.json -d exemploPersons -c persons2
+2022-02-16T02:34:18.832-0300    connected to: mongodb://localhost/
+2022-02-16T02:34:18.868-0300    Failed: cannot decode array into a primitive.D
+2022-02-16T02:34:18.868-0300    0 document(s) imported successfully. 0 document(s) failed to import.
+PS A:\projeto6-MONGODB\MODULO10-AGORAFICADIFICIL,TRABALHOCOMINDEXES> mongoimport persons.json -d exemploPersons -c persons2 --jsonArray
+2022-02-16T02:34:38.175-0300    connected to: mongodb://localhost/
+2022-02-16T02:34:38.339-0300    5000 document(s) imported successfully. 0 document(s) failed to import.
+
+
+
+
+
+
+
+
+
+
+-------------------------------------------------------
+
+
+
+
+
+
+
+
+
+certo...
+
+
+
+
+
+
+
+EXEMPLO DE 1 PERSON:
+
+
+
+
+
+
+
+{
+        "_id" : ObjectId("620c8cee53c75eb1f48892b5"),
+        "gender" : "female",
+        "name" : {
+                "title" : "miss",
+                "first" : "maeva",
+                "last" : "wilson"
+        },
+        "location" : {
+                "street" : "4962 36th ave",
+                "city" : "jasper",
+                "state" : "northwest territories",
+                "postcode" : "U0A 4J6",
+                "coordinates" : {
+                        "latitude" : "-31.6359",
+                        "longitude" : "111.3806"
+                },
+                "timezone" : {
+                        "offset" : "+9:00",
+                        "description" : "Tokyo, Seoul, Osaka, Sapporo, Yakutsk"
+                }
+        },
+        "email" : "maeva.wilson@example.com",
+        "login" : {
+                "uuid" : "8f2d499c-6a7e-4606-8c58-211fdb880c31",
+                "username" : "smallgoose815",
+                "password" : "weston",
+                "salt" : "TyL1q8hK",
+                "md5" : "bcedea61753320688ea27be01982556d",
+                "sha1" : "9e075df851fdaf292170d8e0a92c19ee37fba0f2",
+                "sha256" : "6f022405c6a384de3ab5cfc98cccdd97570e5b412046d05dfb79c23ae37612fa"
+        },
+        "dob" : {
+                "date" : "1962-08-11T20:51:07Z",
+                "age" : 56
+        },
+        "registered" : {
+                "date" : "2016-10-03T10:02:55Z",
+                "age" : 1
+        },
+        "phone" : "727-218-6012",
+        "cell" : "443-382-6538",
+        "id" : {
+                "name" : "",
+                "value" : null
+        },
+        "picture" : {
+                "large" : "https://randomuser.me/api/portraits/women/96.jpg",
+                "medium" : "https://randomuser.me/api/portraits/med/women/96.jpg",
+                "thumbnail" : "https://randomuser.me/api/portraits/thumb/women/96.jpg"
+        },
+        "nat" : "CA"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK.... ESTAMOS COM 5 MIL DESSES DOCUMENTS....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> CERTO.... ESTAMOS COM ESSA COLLECTIOn...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+temos várias coisas que são NESTED DOCUMENTS,
+
+
+como 
+
+
+'name'
+
+
+e 
+'location'...
+
+
+
+
+
+
+
+
+
+
+
+
+location tem 'coordinates',
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+e outras coisas também...
+
+
+
+
+
+
+
+
+
+
+
+OK... TEMOS ESSA DUMMY PERSON DATA....
+
+
+
+
+
+
+AGORA DEVEMOS RODAR UMA QUERY,
+
+E PROCURAR TODAS AS PESSOAS QUE SÃO 'MAIS VELHAS DO QUE 60 ANOS'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+db.persons2.find({"dob.age": {$gt: 60}}).pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> ISSO VAI EXAMINAR ESSE field no embedded document...
+
+
+
+
+
+
+
+
+-> a query vai procurar por pessoas mais velhas do que 60 anos....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PODEMOS RODAR UM COUNT...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.persons2.find({"dob.age": {$gt: 60}}).count()
+
+
+
+
+
+
+
+
+
+
+
+1222 PESSOAS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> OK... É CLARO QUE ESSA FOI UMA QUERY SUPER RÁPIDA... -> MAS NÓS NÃO TEMOS TANTOS DOCUMENTS NESSA COLLECITON,
+
+
+ISSO É ALGO PARA SE TER EM MENTE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA DETERMINAR SE UM INDEX PODE NOS AJUDAR,
+
+
+OU 
+
+PARA 
+
+'''VER O QUE O MONGODB ACTUALLY FAZ'''... -->  MONGODB 
+
+
+
+NOS 
+
+DÁ UMA TOOL 
+
+BEM LEGAL,
+
+
+
+
+
+QUE 
+NOS DEIXA VER COMO _ ELE __ FEZ PARA ANALISAR NOSSA QUERY...
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+ --> A TOOL É UM SIMPLES METHOD QUE ADICIONAMOS NA NOSSA QUERY... -> 
+
+
+
+
+
+
+
+
+ aqui, depois de fazer reach out 
+
+
+
+
+
+
+ A NOSSA COLLECTION,
+
+vocÊ pode adicionar o method de 'explain()',
+
+
+
+
+
+
+E AÍ CHAINAR SUA 
+QUERY COMUM...
+
+
+
+
+
+EXPLAIN -------> FUNCIONA COM 'find', 'delete', 'update' -------> NÃO FUNCIONA PARA 'insert'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SIGNIFICA QUE ELE FUNCIONA PARA METHODS EM QUE VOCÊ 'NARROW DOWN DOCUMENTS',
+
+
+
+
+methods em que vocÊ ENCONTRA DOCUMENTS (E os insert não fazem isso)... 
+
+
+
+
+
+
+
+
+
+
+
+--> OK...
+
+
+ESCREVEMOS ASSIM:
+
+
+
+
+db.persons2.explain().find({})
+
+
+
+
+
+
+
+
+
+
+
+
+ou assim:
+
+
+
+
+
+
+
+
+
+db.persons2.explain().updateOne({})
+
+
+
+
+
+
+
+
+ou assim:
+
+
+
+
+
+
+db.persons2.explain().deleteOne({})
+
+
+
+
+
+
+
+
+
+
+
+
+-> NO CASO, NOSSA QUERY FICA ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+
+db.persons2.explain().find(
+    {
+        "dob.age": {$gt: 60}
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> ISSO, O FATO DE TERMOS 'explain()',
+
+VAI 
+
+
+FAZER 
+
+COM QUE 
+
+
+
+
+A RESPONSE SEJA UM POUCO MAIS DETALHADA:
+
+
+
+
+
+
+
+
+
+
+{
+        "explainVersion" : "1",
+        "queryPlanner" : {
+                "namespace" : "exemploPersons.persons2",
+                "indexFilterSet" : false,
+                "parsedQuery" : {
+                        "dob.age" : {
+                                "$gt" : 60
+                        }
+                },
+                "queryHash" : "FC9E47D2",
+                "planCacheKey" : "A5FF588D",
+                "maxIndexedOrSolutionsReached" : false,
+                "maxIndexedAndSolutionsReached" : false,
+                "maxScansToExplodeReached" : false,
+                "winningPlan" : {
+                        "stage" : "COLLSCAN",
+                        "filter" : {
+                                "dob.age" : {
+                                        "$gt" : 60
+                                }
+                        },
+                        "direction" : "forward"
+                },
+                "rejectedPlans" : [ ]
+        },
+        "command" : {
+                "find" : "persons2",
+                "filter" : {
+                        "dob.age" : {
+                                "$gt" : 60
+                        }
+                },
+                "$db" : "exemploPersons"
+        },
+        "serverInfo" : {
+                "host" : "DESKTOP-V43A7S1",
+                "port" : 27017,
+                "version" : "5.0.6",
+                "gitVersion" : "212a8dbb47f07427dae194a9c75baec1d81d9259"
+        },
+        "serverParameters" : {
+                "internalQueryFacetBufferSizeBytes" : 104857600,
+                "internalQueryFacetMaxOutputDocSizeBytes" : 104857600,
+                "internalLookupStageIntermediateDocumentMaxSizeBytes" : 104857600,
+                "internalDocumentSourceGroupMaxMemoryBytes" : 104857600,
+                "internalQueryMaxBlockingSortMemoryUsageBytes" : 104857600,
+                "internalQueryProhibitBlockingMergeOnMongoS" : 0,
+                "internalQueryMaxAddToSetBytes" : 104857600,
+                "internalDocumentSourceSetWindowFieldsMaxMemoryBytes" : 104857600
+        },
+        "ok" : 1
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO É IMPORTANTE:
+
+
+
+
+
+
+              "winningPlan" : {
+                        "stage" : "COLLSCAN",
+                        "filter" : {
+                                "dob.age" : {
+                                        "$gt" : 60
+                                }
+                        },
+                        "direction" : "forward"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> TEMOS A DETAILED DESCRIPTION DO QUE O MONGODB FEZ....
+
+
+
+
+
+--> TAMBÉM NOS DÁ UMA DESCRIPTION DE COMO ELE DERIVOU NOSSOS RESULTADOS....
+
+
+
+
+-> O MONGODB PENSA 
+
+
+
+SEGUNDO 'PLANS' -------> PLANS SÃO SIMPLESMENTE 
+
+
+
+
+
+
+____ '''ALTERNATIVAS''' QUE ELE CONSIDERA PARA RODAR CADA QUERY...
+
+
+
+
+
+
+
+
+
+
+
+--> NO FINAL DAS CONTAS,
+
+
+
+ELE VAI
+
+
+ENCONTRAR 1 
+'winningPlan'...
+
+
+
+
+
+
+
+
+
+
+no caso,
+
+
+aqui foi o de 'COLLSCAN' (collection scan)...
+
+
+
+
+
+
+
+
+
+
+
+--> O 'winningPlan'
+
+
+
+É ALGO ESPECÍFICO,
+
+
+
+
+
+
+E O PROFESSOR DEPOIS NOS EXPLICARÁ COMO O 
+
+
+
+
+MONGODB DETERMINA O 'winningPlan' (acho que é pela presença ou não de um index...)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E ESSE  WINNINGPLAN 
+
+
+
+
+
+
+É ESSENCIALMENTE O QUE O MONGODB FEZ PARA 'GET' 
+
+ 
+ OS NOSSOS RESULTS --> O WINNING PLAN,
+
+ NO CASO,
+
+ FOI FAZER 
+ UM 
+
+
+ 'FULL COLLECTION SCAN'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> VOCê TAMBÉM PODERIA TER 'REJECTEDPLANS',
+
+ como visto aqui:
+
+       "rejectedPlans" : [ ]
+
+
+
+
+
+
+
+
+
+
+
+
+       -> MAS PARA ISSO,
+
+
+VOCÊ TERIA DE TER 'OUTROS PLANS' (outras alternativas).... --> e sem outros PLANS, QUE SÃO INCORPORADOS PELOS 'INDEXES' (os indexes são os outros plans)
+
+
+
+A ÚNICA ALTERNATIVA POSSÍVEL AO MONGODB É O 
+
+
+
+'COLLSCAN'...
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> OK.... E PODEMOS TER OUTPUT AINDA MAIS DETALHADO, NA VERDADE...
+
+
+
+
+
+
+
+
+
+
+
+--> basta passar 1 argumento ao 'explain'...
+
+
+
+
+
+
+
+
+
+
+--> ESSE ARGUMENTO SERÁ UMA STRING, STRING EM QUE CONTROLAMOS A 'VERBOSITY' desse comando....
+
+
+
+
+
+
+
+
+
+
+
+--> escreva "executionStats",
+
+
+
+
+
+
+
+
+
+
+VOCÊ VERÁ UM DETAILED OUTPUT PARA ESSA QUERY, E COMO OS RESULTS FORAM RETORNADOS...
+
+
+
+
+
+
+ex:
+
+
+
+
+db.persons2.explain("executionStats").find(     {         "dob.age": {$gt: 60}     } )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> LÁ, VOCÊ VÊ isto:
+
+
+
+    "executionTimeMillis" : 2,
+
+
+
+
+
+    --> ESSE É O TEMPO QUE A OVERALL QUERY TOMOU.... (é super rápido, mas nossa collection não tem tantos documents).... --> se tivéssemos milhoes de documents, esse número aumentaria...
+
+
+
+
+
+
+
+
+
+
+
+
+
+    --> E AÍ VOCê VÊ ISTO:
+
+
+            "totalDocsExamined" : 5000,
+
+
+
+
+
+
+
+
+
+
+
+            --> OU SEJA,
+
+            TIVEMOS QUE OLHAR 5 MIL DOCUMENTS 
+
+
+
+
+
+
+            __ PARA __ RETORNAR NOSSOS 1222 DOCUMENTS... (
+
+
+ou seja, isso é bem ruim, um gap bem grande entre o número de documents procurados/examinados e o número retornado
+
+
+            )
+
+
+
+
+
+
+
+
+            --> ISSO AÍ, O GAP,
+
+            JÁ É UM BOM SINAL DE QUE ESSA NOSSA FIND QUERY ESTÁ SUBOPTIMIZADA, ineficiente...
+
+
+
+
+
+
+
+
+
+            --> DEVEMOS ADICIONAR UM INDEX E VER COMO ISSO MUDA AS COISAS....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            --> ADICIONAMOS UM INDEX A UMA COLLECTION POR MEIO DE 
+
+
+
+
+
+db.collectionName.createIndex()
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM... UM INDEX É SEMPRE DEFINIDO COMO UM DOCUMENT,....
+
+
+
+
+
+
+
+
+
+O PRIMEIRO VALOR, A KEY,
+
+
+
+
+
+SERÁ 
+
+
+O _ NOME__ DO FIELD QUE SERÁ USADO PARA ESSE INDEX (o index será criado para esse field específico)....
+
+
+
+
+
+
+
+
+
+
+
+
+--> no caso do professor, como ele quer criar um index para o field de 'age',
+
+
+
+
+ele escreve 
+
+
+
+
+
+
+
+
+
+
+
+
+db.persons.createIndex(
+        {"dob.age" }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK... ISSO JÁ NOS MOSTRA QUE __PODEMOS__ CRIAR INDEXES EM EMBEDDED FIELDS,
+
+
+NÃO MUDA QUASE NADA EM RELAÇÃO A FIELDS COMUNS/top-level... (vocÊ só tem que usar essa sintaxe de "dob.age")...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> CERTO.... AÍ O 'VALUE' 
+
+
+
+
+SERÁ '''WHETHER O MONGODB DEVERÁ 
+
+CRIAR ESSA LIST DE VALUES, dentro desse field de "age" , 
+
+EM UMA ORDEM DE DESCENDING OU ASCENDING.....'
+
+
+
+
+
+
+
+
+
+
+
+-----> OK... ISSO SIGNIFICA QUE ELE PODE SORTAR POR 'ASCENDING ORDER'  
+
+
+
+ou 'descending'....
+
+
+
+
+
+
+
+--> se você coloca '1',
+
+que é o DEFAULT, VOCÊ VAI SORTAR POR ASCENDING... descending é '-1'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> O QUE VOCê ESCOLHE, '1' OU '-1',
+
+
+
+NÃO INTERESSA MT... -----> MESMO SE VOCê SORTAR SEUS DOCUMENTS NO SENTIDO INVERSO (-1),
+
+
+
+SUA 
+
+QUERY AINDA VAI SER 'SPED UP',
+
+
+
+
+
+
+PQ O MONGODB _ PODE _ TRAVERSAR  ESSE INDEX/LIST 
+
+
+
+EM __ AMBAS AS DIREÇÕES... --------> PROFESSOR COLOCA ASCENDING, MAS ISSO REALMENTE NÃO IMPORTA....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> fica assim:
+
+
+
+
+
+
+
+
+
+
+db.persons2.createIndex(
+        {
+                "dob.age": 1 
+        }
+)
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+> db.persons2.createIndex(
+...         {
+...                 "dob.age": 1
+...         }
+... )
+{
+        "numIndexesBefore" : 1,
+        "numIndexesAfter" : 2,
+        "createdCollectionAutomatically" : false,
+        "ok" : 1
+}
+
+
+
+  
+
+
+-----> CERTO.... --> 
+
+
+
+
+ISSO 
+
+
+
+CRIA UM 'INDEX'... --> 
+
+
+
+
+
+
+
+
+
+
+
+
+você observa 
+
+
+
+
+'numIndexesBefore' -->   ISSO QUER DIZER QUE TÍNHAMOS UM INDEX DE '1' anteriormente.... --> logo veremos que index é esse...
+
+
+
+
+
+
+'numIndexesAfter' -----> ISSO QUER DIZER O INDX QUE FICOU __ DPOIS__... ----> ou seja,
+
+
+depois da criação do index... --> no caso,
+
+
+FICOU '2'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> COM ISSO,
+
+
+
+devemos __ REPETIR__ NOSSO COMANDO DE 'db.persons2.explain().find()'
+
+
+
+
+QUE 
+
+TÍNHAMOS USADO ANTES..
+
+
+
+
+
+
+
+
+
+
+
+--- >VAMOS ESCREVER NOVAMENTE ISTO:
+
+
+
+
+
+
+
+
+
+
+db.persons2.explain().find(
+        {
+                "dob.age": {$gt: 60}
+        }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, IMEDIATAMENTE PERCEBEMOS QUE O 'winningPlan'
+
+
+MUDOU..
+
+
+
+
+
+
+
+
+FICOU ASSIM:
+
+
+
+
+
+
+ "winningPlan" : {
+                        "stage" : "FETCH",
+                        "inputStage" : {
+                                "stage" : "IXSCAN",
+                                "keyPattern" : {
+                                        "dob.age" : 1
+                                },
+                                "indexName" : "dob.age_1",
+                                "isMultiKey" : false,
+                                "multiKeyPaths" : {
+                                        "dob.age" : [ ]
+                                },
+                                "isUnique" : false,
+                                "isSparse" : false,
+                                "isPartial" : false,
+                                "indexVersion" : 2,
+                                "direction" : "forward",
+                                "indexBounds" : {
+                                        "dob.age" : [
+                                                "(60.0, inf.0]"
+                                        ]
+                                }
+                        }
+                },
+                "rejectedPlans" : [ ]
+
+
+
+
+
+
+
+
+-------------------------
+
+
+
+
+
+
+
+OK... AGORA O NEGÓCIO USOU O 'IXSCAN' ---> index Scan ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS NÃO CONSEGUIMOS O OUTPUT COMPLETO/MAIS 'VERBOSE',
+
+
+pq não escrevemos 'executionStats' no parâmetro de 'explain'...
+
+
+
+
+
+
+
+
+
+
+CORRIGIMOS ISSO, ASSIM:
+
+
+
+
+
+
+
+db.persons2.explain("executionStats").find(
+        {
+                "dob.age": {$gt: 60}
+        }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+O EXECUTION TIME FICOU ASSIM:
+
+
+
+
+
+
+
+
+    "executionTimeMillis" : 6,
+
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR DIZ QUE ''ISSO ABAIXOU CONSIDERAVELMENTE'  (mas no meu caso, a executionTimeMillis foi PIOR, POR ALGUMA RAZÃO)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS AGORA REEXECUTEI, e ficou em '1'...
+
+
+
+
+ "executionTimeMillis" : 1,
+
+
+
+
+
+
+
+
+
+ --> E AGORA SEMPRE ESTÁ FICANDO COMO '1'...
+
+
+
+
+
+
+
+
+
+
+
+ -> A MAIN THING É QUE O NEGÓCIO 
+
+
+
+
+
+
+ FOI 
+
+
+
+ 'SPED UP'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -_> OUTRA COISA QUE PERCEBEMOS É QUE AGORA TEMOS 2 'EXECUTION STAGES',
+
+
+ em vez de apenas uma...
+
+
+
+
+
+
+
+ ex:
+
+
+
+
+
+
+
+
+
+
+
+    "executionStages" : {
+                        "stage" : "FETCH", ////////STAGE 1
+                        "nReturned" : 1222,
+                        "executionTimeMillisEstimate" : 0,
+                        "works" : 1223,
+                        "advanced" : 1222,
+                        "needTime" : 0,
+                        "needYield" : 0,
+                        "saveState" : 1,
+                        "restoreState" : 1,
+                        "isEOF" : 1,
+                        "docsExamined" : 1222,
+                        "alreadyHasObj" : 0,
+                        "inputStage" : {
+                                "stage" : "IXSCAN", ////////STAGE 2
+                                "nReturned" : 1222,
+                                "executionTimeMillisEstimate" : 0,
+                                "works" : 1223,
+                                "advanced" : 1222,
+                                "needTime" : 0,
+                                "needYield" : 0,
+                                "saveState" : 1,
+                                "restoreState" : 1,
+                                "isEOF" : 1,
+                                "keyPattern" : {
+                                        "dob.age" : 1
+                                },
+                                "indexName" : "dob.age_1",
+                                "isMultiKey" : false,
+                                "multiKeyPaths" : {
+                                        "dob.age" : [ ]
+                                },
+                                "isUnique" : false,
+                                "isSparse" : false,
+                                "isPartial" : false,
+                                "indexVersion" : 2,
+                                "direction" : "forward",
+                                "indexBounds" : {
+                                        "dob.age" : [
+                                                "(60.0, inf.0]"
+                                        ]
+                                },
+                                "keysExamined" : 1222,
+                                "seeks" : 1,
+                                "dupsTested" : 0,
+                                "dupsDropped" : 0
+                        }
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... AQUI CABE UMA EXPLICAÇÃO:
+
+
+
+
+
+
+
+
+O '''PRIMEIRO STAGE''' É ACTUALLY O STAGE QUE ESTÁ ESCRITO MAIS ABAIXO,
+
+aquele de 'inputStage',
+
+
+
+
+
+que é um 'IXSCAN'.... 
+
+
+
+
+
+
+
+
+
+
+--> JÁ O SEGUNDO STAGE __ É __ AQUELE STAGE DE 'Fetch',
+
+QUE VAI FETCHEAR 
+
+
+NOSSOS DOCUMENTS A PARTIR 
+
+
+DA 
+
+DATA 
+
+
+
+nos index..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NO NOSSO OUTRO OUTPUT,
+
+
+
+
+'winningPlan',
+
+
+
+VEMOS ISTO:
+
+
+
+
+
+
+  "winningPlan" : {
+                        "stage" : "FETCH",
+                        "inputStage" : {
+                                "stage" : "IXSCAN",
+                                "keyPattern" : {
+                                        "dob.age" : 1
+                                },
+                                "indexName" : "dob.age_1",
+                                "isMultiKey" : false,
+                                "multiKeyPaths" : {
+                                        "dob.age" : [ ]
+                                },
+                                "isUnique" : false,
+                                "isSparse" : false,
+                                "isPartial" : false,
+                                "indexVersion" : 2,
+                                "direction" : "forward",
+                                "indexBounds" : {
+                                        "dob.age" : [
+                                                "(60.0, inf.0]"
+                                        ]
+                                }
+                        }
+                },
+                "rejectedPlans" : [ ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> OK, ISSO SIGNIFICA UQE 
+
+UM 
+
+'FULL COLLECTION SCAN'
+
+não foi executado,
+
+
+e sim 
+
+
+
+
+FOI EXECUTADO UM 'index scan'
+
+NA FASE DE INPUTS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> JÁ NO 'INPUTSTAGE',
+
+
+
+
+LEMOS ISTO:
+
+
+
+  "inputStage" : {
+                                "stage" : "IXSCAN",
+                                "nReturned" : 1222,
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO SIGNIFIC QUE __ ELE __ JÁ RETORNOU 
+
+
+
+1222 DOCUMENTS.... --------> NA VERDADE,
+
+
+
+
+
+
+PARA SERMOS MAIS PRECISOS,
+
+
+NÃO É 'RETORNAR DOCUMENTS',
+
+
+E SIM 
+
+
+
+_ AS KEYS_ ____ NO 'INDEX',
+
+
+KEYS QUE POSSUEM OS POINTERS  AOS DOCUMENTS RESPECTIVOS NA COLLECTION DE 'persons2'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> ISSO SIGNFIICA QUE 
+
+
+
+O 
+'indexScan'
+
+
+
+NÃO VAI 
+
+
+
+
+
+
+RETORNAR DOCUMENTS,
+E SIM 
+
+VAI RETORNAR 
+
+
+
+
+
+
+
+APENAS AS 'KEYS NO INDEX',
+
+
+e aí 
+
+
+OS POINTERS AOS DOCUMENTS.... ---------->
+
+
+
+
+
+
+
+
+
+
+
+
+--> É O PRÓXIMO STAGE,
+
+
+'FETCH',
+
+que 
+
+
+VAI 
+
+PEGAR 
+
+
+
+ESSES POINTERS 
+
+
+
+
+
+
+RETORNADOS PELO INDEX E __ AÍ_ __ FAZER 'REACH OUT' 
+
+À collection de 
+
+
+'persons2'... (
+
+        para fetchear os verdadeiros documents 
+) --------> COM ISSO,
+
+
+
+
+VOCÊ 
+
+VIU QUE APENAS TIVEMOS DE FAZER 'REACH OUT' 
+
+
+
+
+
+a 1222 keys NO NOSSO INDEX para aí '''REACH '''' 1222 documents 
+
+
+
+
+QUE FORAM RETORNADOS, lá  da collection de 'persons2.'..
+
+
+
+
+
+
+
+
+
+
+-------> NÓS TAMBÉM 
+
+
+
+
+
+
+TIVEMOS DE 'LOOK INTO THESE DOCUMENTS',
+
+
+
+PQ 
+
+O INDEX 
+
+
+APENAS TEM O POINTER A ESSES DOCUMENTS (
+
+        o que significa que 
+
+        ele 
+
+        apenas
+
+        faz um pequeno 'narrow down' 
+
+
+        DO SET DE DOCUMENTS,
+
+
+
+PQ 
+
+NÓS AINDA TEMOS QUE IR ATÉ OS DOCUMENTS PARA OS RETORNAR, COM NOSSA QUERY...
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS ISSO AÍ ACELEROU NOSSA QUERY,
+
+
+
+E É ASSIM QUE INDEXES PODEM NOS AJUDAR...
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, ANTES DE OLHARMOS TIPOS ESPECÍFICOS DE INDEXES,
+
+
+
+
+
+
+
+
+O PROFESSOR DIZ QUE 
+
+DEVE NOS MOSTRAR ALGO INTERESSANTE NESSE DATA SET,
+QUE VAI TE AJUDAR A ENTENDER INDEXES UM POUCO MELHOR...

@@ -1,0 +1,1317 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... MAS QUE MAIS PODEMOS FAZER COM 'update',
+
+ 
+ ALÉM DE SETTAR ALGUNS VALUES COM '$set'? 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> BEM,
+
+
+ DEVEMOS OLHAR OS NOSSOS USERS MAIS UMA VEZ,
+
+ com 
+
+
+ 'db.users.find()'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ db.users.find()
+
+
+
+
+
+
+
+
+
+
+
+
+ --> AGORA DIGAMOS 
+
+
+
+
+
+
+
+ QUE 
+
+ MANUEL 
+
+
+ SE TORNOU 
+
+
+
+ MAIS 
+
+
+
+ VELHO... -> queremos TROCAR A 'AGE' DELE,
+  DE 30 PARA 31...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> PROFESSOR DIZ QUE PODERÍAMOS FAZER ISSO COM '$set',
+
+
+  SIMPLESMENTE SETTAR ESSE NEGÓCIO COMO '$set: {age: 31}'...
+
+
+
+
+
+
+
+
+
+
+
+
+  --> MAS EM UM APLICATIVO TÍPICO,
+
+
+
+
+
+
+  VOCÊ 
+
+
+  GERALMENTE_ __ NÃO SABERÁ A AGE DE TODOS OS SEUS USERS... ------> É POR ISSO QUE SERIA 
+
+  NICE 
+
+  SE 
+
+  VOCÊ 
+
+
+  __ NÃO TIVESSE QUE 
+
+
+
+
+  '''FIND ALL USERS/find o user que você quer updatar PRIMEIRO''' 
+
+
+
+
+
+  para só 
+
+  então 
+
+  'GET THE CURRENT AGE' 
+
+
+  PARA __ SÓ _ _ENTÃO 
+
+
+
+  RECALCULAR A NOVA AGE,
+
+
+
+
+
+PARA SÓ 
+
+
+ENTÃO 
+
+
+
+'''issue your update request''' -->  SERIA BEM MELHOR SE 
+
+
+
+
+
+
+
+
+
+
+TRANSFORMATIONS SIMPLES E COMUNS  COMO ESSA FOSSEM FEITAS AUTOMATICAMENTE PELO MONGODB...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E O MONGODB PODE, NO CASO, FAZER ISSO PARA NÓS... --> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> O INCREMENT DE 1 NUMBER É UMA TASK ___ TÃO COMUM__ QUE 
+
+O 
+
+
+MONGODB 
+
+
+
+TEM UM 
+
+
+
+OPERATOR 'BUILT-IN'
+
+
+PARA ISSO....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NOSSO USER DE MANUEL É ESTE:
+
+
+
+{
+        "_id" : ObjectId("6206ef9a302d097773cc19a5"),
+        "name" : "Manu",
+        "hobbies" : [
+                {
+                        "title" : "Cars",
+                        "frequency" : 1
+                },
+                {
+                        "title" : "Horses",
+                        "frequency" : 2
+                }
+        ],
+        "phone" : "2222222222",
+        "age" : 30
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> VAMOS USAR UPDATEONE,
+
+E AÍ FILTRAR POR 'manu',
+
+POR MEIO DO SEU NAME....
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+db.users.updateOne({name: "Manu"}, 
+
+
+
+{
+
+}
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... MAS JÁ NO SEGUNDO PARÂMETRO, NÃO VAMOS USAR '$set',
+
+
+
+
+
+E SIM 
+
+
+USAREMOS 
+
+
+
+
+
+'$inc: ' -----> INCREMENT...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E, BTW,
+
+VOCê TAMBÉM PODE COMBINAR ISSO,
+
+PODE COMBINAR O '$inc' 
+
+
+
+
+
+
+
+
+
+COM OUTRAS COISAS, COMO 
+
+
+'$set'...
+
+
+
+
+
+
+
+TIPO ASSIM:
+
+
+
+
+
+db.users.updateOne({name: "Manu"}, 
+
+
+{
+$inc: {
+
+},
+
+
+$set: { ///ISSO É VÁLIDO, SIM...
+
+}
+}
+
+)
+
+
+
+
+
+
+
+
+
+----------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO SIGNIFICA QUE VOCÊ PODE FAZER 'MÚLTIPLAS COISAS DIFERENTES'
+
+
+em 1 mesmo 'update'...
+
+
+
+
+
+
+
+
+
+
+
+
+-_> MAS AQUI, NO CASO,
+
+O PROFESSOR SÓ USARÁ '$inc',
+
+
+E AÍ 
+
+
+
+DIRÁ 
+QUE 
+
+
+
+''''AGE DEVERÁ SER INCREMENTADA POR 1'''' ---> 
+
+
+
+
+
+PARA DIZER ISSO,
+
+ELE ESCREVE 
+
+
+
+
+'{$inc: {age: 1}}' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE VOCÊ QUER INCREMENTAR POR 2,
+
+
+
+ESCREVA ASSIM:
+
+
+
+
+'{$inc: {age: 2}}' 
+
+
+
+
+-------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+EX (completo):
+
+
+
+
+
+
+db.users.updateOne({name: "Manu"}, 
+
+
+{
+$inc: {
+age: 2
+},
+}
+
+)
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+
+db.users.updateOne(
+    {name: 'Manu'},
+
+    {$inc: {age: 2}}
+)
+
+
+
+
+
+
+
+
+
+
+
+------------------
+
+
+
+
+
+
+
+--> OK... SE AGORA RODAMOS
+
+
+'db.users.find()',
+
+
+VEMOS QUE 
+
+ 
+MANU ESTÁ COM UMA AGE de '32'... (sinal de que o OPERATOR FUNCIONOU )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OBS:::: VOCÊ TAMBÉM PODE 'DECREMENT' por meio do method de '$INC'- --> 
+
+
+
+
+
+
+
+EMBORA O NOME SEJA '$inc',
+
+
+É POSSÍVEL,
+
+SIM,
+
+
+
+USAR O '$inc' 
+
+
+PARA 
+
+
+
+__DECREMENTAR VALUES DE SEUS FIELDS,
+
+
+
+NOS SEUS DOCUMENTS...
+
+
+
+TIPO ASSIM:
+
+
+
+
+
+
+
+db.users.updateOne(
+    {name: 'Manu'},
+
+    {$inc: {age: -2}}
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA O MANU VAI 'decrement' 2 de seu número de 'age'.....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> CERTO... ISSO TUDO FAZ SENTIDO..
+
+
+
+
+
+
+
+
+
+
+
+--> COM INC VOCÊ PODE 'IR EM AMBAS AS DIREÇÕES'..
+
+
+
+
+
+
+
+
+
+
+
+
+--> E, ALÉM DISSO,
+
+
+
+VOCÊ PODE 'COMBINE' o inc com outros operators,
+
+
+conforme mostrado anteriormente..
+
+
+
+
+
+
+
+
+
+
+
+
+
+O PROFESSOR CRIA UM EXEMPLO PARA NÓS:
+
+
+
+db.users.updateOne(
+    {name: 'Manu'},
+
+    {$inc: {age: 1},  $set: {isSports: false}}
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK....  COM ISSO, A AGE DE MANU SERÁ AUMENTADA EM 1,
+
+
+
+
+
+E SERÁ ADICIONADA UMA PROPRIEDADE DE 'isSports: false'
+
+no seu document....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AS 2 COISAS FORAM FEITAS, ESSENCIALMENTE....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... É CLARO QUE VOCÊ PODE 'get fancy'
+
+
+
+
+E ENTÃO TENTAR 
+
+
+
+'SETTING THE SAME VALUE YOU ARE INCREMENTING' 
+
+
+
+(
+
+    tentar confundir o 
+
+    mongodb 
+
+
+    COM O SET de um value NA MESMA PROPRIEDADE QUE VOCÊ INCREMENTOU/DECREMENTOU
+)
+,
+
+
+
+
+TIPO ASSIM:
+
+
+
+
+
+db.users.updateOne(
+    {name: 'Manu'},
+
+    {$inc: {age: 1},  $set: {age: 30}}
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE FIZERMOS ISSO,
+
+
+VAMOS GANHAR 1 ___ ERROR___ ---> o error será de 
+
+
+
+
+'writeError: Updating the path 'age' would create a conflict at 'age'....' 
+
+
+
+
+
+
+
+
+
+
+
+
+----> ISSO, NO CASO, ACONTECE 
+
+
+
+PQ OS 2 OPERATORS/OPERATIONS ESTARÃO TRABALHANDO NO MESMO FIELD... --> como isso não é permitido,
+
+
+
+ESSA ESCRITA VAI SIMPLESMENTE FALHAR...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO SIGNIFICA QUE É POSSÍVEL EXECUTAR MÚLTIPLOS 
+
+
+
+
+OPERATORS EM CONJUNTO,
+
+MAS APENAS SE ELES NÃO 
+
+
+ATUAREM SOBRE 1 MESMO FIELD (como "$set" e "$inc'....)
+
+
+
+
+
+
+
+
+
+
+
+
+--. AÍ O PROFESSOR ESCREVE UMA QUERY,
+
+bem SIMPLES,
+
+
+de UPDATEMANY dos documenS EM QUE 'age ' É MAIOR DO QUE '30'.....
+
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+db.users.updateMany(totalAge: {$gt: 30}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> ok.....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.users.find(totalAge: {$gt: 30}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS DIGAMOS QUE PARA esse update DE TODAS AS MENIRAS NO MONSTRO CAPITALIST,
+
+
+
+
+
+
+
+
+
+
+
+--> BEM.. ISSO SIGNIFICA QUE VAMOS QUERER ADICIONAR UM NOVO FIELD 
+
+
+
+
+A TODOS 
+
+
+OS 
+
+
+HOBBIES dentro de 'hobbies',
+
+
+E NÃO SÓ A 1 ÚNICA PESSOA..
+
+
+
+
+
+
+db.users.updateMany({totalAge: {$gt: 30}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> PROFESSOR COMEÇA ASSIM, SIM... ----> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PARA UPDATAR OS EMBEDDED DOCUMENTS,
+
+
+
+
+
+
+ 
+ O PROFESSOR VAI USAR O CLÁSSICO '$set'... -> 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+ NA VERDADE,
+
+
+ ELE VAI USAR o '$inc' 
+
+
+ para MATCH IT UP.... -----> VAMOS QUERER OVERWRITTAR OS HOBEEIS,,,
+
+
+
+
+
+
+
+
+
+
+
+ ex:
+
+
+
+
+
+ db.users.updateMany({totalAge: {$gt: 30}},
+ 
+ 
+ 
+ 
+ {
+     $inc: {hobbies: }
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+ )
+
+
+
+
+
+
+
+
+
+ -> OK, VAMOS QUERER UPDATAR OS HOBBIES,
+
+
+ MAS O PROFESSOR NÃO VAIQ UERER OVERWRITTAR O FIELD INTEIRO,
+
+
+ e sim VAI QUERER SÓ ADICIONAR 1 NOVO FIELD a cada 'document' DENTRO DE 'hobbies'...
+
+
+
+
+
+
+
+
+
+
+
+ --> PARA ISSO,
+
+
+
+ professor tenta acessar 
+
+
+
+ {
+     $inc: {"hobbies.frequency": }
+ },
+
+
+
+
+
+
+
+
+
+ E AÍ TENTAR INCREMENTAR ESSE VALOR por '-1' -----> pq essas pessoas precisam 'slow down' um pouco...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ COM ISSO, O CÓDIGO FICA ASSIM;
+
+
+
+
+
+
+
+
+
+  db.users.updateMany({totalAge: {$gt: 30}},
+ 
+ 
+ 
+ 
+ {
+     $inc: {hobbies: }
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AÍ SE TENTAMOS EXECUTAR ISSO AÍ.,
+
+
+RECEBEMOS IMEDIATAMENTE UM __ ERRO__ ----> 
+
+
+
+
+
+
+
+'''YOU CANNOT create field 'frequency' EM UM ELEMENT/ARRAY 'hobbies''' -----> 
+
+
+
+
+
+
+E O PROBLEMA, AQUI, É QUE 'hobbies' 
+
+
+
+
+É 1 ARRAY,
+
+E NÃO UM 'DOCUMENT EM SI'.... -----> EAPESAR DE QUE VOCÊ 
+
+
+
+
+
+
+
+
+
+
+PODE 'chamar/encontrar' documents por meio dessa NOTAÇÃO AQUI:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  db.users.updateMany({totalAge: {$gt: 30}},
+ 
+ 
+ 
+ 
+ {
+     $inc: {"hobbies.frequency": -1}
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+ )
+
+
+
+
+,
+
+
+
+
+,
+
+
+
+ 
+
+ E MESMO QUE VOCÊ CONSIGA USAR ESSA SINTAXE PARA 'FIND DOCUMENTS',
+
+
+
+ VOCÊ NÃO VAI PODER OS UPDATAR COM ELA...

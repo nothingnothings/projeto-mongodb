@@ -1,0 +1,715 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> FALAMOS DE 'OPERATORS'
+
+NA ÚLTIMA LECTURE (coisas como "$gt" e "$lt") --------> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+E TEMOS UM PUNHADO DE DIFERNETES OPERATORS 
+
+
+
+
+
+
+
+
+QUE PODEMOS DIFERENCIAR...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA INÍCIO DE CONVERSA,
+
+TEMOS 
+
+
+'QUERY OPERATORS' 
+
+
+E 
+
+'PROJECTION OPERATORS'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> QUERY SELECTORS --> SÃO COISAS COMO '$gt',
+
+
+QUE NOS DEIXAM 'NARROW DOWN' o SET DE DOCUMENTS QUE RETRIEVAMOS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PROJECTION OPERATORS ---> NOS DEIXAM '''TRANSFORM''', OU __ CHANGE__ A DATA QUE NÓS 'GET BACK' (
+
+    pegar só alguns fields,
+
+
+    ou então alterar alguns fields,
+
+    até certo ponto...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> ESSES 2 TIPOS DE OPERATORS SÃO CHAMADOS DE 'READ OPERATORS'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+READ OPERATORS 
+
+|
+|
+|
+
+
+QUERY SELECTORS 
+
+
+
+E 
+
+
+
+PROJECTION OPERATORS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> MAS TAMBÉM APRENDEREMOS, MAIS TARDE,
+
+SOBRE 
+
+'UPDATE-RELATED OPERATORS.'..
+
+
+
+
+
+
+
+
+
+--> POR MEIO DESSES OPERATORS, PODEMOS ESSENCIALMENTE UPDATE 'FIELDS' 
+
+E 
+
+'ARRAYS'... --------> E HÁ DIFERENTES TECHNIQUES 
+
+
+
+
+__ PARA ___ OPERATE ESSAS COISAS... (
+
+    NORMAL FIELDS ou arrays.... --> VEREMOS ISSO NO MÓDULO DE 'UPDATE'...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> POR FIM,
+
+TEMOS 'QUERY MODIFIERS' --> ISSO NOS DEIXA ALTERAR O 'QUERY BEHAVIOR',
+
+
+MAS É ALGO QUE 
+
+JÁ FOI DEPRECADO.... (
+
+
+    ISSO NÃO SERÁ ESTUDADO NO NOSSO CURSO,
+
+    PQ AS COISAS QUE FAZÍAMOS COM ESSES 'QUERY MODIFIERS'
+
+
+    SÃO 
+
+    COISAS QUE PODMEOS FAZER, HOJE,
+
+
+    COM 'NORMAL OPERATORS.'...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ALÉM DISSO,
+
+
+
+TAMBÉM PODEMOS FAZER UM POUCO DE 'AGGREGATION',
+
+
+
+
+
+QUE 
+
+
+TAMBÉM É O 'READ DE DATA DA DATABASE',
+
+
+
+MAS QUE AÍ 
+
+
+TE DEIXA FAZER UNS TRANSFORMS UM POUCO MAIS COMPLEXOS,
+
+
+ESSENCIALMENTE... ---------> ESSE É UM CONCEITO 
+
+
+
+BEM INTERESSANTE,
+
+
+
+
+
+
+
+
+EM QUE 
+
+
+VOCê BASICAMENTE SETTA 
+
+
+
+1 
+
+'PIPELINE DE STAGES' 
+
+
+
+em que você vai 
+
+
+'FUNNEL YOUR DATA THROUGH' --->  E AÍ VOCÊ VAI GANHAR/VAI PODER USAR UM MONTE DE OPERATORS QUE TE 
+
+DEIXAM 
+
+
+
+
+'SHAPE' 
+
+A DATA QUE VOCÊ GANHA DE VOLTA,
+
+
+PARA CONSEGUIR A FORMA QUE VOCê VAI QUERER UTILIZAR NO SEU APP...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> A AGGREGATION É COMPOSTA DE 
+
+
+
+
+'PIPELINE STAGES' 
+
+
+
+e 
+
+
+'PIPELINE OPERATORS'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> TEREMOS 1 MÓDULO INTEIRO SOBRE 'AGGREGATION'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> É POR ISSO QUE NESSE MÓDULO FOCAREMOS NOS 'READ OPERATORS,'
+
+
+
+e no UPDATE MODULE 
+
+
+
+ESTUDAREMOS OS 'UPDATE OPERATORS'...
+
+
+
+
+
+
+
+
+--> OK...........
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+MAS PARA INSERTS E DELETES,
+
+NÃO HÁ OPERATORS (
+ 
+
+
+
+    na verdade,
+
+    para 'delete' EXISTEM OPERATORS,
+
+
+
+
+    mas 
+
+eles serão os MESMOS DOS 'READ OPERATORS',
+
+
+
+PQ 
+
+
+
+
+EM DELETE VOCÊ VAI QUERER 'ENCONTRAR A DATA QUE VOCÊ QUER DELETAR',
+
+
+
+
+
+e isso  FUNCIONA DA _ MESMA_ MANEIRA QUE VOCê 'ENCONTRA DATA PARA OUTPUTTAR', lá no read...
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+--> MAS PARA O UPDATE TEREMOS UNS OPERATORS SEPARADOS,
+
+
+
+DISTINTOS DOS DE FIND/DELETE,
+
+
+
+E ELES SERÃO MOSTRADOS EM 1 MÓDULO SEPARADO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> OK....
+
+
+
+
+
+
+
+
+
+
+
+A PRÓXIMA PERGUNTA É:
+
+
+
+
+
+
+
+
+
+
+'''COMO OPERATORS IMPACTAM NOSSA DATA'....
+
+
+
+
+
+
+
+
+
+
+
+--> BEM,
+
+A RESPOSTA A ESSA PERGUNTA _ DEPENDE__ DO TYPE DO OPERATOR....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1o type) ----> QUERY OPERATOR... --> É COMO O QUE USAREMOS NESTE MÓDULO.... -->  NÓS PODEMOS USAR OS 'QUERY OPERATOR' PARA 'LOCATE DATA'... (ESSE É SEU PURPOSE)...
+
+
+
+
+--> ISSO SIGNIFICA QUE OS QUERY OPERATORS_ _ NUNCA _ FARÃO O 'CHANGE' de nossa data,
+
+
+
+E SIM 
+
+
+
+VÃO SÓ A RETORNAR... ------> 
+
+
+
+
+
+
+COMO EXEMPLO DE 'query operator',
+
+
+TEMOS 
+
+
+
+'$eq',
+
+
+
+QUE SIGNIFICA 'equal',
+
+
+
+
+OU ENTÃO 
+
+
+
+'$gt' e '$lt',
+
+QUE VIMOS ANTERIORMENTE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> 2o TYPE --> PROJECTION OPERATORS -------> VEREMOS NESSE MÓDULO, TAMBÉM... --> O QUE ESSES OPERATORS FAZEM É ALTERAR A 'DATA PRESENTATION' da data que vocÊ recebe de volta...
+
+
+--> ISSO SIGNIFICA QUE ESSE OPERATOR  __TAMBÉM NÃO VAI ALTERAR A DATA NA SUA DATABASE,
+
+
+
+E SIM __ SÓ VAI MUDAR O 'LOOK' DELA, LOOK QUE VOCê RECEBE....
+
+
+
+
+
+
+
+
+
+
+--> COMO EXEMPLO DE 'Projection operators',
+
+
+O PROFESSOR SÓ ESCREVE '$' ------> ESSE '$' VAI FAZER SENTIDO QUANDO COMEÇARMOS A USAR 'PROJECTION OPERATORS'....
+
+
+
+
+-_> ISSO QUER DIZER QUE RECEBEMOS ALGUMAS TOOLS PARA 'CONTROL THE LOOK OF THE DATA WE GET BACK'..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+DEPOIS DISSO,
+
+TEMOS 'UPDATE OPERATORS'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+3o type --> UPDATE OPERATORS --> TE DEIXAM 'MODIFY + ADD' ADDITIONAL DATA... ---> ESSE TIPO DE OPERATORS, NO CASO, VAI TE DEIXAR/VAI OBRIGATORIAMENTE 'CHANGE DATA'...
+
+
+
+
+
+
+
+
+
+--> COMO EXEMPLO DE 'update operator,'
+
+
+
+PODEMOS CITAR 
+
+
+'$inc' ---> 
+
+
+
+
+
+ESSE OPERATOR DE '$inc '
+
+
+SEMPRE VAI 
+
+
+'''INCREMENTAR UM 
+
+
+FIELD POR 1 NÚMERO, OU QUALQUER NÚMERO QUE VOCÊ ESPECIFICAR, QUANDO 
+
+
+ESSE DOCUMENT FOR ALTERADO'''..... ------> E VEREMOS ISSO NO MÓDULO DE 'UPDATE'....

@@ -1,0 +1,1020 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA USAR O MONGODB COMPASS PARA __ SE CONECTAR__ AO SEU MONGODB SERVER 
+
+
+
+
+CRIADO LOCALMENTE,
+
+ESCREVA 
+
+
+'mongodb://127.0.0.1:27017'...
+
+
+
+
+
+
+
+
+
+
+
+--> ESSE É O ENDEREÇO DEFAULT, É CLARO...
+
+
+
+
+
+
+
+--> OK, CONSEGUIMOS VER TODAS NOSSAS DATABASES, AGORA,
+
+DENTRO DO MONGODB COMPASS...
+
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR COMEÇA FALANDO SOBRE O DOWNLOAD DE MONGODB COMPASS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> QUANDO VOCÊ INICIA O MONGODB COMPASS PELA PRIMEIRA VEZ,
+
+A TELA É 1 POUCO DIFERENTE...
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+ -------> tenha seu mongod server 
+
+ rodando... 
+
+
+
+
+
+
+
+
+
+
+ --> SE VOCÊ RODAR O MONGODB COMPASS PELA PRIMEIRA VEZ,
+
+ VOCÊ NEM PRECISA ALTERAR NADA,
+
+ QUE ELE JÁ ESTARÁ CONFIGURADO COMO 
+
+
+
+ 'localhost:27017'..
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> SÓ CLIQUE EM 'connect '--> aí você já estará conectado ao 'local mongodb server'..
+
+
+
+
+
+
+
+
+
+
+
+
+ -> AÍ PODEMOS ATÉ MESMO CRIAR NOVAS DATABASES DENTRO DO MONGODB COMPASS....
+
+
+
+
+
+
+
+ --> PODEMOS ATÉ MESMO INSERIR NOVOS DOCUMENTS MANUALMENTE...
+
+
+
+
+
+
+ --> NOS DATA TYPES,
+
+
+ OBSERVAMOS 
+
+
+
+ OS DATA TYPES QUE ESTUDAMOS ANTES, COMO 'Int32' e 'Int64'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> OK... -----> AÍ O PROFESSOR ENTÃO ESCREVE 
+
+
+
+
+
+
+ {
+     _id: ObjectId("ashjasjasaijo"),
+
+     name: "Max",
+     age: 29,
+
+     location: { ////SEU TYPE SERÁ DE 'OBJECT', no mongodb compass...
+
+     }
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> ESSE OBJECT SERÁ SIMPLESMENTE UM 'EMBEDDED DOCUMENT'....
+
+
+
+
+
+
+
+
+
+
+
+ -> PARA O EMBEDDED DOCUMENT,
+
+
+
+o professor vai ADICIONAR UM TYPE ESPECIAL DE OBJECT,
+
+QUE O PROFESSOR 
+
+
+VAI EXPLICAR MAIS TARDE NO CURSO, 
+
+
+NO MÓDULO DE GEOSPATIAL-------> 
+
+
+
+
+
+
+
+
+
+ELE COLOCA UMA KEY DE 
+
+
+
+'type',
+
+que terá um valor de 'Point' (string)....
+
+
+
+
+
+
+
+-> DEPOIS ELE VAI DEFINIR 'coordinates',
+
+
+
+QUE SERÃO ACTUALLY 
+
+
+um ARRAY....
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+ {
+     _id: ObjectId("ashjasjasaijo"),
+
+     name: "Max",
+     age: 29,
+
+     location: { ////SEU TYPE SERÁ DE 'OBJECT', no mongodb compass...
+
+        type: "Point", /// (STRING)
+        coordinates: Array ///(type) 
+
+     }
+ }
+
+
+
+
+
+
+-------------------------------------
+
+
+
+
+
+
+
+
+
+
+--> NESSE COORDINATES,
+
+
+
+O PRIMEIRO VALOR, representado por '0',
+
+
+ser´
+
+
+um DOUBLE de '56.12'....
+
+
+
+
+
+
+
+
+--> JÁ O SEGUNDO VALOR, REPRESENTADO PELO INDEXADOR '1',
+
+TAMBÉM SERÁ UM DOUBLE,
+
+
+
+
+de valor '43.09'....
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+
+ {
+     _id: ObjectId("ashjasjasaijo"),
+
+     name: "Max",
+     age: 29,
+
+     location: { ////SEU TYPE SERÁ DE 'OBJECT', no mongodb compass...
+
+        type: "Point", /// (STRING)
+        coordinates: Array ///(type) 
+        0: 56.12
+        1: 43.09
+     }
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> AÍ CLICAMOS INSERT,
+
+
+E ISSO VAI INSERIR 
+
+
+NOSSO DOCUMENT LÁ EM UMA DE NOSSAS DATABASES....
+
+
+
+
+
+
+
+
+
+OK... NOSSO OBJECT TERÁ SIDO INSERIDO:
+
+
+
+
+{
+    "_id": {
+        "$oid": "620457e254ac59a6001888e0"
+    },
+    "name": "Max",
+    "age": 29,
+    "location": {
+        "type": "Point",
+        "coordinates": [56.12, 43.09]
+    }
+}
+
+
+
+
+
+
+
+
+
+--> também é possível ver outras tabs além de 'documents',
+
+
+como 
+
+'Aggregations'...
+
+
+
+
+
+
+
+
+
+--> AGGREGATIONS FARÃO MAIS SENTIDO 
+
+AO LONGO DO CURSO,
+ 
+
+
+
+
+
+
+
+LÁ NO MÓDULO DE 'AGGREGATION FRAMEWORK'... ---->  professor vai nos mostrar como podemos aggregate 
+
+
+data 
+
+no shell...  ----> O QUE APRENDEREMOS NO MÓDULO, LÁ COM O SHELL,
+
+
+É ALGO QUE VEREMOS REPLICADO AQUI....
+
+
+
+
+
+
+
+
+
+
+
+
+---> ''''EXPLAIN PLAN'''' 
+
+
+
+e 
+
+
+'INDEXES'''' FARÃO MAIS SENTIDO SOBRE O 
+
+
+MÓDULO DE 'INDEXES',
+
+
+
+
+
+
+
+EM QUE APRENDEREMOS O QUE SÃO INDEXES 
+
+
+
+E PQ OS UTILIZAMOS...
+
+
+
+
+
+
+
+
+
+--> E AQUI, NESSA ABA,
+
+PODEMOS EXPLORAR 
+
+
+QUAIS INDEXES SÃO ATTACHEADOS AS SUAS 
+
+COLLECTIONS,
+
+
+QUE TIPOS DE INDEXES 
+
+SÃO,
+
+
+
+
+E TAMBÉM PODE CRIAR 
+
+
+
+1 NOVO INDEX...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> LÁ EM 'EXPLAIN PLAN',
+
+
+por sua vez,
+
+
+APRENDEMOS 
+
+
+
+COMO 
+
+
+
+SUAS QUERIES SÃO EXECUTADAS....
+
+
+
+
+
+
+
+
+
+
+
+
+--> FALANDO DE QUERIES,
+
+
+PODEMOS EXECUTAR QUERIES 
+
+NO MONGODB 
+
+TAMBÉM... ------------> PODEMOS 
+
+
+
+RODAR UMA QUERY PARA 'FIND ALL DOCUMENTS'...
+
+
+
+
+
+
+
+
+
+
+
+
+---> AH... AGORA ENTENDI... --> VOCÊ ESCREVE SUA QUERY ALI NO 'filter',
+
+
+e aí 
+
+
+
+VOCê 
+
+VÊ 
+
+O QUE TE RETORNA.... -----> 
+
+
+
+
+escrevemos 
+
+
+'{
+    name: "Max"
+}
+'
+
+
+
+
+
+
+
+
+
+
+---> PODEMOS PROCURAR, POR EXEMPLO,
+
+
+
+
+
+""""
+
+{
+    age: 29
+}
+
+
+
+""""
+
+
+
+
+
+
+--> mas se procurarmos por {
+
+    age: 30
+},
+
+não receberemos nada....
+
+
+
+
+
+
+
+
+
+
+
+
+-> PODEMOS USAR COM O MONGODB COMPASS PARA 'GET A FEEL'
+
+
+com o que você 
+
+tem dentro 
+
+
+
+das suas databases...
+
+
+
+
+
+
+
+
+
+
+
+--> E É CLARO QUE VOC~E PODE FAZER MAIS DO QUE VIEW DATA E INSERT DATA,
+
+
+
+
+VOCê TAMBÉM PODE ATUALIZAR E MUDAR SUA DATA....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> CLIQUE 
+
+
+
+E ALTERE,
+
+E AÍ CLIQUE 'SAVE'...
+
+
+
+
+
+
+
+
+--> VOCê TAMBÉM PODE DELETAR 
+
+SEUS DOCUMENTS...
+
+
+
+
+
+
+
+
+
+
+
+
+--> QUANTO AO OBJECT DE LOCATION,
+
+QUE POSSUI ESTA ESTRUTURA:
+
+
+
+
+
+
+
+
+
+location: {
+    type: "Point",
+    coordinates: [
+        56.12, 43.09
+    ]
+}
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO SÓ TE MOSTRA QUE VOCÊ PODE _ ADICIONAR __ NESTED OBJECTS __ 
+
+
+NOS SEUS DOCUMENTS,
+
+
+NO MONGODB COMPASS,
+
+
+
+TAMBÉM...
+
+
+
+
+
+
+
+
+
+
+
+--> E ISSO É NA VERDADE UM TIPO ESPECIAL DE OBJECT,
+
+O QUAL PODEMOS APRENDER NO MÓDULO DE 'GEOSPATIAL'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... ESSE É O COMPASS... --> COMPASS É UMA BOA GUI QUE 
+
+VOCê 
+
+
+DEVE TER CIÊNCIA DE...
+
+
+
+
+
+
+
+
+
+--> PROFESSOR NÃO VAI MAIS USAR ISSO AO LONGO DO CURSO...
+
+
+
+
+
+
+
+
+
+
+--> VOCê SEMPRE PODE VOLTAR E 
+
+LOGGAR 
+
+
+
+
+
+
+DENTRO DE SUA DATABASE SERVER COM O COMPASS,
+
+PARA FACILMENTE 
+
+MANIPULAR SUA DATABASE,
+
+TESTAR QUERIES,
+
+
+
+
+
+
+
+
+
+
+E PARA, MAIS TARDE NO CURSO,
+
+NO MÓDULO DE 'INDEXES',
+
+
+
+
+
+
+estudar o funcionamento de 'indexes' na aba de 'indexes',
+
+
+
+
+
+E 
+
+
+
+TAMBÉM O 
+
+
+'AGGREGATIONS'
+ 
+
+ lá na aba de 'aggregations'...
+
+
+
+
+
+
+
+
+
+
+
+
+ --> OK... ESSE É O COMPASS.... --> MAS HÁ MAIS UMA COISA QUE 
+
+ DEVE SER MENCIONADA:
+
+
+
+ ESSA É A VERSÃO DO 'COMMUNITY' 
+
+
+
+
+
+DO COMPASS.. --> SE VOCÊ ESTIVER USANDO O MONGODB ENTERPRISE,
+
+
+
+
+VOCÊ TERÁ UMA FEATURE EXTRA NO COMPASS,
+
+QUE 
+
+É 
+
+
+A ABA DE 
+
+'SCHEMAS',
+
+
+que não temos aqui...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> A ABA DE SCHEMAS te deixa explorar o 'SCHEMA' de sua data 
+
+em grande detalhe...
+
+
+
+
+
+
+
+
+
+
+--> VOCÊ PODERIA VER QUANTOS DOCUMENTS TEM UMA 'STRING' PARA O 'NAME',
+
+
+ou uma strnig para a 'age',
+
+caso você tenha mixed data,
+
+por exemplo...
+
+
+
+
+
+
+
+--> PARA LOCATION DATA,
+
+
+
+
+
+COMO 
+
+ESSA REPRESENTADA POR:
+
+
+
+
+
+
+
+
+location: {
+    type: "Point",
+    coordinates: [
+        56.12, 43.09
+    ]
+}
+
+
+
+,
+
+
+
+VOCÊ 
+
+PODERIA 
+
+TAMBÉM VER UM 'MAP',
+
+
+E AÍ 
+
+EXPLORAR SUAS ENTRIES NESSE MAP, para múltiplos documents... 
+
+
+
+
+
+
+
+
+
+
+
+--> A VERSÃO ENTERPRISE TE DÁ UM POUCO MAIS DE FEATURES,
+
+
+MAS PARA O BASIC EDITING E VIEWING,
+
+
+A VERSÃO DE COMUNIDADE É SUFICIENTE...

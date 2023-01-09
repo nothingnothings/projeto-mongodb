@@ -1,0 +1,386 @@
+
+
+
+
+
+
+OK, ANTERIORMENTE VIMOS ONE-TO-ONE RELATIONSHIPS USANDO EMBEDDED DOCUMENTS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> AGORA, PARA A GRANDE MAIORIA DAS ONE-TO-ONE RELATIONS,
+
+
+VOCÊ VAI USAR 
+
+'embedded documents'... esse approach aí... -----> 
+
+
+
+
+
+
+
+
+
+MAS VOCÊ NÃO 
+
+
+
+É FORÇADO A FAZER ISSO.... -------> VOCÊ AINDA 
+
+
+
+PODE 
+
+
+ESCREVER 
+
+
+ONE-TO-ONE RELATIONS QUE 
+
+
+
+
+
+UTILIZAM 'DIFFERENT COLLECTIONS'... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AQUI HÁ 1 POSSÍVEL EXEMPLO:
+
+
+
+
+DIGAMOS QUE TEMOS 
+
+
+
+PERSONS E CARS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+''UMA PERSON TEM 1 CAR, E ESSE CAR PERTENCE A 1 PERSON SÓ'.... 
+
+
+
+
+
+
+
+
+
+
+PERSON A <-> CAR 1 
+
+
+
+
+PERSON B <-> CAR 2
+
+
+
+PERSON C <-> CAR 3 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1 CAR POR PESSOA, 1 PESSOA POR CAR....
+
+
+
+
+
+
+
+
+
+
+--> AINDA PODERÍAMOS MODELAR ISSO COM UM EMBEDDED DOCUMENT...
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+db.persons.insertOne({name: 'Max', car: {model: 'BMW', price: 40000}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> OK... MAS DIGAMOS QUE TEMOS UM APP 
+
+
+
+
+
+
+EM QUE 
+
+
+
+QUEREMOS MAIS UM USE-CASE DE 'ANALYTICS' ----> USE-CASE EM QUE 
+
+
+ESTAMOS MT 
+
+
+INTERESSADOS EM 'ANALYZING PERSON DATA',
+
+
+
+
+como 
+
+
+'AVERAGE SALARY'
+
+E 
+
+'AGE' (data que não temos aqui)
+
+
+
+
+
+
+
+
+
+MAS PODEMOS ADICIONAR MAIS DATA,
+
+
+DE ACORDO COM O APP...
+
+
+
+
+
+
+
+
+
+
+--> eSTAMOS INTERESSADOS EM ANALISAR NOSSAS PERSONS, E OS CARS A QUE SÃO VINCULADAS,
+
+
+
+MAS N TANTO ASSIM A RELATION ENTRE ELES... (RESEARCH MAIS NOS CARS, E NAS PERSONS, INDIVIDUALMENTE)...
+
+
+
+
+
+
+
+
+
+
+--> COMO VAMOS ANALISAR OS 2 INDIVIDUALMENTE,
+
+NÃO HÁ RAZÃO PARA NÃO OS SPLITTAR EM 2 COLLECTIONS SEPARADAS... (não há razão para mergear as 2 collections em 1 collection só, pq 
+
+NÃO HÁ NECESSIDADE DE FETCHEAR DATA DO CARRO, POR EXEMPLO, QUANDO ESTAMOS FETCHEANDO DATA DAQUELA PERSON, DOCUMENT DAQUELA PERSON)...
+
+
+
+
+
+
+
+
+
+
+
+--> PQ ISSO SIGNIFICARIA QUE 
+
+
+TERÍAMOS DE FAZER UM MONTE DE 'TRANSFORMATION WORK'
+
+para 
+
+
+extrair 
+
+a data 
+
+
+dos cars que interessa,
+
+e um monte de send de data over the wire...
+
+
+
+
+
+
+
+
+-------> É POR ISSO QUE PODEMOS IR POR UM APPROACH 
+
+
+
+
+
+
+
+EM QUE INSERIMOS 
+
+
+uma person,
+
+coisa normal,
+
+
+
+
+
+MAS COM UM ID NO INTERIOR... TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+
+{
+    name: 'Max',
+    _id: ObjectId("5asijassijaaishjlasi'),
+    age: 29,
+    salary: 3000
+}
+
+
+
+
+
+
+
+
+
+db.cars.insertOne(
+    {
+        model: 'BMW',
+        price: 400000,
+        ownerId: ObjectId("5asijassijaaishjlasi');
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> COM ISSO,
+
+
+
+ainda ficamos com A RELATION ENTRE OS 2, CONTIDA EM 1 ID,
+
+MAS NÃO TEMOS QUE FETCHEAR O DOCUMENT 'car' inteiro quando fetcheamos o user, por exemplo... essa é a vantagem...
+
+
+
+
+
+
+--> PODEMOS MERGEAR A DATA SE QUISERMOS, AQUI, 
+
+
+
+MAS NÃO É OBRIGATÓRIO.... (
+
+
+
+USE-CASE EM QUE 
+
+
+COMUMMENTE NÃO MERGEAMOS DATA, NÃO TEMOS NECESSIDADE DISSO,
+
+SÓ OCASIONALMENTE...
+
+)
+
+
+
+
+
+
+--> 

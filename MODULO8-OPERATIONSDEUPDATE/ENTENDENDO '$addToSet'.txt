@@ -1,0 +1,323 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... HÁ MAIS UM COMANDO QUE O PROFESSOR QUER NOS MOSTRAR...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> ANTES DISSO,
+
+PROFESSOR QUER CICLAR ATÉ O COMANDO EM QUE FIZEMOS PUSH DE 'A SINGLE HOBBY TO MARIA'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+era o código de 
+
+
+
+
+
+db.users.updateOne({name: "Maria"}, {$push: {hobbies: {title: "Sports", frequency: 2}}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA VAMOS MUDAR ISSO PARA SER 'title: hiking'....
+
+
+
+
+
+
+
+EX:
+
+
+db.users.updateOne({name: "Maria"}, {$push: {hobbies: {title: "Hiking", frequency: 2}}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR EXPLICA QUE AQUI, POR MEIO DESSE CÓDIGO, FAZÍAMOS/FAZEMOS O PUSH DE UM 'SINGLE ITEM'..
+
+
+
+
+
+
+
+
+
+
+
+
+-->  E O COMANDO QUE O PROFESSOR NOS MOSTRARÁ,
+
+
+
+'$addToSet',
+
+
+
+
+_ NÃO VAI FUNCIOANR COM '$each' (
+
+
+    ou seja,
+
+    COM AQUELE OPERATOR QUE 
+
+    TE DEIXA ESPECIFICAR UMA LIST/CONJUNTO DE OBJECTS/ELEMENTS A SER ADICIONADO EM UM ARRAY JÁ EXISTENTE..
+)
+
+
+
+
+
+
+
+
+
+
+--> SE VOCÊ QUER FAZER PUSH DE _}_aPENAS__ 1 ÚNICO OBJETO, COMO AGORA,
+
+
+
+
+
+
+VOCê PODE RECORRER AO USO DE '$addToSet'
+
+
+
+EM VEZ de '$push'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> OK... ----> ESCREVEMOS ISSO AÍ, TIPO ASSIM:
+
+db.users.updateOne({name: "Maria"}, {$addToSet: {hobbies: {title: "Hiking", frequency: 2}}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> OK.... SE AGORA ENCONTRARMOS NOSSO ITEM,
+
+VEREMOS NOSSO ITEM DENTRO DO ARRAY DELE...
+
+
+
+
+
+
+
+
+
+
+
+--> A PERGUNTA É:
+
+
+QUAL É A DIFERENÇA de '$addToSet'
+
+
+
+
+
+EM RELAÇÃO AO 
+
+
+'$push'?
+
+
+
+
+
+
+
+
+
+A DIFERENÇA FICA CLARA ____QUANDO TENTAMOS __ EXECUTAR O EXATO MESMO COMMAND MAIS 1 VEZ... ---->  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**** LÁ, COM O $PUSH,
+
+SE TENTÁVAMOS RODAR UMA MESMA QUERY, com o mesmo object sendo addado por meio de 'push' a um array,
+
+
+__ NÓS ACABÁVAMOS CONSEGUINDO,
+
+O OBJECT ACABAVA ADICIONADO AO ARRAY E 'duplicate data' era criada...
+
+
+
+
+
+
+
+
+
+
+--> JÁ COM '$addToSet',
+
+
+ SE TENTARMOS RODAR UMA MESMA QUERY/OPERAÇÃO MAIS DE 1 VEZ,
+
+
+
+
+
+
+
+
+O DOCUMENT NÃO SERÁ 'CHANGED'.... ('modifiedCount: 0')... --> NÃO GANHAMOS ERRO ALGUM ,MAS NADA ACABA MODIFICADO..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... A DIFERENÇA DE 'addToSet'
+
+
+EM RELAÇÃO A 
+
+
+
+'push',
+
+
+NO CASO,
+
+É QUE 
+
+
+ELE 
+
+
+
+
+'ADDS UNIQUE VALUES ONLY' ------>  ISSO SIGNIFICA QUE __ SE VOCê __ TENTA ADICIONAR UM VALUE __ QUE __ JÁ FAZ PARTE DO ARRAY em que 
+
+vocÊ está tentando addar,
+
+
+
+__ ESSE VALUE/ELEMENT __ NÃO SERÁ ADICIONADO MAIS 1 VEZ (sem duplicate data)... --> E ISSO, É CLARO, TAMBÉM PODE SER ÚTIL, EM ALGUMAS SITUAÇÕES...

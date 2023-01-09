@@ -1,0 +1,325 @@
+
+
+
+
+
+
+
+
+
+
+ANTES DE VERMOS O CÓDIGO DE VERDADE,
+
+HÁ ALGO QUE VOCÊ TEM DE SABER:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+É QUE VOCÊ TEM QUE ENTENDER COMO  O 
+
+
+'TRABALHO ENTRE O __ MANAGEMENT_ DA DATABASE (provavelmente através da SHELL  )
+
+
+e 
+
+O INTERACTING __ COM A DATABASE (através do driver)'
+
+
+
+são 
+
+SPLITTADOS... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OU SEJA,
+
+COMO SPLITTAMOS O TRABALHO ENTRE ESSAS 2 FERRAMENTAS/MEIOS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ok... 
+
+
+
+
+
+
+SHELL ===
+
+
+
+
+COM O QUE USAMOS 
+
+ATÉ AGORA,
+
+PROVAVELMENTE FICAREMOS COM A SHELL PARA O 'CONFIGURE DA DATABASE',
+
+
+o 
+
+
+'CREATE DE DATABASES',
+
+'CREATE DE COLLECTIONS'
+
+
+
+
+E O 
+
+
+
+'CREATE DE INDEXES'...
+
+
+
+
+(
+
+
+    SIM, ESSAS SÃO APARENTEMENTE COISAS QUE SÓ SÃO POSSÍVEIS COM A SHELL....
+)
+
+
+
+
+
+
+
+
+--> ESSAS SÃO TAREFAS QUE VOCÊ FAZ 'UPFRONT', 
+
+
+ou seja,
+
+QUANDO VOCÊ SETTA 
+
+O BACKEND PARA SEU APP... --> E VOCÊ NÃO FAZ ISSO 
+
+
+
+
+DENTRO DO SEU DRIVERZINHO,
+
+PQ 
+O 
+
+DRIVER 
+
+
+
+TEM MAIOR CONEXÃO 
+
+COM A LÓGICA 
+
+
+DE SEU 
+
+APP,
+
+
+
+COM SEU APP EM SI... ----> E SE VOCÊ ESTÁ CONSTRUINDO UMA ONLINE SHOP, POR EXEMPLO,
+
+
+
+
+O CÓDIGO DO SEU APP VAI SER BASICAMENTE RESPONSÁVEL PELO 'HANDLE DOS PRODUCTS', users, WORK COM ORDERS, etc...
+
+
+
+
+
+
+
+
+--> O 'INITIAL DATABASE SETUP' NÃO É ALGO 
+
+QUE __ SEU __ APP DEVE 'LIDAR COM';  O IDEAL É QUE ELE APENAS 'ASSUMA QUE A DATABASE JÁ ESTÁ NO LUGAR',
+
+
+
+PARA ENTÃO SE COMUNICAR COM A DATABASE...
+
+
+
+-------->  É POR ISSO QUE TODAS ESSAS ETAPAS DE 
+
+
+CONFIGURATION/SETUP __ SERÃO FEITAS DE DENTRO __ DA SHELL... (upfront)..
+
+
+
+
+
+
+
+
+
+
+
+DRIVER ====  DE DENTRO 
+
+
+
+
+DO 
+
+SEU 
+
+
+APP,
+
+
+VOCÊ TIPICAMENTE 
+
+
+
+EXECUTARÁ 
+
+TODAS 
+
+ESSAS 
+
+CRUD OPERATIONS 
+
+
+
+
+
+
+
+
+
+PARA 
+
+
+'STORE DATA',
+
+'RETRIEVE',
+
+
+'UPDATE',
+
+'DELETE'...
+
+
+
+
+
+
+
+
+
+--> as aggregation pipelines __ TAMBÉM SÃO CONFIGURADAS/ACESSADAS __ DE DENTRO __ 
+
+DO 
+
+DRIVER- --> SÃO USADAS 
+
+
+PARA 
+
+
+
+
+RETRIEVAR 
+
+SUA 
+
+DATA 
+
+DE UM FORMATO ESPECÍFICO,
+
+NÃO SATISFEITO INICIALMENTE PELO SEU DATA SCHEMA....
+
+
+
+
+
+
+
+
+
+
+--> ESSE SPLIT É 
+
+
+
+IDEAL PQ DIVIDE AS RESPONSIBLITIES...
+
+
+
+
+
+
+
+
+
+
+
+
+---> É CLARO QUE VOCÊ PODE CRIAR COLLECTIONS E INDEXES DE DENTRO DO DRIVER,
+
+
+
+
+
+
+
+E ISSO é algo possível...
+
+
+
+
+
+
+
+DEVEMOS VER TUDO ISSO EM UM APP EXEMPLO QUE O PROFESSOR PREPAROU...

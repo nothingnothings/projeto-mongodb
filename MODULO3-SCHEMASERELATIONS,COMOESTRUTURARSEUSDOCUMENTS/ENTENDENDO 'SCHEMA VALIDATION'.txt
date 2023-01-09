@@ -1,0 +1,463 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> FALAMOS MT SOBRE SCHEMAS,
+
+
+SOBRE STRUCTURES E RELATIONS...
+
+
+
+
+
+
+
+
+
+
+
+
+-_> AGORA O PROFESSOR QUER FALAR SOBRE 'SCHEMA VALIDATIOn'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> professor quer voltar àquele tópico de 'DATA TYPE',
+
+
+
+
+E TAMBÉM 
+
+
+
+
+A NOSSA 'SCHEMA STRUCTURE', em geral....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> APRENDEMOS QUE O MONGODB É MT FLEXÍVEL,
+
+
+
+
+
+VOCÊ PODE TER 
+
+
+
+
+SCHEMAS TOTALMENTE DIFERENTES (documents também) 
+
+
+
+em uma 
+
+
+MESMA COLLECTION...
+
+
+
+
+
+
+
+
+
+--> MAS ÀS VEZES VOCÊ VAI QUERER UM STRICT SCHEMA,
+
+
+PQ 
+
+VOCÊ VAI SABER QUE 
+
+
+
+
+SEU APP VAI 
+
+
+PRECISAR FETCHEAR POSTS,
+
+E ELE VAI PRECISAR 
+
+ACESSAR O 'TITLE' EM CADA POST,
+
+
+
+E ELE VAI EXPECT QUE CADA 'title' será obrigatoriamente uma string....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> PARA CASOS COMO ESSES,
+
+
+SCHEMA VALIDATION PODE TE AJUDAR...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O QUE É 'SCHEMA VALIDTION'?  (acho que já sei)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> DIGAMOS QUE TEMOS UM CÓDIGO DE 'insertOne()'
+
+
+sendo executado,
+
+e 1 document está sendo inserido em nossa collection..
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> E ISSO SE APLICA A OPERATIONS DE UPDATE, TAMBÉM ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE ADICIONAMOS UM 'VALIDATION SCHEMA',
+
+
+
+
+
+
+
+um deles,
+
+
+aí o schema/mongodb
+
+
+
+VAI 'VALIDATE' THE INCOMING SCHEMA,
+
+a partir 
+
+do 
+
+schema que definimos....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> OU A OPERAÇÃO SERÁ ACEITA
+,
+
+
+ OU SERÁ REJEITADA (
+
+
+     a database não é tocada,
+
+     não é alterada,
+
+
+     e o user recebe um ERROR....
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+ --. PARA SER MAIS PRECISO,
+
+ VOCÊ PODE DEFNIIR 
+
+
+
+
+ SCHEMA VALIDATION,
+
+
+
+
+ (
+
+     DO JEITO QUE O PROFESSOR MOSTRARÁ NA PRÓXIMA LIÇÃO
+ )...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> MAS ALÉM DE PODER DEFINIR 'SCHEMA VALIDATION' EM GERAL,
+
+ VOCÊ PODE DEFINIR 
+
+
+
+
+
+
+ 1) '''QUAIS KINDS OF OPERATION VOCÊ QUER VALIDATE'''' (''validationLevel'') 
+
+
+
+
+
+
+ 2) ''' O QUE VOCÊ QUER FAZER SE A VALIDATION FALHAR''''' (por meio da opção/setting de 'validationAction')...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> 1) COM VALIDATIONLEVEL, VOCÊ PODE DEFINIR QUAIS DOCUMENTS DEVEM SER 'VALIDATED'.... --------> você pode 
+
+
+
+
+ OU DEFINIR O VALIDATION LEVEL:
+
+
+
+
+ A) COMO 'strict' --> AÍ TODOS OS INSERTS E UPDATES SERÃO VALIDATED...
+
+
+
+
+
+
+ b) 'MODERATE' --> TODOS OS INSERTS SERÃO VALIDATED, MAS 
+
+                    APENAS OS UPDATES QUE TOCAREM SOBRE DOCUMENTS QUE JÁ ESTAVAM 'VALID' ANTERIORMENTE 
+
+                    SERÃO __ CHECADOS__ POR 'validity'...
+
+                    (
+
+
+                        ISSO QUER DIZER QUE SE VOCê TINHA ALGUMA DATA QUE JÁ EXISTIA NA DATABASE ANTES,
+
+                        DATA QUE ERA INVÁLIDA PQ __ VOCê HAVIA A SETTADO_ _ ANTES__ DE DEFINIR 1 SCHEMA,
+
+                        ELA __ _PODERÁ SER ALTERADA __ POR MEIO DE 'updates' INVÁLIDOS/incompatíveis com sua schema e schema validation..
+                    )
+
+
+
+
+
+
+
+
+                    --> bem nicho, isso aí.... -----> mas com 'moderate', o que interessa é que você poderá UPDATAR ESSES DOCUMENTS AÍ, DESDE QUE OS DOCUMENTS ANTIGOS/JÁ EXISTENTES NÃO SE ENCAIXEM NO SEU SCHEMA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2) validationAction -----> VOCÊ PODE ESCOLHER O QUE QUER FAZER A PARTIR DESSE ERROR, VALIDATION ERROR.
+
+
+OPÇÕES:
+
+
+
+
+a) ATIRAR UM ERROR...  ('error')-----> O MONGODB VAI DAR THROW DE UM ERROR, E AÍ VAI 'DENY INSERT/UPDATE'... ( e a database não será alterada)...
+
+
+
+
+
+
+
+B) APENAS 'warn' ---> QUANDO VOCÊ DEFINE 'warn',
+
+
+SEU ERRO/AVISO (warning) será LOGGADO,
+
+
+MAS O MONGODB AINDA VAI PROCEDER COM A OPERAÇÃO....
+
+
+
+(
+
+    você ainda teria o write/change da data,
+
+    mas será loggado um warning dizendo que seu critério não foi satisfeito...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> A COISA QUE VOCÊ VAI QUERER FAZER VAI _ DEPENDER__ DE SEU APP... --> se você 
+
+
+
+fica ok COM 'INCORRECT DAta' 
+
+
+PERMANECENDO NA SUA DATABASE,
+
+
+
+
+E APENAS QUER SER 'WARNED' sobre isso,
+
+
+MARQUE 'warn' 
+
+
+
+
+nesse 'validationAction'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VEREMOS ISSO NA PRÓXIMA AULA, NA PRÁTICA....

@@ -1,0 +1,860 @@
+
+
+
+
+
+
+
+
+
+ok........ --> em 'mongo realms'
+
+
+temos a interface do realms/stitch,
+
+
+
+
+
+com as diferentes features que ele oferece...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> VOCÊ TEM ESSA PAGE DE 'GETTING STARTED',
+
+
+
+QUE ACTUALLY TE DÁ ALGUMAS STEPS PARA 'QUICKLY GET STARTED' --> o professor 
+
+
+não vai as seguir agora, no entanto...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> A ABA DE 'CLIENTS' 
+
+
+TE 
+
+DEIXA 
+
+ESCOLHER QUE TIPO DE 
+
+APP VOCÊ ESTÁ CONSTRUINDO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+TEMOS 3, NO CASO DO PROFESSOR:
+
+
+
+
+
+
+
+
+1) BROWSER (JAVASCRIPT)
+
+
+
+
+2) JAVA (Android) 
+
+
+
+
+
+
+
+
+3) SWIFT (IOS)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> ou seja, browser e mobile apps...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> aí essas pages te mostram como instalar o stitch/mongo realms 
+
+nessas plataformas --> ISSO PQ 
+
+
+VOCÊ 
+
+VAI 
+
+PRECISAR DE UMA SDK,
+
+
+INSTALADA LOCALMENTE,
+
+
+PARA 
+
+USAR O STITCH E SUAS FEATURES, NESSAS PLATAFORMAS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> faremos isso etapa-por-etapa...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> LÁ NA 'CONFIG' DO ATLAS CLUSTER, PODEMOS IGNORAR A OPÇÃO DE 'mongodb connection string'...
+
+(
+
+
+
+
+    nos deixa conectar ao stitch app de uma forma 1 pouco diferente....
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> AS RULES DO STITCH/ATLAS CLUSTERS/MONGO REALMS,
+
+
+
+essa opção aí,
+
+
+VAI SE TORNAR __ SUPER_ iMPORTANTE __ DAQUI A POUCO,
+
+PQ 
+
+É 
+
+AÍ QUE 
+
+DEFINIMOS AS PERMISSÕES DE CADA USER NA NOSSA DATABASE...
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA ENCONTREI.... --> HÁ UMA OPÇÃO QUE NOS PERMITE DEFINIR QUAL 
+
+
+
+LINGUAGEM QUERMOS USAR...
+
+
+
+
+
+
+--> ENTRETANTO, TEMOS 2 ENTRADAS,
+
+
+
+
+uma para 'getting started with realms sdk' 
+
+
+
+e 
+
+outra 
+
+para 
+
+
+
+''working with realms'''..
+
+
+
+
+
+
+
+
+
+
+
+-> e as opções de linguagem diferem para as duas....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+A PRIMEIRA TEM ESSAS OPÇÕES:
+
+
+
+
+NODEJS
+
+
+
+WEB 
+
+
+ANDROID (JAVA)
+
+
+
+
+ANDROID (KOTLIN)
+
+
+
+
+IOS (SWIFT)
+
+
+
+IOS( OBJECTIVE-C)
+ 
+
+
+
+ .NET 
+
+
+
+
+
+
+
+
+
+  A SEGUNDA TEM ESTAS:
+
+
+
+
+
+
+
+
+
+
+
+  JAVASCRIPT 
+
+
+  TYPESCRIPT 
+
+  JAVA 
+
+
+
+  OBJECTIVE-C 
+
+
+  C# 
+
+
+  KOTLIN 
+
+
+  SWIFT 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> JÁ TRIGGERS É AQUILO QUE O PROFESSOR MENCIONOU NOS SLIDES:
+
+
+
+
+
+
+
+
+
+  '' É ONDE VOCÊ PODE SETTAR ALGUNS LISTENERS PARA COISAS QUE OCORREM NA SUA DATABASE,
+
+  OU ENTÃO 
+
+  DEFINIR LISTENERS QUE DEVEM SER DISPARADOS PARA CERTOS 'AUTH EVENTS''' --> e aí você pode 
+
+  executar
+   
+
+   'FUNCTIONS' a partir disso...
+
+
+
+
+
+
+
+
+
+
+
+
+
+   --> JÁ 'SERVICES'  
+
+
+
+
+
+
+
+   SÃO ESSES 'SERVICES' 
+
+   EM QUE 
+
+
+   VOCÊ PODE ADICIONAR SERVIÇOS COMO O 'AWS S3',
+
+
+
+   PARA 
+
+
+   AÍ 
+
+
+
+
+   REPENTINAMENTE  ADICIONAR __ FUNCIONALIDADES QUE NÃO SÃO BUILTIN DO STITCH,
+
+
+
+
+
+QUE NO CASO ERGUE UMA 'BRIDGE' PARA VOCê OS CONECTAR A ELE....
+
+
+
+
+
+
+
+(
+
+
+    services de outras companhias...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> EM 'USERS' VOCÊ PODE SER _ oS USERS_ QUE _FIZERAM 'SIGNUP' COM SEU APP... --> E 
+
+
+
+
+
+
+ESSA AUTHENTICATION,
+
+USER MANAGEMENT,
+
+TUDO ISSO 
+
+
+
+É HANDLADO 
+
+'
+BEHIND THE SCENES' 
+
+
+pelo stitch ----------> ISSO SIGNIFICA QUE VOCÊ NÃO TEM QUE SE PREOCUPAR COM 
+
+O 
+SAVE 
+
+
+
+DE PASSWORDS EM UM FORMATO ENCRYPTADO, POR EXEMPLO,
+
+
+
+
+
+
+
+
+
+
+PQ 
+
+
+
+VOCÊ __ NEM __ MESMO __ VAI ARMAZENAR ESSES PASSWORDS 
+
+NA SUA MONGODB COLLECTION, AGORA... ->  em vez disso,
+
+
+
+
+TODO ESSE CONJUNTO DE DATA DOS 'PASSWORD' SERÁ ADMINISTRADO 
+
+
+
+PELO PRÓPRIO STITCH,
+
+
+
+
+
+
+
+ESSA DATA FICANDO 'INVISÍVEL' A VOCÊ e outras pessoas... -----------> E ISSO É BEM AWESOME,
+
+
+
+
+PQ 
+
+
+
+NOS DEIXA 'FOCAR NA NOSSA CORE BUSINESS LOGIC'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> JÁ 'VALUES'  ------> SÃO ALGUNS 'STATIC VALUES' que você pode inputtar,
+
+os quais 
+
+
+você poderá/pode 
+
+então 
+
+
+
+
+INSERIR/USAR NAS SUAS RULES E FUNCTIONS,
+
+TUDO 
+
+
+POR MEIO DO 
+
+
+PLACEHOLDER ESPECIAL DE 
+
+'%%values'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> OK.... ---> JÁ 'Functions' é A __ PARTE _ EM QUE _ VOCÊ PODE 'CREATE A NEW FUNCTION',
+
+
+
+
+
+
+PARA ENTÃO DEFINIR UM CÓDIGO JAVASCRIPT QUE É EXECUTADO 'ON DEMAND',
+
+
+
+
+
+
+NO SERVIDOR,
+
+
+
+em outras palavras...
+
+
+
+
+
+
+
+
+
+
+--> VOCÊ TAMBÉM TEM 'LOGS',
+
+em que você pode ver o QUE ACONTECEU NO SEU STITCH APp...
+
+
+(
+
+
+
+    podemos ver isso mais tarde, quando tivermos algo acontecendo..
+)
+
+
+
+
+
+
+
+
+
+
+
+-> TAMBÉM TEMOS 'PUSH NOTIFICATIONS '-> ESSA FEATURE É USADA PARA 'PUSH NOTIFICATIONS' para
+
+
+MOBILE APPS....
+
+
+
+
+
+
+
+
+
+
+--> OK, ESSE É O ROUGH OVERVIEW DO STITCH... ----> 
+
+
+
+
+
+
+
+
+DEVEMOS INSTALAR O CLIENT DO STITCH NO NOSSO PROJETO/FRONTEND...
+
+
+
+
+
+
+
+
+-> para isso, devemos rodar 
+
+
+
+
+
+'npm install --save realm'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... ISSO VAI INSTALAR ESSA DEPENDENCY...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO VAI INSTALAR A 
+
+JAVASCRIPT SDK PARA O STITCH/REALM,
+
+
+
+QUE É NECESSÁRIA PARA INTERAGIR COM O STITCH DENTRO DE NOSSO CLIENTSIDE APP....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> agora rodamos npm start para resettar nosso react appp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O INTERESSANTE É QUE, AGORA,
+
+SEREMOS 
+
+CAPAZES 
+
+
+
+
+DE 
+
+
+
+
+
+
+LIDAR COM NOSSA DATABASE __ SEM __ O NOSSO FOLDER DE 'backend' ( ou seja,
+
+
+sem 
+
+
+
+A NODE API 
+
+
+
+NO BACKEND...
+)
+
+
+
+
+
+
+
+
+
+-> E ISSO É BEM LEGAL....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... --->  DELETADO ESSE 
+
+
+FOLDER,
+
+
+
+NOSSO 
+
+APP 
+VAI 
+
+
+FICAR 'BROKEN', por enquanto... ( 
+
+    pq ainda não implementamos o stitch nele; apenas instalamos a package do stitch/realm
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> o login e tudo desse gênero não funciona,
+
+pq 
+
+DELETAMOS  
+
+
+
+
+
+
+TODA A LÓGICA 
+
+
+
+
+
+RELACIONADA A ISSO...  ---> MAS COMO VAMOS USAR  
+
+O STITCH, 
+
+NÃO HÁ PROBLEMA EM TERMOS FEITO ISSO...

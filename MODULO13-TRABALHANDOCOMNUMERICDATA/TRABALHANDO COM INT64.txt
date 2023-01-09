@@ -1,0 +1,1145 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA QUE VIMOS O INT32,
+
+
+COM O WRAPPER DE 
+
+'NumberInt()',
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+QUE É USADO TIPO 
+
+
+
+
+'NumberInt(212102210)',
+
+
+
+
+
+DEVEMOS VER UM  EXEMPLO 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PARA UM VALOR 'LONG' -----> int64 ---->  INT64 É UM TIPO DE PADRÃO/NUMBER STORAGE TYPE que 
+
+
+
+voc~e pode utilizar...
+
+
+
+
+
+
+
+
+
+
+
+
+--> vocÊ só vai utilizar 'int64' se vocÊ for armazenar NÚMEROS INTEIROS (integers) 
+
+
+ENORMES... (mais ou menos de 2 bilhoes)...
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO,
+
+O PROFESSOR TEM QUE 
+
+ARMAZENAR 
+
+
+UM VALOR IMENSO...
+
+
+
+
+
+
+
+
+
+
+
+
+-> ele escreve 
+
+
+
+
+
+
+
+db.companies.insertOne(
+    {
+
+        valuation: número grande...
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+VAMOS ESCREVER ASSIM:
+
+
+
+db.companies.insertOne(
+    {
+
+        valuation: 30000000000
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> OK... MAS DIGAMOS QUE VOCê ESCREVEU ESSE NÚMERO  GIGANTE COM O WRAPPER DE 
+
+
+
+'NumberInt()' 
+
+
+
+(
+
+
+    QUE É O WRAPPER QUE É USADO PARA CONVERTER SEUS NUMBERS 
+
+    DOUBLE-64bits (o default)
+
+
+
+    EM 
+
+
+    INTEGERS 32 BITS (números curtos, de até 2 bilhoes)... --> 
+
+
+
+
+
+
+
+
+
+
+)
+
+
+
+
+
+
+
+
+
+
+O PROFESSOR ARMAZENA O NEGÓCIO ASSIM:
+
+
+
+
+
+db.companies.insertOne(
+    {
+        valuation: NumberInt(50000000000000000)
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> QUANDO ELE ARMAZENAR ESSE NEGÓCIO,
+
+
+O NEGÓCIO VAI FICAR TODO ERRADO NA DATABASE....
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+{ "_id" : ObjectId("6219459484a82d185e2dc6e9"), "valuation" : 784662528 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... VIMOS QUE UM VALOR TOTALMENTE DIFERENTE 
+
+
+FOI 
+
+
+
+
+INSERIDO NESSE FIELD... -----> isso signifca que 
+
+
+
+
+
+
+
+
+NÓS 
+
+
+
+INSERIMOS UM VALOR GRANDE DEMAIS,
+
+
+
+E AÍ 
+
+
+BASICAMENTE 
+
+
+NÓS 
+
+'EXCEEDED' 
+
+
+
+O 
+
+RANGE DE VALUES QUE 
+
+
+TÍNHAMOS DISPONÍVEL PARA 'INT32' ---------->  mas pq 
+
+recebemos esse valor,
+
+
+e não 
+
+um erro? 
+
+
+
+
+
+
+
+--> bem, isso é devido À maneira pela qual numbers são handlados, tecnicamente, por computers...
+
+
+
+
+
+
+
+
+
+
+
+--> mas ainda recebemos um valor errado....
+
+
+
+
+
+
+
+--------> MAS SE INSERIMOS 
+
+
+
+UM VALOR BEM MENOR, DENTRO DE 2 BILHOES,
+
+
+
+
+
+
+
+DENTRO DO LIMITE,
+
+
+
+
+RECEBEMOS 
+
+
+O 
+
+
+VALOR 
+
+EXATO:
+
+
+
+
+
+
+db.companies.insertOne(
+    {
+        valuation: NumberInt(2147483647)
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO SERÁ ARMAZENADO,
+
+MAS SE AUMENTARMOS 
+
+EM APENAS 1 NÚMERO:
+
+
+
+
+
+
+db.companies.insertOne(
+    {
+        valuation: NumberInt(2147483648)
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AÍ A RANGE SERÁ ULTRAPASSADA,
+
+
+
+E 
+
+AÍ 
+
+
+
+
+VAMOS TER UM NÚMERO NEGATIVO... (bug do milênio, haha).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+->  MAS ANTES DE DARMOS UMA OLHADA NAQUELE VALOR DE 'INT64' (long integer),
+
+
+
+devemos ver uma coisinha...
+
+
+
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR TENTA ARMAZENAR AQUELE NÚMERO QUE ERA GRANDE DEMAIS POR 1 UNIDADE..
+
+
+
+
+
+--> MAS AÍ ELE TIRA O WRAPPER 
+
+DE 
+
+'int32',
+
+fazendo com que esse negócio fique como um 
+
+
+
+
+64BIT DOUBLE....
+
+
+
+ex:
+
+
+
+
+
+
+
+
+db.companies.insertOne(
+    {
+        valuation: 2147483648
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE FIZERMOS ISSO,
+
+
+
+VEREMOS QUE NOSSO VALOR TERÁ SIDO ARMAZENADO CORRETAMENTE --> A RAZÃO PARA ISSO É QUE UM 64 BIT DOUBLE 
+
+
+
+
+
+TEM UMA RANGE MAIOR DO QUE UM 
+
+
+'INT 32BIT'.... --------> É POR ISSO QUE PODERÍAMOS/PODEMOS USAR UM 64BIT DOUBLE 
+
+
+PARA ARMAZENAR 
+
+
+
+ESSE VALOR GRANDINHO....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS AINDA ASSIM,
+
+O 
+
+
+64BIT DOUBLE ___ NÃO TERÁ a range 
+
+
+que 
+
+
+
+
+
+o data type do 64 BIT, LONG INTEGER, terá....
+
+
+
+
+
+
+
+
+
+
+
+
+------> as ranges dos 3, quanto A INTEGRAIS,  portanto:
+
+
+
+
+
+
+
+
+64 bit  LONG INTEGER >  64 bit double >  32bit integer...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------> 64 bit long integer --> SÓ HANDLA INTEGERS,
+
+
+
+
+não handla CASAS DECIMAIS....
+
+
+
+
+
+
+
+
+
+-------> 64 bit doubles --> armazena tanto integers como decimals...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> se temos 
+
+
+
+
+
+integers 
+
+
+
+enormes,
+
+
+
+
+
+
+vaoms querer usar o 
+
+
+
+wrapper de 
+
+
+
+'NumberLong(2147483648)' 
+
+
+
+
+
+
+
+
+
+
+--> ESSE WRAPPER AÍ É O DE LONG INTEGERS.... (64 bit integers)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> claro que a conversão em 64bit int 
+
+
+
+
+depende do driver/linguagem de programação que voc~e está usando...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ok.... para armazenar nosso  valor,
+
+escrevemos assim:
+
+
+
+
+
+
+
+
+
+
+
+db.companies.insertOne(
+    {
+        value: NumberLong(2147483648)
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS SE 
+
+
+EXAMINARMOS ESSE NEGÓCIO,
+
+
+TAMBÉM TEREMOS UM PROBLEMA...
+
+
+
+
+
+
+
+-->  > db.companies.insertOne(
+...     {
+...         value: NumberLong(2147483648)
+...     }
+... )
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("621a7832ef803c8ce605cfff")
+}
+
+
+
+
+
+
+
+
+
+
+
+--> PARECE QUE 
+
+ELE FOI ARMAZENADO,
+
+
+SIM,
+
+e realmente foi...
+
+
+
+
+
+
+
+ex:
+
+
+> db.companies.findOne({_id: ObjectId("621a7832ef803c8ce605cfff")})
+{
+        "_id" : ObjectId("621a7832ef803c8ce605cfff"),
+        "value" : NumberLong("2147483648")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS AGORA O PROFESSOR VAI NOS MOSTRAR UM PROBLEMA QUE ACONTECERÁ
+ 
+
+
+ SE ESCREVERMOS O VALOR MAIS 
+
+
+
+
+ ALTO POSSÍVEL PARA 'LONG INTEGERS'...
+
+
+
+
+
+
+
+ ex:
+
+
+
+
+
+
+ db.companies.insertOne(
+     {
+         value: NumberLong(9223372036854775807)
+     }
+ )
+
+
+
+
+
+
+
+
+
+
+ --> ESSE É O MAIOR VALOR 'SUPORTADO' POSSÍVEL....
+
+
+
+
+
+
+
+
+
+ --> MAS SE TENTARMOS INSERIR ESSE NEGÓCIO AÍ, VAMOS RECEBER UM ___ ERRO__:
+
+
+
+
+ >  db.companies.insertOne(
+...      {
+...          value: NumberLong(9223372036854775807)
+...      }
+...  )
+Error: number passed to NumberLong must be representable as an int64_t :
+@(shell):3:17
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> OU SEJA,
+
+
+
+
+ESSE VALOR SERÁ CONSIDERADO 'TOO BIG' MESMO ASSIM.... -------->  MAS PQ 
+
+
+
+
+
+
+DEU ISSO?
+
+
+
+
+É 
+PQ 
+
+
+O VALOR QUE WRAPPAMOS, INICIALMENTE, É UM 'DOUBLE 64',
+
+
+
+
+que eventualmente é 
+
+
+wrappado
+ 
+
+
+
+ pelo 
+
+ wrapper de 'long 64' ----> 
+
+
+
+ É POR ISSO QUE 
+
+ PARA 
+
+
+ QUE 
+
+ ESSE STORE FUNCIONE,
+
+
+ PRECISAMOS WRAPPAR O number dentro de 'NumberLong'
+
+
+
+
+
+ em "" (quotation marks)..
+
+
+
+
+
+
+
+ ex:
+
+
+
+
+
+
+
+
+ 
+ >  db.companies.insertOne(
+...      {
+...          value: NumberLong("9223372036854775807")
+...      }
+...  )
+
+
+
+
+
+
+
+
+
+
+
+
+ESCREVEMOS ASSIM:
+
+
+
+> db.companies.insertOne({value: NumberLong("9223372036854775807")})
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("621a7920ef803c8ce605d000")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+---> OU SEJA,
+
+AGORA FUNCIONOU...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E ISSO É BEM IMPORTANTE DE ENTENDER:
+
+
+
+
+
+
+'NumberInt()" 
+
+ 
+e 
+
+
+
+'NumberLong()' 
+
+
+
+
+
+
+
+
+
+PODEM SER USADOS/WRAPPAR VALORES TANTO COM OU SEM '' (quotation marks)... --> 
+
+
+
+
+E VOCê 
+
+
+
+SEMPRE DEVE 
+
+
+PASSAR 
+
+COM OS "" (ou seja, passar uma string).... -->  VOCÊ DEVE FAZER ISSO PQ O MONGODB 
+
+
+SEMPRE VAI 'CONVERTER' 
+
+ESSA STRING INTERNAMENTE,
+
+DE FORMA ADEQUADA,
+
+
+E AÍ 
+
+
+
+A ARMAZENAR,
+
+NA FORMA QUE VOCÊ PEDIU (long Int 64, double 64, int32, double 128bits, etc)...... -------> 
+
+
+
+
+
+
+
+
+
+
+
+
+OU SEJA,
+
+
+NÃO ESCREVA O NÚMERO DIRETO, sem "", no wrapper --> PQ SE VOCÊ FIZER ISSO,
+
+O
+ NUMBER QUE VOCÊ PASSAR AINDA VAI ENFRENTAR AS LIMITAÇÕES do javascript( na shell, que é baseada no javascript)...
+
+
+
+
+
+
+
+
+
+
+ --> PQ QUANDO NÓS ESCREVEMOS ESSE NÚMERO GRANDE,
+
+ ELE FICA 
+
+
+ MT GRANDE PARA A SHELL,
+
+
+ QUE É BASEADA NO JAVASCRIPT, 
+
+ que o recusa (
+     por isso a necessidade de wrappar com string...
+
+
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> A STRING EVITA AS 'LIMITAÇÕES DO JAVASCRIPT' da shell,
+
+
+
+
+
+ e é por isso que 
+
+
+ usamos "" ao redor do valor passado ao wrapper...

@@ -1,0 +1,715 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SORTING É UMA COISA QUE PODEMOS FAZER, SIM, POR SINTAXES COMO ESTA:
+
+
+
+
+
+
+ db.movies.find().sort({"rating.average": 1}).forEach((doc) => {printjson(doc)})
+
+
+
+ (apenas 1 critério de sort, 1 field considerado, apenas)...
+
+
+
+
+
+
+
+
+
+  db.movies.find().sort({"rating.average": 1, runtime: 1}).forEach((doc) => {printjson(doc)})
+
+
+
+
+(múltiplos critérios de SORT CONSIDERADOS, MÚLTIPLOS FIELDS)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> JÁ 'SKIP()" e 'limit()' 
+
+
+
+
+SÃO OUTROS METHODS USADOS COM 'cursor results'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+SKIP --> SKIPPA CERTO NÚMERO DE DOCUMENTS NA SUA COLLECTION, ANTES DE COMEÇAR A FAZER 'FIND' dos documents....
+
+
+
+
+
+LIMIT --> LIMITA O NÚMERO DE DOCUMENTS RETORNADO POR AQUELE CALL DE 'find()'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ok, professor começa a explicação:
+
+
+
+
+
+
+
+'''VOCê TAMBÉM PODE SKIPPAR CERTO NÚMERO DE ELEMENTS''' --> 
+
+
+
+
+bem, mas pq você skipparia elements? 
+
+
+
+
+
+
+
+
+
+
+
+
+BEM, DIGAMOS QUE NO SEU CLIENT APPLICATION VOCê IMPLEMENTA CERTA PAGINATION (aí pessoas podem acessar results distribuídos ao longo de múltiplas pages)...
+
+
+
+
+
+
+-_> PESSOAS NÃO QUEREM TER APENAS 1 PAGE COM 100 RESULTS,
+
+E SIM 
+
+VÁRIOS RESULTS,
+EM 
+
+
+
+MÚLTIPLAS PAGES..
+
+
+
+
+
+
+
+--> É PARA ISSO QUE SERVE O METHOD DE SKIP,
+
+
+PQ VOCê VAI SKIPPAR PARA A 'PAGE 2'
+
+
+de sua database,
+
+
+para compatibilizar com seu app...
+
+
+
+
+
+
+
+
+
+
+
+ E É POR ISSO QUE SUA QUERY/FIND coisa vai ficar assim:
+
+
+
+
+
+
+
+
+   db.movies.find().sort({"rating.average": 1, runtime: 1}).skip(10)
+
+
+
+
+
+
+
+
+
+
+
+
+
+   --> SKIP 10,
+
+   no caso,
+
+   VAI SKIPPAR 10 RESULTS... -> E JÁ USAMOS ISSO,
+
+
+
+LÁ 
+
+
+NO CURSO DO NODEEXPRESS,
+
+para 
+
+
+CONSEGUIR PAGINATION NO NOSSO APP (tanto com REST APIs como render tradicional de pages)...
+
+
+
+
+
+
+
+
+
+
+
+
+------> skip 10 vai skippar 10,
+
+
+
+
+skip 100 vai skippar 100,
+
+
+
+etc etc...
+
+
+
+
+
+
+
+
+
+
+
+--> SKIPPING NOS DEIXA 'MOVE THROUGH OUR 
+
+DATA SET'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------------> SKIP É USADO EM UM CURSOR, TAMBÉM...
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> JÁ 'LIMIT'
+
+É USADO PARA LIMITAR 
+
+ A QUANTIDADE 
+
+
+
+
+ DE ELEMENTS QUE O CURSOR 'SHOULD RETRIEVE' em um determinado tempo... (
+
+
+e isso também significa a QUANTIDADE 
+
+DE 
+OBJECTS QUE VOCÊ PODE 'MOVE THROUGH'
+
+em 1 determinado 
+
+
+cursor...
+
+
+
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -------->
+
+
+
+
+ O PROFESSOR, PARA EXEMPLIFICAR, ESCREVE:
+
+
+
+
+
+
+
+
+
+
+
+   db.movies.find().sort({"rating.average": 1, runtime: 1}).skip(100).limit(10).pretty();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   --> AÍ, POR MEIO DESSE CÓDIGO AÍ,
+
+   VAMOS LIMITAR A 10 DOCUMENTS 
+
+
+   O NÚMERO DE COISAS RETORNADAS POR ESSE FIND...
+
+
+
+
+
+
+
+
+
+
+
+
+   --> UMA COISA INTERESSANTE OCORRE SE VOCê USAR '.count()'
+
+   sobre essa query:
+
+
+
+      db.movies.find().sort({"rating.average": 1, runtime: 1}).skip(100).limit(10).count()
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE VOCÊ RODAR ISSO AÍ, AINDA VAI OBTER '240'... (mesmo tendo esse SKIP e esse LIMIT)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS SE RODARMOS 'pretty()'
+
+sobre essa query 
+
+
+VAMOS RECEBER _ aPENAS __ 10 ELEMENTS.... 
+
+
+
+
+
+
+
+ex:
+
+
+
+      db.movies.find().sort({"rating.average": 1, runtime: 1}).skip(100).limit(10).pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+
+DE FATO,
+
+
+
+O CURSOR NÃO FICARÁ  
+
+    'FULL EXHAUSTED',
+
+
+
+
+    MAS REALMENTE SÓ VAMOS OBTER '10 elements' 
+
+
+    por meio do limit -->  LIMIT NOS DEIXA RETRIEVAR UMA CERTA QUANTIDADE 
+
+
+
+
+
+    DE DOCUMENTS,
+
+    MAS SÓ A QUANTIDADE QUE ESPECIFICAMOS...
+
+
+
+
+
+
+
+    -----> O LIMIT TAMBÉM 
+
+
+
+    TEM RELAÇAÕ COM PAGINATION... --> PQ SE VOCÊ TIVER PAGINATION,
+
+
+
+    NÃO BASTA SÓ PULAR PARA A PAGE 2; 
+
+
+    você também vai querer LIMITAR A QUANTIDADE DE COISAS MOSTRADA NA PAGE 2/EM QUALQUER PAGE,
+
+
+    E É EXATAMENTE ISSO QUE O LIMIT TE DEIXA FAZER,
+
+
+
+    ELE 
+
+
+    LIMITA A QUANTIDADE DE DATA QUE É RETRIEVED E RETORNADA PELO CURSOR....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> BEM,
+
+
+
+MAS HÁ UMA COISA QUE VOCÊ TALVEZ TENHA PENSADO SOBRE... -------> SE TEMOS 
+
+
+
+
+
+ESSA OPÇAO DE RODAR 
+
+'sort' 
+
+
+e 
+
+'skip'
+
+
+
+e 'limit'
+
+
+em 1 mesmo cursor,
+
+
+
+
+POR ACASO 
+
+
+A 
+
+ORDEM
+
+
+DE EXECUÇÃO DESSAS COISAS IMPORTA? 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> EM TEORIA,
+
+'''DEVERIA IMPORTAR''''
+
+
+
+
+
+
+
+
+
+pq 'deveria importar'?
+
+
+
+
+
+
+
+É PQ SE EU SKIPPASSE ANTES DE EU 'sort',
+
+
+
+
+
+
+
+EU 
+
+
+
+FARIA SKIP DOS UNSORTED DOCUMENTS,
+
+
+
+E SÓ ENTÃO SORTARIA OS 'REMAINING ONES' (
+
+    o que bagunçaria a ordem...
+) --------> A BOA NOTÍCIA É QUE 
+
+
+
+
+
+
+
+
+
+
+_______ EM CURSORS__, NO CASO__, 
+
+
+A 
+
+'ORDER'
+
+
+
+DE CALL DOS METHODS __ NÃO IMPORTA__.... -------> MAIS TARDE,
+
+
+
+LÁ NO 
+
+
+
+MÓDULO DO 'AGGREGATION FRAMEWORK',
+
+
+ESSA SITUAÇÃO VAI MUDAR,
+
+E A ORDEM
+
+DE EXECUÇÃO 
+
+DE 
+
+
+'filter',
+
+
+'sort' 
+
+
+
+e 
+
+
+'skip'
+
+
+
+VAI IMPORTAR.. -> PROFESSOR FALARÁ SOBRE ISSO NESSE MÓDULO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> MAS AQUI, COM
+
+
+'find()",
+
+
+VOCê PODE SKIPPAR, LIMITAR E SORTAR 
+
+
+
+
+NA ORDEM QUE VOCê QUISER,
+
+
+que não fará diferença... --> MONGODB VAI AUTOMATICAMENTE FAZER AS COISAS NA ORDEM CERTA:
+
+
+
+
+
+
+
+
+
+ELE VAI:
+
+
+
+
+1) SORTAR PRIMEIRO 
+
+
+
+2) AÍ VAI SKIPPAR 
+
+
+
+3) AÍ VAI LIMITAR 
+
+
+(
+
+    mas essa é uma ordem que você pode manter na cabeça, manter como a 'ORDEM CERTA/PADRÃO'...
+)

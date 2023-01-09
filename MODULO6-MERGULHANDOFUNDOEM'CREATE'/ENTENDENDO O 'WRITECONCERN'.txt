@@ -1,0 +1,1470 @@
+
+
+
+
+
+
+
+
+
+
+
+
+OK... NA ÚLTIMA AULA,
+
+
+
+APRENDEMOS SOBRE A PROPRIEDADE/FLAG DE 
+
+'ordered'
+ 
+
+
+
+
+ NAS NOSSAS OPERATIONS DE 'insertMany',
+
+
+
+ COMO VISTO AQUI:
+
+
+
+
+
+
+
+
+ 
+ 
+db.hobbies.insertMany(
+[
+    {
+           _id: "yoga",
+        name: "Yoga"
+    },
+        {
+               _id: "cooking",
+        name: "Cooking"
+    }
+    ,
+        {
+               _id: "hiking",
+        name: "Hiking"
+    }
+],
+
+
+
+
+
+
+
+{
+    ordered: true/false
+}
+)
+
+
+
+
+
+
+
+
+
+-----------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO, NO CASO, É A MATÉRIA DOS 'ORDERED VS UNORDERED INSERTS'...
+
+
+(
+
+
+    que determina o COMPORTAMENTO DO MONGODB AO 
+    TER ERRORS DE INSERT, errors causados por '1 document com esse _id já existe na sua database'...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> se você define 
+
+
+
+'ordered: true',
+
+
+
+QUE É O DEFAULT,
+
+O 
+
+MONGODB __ VAI PARAR __ DE TENTAR_ INSERIR O RESTO DO ARRAY QUE VOCê PASSOU,
+
+
+
+e vai adicionar/ter inserido APENAS OS 
+
+
+DOCUMENTS ANTERIORES àQUELE DOCUMENT QUE 
+
+
+causou o error...
+
+
+
+
+
+
+
+
+
+
+
+
+--> JÁ SE VOCÊ DEFINE 'ordered: false',
+
+
+
+O MONGODB AINDA VAI TENTAR INSERIR O RESTO DOS DOCUMENTS, o resto dos documents passados no array, após o documetn que deu erro, nesse array...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> OK.......
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS HÁ UMA SEGUNDA OPÇÃO QUE PODEMOS ESPECIFICAR,
+
+AGORA TANTO EM 
+
+'insertOne'
+
+
+
+COMO EM 'insertMany'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->É A OPTION DE 'writeConcern'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR EXPLICARÁ O QUE ISSO SIGNIFICA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> DIGAMOS QUE TEMOS O CLIENT E O MONGODB SERVER...
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+
+| CLIENT |                   | MONGODB SERVER |
+ shell                                   mongod
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> O CLIENT SERÁ A SHELL,
+
+OU ENTÃO SEU APP,
+USANDO O MONGODB DRIVER APROPRIADO....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> OK.... --> AGORA DIGAMOS QUE 
+
+
+VOCÊ QUER FAZER 'insertOne()'
+
+DE 
+
+1 
+ÚNICO DOCUMENT,
+
+nesse seu database server...
+
+
+
+(
+
+    mas isso também 
+
+    existe para 'insertOne()'
+
+    e 'insertMany()'...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO EXISTE PARA TODAS AS WRITE OPERATIONS (por isso o nome é 'writeConcern')...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... ESTAMOS TENTANDO INSERIR 1 ÚNICO DOCUMENT...
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS COMO APRENDEMOS NO INÍCIO DO CURSO,
+
+
+lá no 'mongod'
+
+VAMOS TER ALGO CHAMADO DE 
+
+'
+STORAGE ENGINE'... ----->  
+
+
+
+
+
+
+
+
+
+
+ESSA É A 'ENGINE RESPONSÁVEL PELO ACTUAL WRITE DA DATA AO DISK',
+
+
+E TAMBÉM  PELO MANAGE DESSA DATA 'NA MEMORY'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> OK... --> O ESQUEMA FICA ASSIM:
+
+
+
+
+
+
+
+
+
+
+| CLIENT |    --------->          | MONGODB SERVER |  ---------> 'STORAGE ENGINE' 
+ shell                                   mongod                             |
+                                                                            |
+                                                                            |
+                                                                            |
+                                                                            |
+                                                                            V 
+
+                                                                    MEMORY...
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO QUER DIZER, NO CASO,
+
+
+
+QUE SEU 'WRITE' 
+
+
+
+PODE ACABAR__ NA MEMORY__ ANTES_ DE SER WRITADA 
+
+
+
+
+
+AO DISK.... -------> E, LÁ,
+
+
+
+
+
+
+NA MEMORY,
+
+
+O STORAGE ENGINE 
+
+
+
+MANAGEIA 
+
+A DATA QUE 
+
+
+PRECISA _ SER ACESSADA, PELA STORAGE ENGINE,  COM 
+
+
+
+
+FREQUÊNCIA RÁPIDA,
+
+
+PQ ISSO É MAIS RÁPIDO DO QUE O TRABALHO COM O DISK... --------> É CLARO QUE 
+
+
+
+
+
+
+
+O SEU 'WRITE' 
+
+TAMBÉM ESTÁ 
+
+
+'SCHEDULED' 
+
+
+PARA SER ESCRITO/END UP NO DISK... -- >
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO SIGNIFICA QUE ELE VAI COLOCAR ESSA DATA INICIALMENTE NA MEMORY,
+
+PARA ENTÃO A ARMAZENAR NO DISK...
+
+
+
+
+
+
+
+eX:
+
+
+
+
+
+
+
+| CLIENT |    --------->          | MONGODB SERVER |  ---------> 'STORAGE ENGINE' 
+ shell                                   mongod                             |
+                                                                            |
+                                                                            |
+                                                                            |----------
+                                                                            |          |
+                                                                            V          |
+                                                                                       |
+                                                                    MEMORY...          |
+                                                                                       |
+                                                                                       V 
+
+                                                                                       'DATA ON DISK'
+
+
+
+
+
+
+
+
+
+--> MAS HÁ UM DETALHE ADICIONAL.... --> CERTAS OPERAÇÕES,
+
+
+
+COMO  O 'insertOne',
+
+
+
+
+
+PERMITEM QUE VOCê DEFINA UM 'WRITE CONCERN'... ----------> ISSO EXISTE EM TODAS WRITE OPERATIONS, COMO INSERTONE..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA HABILITAR/ESCREVER UM WRITE CONCERN,
+
+VOCÊ DEVE INCLUIR O 
+
+
+SEU ARGUMENT,
+
+
+QUE DEVE SER O SEGUNDO ARGUMENT DE 'insertOne()'....
+
+
+
+
+
+
+
+
+
+
+
+
+--> 1 ARGUMENT DE 'writeConcern'
+
+
+
+POSSUI ESTE FORMATO:
+
+
+
+
+
+{
+    w: 1,
+    j: undefined
+}
+
+
+
+
+
+
+
+
+
+
+
+
+--> ELE É UM DOCUMENT EM QUE PODEMOS DEFINIR SETTINGS COMO ESSAS...
+
+
+
+
+
+
+--> MAS OQ SIGNIFICA ISSO? 
+
+
+
+
+
+
+
+
+
+
+w ---------> SIMPLESMENTE SIGNIFICA 'write' .... --> 
+
+
+
+
+
+
+e o '1', valor desse write, significa 
+
+
+ 
+
+ ' EM HOW MANY INSTANCES' (em caso de vocÊ estar usando MÚLTIPLAS INSTANCES EM 1 SERVIDOR, algo que veremos no final do curso)
+ 
+ 
+ 
+
+
+'VOCê VAI QUERER QUE ESSE WRITE SEJA ACKNOWLEDGED?'
+
+
+
+
+
+
+
+
+
+-----> com 'w: 1',
+
+
+
+
+
+
+
+VOCÊ ESSENCIALMENTE DIZ 
+
+
+
+'''HEY, MEU MONGODB DEVE 
+
+ACEITAR ESSE WRITE''' --------> ou seja,
+
+
+
+
+
+a storage engine 
+
+deverá 
+
+ficar 
+
+CIENTE DO WRITE 
+
+
+E ENTÃO EVENTUALMENTE 
+
+
+
+
+
+___ ESCREVER__ ESSA DATA __ NO DISCO..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> já o 
+
+
+'j: undefined',
+
+
+
+
+
+
+SIGNIFICA O 'JOURNAL'.. ---> 
+
+
+
+
+
+
+O JOURNAL É UM ARQUIVO EXTRA 
+
+
+
+
+
+
+
+QUE __ A STORAGE ENGINE  __ MANAGEIA__ ... --------> 
+
+
+
+
+
+
+
+
+
+NO CASO,
+
+
+
+
+ESSE ARQUIVO É 
+
+
+
+BASICAMENTE UM 
+
+
+ARQUIVO
+ 
+
+ 'Todo'... ----------->  O JOURNAL PODE 
+
+
+
+ SER MANTIDO,
+
+
+
+ PARA ENTÃO 
+
+
+
+ SALVAR 
+
+
+
+
+
+
+
+
+
+ ''''OPERATIONS QUE A STORAGE ENGINE PRECISA FAZER''' que AINDA  __ NÃO _ _FORAM COMPLETADAS,
+
+
+
+
+
+ COMO ESSE PRÓPRIO 'WRITE'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> MAS A EXISTÊNCIA DE UM JOURNAL 
+
+
+
+
+
+
+
+NÃO É NECESSARIA 
+
+PARA 
+
+
+
+A
+
+STORAGE ENGINE ESCREVER 
+
+
+ALGO 
+
+
+NO DISK... -->  o mero acknowledge do 'write' 
+
+JÁ É SUFICIENTE..... A STORAGE ENGINE NÃO PRECISA MANTER UM JOURNAL PARA SABER DISSO, DESSE WRITE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> a ideia desse ARQUIVO 'JOURNAL',
+
+
+QUE É 
+
+_ UM ARQUIVO __ DE VERDADE NO DISK,
+
+
+
+
+
+
+É _ SÓ _ 
+
+
+
+
+
+O STORAGE ENGINE DIZENDO QUE ESTÁ 'AWARE' 
+
+desse write  -----------------------> E AÍ,
+
+
+
+SE O SEU SERVIDOR 
+
+'GOES DOWN'
+
+
+por qualquer razão,
+
+
+
+
+ou qualquer bosta acontecer,
+
+
+
+
+
+ESSE _ ARQUIVO __ AINDA 
+
+
+
+FICARÁ/FICA 
+
+
+
+
+NO SEU FILE SYSTEM DO SERVER.... ---------> E AÍ, SE O SEU SERVER SE RECUPERAR/RESTARTAR,
+
+
+
+
+
+
+
+
+ELE __ PODE ___'LOOK INTO THAT FILE' E ENTÃO ___ VER O QUE __ ELE 
+
+PRECISA FAZER.... -----------> E ISSO, É CLARO,
+
+
+
+É UM BOM BACKUP  (
+
+    pq a memory pode já ter sido apagada,
+
+
+    a esse ponto...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> EM OUTRAS PALAVRAS, SEU 'write' PODERÁ TER SIDO PERDIDO, apagado da memory,
+
+
+SE NÃO FOI ESCRITO NO 'journal'... (e se não foi INSCRITO NAS REAL DATA FILES, NO SERVER, ainda) -------> ESSA É A IDEIA 
+
+
+
+
+
+
+POR TRÁS DO JOURNAL... --> 
+
+
+
+
+por isso que dizemos que é 
+
+
+um 
+
+
+
+'BACKUP TODO LIST',
+
+
+
+
+uma toDo list DE BACKUP...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> OK... MAS PQ DIABOS ESCREVEMOS ESSA OPERAÇÃO NO JOURNAL,
+
+
+E NÃO DIRETAMENTE NAS DATABASE FILES?
+
+
+
+
+
+
+
+
+-> bem, É PQ O WRITE NAS DATABASE FILES é simplesmente mais 'PERFORMANCE HEAVY'...  --> já o 
+
+
+
+
+journal é uma 'SINGLE LINE' que descreve perfeitamente a write operation...
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> O WRITE NAS DATABASE FILES, É CLARO, É UMA 
+
+
+TAREFA MAIS EXIGENTE,
+
+  
+  PQ AÍ PRECISAMOS ENCONTRAR A POSIÇÃO CORRETA PARA INSERIR ESSE DOCUMENT,
+
+
+
+  ETC ETC.... --> E SE VOCÊ TEM INDEXES,
+
+
+  VOCÊ TAMBÉM PRECISA UPDATÁ-LOS.... (algo que veremos mais tarde)...
+
+
+
+
+
+
+
+
+--> ISSO SEMPRE VAI DEMORAR MAIS TEMPO DO QUE O WRITE NO 'JOURNAL'...
+
+
+
+
+
+
+  -> OK... MAS AINDA ASSIM,
+
+
+
+
+  o write de files na sua database 
+
+
+
+  __ ACABA FICANDO MAIS LENTO, COM O USO DO JOURNAL (pq é um processo a mais),
+
+
+
+
+  MAS ACHO QUE COMPENSA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> O DEFAULT,
+
+
+
+
+NO MONGODB,
+
+
+
+É QUE O JOURNAL NÃO É UTILIZADO....
+
+
+
+
+
+
+
+
+
+ISSO É VISTO NAQUELE PARÂMETRO DE 'writeConcern',
+
+
+
+
+
+que é assim:
+
+
+
+{
+    w: 1,
+    j: undefined
+}
+
+
+
+
+
+
+
+
+
+
+---> ESSE É O DEFAULT...  ------->  O 'UNDEFINED' no 'j' 
+
+
+significa que 
+
+
+
+
+
+''''A STORAGE ENGINE EVENTUALMENTE 
+
+VAI HANDLAR ESSE WRITE, E TAMBÉM FAZER O WRITE NO JOURNAL.... MAS VOCê, COMO DESENVOLVEDOR,
+
+NÃO SABERÁ DISSO, NÃO TERÁ A INFORMAÇÃO SE 
+
+O 
+
+DOCUMENT JÁ FOI INSERIDO OU NÃO, se o write foi bem sucedido, NÃO SABERÁ NADA DISSO,
+
+
+
+SÓ QUE __ O SERVER FICARÁ 'AWARE' do seu write'''' ------------> ISSO SIGNIFICA QUE 
+
+
+
+SE O 
+
+
+SERVER 'GOES DOWN'
+
+
+
+
+nesse exato momento,
+
+
+
+
+a storage engine realmente pode não ter feito o 'write' PQ _ 
+
+
+ELA ainda NÃO SALVOU A OPERAÇÃO NO JOURNAL,
+
+
+E NÃO 
+
+
+SALVOU O DOCUMENT NAS DATABASE FILES, AINDA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, VOCÊ PODE DEFINIR UMA OPÇÃO ALTERNATIVA,
+
+
+
+
+{
+    w: 1,
+    j: true
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O QUE VOCê ESTÁ DIZENDO, AGORA,
+
+
+
+
+
+
+
+
+
+É 
+
+
+
+'''''HEY, POR FAVOR SÓ REPORTE UM SUCCESS PARA ESSE WRITE, PARA MIM,
+
+_ DEPOIS_ QUE _ ELE FOI TANTO ACKNOWLEDGED COMO SAVED AO JOURNAL'''' --->  ISSO QUER DIZER, NO CASO,
+
+
+
+
+
+QUE VAMOS TER 
+
+
+UMA SEGURANÇA BEM MAIOR,
+
+
+PQ 
+
+
+
+ESSA OPERAÇÃO VAI ACONTECER __ MESMO ___ QUE O SERVER SOFRA  DIFICULDADES (goes down)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> BEM, NÓS TAMBÉM TEMOS UMA TERCEIRA OPÇAÕ EM 'writeConcern',
+
+
+
+QUE É 
+
+
+
+o 
+
+'wtimeout' ----------> 
+
+
+
+
+
+
+
+significa 'WRITE TIMEOUT'.....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESSA É UMA OPÇÃO EM QUE VOCÊ 
+
+
+
+
+DÁ UM 
+
+'TIMEFRAME' 
+
+
+
+
+
+AO SERVER PARA __ 'REPORT A SUCCESS FOR THIS WRITE',
+
+
+antes de você o CANCELAR... --------->  ISSO QUER DIZER QEU 
+
+
+
+
+
+SE VOCê TIVER ISSUES COM A NETWORK CONNECTION, COISAS ASSIM,
+
+VOCÊ VAI SIMPLESMENTE 'TIMEOUT'
+
+aqui....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> ex:
+
+
+{
+    w: 1,
+    wtimeout: 200,
+    j: true
+}
+
+
+
+
+
+
+
+
+
+
+---> É CLARO QUE DEFINIR ISSO 'TOO LOW'
+
+
+
+vai fazer com que aconteça o CANCEL de casos que NORMALMENTE SERIAM BEM SUCEDIDOS (so´um pouco lentinhos)...
+
+
+
+
+
+
+
+
+
+
+
+
+--> É POR ISSO QUE VOCê DEVE SABER O QUE ESTÁ FAZENDO,
+
+QUANDO ESTÁ SETTANDO ESSE 'wtimeout' --> pq uma pequena 
+
+
+
+quantidade de latency pode fazer com que essa threshold 
+
+seja 
+
+atingida,
+
+cancelando suas operações...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> OK.... ESSE É O WRITECONCERN,
+
+
+
+
+E COMO VOCê PODE CONTROLAR ISSO...
+
+
+
+
+
+
+
+
+
+
+
+
+-> É CLARO QUE O ENABLE DO 'JOURNAL CONFIRMATION'
+
+
+
+SIGNIFICA QUE 
+
+SEUS WRITES VÃO DEMORAR MAIS... (
+
+    pq você 
+
+    vai fazer mais do que apenas dizer ao server sobre eles;
+
+
+    você terá de ESPERAR PELO STORE DESSA WRITE OPERATION NO SEU JOURNAL...
+)
+
+
+
+
+
+
+
+
+--> MAS É CLARO QUE 
+
+VOCê GANHA MAIOR SECURITY, SECURITY DE QUE O ACTUAL WRITE 'SUCCEEDED'... 
+
+
+
+
+
+
+
+
+
+
+
+--> É UMA DECISÃO QUE VOCÊ PRECISA TOMAR, DE ACORDO COM AS NECESSIDADES DE SEU APP...

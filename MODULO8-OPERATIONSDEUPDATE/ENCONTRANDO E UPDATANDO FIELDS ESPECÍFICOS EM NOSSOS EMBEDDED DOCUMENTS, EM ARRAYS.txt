@@ -1,0 +1,1498 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------->
+
+
+
+A QUESTÃO ÓBVIA QUE RESTOU É:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'''COMO POSSO ENCONTRAR CERTO SET DE PERSONS/DOCUMENTS,
+
+
+
+
+
+
+com um CERTO SET DE DOCUMENTS EM 'hobbies',
+
+
+
+
+E AÍ 
+
+SÓ UPDATAR 
+
+ESSES HOBBIES ESPECÍFICOS...''''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> DIGAMOS QUE QUEREMOS ENCONTRAR __ TODOS __ OS HOBBIES COM 
+
+
+
+UMA FREQUÊNCIA MAIOR 
+
+DO QUE 
+
+
+2...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO QUER DIZER QUE, ANTES DE MAIS NADA,
+
+V
+AMOS RODAR UM FIND...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.users.find(
+    {
+
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> e depois que encontrarmos esses overall documents com esses embedded documents com esse valor na frequencia,
+
+
+
+
+VAMOS QUERER __ TROCAR__ OS ELEMENTS __ NO ARRAY...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, PRIMEIRAMENTE PROFESSOR ESCREVE:
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.users.find(
+    {
+        "hobbies.frequency": {$gt: 2}
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... NESSE FILTER PROCURAMOS POR UMA FREQUENCY MAIOR DO QUE 2,
+
+
+
+
+
+tudo normal.... ------> aí veremos 
+
+
+
+TODOS 
+
+
+
+
+OS embedded documents que SATISFIZERAM O FILTER,
+
+
+
+
+junto daqueles que NÃO SATISFIZERAM....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOCê TEM QUE LEMBRAR QUE ' ONE FULFILLING EMBEDDED DOCUMENT GIVES US THE ENTIRE SURROUNDING DOCUMENT'...
+
+
+
+
+(
+    pq o find continua procurando pelo surrounding document....
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... AGORA QUERO UPDATAR __ TODOS __ OS HOBBIES EM QUE A FREQUENCY ESTÁ COMO MAIOR DO QUE 2.... (removê-los, ou então colocar algo no seu lugar, no lugar desses objects... )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+{
+        "_id" : ObjectId("6209f1279207fe373c205a87"),
+        "name" : "Chris",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2,
+                        "highFrequency" : true
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3,
+                        "goodFrequency" : true
+                },
+                {
+                        "title" : "Souji",
+                        "frequency" : 3
+                }
+        ],
+        "age" : 30,
+        "phone" : 120212012108
+}
+
+
+
+
+
+
+
+
+
+--> QUEREMOS QUE ESSES 2 embeddedd com frequency: 3 
+
+
+
+
+SEJAM 
+
+
+UPDATADOS....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> COMO PODEMOS FAZER ISSO?
+
+
+
+
+
+
+
+
+
+bem, acessamos nossos users,
+
+
+
+com updateMany...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->  AÍ PRECISAMOS ENCONTRAR NOSSAS 'RIGHT PERSONS',
+
+
+com este código:
+
+
+
+
+
+
+
+
+
+
+
+db.users.updateMany({"hobbies.frequency": {$gt: 2} })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MESMA COISA QUE TÍNHAMOS ANTES...
+
+
+
+
+
+
+
+--> MAS NO UPDATE MECHANISM,
+
+VAMOS QUERER USAR '$set'
+
+PARA
+
+
+SUBSTITUIR ESSES EMBEDDED DOCUMENTS que 
+
+
+
+
+
+
+
+
+
+
+TIVEREM 'frequency: {$gt: 2}' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> OK... MAS DENTRO DE '$set',
+
+
+
+O QUE O PROFESSOR QUER 
+
+FAZER É 
+
+
+
+
+
+
+escrever:
+
+
+
+
+
+
+
+
+1) NÃO 'hobbies.$', pq isso aí vai nos dar 'THE FIRST MATCHING ELEMENT', que, no caso, NÃO É O QUE DESEJAMOS....
+
+
+
+
+
+
+
+2) não 'hobbies.$.xxxx', pq isso aí vai ADICIONAR UMA NOVA PROPRIEDADE, E NÃO É ISSO QUE DESEJAMOS...
+
+
+
+
+
+
+
+3) TALVEZ "hobbies.$[].frequency": , PQ ISSO AÍ VAI NOS DEIXAR __ ATUALIZAR TODOS EMBEDDED DOCUMENTS ("$[]"), seus fields de 'frequency', especificamente...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+MAS O 3 NOS TRAZ UM PROBLEMA.... --> NOS TRAZ UM PROBLMEA JUSTAMENTE PQ ELE VAI 'UPDATE ALL THE EMBEDDED DOCUMENTS',
+ 
+
+ OU SEJA,
+
+
+ VAI UPDATAR ATÉ MESMO OS EMBEDDED DOCUMENTS QUE NÃO SATISFIZERAM O CRITÉRIO DE 'hobbies.frequency': {$gt: 2},
+
+
+
+ AQUELE CRITÉRIO DE TER a frequency maior do que 2....
+
+
+
+
+
+
+
+
+
+--> É POR ISSO QUE O PROFESSOR INTRODUZ UMA NOVA FEATURE,
+
+
+QUE É 
+
+a 
+
+FEATURE DO 'indexador'....
+
+
+
+
+
+
+
+isto aqui:
+
+
+
+"hobbies.$[].frequency":
+          ^^
+
+
+
+          ISSO AÍ NÃO EXISTE SÓ PARA ENFEITE.... --> VOCÊ ESCREVE, DENTRO DISSO,
+
+
+
+          QUALQUER COISA QUE VOCÊ QUISER... (qualquer nome)...
+
+
+
+
+
+
+
+
+
+    --> O PROFESSOR ESCREVE 'el',
+
+
+
+    de 'element'...
+
+
+
+
+
+
+
+
+--> AÍ VOCê VAI USAR ':' 
+
+e aí 
+
+dizer O QUE VOCÊ VAI QUERER SETTAR, COMO VALUE,
+
+nesse negócio...
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+db.users.updateMany({"hobbies.frequency": {$gt: 2}, {$set: {"hobbies.$[el]": ...}} })
+
+
+
+
+
+
+
+
+
+
+
+
+TIPO ASSIM....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS NÃO ACABAMOS... --> O PROFESSOR PRIMEIRAMENTE 
+
+
+
+
+
+ESCREVE, no lado do ':',
+
+
+
+
+UM __  '{}' (nested document) ----> ISSO 
+
+
+
+
+
+
+
+
+
+
+
+
+PQ ESSE 'hobbies.$[el]' 
+
+
+
+VAI SE REFERIR ___ A UM _ DOCUMENT __ 
+
+
+
+
+ESPECÍFICO NO SEU ARRAY... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR, NO CASO, VAI QUERER ADICIONAR UM FIELD DE 'goodFrequency'  (valor de true)
+
+
+
+
+
+AOS NOSSOS DOCUMENTS/OBJECTS no array,
+
+
+
+POR ISSO 
+
+
+ELE 
+
+
+
+ESCREVE 
+
+
+
+
+
+"
+
+
+{
+    "hobbies.$[el].goodFrequency": true
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> certo.... MAS AÍ O PROFESSOR PEDE QUE AINDA NÃO ENVIEMOS ESSA QUERY.. --> isso pq 
+
+
+a 
+
+
+parte 
+
+
+"hobbies.$[el]" 
+
+
+
+
+AINDA NÃO SERÁ COMPREENDIDA PELO MONGODB....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESSA COISA 'el' 
+
+
+É ALGO QUE _ _NÓS VAMOS DEFINIR/definimos.... ----> ISSO PQ AGORA 
+
+
+
+ADICIONAMOS UM TERCEIRO PARâMETRO 
+
+AO METHOD DE 'updateMany',
+
+
+
+
+
+
+
+QUE 
+
+
+
+
+
+TAMBÉM SERÁ UM DOCUMENT...
+
+
+
+
+(
+
+
+
+
+    esse é o DOCUMENT EM QUE VOCê PODE DEFINIR A OPTION DE 
+
+
+
+    'upsert: true',
+
+
+
+
+    E TAMBÉM AQUELE 'writeConcern: {}'
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS AQUI O PROFESSOR VAI ADICIONAR UMA KEY DE 'arrayFilters',
+
+QUE 
+
+
+É OUTRA COISA, COMPLETAMENTE DIFERENTE...
+
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+db.users.updateMany({"hobbies.frequency": {$gt: 2}}, 
+
+
+
+
+{$set: {"hobbies.$[el].goodFrequency": true}}, 
+
+
+
+
+{arrayFilters: }
+
+
+
+
+
+
+)
+
+
+
+
+
+
+
+
+
+
+---------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CERTO.... E O 'arrayFilters'
+
+
+
+
+REALMENTE__ SÓ FUNCIONA__ COM ESSA SINTAXE DE '[el]'.... --------> DENTRO 
+
+
+DE 
+
+
+
+
+'arrayFilters',
+
+
+
+
+
+EU SUPONHO QUE 
+
+
+VAMOS ESCREVER 
+
+UM '{}',
+
+
+
+
+E AÍ 
+
+DENTRO DESSE '{}',
+
+
+vamos escrever KEYS..... keys que serão coisas como 'el', e vão se referir às coisas que colocamos dentro dos '[]' lá no segundo parâmetro...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... AÍ O PROFESSOR COMEÇA:
+
+
+
+
+
+'em arrayFilters,
+
+
+VOCÊ 
+
+PODE 
+
+
+ESCREVER ALGUMAS __ CONDITIONS_ PELAS QUAIS VOCÊ VAI __ '''FILTER ELEMENTS/EMBEDDED DOCUMENTS'''' ''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E ESSAS CONDITIONS PODEM ATÉ MESMO ___ DIFERIR__ DAS CONDITIONS QUE VOCÊ ESCREVEU LÁ 
+
+NO PRIMEIRO PARÂMETRO,
+
+
+LÁ NO FILTER 
+
+
+
+DO SEU METHOD DE 'updateMany' (ou seja, aqui essas conditions NÃO PRECISAM SER " "hobbies.frequency": {$gt: 2} ")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> ISSO SIGNIFICA QUE PODEMOS FICAR PROCURANDO POR ALGO TOTALMENTE DIFERENTE NO PRIMEIRO PARÂMETRO,
+
+
+como 
+
+
+'age: {$gt: 30}',
+
+
+
+
+
+
+E AINDA __ ASSIM __ 
+
+
+
+
+
+
+
+
+FAZER 'FILTER OUT' 
+
+
+
+
+DE ALGUNS ELEMENTOS/EMBEDDED DOCUMENTS ESPECÍFICOS,
+
+
+
+
+NESSE ARRAY de 'hobbies'... ->  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+COMPLEMENTANDO: 
+
+
+
+E VOCÊ PODE, AINDA, FAZER ISSO COM DIVERSOS ARRAYS, ARRAYS COMPLETAMENTE DIFERENTES,
+
+
+
+PQ 
+
+
+
+com 
+
+o set 
+
+do identifier de 'el' em '[el]',
+
+
+
+VOCê 
+
+
+
+
+
+
+
+ESTÁ DANDO 1 IDENTIFIER PARA __ A CONDITION _ QUE VOCê VAI QUERER APLICAR NESSA 
+
+
+
+
+
+
+
+
+
+UPDATE EXPRESSION ESPECÍFICA DE '$set: {"hobbies.$[el].goodFrequency": true} ' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> CERTO.... EM ARRAY FILTERS,
+
+
+
+
+VOCÊ, PORTNATO,
+
+
+
+TERÁ UM ARRAY 
+
+(
+    []
+)
+
+
+
+
+
+DOS DIFERENTES FILTERS PARA OS DIFERENTES ARRAYS QUE VOCê ESTARÁ UPDATANDO...
+
+
+
+
+
+
+
+
+
+tipo assim:
+
+
+
+
+
+
+
+{
+    arrayFilters: [
+        {}, {}, {}
+    ]
+}
+
+
+
+
+
+
+
+
+
+
+
+--> MÚLTIPLOS DOCUMENTS,
+
+
+1 PARA CADA 'filter' ('[el]'),
+
+
+
+
+
+
+
+
+
+
+
+E AÍ VOCê PRECISA REPETIR SEU IDENTIFIER,
+
+
+tipo assim:
+
+
+
+
+
+
+
+{
+    arrayFilters: [
+        {el: }, {}, {}
+    ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> '[el]',
+
+
+PARA NÓS,
+
+
+
+É UM ELEMENT, MAS UM ELEMENT QUE É UM 'EMBEDDED DOCUMENT' em hobbies.... ----> ISSO QUER DIZER QUE 
+
+
+
+
+_ SE QUEREMOS __ FAZER 'CHECK' POR 1 FIELD ESPECÍFICO NESSE EMBEDDED DOCUMENT DE 'el', 
+
+
+
+
+
+
+
+
+
+
+
+
+EU POSSO/DEVO USAR 
+
+
+
+'el.xxxx',
+
+
+
+'el.yyyyy',
+
+
+
+'el.zzzzz',
+
+
+
+
+DEPENDENDO DA PROPRIEDADE/FIELD QUE EU TENHO NESSE EMBEDDED DOCUMENT....
+
+
+
+
+
+
+
+
+
+
+
+--> NO CASO DO PROFESSOR, ELE VAI CHECAR___ SE A 'frequency' É MAIOR DO QUE 2...
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+{
+    arrayFilters: [
+        {el: {$gt: 2}}, {}, {}
+    ]
+}
+
+
+
+-------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK... MAS O PROBLEMA, NO CASO, É QUE COM ISSO ELE ESTARÁ 'rebuilding' a query que 
+
+
+
+ESCREVEMOS LÁ NO PRIMEIRO PARÂMETRO,
+
+de 
+
+
+
+"hobbies.frequency": {$gt: 2} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS VOCÊ NÃO É OBRIGADO A FAZER ISSO,
+
+PODE PROCURAR POR COISAS COMPLETAMENTE DISTINTAS EM 
+
+
+
+
+'arrayFilters', nessas conditions...
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... O CÓDIGO COMPLETO FICA ASSIM:
+
+
+
+
+
+
+
+db.users.updateMany({"hobbies.frequency": {$gt: 2}}, 
+
+
+
+
+{$set: {"hobbies.$[el].goodFrequency": true}}, 
+
+
+
+
+{arrayFilters: [
+
+
+
+    {"el.frequency": {$gt: 2}}
+]
+
+
+
+
+
+ }
+
+
+
+
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA SE SALVAMOS ISSO AÍ,
+
+
+
+
+
+VEMOS QUE 
+
+
+
+
+
+
+
+
+
+
+
+5 DOCUMENTS TERÃO SIDO MODIFICADOS.... --- >vendo os users,
+
+
+
+VEJO QUE 
+
+
+
+
+
+
+
+ALGUNS DOCUMENTS FICARAM COM 'goodFrequency: true',
+
+
+
+E OUTROS NÃO... --> 
+
+
+
+SÓ OS DOCUMENTS QUE TINHAM UMA FREQUENCY MAIOR DO QUE 
+'2' 
+
+
+
+
+
+FICARAM COM ESSE NOVO FIELD...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> ok... ESSA É UMA BOA SINTAXE, QUE TE DEIXA SER REALMENTE BEM FLEXÍVEL ACERCA 
+
+
+
+
+
+
+
+DO 'FILTER OUT' 
+DE 
+
+ELEMENTS EM 1 ARRAY QUE _ DEVEM MUDAR..... -------> VOCê PODE TER MAIS DE 1 FILTER, TOTALLY DIFFERENT FILTERS....
+
+
+
+
+
+
+
+
+
+
+
+
+***** O FILTER PELO QUAL VOCÊ IDENTIFICA/SELECIONA OS DOCUMENTS 
+
+
+
+E 
+
+
+O FILTER PELO QUAL VOCÊ IDENTIFICA 
+''QUAIS ARRAY ELEMENTS QUERO UPDATAR'' __ NÃO _ PRECISAM__ SER IDÊNTICOS, podem versar sobre coisas bem diferentes)...

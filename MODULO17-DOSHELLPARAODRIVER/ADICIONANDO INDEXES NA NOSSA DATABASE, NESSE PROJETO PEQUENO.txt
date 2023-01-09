@@ -1,0 +1,458 @@
+
+
+
+
+
+
+
+
+
+
+--> UMA BREVE NOTA SOBRE O 'SORTING',
+
+
+na última aula...
+
+
+
+
+
+
+
+
+
+
+
+ --> NÓS HAVÍAMOS CRIADO UM 
+
+
+
+
+ __ 'SORT' PARA OS 'PRICE'...
+
+
+
+
+
+
+
+ tipo assim:
+
+
+
+
+
+
+db
+        .collection('products')
+        .find({})
+        .sort({ price: -1 })
+        .skip(pageSize * (pageNumber - 1))
+        .limit(pageSize)
+        .toArray()
+
+
+
+
+
+
+
+
+
+
+
+
+        -> DESCENDING ORDER...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> OK... MAS COMO O PROFESSOR MENCIONOU HÁ ALGUMAS AULAS,
+
+
+
+QUNADO 
+
+
+
+VOCÊ 
+
+FAZ 
+MT 
+
+
+SORTING NO SEU CÓDIGO,
+
+
+
+
+É BOM TER UM ___ INDEX__ PARA ESSA OPERAÇÃO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> ADEMAIS,
+
+o 
+
+
+CREATE DE INDEXES _ NÃO É ALGO QUE __ VOCÊ FAZ DE DENTRO DE SEU CÓDIGO NODE... -> você tipicamente fará isso 
+
+de dentro 
+da 
+
+MONGOSHELL..
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOCÊ  NUNCA VAI 'CREATE A INDEX' 
+
+a partir de um incoming request ou qualquer coisa do gênero...
+
+
+
+
+
+
+
+
+
+
+----> O MANAGE DE SUA DATABASE,
+
+COMO O CREATE DE um INDEX,
+
+
+
+
+
+é algo 
+
+
+
+
+QUE VOCÊ DEVE FAZER LÁ DE DENTRO DE SUA DATABASE...
+
+
+
+
+
+
+
+
+
+
+
+
+--> É POR ISSO QUE VAMOS EXECUTAR O MONGOSHELL 
+
+
+
+e passar a url do mongoatlas com o password e user,
+
+tipo assim:
+
+
+
+
+
+
+
+PS A:\projeto6-MONGODB\MODULO17-DOSHELLPARAODRIVER> mongo "mongodb+srv://cluster0.nhtjo.mongodb.net/shop" --username madblorga --password papanacuas
+
+
+
+
+
+MongoDB shell version v5.0.6
+connecting to: mongodb://cluster0-shard-00-02.nhtjo.mongodb.net:27017,cluster0-shard-00-01.nhtjo.mongodb.net:27017,cluster0-shard-00-00.nhtjo.mongodb.net:27017/shop?authSource=admin&compressors=disabled&gssapiServiceName=mongodb&replicaSet=atlas-gc0c6b-shard-0&ssl=true
+Implicit session: session { "id" : UUID("86bcb3f2-3104-4ac4-bdd8-21c6ef00c68f") }
+MongoDB server version: 5.0.6
+================
+Warning: the "mongo" shell has been superseded by "mongosh",
+which delivers improved usability and compatibility.The "mongo" shell has been deprecated and will be removed in
+an upcoming release.
+For installation instructions, see
+https://docs.mongodb.com/mongodb-shell/install/
+================
+MongoDB Enterprise atlas-gc0c6b-shard-0:PRIMARY> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> certo... aí vamos querer criar um 
+
+
+
+
+INDEX NO FIELD DE 'price',
+
+
+essencialmente...
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+MongoDB Enterprise atlas-gc0c6b-shard-0:PRIMARY> show dbs
+admin       0.000GB
+auth-demo   0.000GB
+blog2       0.000GB
+comments    0.000GB
+local       9.980GB
+newsletter  0.000GB
+postFeed    0.000GB
+shop        0.000GB
+shop2       0.000GB
+todos       0.000GB
+MongoDB Enterprise atlas-gc0c6b-shard-0:PRIMARY> use shop2
+switched to db shop2
+MongoDB Enterprise atlas-gc0c6b-shard-0:PRIMARY> show collections
+dummy
+products
+MongoDB Enterprise atlas-gc0c6b-shard-0:PRIMARY> db.products.createIndex({price: 1})
+{
+        "numIndexesBefore" : 1,
+        "numIndexesAfter" : 2,
+        "createdCollectionAutomatically" : false,
+        "commitQuorum" : "votingMembers",
+        "ok" : 1,
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1646533149, 7),
+                "signature" : {
+                        "hash" : BinData(0,"6pLwjs1YwtDWXvS62YxkweIWdMo="),
+                        "keyId" : NumberLong("7026883533561921537")
+                }
+        },
+        "operationTime" : Timestamp(1646533149, 7)
+}
+MongoDB Enterprise atlas-gc0c6b-shard-0:PRIMARY> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> certo....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.products.createIndex(
+    {
+        price: 1
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NÃO INTERESSA SE CRIARMOS EM ASCENDING OU DESCENDING,
+
+pq o index pode ser 'traversed' em ambos os lados...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> FAZEMOS ISSO....
+
+
+
+
+
+
+
+
+
+
+--> agora vemos que o INDEX FOI CRIADO....
+
+
+
+
+
+
+
+
+
+--> GANHAMOS UM OUTPUT UM POUCO DIFERENTE DO QUE ANTES,
+
+
+PQ 
+
+ESTAMOS 
+
+USANDO O MONGODB ATLAS....
+
+
+
+
+
+
+
+(
+
+    mas, no final das contas,
+
+
+    estamos 
+
+
+
+    com o index adicionado....
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> COM O INDEX ADICIONADO, NÃO PRECISAMOS ALTERAR COISA ALGUMA NO NOSSO CÓDIGO NODE,
+
+PODEMOS 
+
+CONTINUAR O UTILIZANDO NORMALMENTE...
+
+
+
+
+
+
+
+
+
+
+--> ok, temos esse index,
+
+que 
+
+será 
+usado 
+
+quando fizermos 'sort'...
+
+
+
+
+
+
+
+
+
+
+--> OK, SE QUISERMOS FAZER 
+
+
+SORTING EXCESSIVO,
+
+CRIAMOS 
+
+
+INDEXES,
+
+NO LADO DE FORA DE NOSSO APPp.....

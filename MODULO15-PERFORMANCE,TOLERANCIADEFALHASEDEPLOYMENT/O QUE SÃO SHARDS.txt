@@ -1,0 +1,1248 @@
+
+
+
+
+
+
+
+SHARDING (horizontal scaling)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ENTENDENDO SHARDING...
+
+
+
+
+
+
+
+
+
+
+--> VIMOS REPLICA SETS,
+
+
+
+MAS TEMOS QUE VER SHARDING, AGORA...
+
+
+
+
+
+
+
+
+
+
+
+
+SHARDING E REPLICA SETS SÃO FREQUENTEMENTE CONFUNDIDOS COM 'REPLICA SETS', E VICE VERSA.....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS ELES SÃO 2 COISAS TOTALMENTE DIFERENTES...  ----> 
+
+
+
+
+
+
+
+
+1 QUICK WORD ACERCA DE SCALING:
+
+
+
+
+
+
+
+
+a. digamos que vocÊ tem um mongodb server --> por isso, queremos dizer um pc 
+
+
+
+QUE RODA SEU MONGODB SERVER, E EM QUE SUAS DATABASE FILES SÃO ARMAZENADAS ... 
+
+
+
+
+
+
+
+
+
+
+b. se você tiver um server desses, e aí do nada você precisa de mais PODER,  pq você tem mais REQUESTS,
+
+mais USERs 
+
+
+
+CHEGANDO,
+
+
+
+MAIS OPERAÇÕES DE READ-WRITE.... 
+
+
+
+
+
+
+
+
+
+c. o que vocÊ pode fazer? 
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> VOCÊ PODE DAR UPGRADE NO SEU SERVER.... --> VOCê VAI: 
+
+
+a) comprar mais cpu 
+
+
+b) comprar mais memória ram, etc....
+
+
+
+
+
+
+
+
+
+
+--> E AÍ VOCÊ VAI COLOCAR TUDO ISSO NO SERVER....
+
+
+
+
+
+
+
+
+
+--> SE VOCÊ TIVER/USAR UM CLOUD PROVIDER,
+
+
+
+VOCê PODE FAZER TUDO ISSO COM 1 SIMPLES CLICK....
+
+
+
+
+
+
+
+
+
+
+
+
+---> ESSA Á UMA SOLUÇÕA,
+
+
+
+SIM,
+
+
+
+MAS ISSO SÓ VAI TE LEVAR 
+
+
+
+ATÉ CERTO PONTO.... (você vai precisar de HORIZONTAL SCALING, SHARDING, para ir além).
+
+
+
+
+
+
+
+
+----> CHEGA CERTO PONTO EM QUE 
+
+
+VOCÊ 
+
+
+NÃO CONSEGUE MAIS COLOCAR CPU E RAM EM 1 MESMA MÁQUINA... --> NESSE MOMENTO,
+
+
+
+VOCÊ 
+
+
+
+
+VAI __ PRECISAR__ DE MAIS SERVERS__.... --> MAS 
+
+
+
+
+
+
+
+
+ISSO TRAZ OUTRO PROBLEMA:
+
+
+
+
+
+
+
+
+
+
+
+
+OS SERVERS NÃO FAZEM 'DUPLICATE' DA DATA --> ELAS NÃO 
+
+
+
+SÃO 
+
+
+
+
+DUPLICATES, E SIM 'SPLITTAM A DATA'.... --> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SERVER 
+
+
+A 
+
+B 
+
+
+C 
+
+D 
+
+
+E 
+
+
+F 
+
+
+G
+
+
+
+
+
+
+
+
+
+
+
+->  ISSO SIGNIFICA QUE O SERVER 'A' PODE TER DATA DE MESMO TIPO/FUNÇÃO QUE  O SERVER 'G',
+
+
+
+
+MAS PARA 
+
+UM 
+
+DIFERENTE 'CHUNK' DA DATABASE... --> E ISSO É __ BEM IMPORTANTE DE ENTENDER:
+
+
+
+
+
+
+
+COM O SHARDING,
+
+
+VOCÊ 
+
+
+TEM 
+
+
+UM MONTE DE PCS ,
+
+TODOS ELES RODANDO MONGODB SERVERS,
+
+
+
+
+
+MAS ESSES SERVERS __ NÃO FUNCIONAM 'STANDALONE',
+
+
+
+e sim 
+
+
+funcionam 
+
+
+
+'''TOGETHER''',
+
+e aí 
+
+SPLITTAM
+
+a data disponível..... --->  A DATA 
+
+
+É __ DISPONIBILIZADA AO LONGO DE SEUS MÚLTIPLOS SHARDS,
+
+E NÃO DUPLICADA..
+
+
+
+
+
+
+
+
+
+
+
+
+
+DATA IS DISTRIBUTED ACROSS SHARDS..
+
+
+
+
+
+
+
+
+
+--> E AS QUERIES, QUERIES EM QUE FAZEMOS FIND DE DATA, UPDATE, DELETE, INSERT,
+
+
+TODAS ELAS TEM QUE SER EXECUTADAS CONTRA TODOS OS SERVERS/server correto,
+
+
+
+
+
+PQ 
+
+
+
+
+'''CADA 
+
+
+SERVER FAZ MANAGE DE SEU PRÓPRIO CHUNK DE DATA''',
+
+
+
+e tem uma certa 'range' de data.... --> 
+
+
+
+
+
+
+
+EX:
+
+
+SE VOCÊ ARMAZENA DATA EM ORDEM ALFABÉTICA,
+
+
+O PRIMEIRO SV 
+
+
+
+VAI 
+
+
+
+ARMAZENAR 
+
+A-F 
+
+
+DEPOIS 
+
+
+G- L,
+
+
+
+ETC ETC..
+
+
+
+
+
+
+
+
+
+
+
+
+------> AS OPERATIONS TEM QUE SER FORWARDADAS AOS SERVERS CORRETOS... (para que o negócio funcione)...
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS COMO ISSO FUNCIONA?
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, TEMOS OS MÚLTIPLOS SHARDS:
+
+
+
+
+
+
+
+
+
+
+
+mongod (Server/shard) 
+
+
+
+
+
+
+
+
+mongod(Server/shard)
+
+
+
+
+
+
+
+
+mongod(Server/shard)
+
+
+
+
+
+
+
+
+
+
+-> MÚLTIPLAS INSTANCES DE MONGOD --> CADA INSTANCE É UM SHARD.... --> CADA SHARD,
+
+
+
+BTW,
+
+
+
+
+
+
+PODE __  E VAI__ SER 1 REPLICA SET... ->  ISSO SIGNIFICA QUE 
+
+
+
+
+
+CADA SHARD 
+
+É 
+
+UM 
+
+REPLICA SET,
+
+
+UM 'SET DE NODES'...
+
+
+
+
+
+
+
+
+
+
+
+
+------> OK... 
+
+SE VOCê TEM ESSES SERVERS,
+
+
+
+VOCê TERÁ 
+
+O SEU CLIENT/APP....
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+
+
+mongod (Server/shard) 
+
+
+
+
+
+
+
+
+mongod(Server/shard)                                            CLIENT
+
+
+
+
+
+
+
+
+mongod(Server/shard)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE VOCÊ TEM ESSES SERVERS E O CLIENT,
+
+
+
+VOCÊ DE REPENTE TERÁ UM NOVO 'MIDDLEMAN',
+
+que 
+
+
+AINDA NÃO VIMOS NESSE CURSO... --> É O MIDDLEMAN 
+
+DE 
+
+
+'mongos(Router)'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> ESSE É O ROUTER OFERECIDO 
+
+
+PELO 
+
+
+
+MONGODB... ------> ESSE ROUTER É RESPONSÁVEL PELO 'FORWARDING' DAS SUAS OPERATIONS (insert, reads, updates, deletes)
+
+
+
+
+
+
+
+
+
+PARA __ O ___ SHARD CORRETO, DENTRE MUITOS __.... ---> ISSO SIGNIFICA QUE 
+
+
+
+
+
+O __ ROUTER_ 'mongos' 
+
+
+
+
+TEM QUE 
+
+DESCOBRIR 
+
+'QUAL SHARD É RESPONSÁVEL PELA DATA QUE 
+
+VOCÊ ESTÁ INSERINDO' (onde deve ser armazenado) E 
+
+
+
+
+
+
+
+'''QUAL SHARD POSSUI A DATA QUE VOCÊ QUER RETRIEVAR''...
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ESSE SPLITTING, USAMOS UM ELEMENTO ADICIONAL,
+
+
+CHMADO DE 
+
+
+'Shard Key'...
+
+
+
+
+
+
+
+
+
+
+
+--> SHARD KEY- -> É 
+
+
+
+ESSENCIALMENTE 1 __fIELD__ ADICIONADO A CADA DOCUMENT,
+
+
+
+MUITO IMPORTANTE,
+
+
+QUE É BASICAMENTE USADO 
+
+
+
+
+
+PARA QUE O SERVER 
+
+
+'
+ENTENDA' 
+
+
+
+
+
+
+
+''ONDE ESSE DOCUMENT PERTENCE''' -->  E, BEM, 
+
+
+ESSA 
+
+CONFIGURAÇÃO 
+
+DOS 
+
+
+SHARDS, AS SHARD KEYS,
+
+
+É 
+
+
+ALGO QUE 
+
+
+
+
+_ NÃO É TRIVIAL.... --> PQ VOCÊ SEMPRE VAI QUERER ___ ASSEGURAR__ QUE 
+
+
+VOCÊ TEM UMA 
+
+SHARD KEY 
+
+
+QUE 
+
+É 
+
+
+
+'EVENLY DISTRIBUTED' -----> ou seja
+,
+
+
+
+VOCê PODE 
+
+
+ASSIGNAR SEUS PRÓPRIOS VALUES.... --> posso dizer 
+
+
+
+
+'''MINHA SHARD KEY SERÁ O NOME DE MEU USER'''' --> ok,
+
+
+mas 
+
+
+se 
+
+vocÊ fizer isso,
+
+
+VOCÊ TERÁ DE ASSEGURAR QUE 
+
+SEUS USERNAMES SÃO 'evenly distributed'.... (ou seja, n podemos ter 100 nomes com A e zero com Z ) --> PQ SE VOCÊ FIZESSE ISSO,
+
+
+TODOS OS DOCUMENTS ACABARIAM EM 1 SHARD SÓ, o que não seria bom....
+
+
+
+
+
+
+
+
+
+
+
+---> OK.... É POR ISSO QUE 'ESCOLHER A SHARD KEY SABIAMENTE' É 
+
+
+
+
+BEM IMPORTANTE,
+
+E ALGO QUE 
+
+VOCê PODE 
+
+LER BASTANTE NOS OFFICIAL DOCS... --> GERALMENTE É TRABALHO DO SEU ADMIN.... -> 
+
+
+
+
+
+
+
+
+
+
+OK, MAS O QUE INTERESSA É QUE É O TRABALHO DESSE 'MONGOS'
+
+
+
+
+
+
+
+DESCOBRIR 'EM QUE LUGAR UMA OPERATION DEVE SER EXECUTADA'... --> QUAL SERVER DEVE SER RESPONSÁVEL PELO STORE DE UMA INCOMING DATA, ETC ETC...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ok, mas COMO FUNCIONA O QUERYING, COM O SHARDING?
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, TEMOS TODOS NOSSOS SHARDS..
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SHARD SHARD SHARD
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> AÍ TEMOS UMA QUERY QUE CHEGA AO NOSSO SERVER...
+
+
+
+
+
+
+
+
+
+
+--> QUERY DE 'find()" --> 
+
+
+ESSA QUERY
+
+
+VAI BATER NO ROUTER de 'mongos'....
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+
+find()
+
+|
+|
+|
+|
+
+
+
+
+mongos 
+
+
+|
+|
+|
+|
+
+
+
+SHARD SHARD SHARD 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> NESSE CASO AÍ, SUPONHAMOS QUE 
+
+
+
+
+
+
+A) SEU FIND ___NÃO ESPECIFICOU UM VALUE__ PARA A 'SHARD KEY' --> talvez vocÊ esteja procurando por um user chamado de 'Max', mas aí __ SEU SHARDKEY É ALGUM OUTRO VALUE, VALUE QUE NÃO É O 'NAME'....
+
+--> nesse caso, no seu filter de 'find' NÃO TERÁ NENHUMA INFORMATION ACERCA DO 'SHARD KEY', o que fará com que 
+o mongos NÃO SAIBA  QUAL SHARD É RESPONSÁVEL PELO HANDLE DESSE FIND REQUEST... (
+
+
+    não vai saber qual shard é responsável/contém essa sua data....
+)
+
+
+
+
+--> NESSA HIPÓTESE AÍ, _'''SUBOPTIMAL''',
+
+O MONGOS tem que 
+
+'BROADCAST' 
+
+
+SEU REQUEST A  ___TODOS__ OS SHARDS... -> tem que multiplicar seu request e o enviar a TODOS OS SHARDS... --> 
+
+
+AÍ CADA  SHARD TEM QUE 
+
+CHECAR/PENSAR 
+
+
+'SOU RESPONSÁVEL? TENHO ESSA DATA?'  ------> 
+
+
+
+
+
+
+E AÍ CADA SHARD VAI RETORNAR CADA RESPONSE, DIZENDO 'AQUI ESTÁ A DATA' ou 'nenhuma data encontrada'' --> E AÍ 
+
+
+O 
+
+MONGOS TEM QUE __ FAZER 'MERGE' DE TODA ESSA DATA EM 1 ÚNICO NEGÓCIO, para então retornar esse negócio...
+
+
+
+
+
+
+
+
+
+
+
+
+
+B) NA HIPÓTESE 2,
+
+
+SUA QUERY DE 'FIND'
+
+
+POSSUI/TEM 
+
+
+
+A 
+
+
+'SHARD KEY' especificada... ----> DIGAMOS QUE 
+
+
+
+SUA SHARD KEY __ AGORA __ É REALMENTE O 
+
+'userName',
+
+
+
+E AGORA 
+
+
+VOCê 
+
+ESTÁ PROCURNADO 
+
+
+
+PELO 'username'
+
+
+no seu filter de find, tipo 'find({username: 'Max'})'  --------> QUANDO ISSO ACONTECE/ ESSA SITUAÇÃO SE APRESENTA,
+
+
+O 
+
+MONGOS PODE FAZER 'FORWARD' DIRETO DESSE 
+
+
+
+FIND __ AO __ SHARD__ CORRETO,
+ 
+ PARA FETCHEAR A DATA DE LÁ ---------------> É CLARO QUE __ iSSO É MAIS EFICIENTE... ---> 
+
+
+
+
+
+
+
+ E ESSA É A PARTE QUE MAIS INTERESSA A VOCÊ,
+
+
+ COMO DESENVOLVEDOR:
+
+
+
+
+
+ SE VOCê 
+
+
+
+
+
+ ESTÁ _ USANDO SHARDING,
+
+ SABE QUE 
+
+ ESTÁ 
+
+ USANDO SHARDING,
+
+
+
+ VOCê DEVE SENTAR JUNTO COM SEU DATABASE ADMIN __ E ESCOLHER 
+
+ UMA 
+
+
+ SÁBIA 
+
+ SHARD KEY,
+
+
+ COM BASE NAS NECESSIDADES DO SEU APP,
+
+
+
+ QUE É 
+
+ 'EVENLY DISTRIBUTED',
+
+
+
+
+ TUDO PARA QUE VOCE CONSIGA 
+
+
+ ESCREVER QUERIES 
+
+ QUE 
+
+
+
+
+ USEM ESSA SHARD KEY _ COM A MAIOR FREQUÊNCIA POSSÍVEL.... (que ela seja incluída nas queries, no caso)....
+
+
+
+
+
+
+
+
+
+
+
+ -_> OK, ESSE É O SHARDING... --> É 'ALL ABOUT '
+
+
+
+
+ O DISTRIBUTE DE DATA AO LONGO DE SERVRS,
+
+ E 
+
+
+
+ AÍ 
+
+
+
+ 
+
+
+ FAZER O SETUP DE TUDO DE MODO 
+
+ QUE 
+
+
+
+
+ OS SHARDS PODEM SER USADOS NAS QUERIES EFICIENTEMENTE...
+
+
+
+
+
+
+
+
+
+ --> SHARDS SÃO UM TÓPICO AVANÇADO,
+
+ E VOCÊ 
+
+ NÃO TEM QUE SE PREOCUPAR COM ISSO.... MAS assim como 
+
+
+
+ REPLICA SETS,
+
+
+ QUNADO 
+
+
+ O 
+
+
+ TÓPICO FOR 
+
+ O 
+
+ DE 
+
+
+
+ 'DEPLOYMENT',
+
+
+
+ O PROFESSOR 
+
+
+
+ VAI NOS MOSTRAR UMA SOLUÇÃO QUE NOS DEIXA ADICIONAR SHARDING FACILMENTE..

@@ -1,0 +1,2958 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... ATÉ AGORA,
+
+
+USAMOS 
+
+
+'$match' 
+
+
+
+'$group' 
+
+
+
+
+e 
+
+
+
+'$sort'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA VAMOS VER OUTRO STAGE 
+
+DE 
+
+
+
+
+NOSSO AGGREGATION PIPELINE.... -> VEREMOS UM STAGE QUE 
+
+
+
+
+VAI
+
+
+NOS DEIXAR
+ 
+
+
+ ' ___TRANSFORM EVERY DOCUMENT'',
+
+
+
+
+ EM VEZ _ DE 'AGRUPAR TODOS OS DOCUMENTS EM 1 FIELD/fields' (
+
+     que era o que fazíamos/fazemos no '$group' stage....
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> OK... VAMOS QUERER TRANSFORMAR TODOS OS DOCUMENTS,
+
+ EM VEZ DE 
+
+
+AGRUPAR TODOS ELES... ------> 
+
+
+
+
+
+
+
+
+
+FAREMOS ISSO ATRAVÉS DO STAGE de '$project'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NO PASSADO,
+
+JÁ TRABALHAMOS COM PROJECTION...
+
+
+
+
+
+
+
+
+
+
+
+
+
+trabalhamos com ele no method de 'find',
+
+tipo assim:
+
+
+
+
+
+
+
+
+
+
+
+db.persons.find(
+    {}, 
+
+
+    {
+        _id: 0, name: 1, age: 1, residence: 0 (opcional)
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> MAS COMO UM 'AGGREGATE STAGE',
+
+
+o 
+
+
+
+
+$project CERTAMENTE FICA MAIS __ FORTE___>..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK, MAS O QUE ELE PODE FAZER POR NÓS? 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, 
+
+
+DEVEMOS COMEÇAR SIMPLES.... -> 
+
+
+
+
+
+
+
+
+NÃO VAMOS FAZER NENHUM OUTRO STAGE,
+
+
+
+
+
+
+
+E VAMOS FAZER 'ACCEPT' 
+
+de todos os documents como input,
+
+
+
+
+
+
+
+
+
+
+nesse stage de '$project'...
+
+
+
+
+
+
+
+
+
+
+tipo assim:
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.persons.aggregate(
+   {$project } ////será nossa única etapa....
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PRECISAMOS PASSAR UM __ VALUE_ A ESSE STAGE (como todos os outros stages)..
+
+
+
+
+
+-> o value será um DOCUMENT, como sempre... 
+
+
+
+
+
+
+
+
+
+
+
+
+-------> será um DOCUMENT EM QUE 
+
+
+CONFIGURAMOS ESSE STAGE...
+
+
+
+
+
+
+
+
+
+
+
+
+-> NA SUA FORMA MAIS SIMPLES,
+
+
+O PROJECT 
+
+FUNCIONA 
+
+ '''DA MESMA FORMA QUE ELE FUNCIONA LÁ NO METHOD DE FIND'...
+
+
+
+
+
+
+
+
+
+
+
+
+ -------> ou seja, você pode colocar 
+
+
+ '_id: 0' (
+     dizendo que não quer o id
+ ),
+
+
+ e ái 
+
+
+ dizer 
+
+ que 
+
+ SÓ QUER O 
+
+
+
+ gender,
+
+
+
+
+ o name e mais algumas outras coisas...
+
+
+
+
+
+
+
+
+
+ eX:
+
+
+
+
+
+ db.persons.aggregate(
+   {$project: {
+       _id: 0,
+       gender: 1,
+       name: 1
+
+
+   } } 
+)
+
+
+
+
+
+
+
+
+
+
+
+OK, MAS DIGAMOS QUE __ o NAME_  NÃO DEVERÁ 
+
+FICAR NO MESMO 
+
+FORMATO 
+
+
+
+
+
+DOS 
+
+
+
+
+NOSSOS DOCUMENTS PADRÃO...
+
+
+
+
+
+
+
+
+
+formato de nossos document padrão:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{
+        "_id" : ObjectId("62127db4e5b1e4e4716eb34e"),
+        "gender" : "female",
+        "name" : {
+                "title" : "ms",
+                "first" : "signe",
+                "last" : "rasmussen"
+        },
+        "location" : {
+                "street" : "3635 koldingvej",
+                "city" : "ryslinge",
+                "state" : "sjælland",
+                "postcode" : 44840,
+                "coordinates" : {
+                        "latitude" : "18.2563",
+                        "longitude" : "14.0142"
+                },
+                "timezone" : {
+                        "offset" : "+4:30",
+                        "description" : "Kabul"
+                }
+        },
+        "email" : "signe.rasmussen@example.com",
+        "login" : {
+                "uuid" : "687099d9-b4bd-4881-8657-90abd559844f",
+                "username" : "sadpeacock229",
+                "password" : "baggio",
+                "salt" : "J1WBRau1",
+                "md5" : "2b0824d7f90452cc93a879aaf717fa40",
+                "sha1" : "d7fc48d34816bccf8cac0c532b06e37e65974759",
+                "sha256" : "2388d9162c447e163fdaaf94fb99bc5ca42a93de167d82eed59e296f8d1de8dd"
+        },
+        "dob" : {
+                "date" : "1983-05-20T21:26:44Z",
+                "age" : 35
+        },
+        "registered" : {
+                "date" : "2010-09-30T04:08:40Z",
+                "age" : 7
+        },
+        "phone" : "46945447",
+        "cell" : "97293211",
+        "id" : {
+                "name" : "CPR",
+                "value" : "082246-7576"
+        },
+        "picture" : {
+                "large" : "https://randomuser.me/api/portraits/women/5.jpg",
+                "medium" : "https://randomuser.me/api/portraits/med/women/5.jpg",
+                "thumbnail" : "https://randomuser.me/api/portraits/thumb/women/5.jpg"
+        },
+        "nat" : "DK"
+}
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+       "name" : {
+                "title" : "ms",
+                "first" : "signe",
+                "last" : "rasmussen"
+        },
+
+
+
+
+
+
+
+
+
+----> não vamos querer esse embedded document... -> vamos querer 
+
+
+
+
+
+
+APENAS 1 ÚNICO FIELD,
+
+
+
+em vez desse embedded document... --> E ISSO É ALGO QUE PODEMOS __ FACILMENTE__ FAZER COM 
+
+
+ESSE OPERATOR/stage de 
+
+
+
+
+'$project'....
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -> MAS COMO FAZEMOS ISSO?
+
+
+
+
+
+
+
+
+
+
+
+ --> FAZEMOS ISSO POR MEIO DO ADD DE UM __ NOVO FIELD __, por meio 
+
+ desse 
+
+ "$project'...
+
+
+
+
+
+
+
+
+
+
+ --> E FAZEMOS ISSO assim:
+
+
+
+
+
+
+ {
+     $project: { _id: 0, gender: 1, fullName}
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> CRIAMOS ESSE FIELD DE 'fullName' ->  E ESSE FIELD PODERÁ SER SIMPLESMENTE 'created on the fly'
+
+
+
+
+
+ com base nos NESTED FIELDS de 'first' e 'last', naquele 'name:{}'...
+
+
+
+
+
+
+
+
+
+
+
+
+ --> MAS COMO ISSO FUNCIONA? 
+
+
+
+
+
+
+
+
+
+
+
+
+ --> BEM, TEMOS UM OPERATOR ESPECIAL QUE PODEMOS USAR (visto nos docs oficiais),
+
+
+
+ QUE 
+
+
+
+
+É O OPERATOR de 
+
+
+
+
+
+
+
+
+'$concat'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA USAR O '$concat', você precisa PASSAR UM OBJECT COMO VALUE de 'fullName'...
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+ {
+     $project: { _id: 0, gender: 1, fullName: {$concat }}
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> OK .... --> '$concat' 
+
+
+
+ TE DEIXA _ CONCATENAR__  
+
+
+
+
+ 2 STRINGS --> E, DENTRO 
+
+
+ DESSE '$concat: ',
+
+
+
+ VOCÊ 
+
+ SIMPLESMENTE PASSA 1 ARRAY QUE CONTENHA ESSAS 2 STRINGS...
+
+
+
+
+
+
+
+
+ tipo assim:
+
+
+
+
+
+
+
+
+ $concat: []
+
+
+
+
+
+
+
+
+
+ --> OK... MAS AQUI NÃO TEMOS 1 ARRAY, E SIM 
+
+
+ 2 FIELDS DISTINTOS ('first' e 'last')...
+
+
+
+
+
+
+
+ --> como podemos __EXTRAIR_ os valores desses fields e os enfiar em '$concat'? 
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> PODEMOS FAZER ISSO POR MEIO DE UMA SINTAXE ESPECIAL DO MONGODB.... -----> é 
+
+
+
+
+
+
+ uma sintaxe em que escrevemos, DENTRO DE UMA STRING,
+
+
+
+
+
+ com o DOLLARSIGN,
+
+
+
+
+
+ __ NOS REFERENCIAMOS À
+
+
+ '$name.first'
+
+
+
+
+ e 
+
+
+ '$name.last'...
+
+
+
+
+
+
+
+
+
+
+ -> O DOLLARSIGN,
+
+ DENTRO DESSA STRING,
+
+  
+  VAI SIMPLESMENTE COMUNICAR AO 
+
+
+
+  MONGODB QUE ESSA STRING NÃO É HARDCODED TEXT,
+
+
+  E SIM QUE 
+
+
+
+
+
+
+''''SE REFERE A UM __ FIELD _ DO INCOMING DOCUMENT''',
+
+
+
+E QUE 
+
+ELE DEVE 
+
+'TAKE THE VALUE of that field, instead'...
+
+
+
+
+
+
+
+
+
+-> NESSE CASO,
+
+FICA TIPO ASSIM:
+
+
+
+
+
+
+ db.persons.aggregate(
+   {$project: {
+       _id: 0,
+       gender: 1,
+        fullName: {
+            $concat: ["$name.first", "$name.last"]
+        }
+   } } 
+)
+
+
+
+
+
+
+-------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+ok.... então criamos esse field de 'fullName',
+
+
+
+
+customizado,
+
+em que 
+
+
+
+
+ADICIONAMOS UM VALUE QUE É A CONCATENAÇÃO DE FIELDS 'first' e 'last' de 'name' (no document originário).... --->
+
+
+
+
+
+
+
+isso deu certo graças ao operator de '$concat'...
+
+
+
+
+
+
+
+
+
+
+
+
+é claro que ''$concat''
+
+também 
+
+funciona com HARDCODES..
+
+
+
+
+
+
+tipo 
+
+
+
+$concat: ['hello', 'world'] ---> isso ficará 
+
+
+
+'helloworld'...
+
+
+
+
+
+
+
+
+
+
+tipo 
+
+
+
+
+'fullname: 'helloworld'...
+
+
+
+
+
+
+
+
+
+
+
+
+----> 
+
+
+
+
+
+
+
+
+ok..... 
+
+
+
+
+
+
+
+
+RODAMOS ESSE CÓDIGO 
+
+
+
+
+
+, MAS COM UM 
+
+" " no meio, para que 
+
+
+
+
+tenhamos um espaço..
+
+
+
+
+
+
+
+
+
+
+aí vamos receber vários documents com 
+
+
+
+
+
+FORMATO ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>  db.persons.aggregate(
+...    {$project: {
+...        _id: 0,
+...        gender: 1,
+...         fullName: {
+...             $concat: ["$name.first", "$name.last"]
+...         }
+...    } }
+... )
+{ "gender" : "male", "fullName" : "harveychambers" }
+{ "gender" : "male", "fullName" : "carljacobs" }
+{ "gender" : "female", "fullName" : "madeleinetill" }
+{ "gender" : "male", "fullName" : "isolinoviana" }
+{ "gender" : "female", "fullName" : "mestankaplangı" }
+{ "gender" : "female", "fullName" : "sandralorenzo" }
+{ "gender" : "male", "fullName" : "gideonvan drongelen" }
+{ "gender" : "female", "fullName" : "katiewelch" }
+{ "gender" : "female", "fullName" : "پریاپارسا" }
+{ "gender" : "female", "fullName" : "louisegraham" }
+{ "gender" : "female", "fullName" : "shonakemperman" }
+{ "gender" : "female", "fullName" : "andreiaarnaud" }
+{ "gender" : "male", "fullName" : "بنیامینسالاری" }
+{ "gender" : "female", "fullName" : "anneruiz" }
+{ "gender" : "female", "fullName" : "deliadurand" }
+{ "gender" : "male", "fullName" : "vincentküper" }
+{ "gender" : "female", "fullName" : "anaëlleadam" }
+{ "gender" : "female", "fullName" : "goncaalnıaçık" }
+{ "gender" : "female", "fullName" : "maevagrewal" }
+{ "gender" : "female", "fullName" : "signerasmussen" }
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> ok... conseguimos documents NESSE FORMATO AÍ...
+
+
+
+
+
+
+
+
+
+--> agora, se eu adicionar o ' "" ' hardcodeado, recebo isto:
+
+
+
+
+
+
+
+> db.persons.aggregate(    {$project: {        _id: 0,        gender: 1,         fullName: {             $concat: ["$name.first", " ",  
+"$name.last"]         }    } }  )
+{ "gender" : "male", "fullName" : "harvey chambers" }
+{ "gender" : "male", "fullName" : "carl jacobs" }
+{ "gender" : "female", "fullName" : "madeleine till" }
+{ "gender" : "male", "fullName" : "isolino viana" }
+{ "gender" : "female", "fullName" : "mestan kaplangı" }
+{ "gender" : "female", "fullName" : "sandra lorenzo" }
+{ "gender" : "male", "fullName" : "gideon van drongelen" }
+{ "gender" : "female", "fullName" : "katie welch" }
+{ "gender" : "female", "fullName" : "پریا پارسا" }
+{ "gender" : "female", "fullName" : "louise graham" }
+{ "gender" : "female", "fullName" : "shona kemperman" }
+{ "gender" : "female", "fullName" : "andreia arnaud" }
+{ "gender" : "male", "fullName" : "بنیامین سالاری" }
+{ "gender" : "female", "fullName" : "anne ruiz" }
+{ "gender" : "female", "fullName" : "delia durand" }
+{ "gender" : "male", "fullName" : "vincent küper" }
+{ "gender" : "female", "fullName" : "anaëlle adam" }
+{ "gender" : "female", "fullName" : "gonca alnıaçık" }
+{ "gender" : "female", "fullName" : "maeva grewal" }
+{ "gender" : "female", "fullName" : "signe rasmussen" }
+
+
+
+
+
+
+
+
+---------------------------------------------
+
+
+
+
+
+
+
+
+
+
+O RESULTADO, PORTANTO, 
+
+SERÁ DIFERENTE DE '$group',
+
+
+pq 
+
+AQUI 
+
+NÃO VAMOS TER UM MONTE DE 
+
+
+
+
+DOCUMENTS AGRUPADOS,
+
+
+E SIM 
+
+
+
+
+
+
+
+VAI APENAS 'TRANSFORM EVERY SINGLE DOCUMENT' --> teremos os mesmos documents,
+
+
+mas com data totalmente diferente...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> E A PARTE INTERESSANTE É QUE PODEMOS NÃO APENAS 'EXCLUDE/INCLUDE' data,
+
+
+
+
+MAS TAMBÉM 
+
+
+
+
+CRIAR __ NOVOS__ FIELDS,
+
+
+
+
+com HARDCODED VALUEs (se quisermos),
+
+
+
+OU 
+
+
+
+
+COM 
+
+
+
+
+VALUES DINÂMICOS, CRIADOS A PARTIR DA DERIVAÇÃO DE DATA QUE TEMOS NO PRÓPRIO DOCUMENT, anteriormente (como visto com "$concat")...
+
+
+
+
+
+
+
+
+
+
+
+--------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... .--> AGORA DIGAMOS QUE QUEREMOS NOS CERTIFICAR 
+
+
+DE QUE 
+
+O 
+
+
+FIRST 
+
+E 
+
+LAST 
+
+NAMES 
+
+
+
+comecem
+ 
+
+
+
+com 
+
+
+
+
+UPPERCASE CHARACTERS....
+
+
+
+
+
+
+
+
+
+
+
+-> TAMBÉM PODEMOS FAZER ISSO COM A PHASE DE PROJECTIOn... -> talvez 
+
+
+por meio de 
+
+um OPERATOR DE 
+
+projection'....
+
+
+
+
+
+
+
+
+
+
+
+
+--> talvez com o operator de '$toUpper (aggregation)'...
+
+
+
+
+
+
+
+
+
+
+
+
+---->  
+
+
+$toUpper
+Converts a string to uppercase, returning the result.
+
+$toUpper has the following syntax:
+
+{ $toUpper: <expression> }
+
+The argument can be any expression as long as it resolves to a string. For more information on expressions, see Expressions.
+
+If the argument resolves to null, $toUpper returns an empty string "".
+
+
+
+
+
+
+----------------------
+
+
+
+
+
+
+
+
+
+
+OK, MAS COMO ESCREVEMOS ISSO?
+
+
+
+
+
+
+-> pq '$toUpper' 
+
+
+
+vai transformar TODAS AS LETRAS EM MAIÚSCULAS,
+
+e nós __ SÓ QUEREMOS A PRIMEIRA LETRA DE CADA STRING....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> 1 CARA NO STACKOVERFLOW COLOCOU ESTA SOLUÇÃO:
+
+
+
+
+
+
+To capitalize the first letter of each word in a string, you first need to split the string by a given delimiter using the $split operator, in this instance the delimiter would be a space:
+
+Example
+
+{ "$split": [ "jane doe", " " ] }                                           
+Results
+
+[ "jane", "doe" ]
+
+
+
+
+Next step is to use the $map operator on the result array above and for each element in the array apply the $toUpper transformation on a substring with $substrCP as well as the concat process with $concat to return a transformed array.
+
+Within the transformation, you would need to get the first letter in a given word, transform that letter to uppercase and then concatenate the rest of the string.
+
+For the first part, the transformation follows:
+
+
+
+
+
+
+
+
+
+-----------------------------
+
+
+https://stackoverflow.com/questions/43755093/how-to-capitalize-first-letter-of-each-word-in-mongodb
+
+
+
+
+
+
+------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> É BEM MAIS COMPLEXO DO QUE EU PENSAVA...
+
+
+
+
+
+
+
+
+
+
+
+
+-> vamos ter que rodar uma operação javascript dentro 
+
+
+do mongodb....
+
+
+
+
+
+
+
+
+
+-> VAMOS TER QUE __TRANSFORMAR_ 
+
+
+
+esses 
+
+'$name.first' 
+
+
+
+
+ e 
+
+
+ '$name.last'
+
+
+
+ antes de OS CONCATENAR COM 
+
+
+ '$concat'... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -_> PARA ISSO,
+  
+  PROFESSOR TRANSFORMA O 'PRIMEIRO NOME' 
+
+
+  em uma 
+
+
+
+  EXPRESSÃO,
+
+
+  com 
+
+  '{}' 
+
+  no seu lugar...
+
+
+
+
+
+
+
+
+
+  -----> TIPO ASSIM:
+
+
+
+
+
+
+  $concat: [{} , " ", {}]
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> AÍ, NO PRIMEIRO NAME,
+
+
+  PROFESSOR 
+
+  EXPLICA QUE PODEMOS USAR 
+
+
+
+  '$toUpper',
+
+  que 
+
+  É 
+
+
+
+  _OUTRO _ OPERATOR_ FORNECIDO PELO MONGODB.... --> 
+
+
+
+  MAS É CLARO QUE NÃO VAMOS QUERER EXECUTAR 
+
+
+  'toUpper'
+
+
+  SOBRE A STRING INTEIRA,
+
+
+  E SIM 
+
+
+  APENAS 
+
+
+
+  SOBRE 
+
+
+
+  A ___ PRIMEIRA__ LETRA de nossa string.... --> 
+
+
+
+  PARA ISSO,
+
+  VAMOS QUERER ESCREVER 
+
+
+
+
+  '$split',
+
+  ou algo que splitte a primeira letra da string... 
+
+
+
+
+
+
+
+
+
+
+
+
+  ----> O professor começa escrevendo 'toUpper'
+
+  sobre a string/strings inteiras,
+
+  tipo assim:
+
+
+
+
+
+
+    $concat: [{$toUpper: "$name.first"} , " ", {$toUpper: "$name.last"}]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    --------> --> OK, O CONCAT AINDA SERÁ APLICADO SOBRE STRINGS,
+
+    MAS ESSAS  serão 
+
+
+    strings TRANSFORMADAS POR 'toUpper' 
+
+
+
+
+
+
+
+
+
+
+    -----> SE AGORA RODARMOS A AGGREGATION,
+
+
+    TUDO FICARÁ EM UPPERCASE --> MAS QUEREMOS 
+
+
+
+
+
+
+
+
+
+    TER UPPER SÓ NA PRIMEIRA LETRA DE CADA STRING... --> como fazer isso?
+
+
+
+
+
+
+
+
+
+
+
+    -_> precisamos 'DRILL EVEN FURTHER'' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+    --> ou seja,
+
+    vamos colocar um '{}'
+
+
+
+    DENTRO DE '$toUpper',
+
+    TAMBÉM..
+
+
+
+
+
+
+
+    tipo assim:
+
+
+
+
+
+
+    {
+            $toUpper: {
+                    $split: 
+            }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    -_> OU SEJA,
+
+
+    CADA 'EXPRESSION' (javascript expression)
+
+
+    SERÁ WRAPPADA POR '{}',
+
+
+
+    em cascata..
+
+
+
+
+
+
+
+
+
+
+    ---> OK.... o 
+
+
+
+
+
+
+
+
+
+
+
+    OPERATOR QUE O PROFESSOR USARÁ, AGORA,
+
+    É BEM _ ESTRANHO__...
+
+
+
+
+
+
+
+
+
+
+
+    é o operator 
+
+
+
+    '$substrCP'....
+
+
+
+
+
+
+
+
+
+
+
+    substrCP --> RETORNA   ''''' A SUBSTRING DE UMA STRING'''' -->  ou seja,
+
+
+
+
+    RETORNA ___ ''' A PARTE DE UMA STRING''''.... --> 
+
+
+
+
+
+
+
+
+
+
+
+    OU SEJA,
+
+
+
+
+    ESSE OPERATOR VAI FUNCIONAR COMO UM 'split' versão fancy...
+
+
+
+
+
+
+
+
+
+    --> $substrCP
+
+
+    sempre EXIGE UM ___ ARRAY_ COMO VALUE... ------> 
+
+
+
+
+
+o primeiro value desse array será uma ___ STRING__... --> será a STRING 
+
+
+
+
+
+
+
+cuja 'PARTE' vamos querer pegar....
+
+
+
+
+
+
+
+
+--> NO CASO,
+
+O PROFESSOR 
+
+
+VAI ESCREVER '$name.first',
+
+
+
+nossa string inteira..
+
+
+
+
+
+tipo assim:
+
+
+
+
+
+
+
+
+
+
+    {
+            $toUpper: {
+                    $substrCP: ["$name.first"]
+            }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    ---> PRECISAMOS __ DO SEGUNDO PARÂMETRO,
+
+    QUE 
+
+    SERÁ 
+
+    O 
+
+
+    'STARTING CHARACTER' DE 
+
+
+
+    SUA 
+
+
+    __'''SUBSTRING''' ->  VAMOS COLOCAR 
+
+
+    '0'
+
+
+    JUSTAMENTE PQ 
+
+    STRINGS SÃO '0-INDEXED'... -------> isso vai selecionar o primeiro caracter da string...
+
+
+
+
+
+
+
+
+
+
+    --> AÍ, DEPOIS DE '0',
+
+
+
+
+    TEMOS AINDA OUTRO PARÂMETRO,
+
+
+    QUE 
+
+
+    PERGUNTA 
+
+    'QUANTOS CARACTERES DEVEM SER INCLUÍDOS NA SUBSTRING'... --> VAMOS COLOCAR 
+
+
+
+    '1',
+
+
+    PQ 
+
+
+    VAMOS QUERER _ _QUE __ APENAS ___ o 
+
+    PRIMEIRO CARACTER 
+
+
+
+    SEJA 
+
+    'upperCasezado'...
+
+
+
+
+
+
+
+
+
+
+
+
+    A SINTAXE FICA ASSIM:
+
+
+
+
+
+    
+    {
+            $toUpper: {
+                    $substrCP: ["$name.first", 0, 1]
+            }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    --> ISSO VAI, EM OUTRAS PALAVRAS,
+
+    CONVERTER __ A PRIMEIRA LETRA DA STRING EM UM 'uppercase CHARACTER' -------> MAS É __ ÓBVIO__ QUE 
+
+
+    NAÕ VAMOS 
+
+
+
+    QUERER 
+
+    TER 
+
+    APENAS 
+    O 
+
+
+    primeiro caracter do name...--> queremos TAMBÉM O RESTO DO NAME, QUE DEVERÁ SER APENSADO a essa 
+
+
+    EXPRESSÃO DE 
+
+
+    '{ $toUpper: { $substrCP: ['$name.first', 0, 1]}}' 
+
+
+
+
+
+
+
+
+    que vai representar UMA LETRA MAIÚSCULA, E SÓ ISSO...
+
+
+
+
+
+
+
+
+
+
+
+    --> será que teremos de usar 'concat' DE NOVO 
+
+
+
+
+
+
+    acho que sim...
+
+
+
+
+
+
+
+    --> o uso de CONCAT PROVAVELMENTE SERÁ ASSIM:
+
+
+
+
+
+
+
+
+
+
+    fullName: {
+        
+
+
+
+            $concat: [
+
+                 {$concat: [{$toUpper: {$substrCP: ["$name.first", 0, 1]}}, {$substrCP: ["$name.first", 1]}   ]},
+                " ",
+                {$concat: [{$toUpper: {$substrCP: ["$name.last", 0, 1]}}, {$substrCP: ["$name.last", 1]}   ]}
+
+
+
+
+            ]
+    }
+
+
+
+
+
+
+
+
+
+
+    OK... AGORA VOU TESTAR ISSO NA MINHA QUERY...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    ex:
+
+
+
+
+
+
+
+    db.persons.aggregate(
+            [
+                    {
+                            $project: {
+                                    _id: 0,
+                                    gender: 1,
+                                       fullName: {
+        
+
+
+
+            $concat: [
+
+                 {$concat: [{$toUpper: {$substrCP: ["$name.first", 0, 1]}}, {$substrCP: ["$name.first", 1]}   ]},
+                " ",
+                {$concat: [{$toUpper: {$substrCP: ["$name.last", 0, 1]}}, {$substrCP: ["$name.last", 1]}   ]}
+
+
+
+
+            ]
+    }
+                            }
+                    }
+            ]
+    )
+
+
+
+
+
+
+
+
+
+
+
+
+    GANHEI UM ERROR:
+
+
+
+
+
+
+
+
+
+    on connection: connection to 127.0.0.1:27017 : aggregate failed :
+_getErrorWithCode@src/mongo/shell/utils.js:25:13
+doassert@src/mongo/shell/assert.js:18:14
+_assertCommandWorked@src/mongo/shell/assert.js:737:17
+assert.commandWorked@src/mongo/shell/assert.js:829:16
+DB.prototype._runAggregate@src/mongo/shell/db.js:281:5
+DBCollection.prototype.aggregate@src/mongo/shell/collection.js:1058:12
+@(shell):1:1
+
+
+
+
+
+
+----------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> professor fala que vamos precisar do rest daquele name.... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> parece que, novamente,
+
+eu errei 
+
+
+
+
+a POSIÇÃO DOS OPERATORS...
+
+
+
+
+
+
+
+--> parece que não é possível fazer a 'CONCATENACAO' de '$concat' (um em cima do outro)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ISSO SIGNIFICA QUE ESTA SINTAXE ESTÁ ERRADA:
+
+
+
+
+
+         $concat: [
+
+                 {$concat: [{$toUpper: {$substrCP: ["$name.first", 0, 1]}}, {$substrCP: ["$name.first", 1]}   ]},
+                " ",
+                {$concat: [{$toUpper: {$substrCP: ["$name.last", 0, 1]}}, {$substrCP: ["$name.last", 1]}   ]}
+
+
+
+
+            ]
+
+
+
+
+
+------------> 
+
+
+
+
+
+
+
+
+
+
+
+----> PARA QUE ISSO FUNCIONE,
+
+
+
+
+
+
+
+preciso 
+
+
+DE APENAS 1 CALL DE 'concat',
+
+
+
+E AÍ COLOCAR 
+
+
+
+
+
+
+
+um código NO MESMO LEVEL desse '$toUpper' + '$substrCP',
+
+
+
+
+
+CÓDIGO/EXPRESSÃO QUE REPRESENTE O RESTO DA STRING....
+
+
+
+
+
+
+
+
+
+
+--> portanto,
+
+o código fica tipo assim:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------------
+
+
+
+
+      $concat: [
+
+                 {$toUpper: {$substrCP: ["$name.first", 0, 1] }},
+                 {$substrCP: ["$name.first", 1]}
+                " ",
+                {$toUpper: {$substrCP: ["$name.last", 0, 1] }},
+                 {$substrCP: ["$name.last", 1]}
+
+
+            ]
+
+
+
+
+
+
+
+
+
+
+
+--> MAS AGORA, É CLARO, 
+
+FICAMOS COM  _ OUTRO PROBLEMA.... --> 
+
+
+
+
+
+
+
+aquele 
+
+'substrCP' relativo ao RESTO DA STRING 
+
+
+__PRECISA _ SABER_ QUANTOS CARACTERES NOSSA STRING TERÁ... (
+
+
+        e esse valor é dinâmico, pq nossos documents sempre terão 'names' com valores diferentes....
+)
+
+
+
+
+
+
+
+
+
+
+
+--> PARA CONSEGUIR ISSO,
+
+PRECISO 
+
+
+
+'DYNAMICALLY DERIVE HOW LONG THE NAME IS'... ->  E PODEMOS 
+
+FAZER 
+
+ISSO 
+
+
+
+
+POR MEIO DE AINDA OUTRA EXPRESSION... --> 
+
+
+
+
+
+
+
+
+(
+
+
+        E NÃO É INCOMUM TER NESTED STAGES COMPLEXOS COMO ESSE AQUI....  ----> SE ISSO PODE PARECER COMPLICADO, NÃO FIQUE ALARMADO.. 
+)
+
+
+
+
+
+
+
+
+
+
+
+
+------> É SUPER IMPORTANTE ENTENDER COMO PODEMOS TRABALHAR COM TODAS ESSAS EXPRESSIONS E OPERATORS DIFERENTES... --> especialmente 
+
+
+NESSA FASE 
+
+DE 'PROJECTION', em que 
+
+TIPICAMENTE FAZEMOS UM MONTE DE OPERATIONS...
+
+
+
+
+
+
+
+
+
+--------> PARA DETERMINAR O 
+
+
+__NÚMERO__ DE CARACTERES QUE TEMOS 
+
+
+
+na nossa string, DESCONTADA A PRIMEIRA LETRA,
+
+
+
+professor 
+
+
+vai usar o operator de 
+
+
+'$subtract' -->  
+
+
+
+
+
+
+
+
+ESSE OPERATOR 
+
+SIMPLESMENTE RETORNA __ A DIFERENÇA _ ENTRE 2 NUMBERS...  
+
+
+
+
+
+
+
+
+
+--> MAS PQ VAMOS PRECISAR DISSO? 
+
+
+
+
+
+
+
+pq vamos precisar do 
+
+
+$subtract: [] ? 
+
+
+
+
+
+
+
+
+
+
+-> É PQ VAMOS PRECISAR SABER 
+
+
+
+
+QUAL É _ A LENGTH _ DO NOSSO NAME,
+
+E AÍ 
+
+subtrair '1' 
+
+
+dessa length,
+
+pq
+
+
+começamos a partir 
+
+desse caracter, nessa substring....
+
+
+
+
+
+
+
+
+
+
+
+
+---> PARA ISSO,
+
+
+
+
+VAMOS USAR AINDA OUTRO 
+
+OPERATOR... --> 
+
+
+
+
+ é o 
+
+
+
+
+'$strLenCP' -------> ELE SEMPRE CALCULA _ A __ LENGTH___ DE UMA STRING... ------> 
+
+
+
+
+
+
+
+
+
+E PARA QUE ELE FUNCIONE, VOCÊ PRECISA APONTAR _ O FIELD__ EM QUE SUA STRING SE ENCONTRA (no caso, '$name.first')...
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+$subtract: [ 
+
+        {$strLenCP: "$name.first"},
+        1
+]
+
+
+
+
+
+
+
+
+
+O CÓDIGO COMPLETO FICA ASSIM:
+
+
+
+
+
+
+
+
+
+
+ $concat: [
+
+                 {$toUpper: {$substrCP: ["$name.first", 0, 1] }},
+                 {$substrCP: ["$name.first", 1]}
+                " ",
+                {$toUpper: {$substrCP: ["$name.last", 0, 1] }},
+                 {$substrCP: ["$name.last", 1, {$subtract: [{$strLenCP: "$name.first"}, 1]}]}
+            ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+E NOSSA QUERY COMPLETA FICA ASSIM:
+
+
+
+
+
+
+db.persons.aggregate(
+        [
+                {
+                        $project: {
+                                _id: 0,
+                                gender: 1,
+                                fullName: {
+                                                 $concat: [
+
+                 {$toUpper: {$substrCP: ["$name.first", 0, 1] }},
+                 {$substrCP: ["$name.first", 1, {$subtract: [{$strLenCP: "$name.first"}, 1]}]}
+                " ",
+                {$toUpper: {$substrCP: ["$name.last", 0, 1] }},
+                 {$substrCP: ["$name.last", 1, {$subtract: [{$strLenCP: "$name.first"}, 1]}]}
+            ]
+                                }
+                        }
+                }
+        ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ERRO DE SINTAXE: 'missing ]'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ERA UMA VÍRGULA QUE ESTAVA FALTANDO, no array...
+
+
+
+
+
+
+
+FICOU ASSIM:
+
+
+
+
+
+
+> db.persons.aggregate(
+...   [
+...           {
+...                   $project: {
+...                           _id: 0,
+...                           gender: 1,
+...                           fullName: {
+...                                            $concat: [
+...
+...            {$toUpper: {$substrCP: ["$name.first", 0, 1] }},
+...            {$substrCP: ["$name.first", 1, {$subtract: [{$strLenCP: "$name.first"}, 1]}]},
+...           " ",
+...           {$toUpper: {$substrCP: ["$name.last", 0, 1] }},
+...            {$substrCP: ["$name.last", 1, {$subtract: [{$strLenCP: "$name.first"}, 1]}]}
+...       ]
+...                           }
+...                   }
+...           }
+...   ]
+... )
+{ "gender" : "male", "fullName" : "Harvey Chambe" }
+{ "gender" : "male", "fullName" : "Carl Jaco" }
+{ "gender" : "female", "fullName" : "Madeleine Till" }
+{ "gender" : "male", "fullName" : "Isolino Viana" }
+{ "gender" : "female", "fullName" : "Mestan Kaplan" }
+{ "gender" : "female", "fullName" : "Sandra Lorenz" }
+{ "gender" : "male", "fullName" : "Gideon Van dr" }
+{ "gender" : "female", "fullName" : "Katie Welch" }
+{ "gender" : "female", "fullName" : "پریا پارس" }
+{ "gender" : "female", "fullName" : "Louise Graham" }
+{ "gender" : "female", "fullName" : "Shona Kempe" }
+{ "gender" : "female", "fullName" : "Andreia Arnaud" }
+{ "gender" : "male", "fullName" : "بنیامین سالاری" }
+{ "gender" : "female", "fullName" : "Anne Ruiz" }
+{ "gender" : "female", "fullName" : "Delia Duran" }
+{ "gender" : "male", "fullName" : "Vincent Küper" }
+{ "gender" : "female", "fullName" : "Anaëlle Adam" }
+{ "gender" : "female", "fullName" : "Gonca Alnıa" }
+{ "gender" : "female", "fullName" : "Maeva Grewa" }
+{ "gender" : "female", "fullName" : "Signe Rasmu" }
+Type "it" for more
+
+
+
+
+
+
+
+
+---------------------
+.
+
+
+
+
+
+
+
+
+OK, SUCESSO... ---> retrievamos todos os 'names' com letras iniciais capitalizadas...
+
+
+
+
+
+---------------------------
+
+
+
+
+
+
+
+
+
+
+
+--> OK... ESSA FOI UMA OPERATION BEM COMPLEXA... -->  MAS, NO FINAL DAS CONTAS,
+
+
+
+
+O QUE 
+
+
+
+O PROFESSOR 
+
+
+FEZ 
+
+FOI SÓ 
+
+RETRIEVAR 
+
+
+
+
+ os names com letras capitais...
+
+
+
+
+
+
+
+
+
+
+ ---. RESULTADO FICOU ASSIm:
+
+
+
+
+
+ { "gender" : "male", "fullName" : "Harvey Chambe" }
+{ "gender" : "male", "fullName" : "Carl Jaco" }
+{ "gender" : "female", "fullName" : "Madeleine Till" }
+{ "gender" : "male", "fullName" : "Isolino Viana" }
+{ "gender" : "female", "fullName" : "Mestan Kaplan" }
+{ "gender" : "female", "fullName" : "Sandra Lorenz" }
+{ "gender" : "male", "fullName" : "Gideon Van dr" }
+{ "gender" : "female", "fullName" : "Katie Welch" }
+{ "gender" : "female", "fullName" : "پریا پارس" }
+{ "gender" : "female", "fullName" : "Louise Graham" }
+{ "gender" : "female", "fullName" : "Shona Kempe" }
+{ "gender" : "female", "fullName" : "Andreia Arnaud" }
+{ "gender" : "male", "fullName" : "بنیامین سالاری" }
+{ "gender" : "female", "fullName" : "Anne Ruiz" }
+{ "gender" : "female", "fullName" : "Delia Duran" }
+{ "gender" : "male", "fullName" : "Vincent Küper" }
+{ "gender" : "female", "fullName" : "Anaëlle Adam" }
+{ "gender" : "female", "fullName" : "Gonca Alnıa" }
+{ "gender" : "female", "fullName" : "Maeva Grewa" }
+{ "gender" : "female", "fullName" : "Signe Rasmu" }
+Type "it" for more
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK...
+
+
+
+
+
+
+
+
+
+usamos um monte de operators....
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+
+> db.persons.aggregate(
+...   [
+...           {
+...                   $project: {
+...                           _id: 0,
+...                           gender: 1,
+...                           fullName: {
+...                                            $concat: [
+...
+...            {$toUpper: {$substrCP: ["$name.first", 0, 1] }},
+...            {$substrCP: ["$name.first", 1, {$subtract: [{$strLenCP: "$name.first"}, 1]}]},
+...           " ",
+...           {$toUpper: {$substrCP: ["$name.last", 0, 1] }},
+...            {$substrCP: ["$name.last", 1, {$subtract: [{$strLenCP: "$name.first"}, 1]}]}
+...       ]
+...                           }
+...                   }
+...           }
+...   ]
+... )
+{ "gender" : "male", "fullName" : "Harvey Chambe" }
+{ "gender" : "male", "fullName" : "Carl Jaco" }
+{ "gender" : "female", "fullName" : "Madeleine Till" }
+{ "gender" : "male", "fullName" : "Isolino Viana" }
+{ "gender" : "female", "fullName" : "Mestan Kaplan" }
+{ "gender" : "female", "fullName" : "Sandra Lorenz" }
+{ "gender" : "male", "fullName" : "Gideon Van dr" }
+{ "gender" : "female", "fullName" : "Katie Welch" }
+{ "gender" : "female", "fullName" : "پریا پارس" }
+{ "gender" : "female", "fullName" : "Louise Graham" }
+{ "gender" : "female", "fullName" : "Shona Kempe" }
+{ "gender" : "female", "fullName" : "Andreia Arnaud" }
+{ "gender" : "male", "fullName" : "بنیامین سالاری" }
+{ "gender" : "female", "fullName" : "Anne Ruiz" }
+{ "gender" : "female", "fullName" : "Delia Duran" }
+{ "gender" : "male", "fullName" : "Vincent Küper" }
+{ "gender" : "female", "fullName" : "Anaëlle Adam" }
+{ "gender" : "female", "fullName" : "Gonca Alnıa" }
+{ "gender" : "female", "fullName" : "Maeva Grewa" }
+{ "gender" : "female", "fullName" : "Signe Rasmu" }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> A FASE DE 'project'
+
+
+É 'ALL ABOUT TRANSFORMING DATA',
+
+por isso a grande quantidade de operators...

@@ -1,0 +1,215 @@
+ 
+
+
+
+
+
+
+
+
+
+ COM OS BASICS JÁ ENSINADOS,
+
+ AGORA QUE 
+
+ JÁ SABEMOS COMO 
+
+ PODEMOS 
+
+ 'INSERT DATA',
+
+
+
+ 'READ DATA'
+
+
+ e assim por diante,
+
+
+ como explorar nossa data (dot notation),
+
+
+
+
+
+
+
+
+ DEVEMOS 
+
+ COMEÇAR PELA BASE DE CADA
+  
+  PROJECT...
+
+
+
+
+
+
+
+
+
+  -> NA BASE DE CADA PROJECT,
+
+
+
+
+  SEMPRE TEMOS QUE PLANEJAR COMO QUEREMOS ARMAZENAR DATA NA NOSSA DATABASE... ---> TAMBÉM 
+
+
+
+
+  COMO SERÃO AS RELATIONS ENTRE SUA DATA,
+
+
+
+  E COMO 
+
+
+  ESSAS 
+
+  RELATIONS 
+
+  DEVEM SER REFLETIDAS NA SUA DATABASE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> SÃO PERGUNTAS IMPORTANTES,
+
+
+  E MOLDAM COMO VOCê USA O 
+
+  MONGODB E ESTRUTURA SEU CÓDIGO 
+
+
+
+  NELE....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> VAMOS ESTUDAR:
+
+
+
+
+
+
+
+
+
+
+
+  1) COMPREENDER DOCUMENT SCHEMAS E DATA TYPES OFERECIDOS PELO MONGODB (
+
+
+      advanced types como 'Dates' e etc,
+
+      são CRUCIAIS PARA ARMAZENAR O EXATO TIPO DE DATA QUE 
+
+      SEU USE 
+
+      CASE/APP PRECISA.... 
+  )
+
+
+
+
+
+
+
+
+
+
+  2) MAS VEREMOS MAIS DO QUE __ 
+
+
+  'DATA TYPES' 
+
+  e isso aí,
+
+
+  pq 
+
+
+  VAMOS 
+  VER 
+
+  AS RELATIONS ENTRE DOCUMENTS/DATA ---------> 'MODELLING RELATIONS' --> ISSO PQ 
+
+
+
+
+
+
+  NA GRANDE MAIORIA DOS APPS VOCÊ TEM DIFERENTES ENTIDADES,
+
+
+
+  como 'posts', 'users',
+
+  'comments' --> 
+
+
+  E TODAS ESSAS ENTIDADES SÃO 'RELATED',
+
+
+
+
+  E ESSAS RELATIONS PRECISAM SER REFLETIDAS NA SUA DATABASE, TAMBÉM.... --- >Veremos como fazer isso...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  3) SABER COMO SUA DATA DEVE SE PARECER É NICE,
+
+
+
+  MAS VOCÊ SEMPRE VAI QUERER 'VALIDATE THE INCOMING DATA',
+
+
+
+  VALIDAR SE OS INSERTS/UPDATES QUE CHEGAM A SUA DATABASE 
+
+
+
+  ,
+
+
+  OS REQUESTS,
+
+
+  SATISFAZEM SEUS REQUIREMENTS ('name' precisa ser uma string, etc etc)...

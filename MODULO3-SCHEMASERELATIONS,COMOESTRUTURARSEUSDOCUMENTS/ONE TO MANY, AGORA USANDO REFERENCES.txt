@@ -1,0 +1,534 @@
+
+
+
+
+
+
+
+HORA DE USAR REFERENCES, COM UMA RELATION DE 'ONE-TO-MANY'....
+
+
+
+
+
+
+
+
+
+
+
+--> EXEMPLO 4:
+
+
+
+
+CITY E CITIZENS...
+
+
+
+
+
+
+
+
+
+
+
+
+--_> '''UMA CITY TEM VÁRIOS CITIZENS, MAS 1 CITIZEN SEMPRE PERTENCERÁ APENAS A 1 ÚNICA CIDADE'''..
+
+
+
+
+
+
+
+
+
+
+REPRESENTAÇÃO:
+
+
+
+
+
+
+
+
+
+
+CITY A -----> CITIZEN 1 
+       ---> CITIZEN 2
+        
+
+
+
+
+
+CITY B ----> CITIZEN 1 
+
+
+
+
+CITY C ---> CITIZEN 1 
+       ---> CITIZEN 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       -------> ok... como escreveríamos isso...
+
+
+
+
+
+
+
+
+
+--> provavelmente assim:
+
+
+
+
+
+
+
+
+
+City 
+
+
+
+{
+
+
+
+       _id: ObjectId(aaaaaa),
+
+
+       citizens: ['c1', 'c2', 'c3', 'c4']
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+citizen: 
+
+
+
+
+
+
+
+
+{
+       name: 'Max',
+
+       _id: 'c1',
+
+
+
+       cityId: ObjectId(aaaaa)
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+----> OK.... AGORA DEVEMOS VER UMA RELATIONSHIP 
+
+
+
+
+,
+
+one-to-many,
+
+em que 
+
+
+o SPLIT EM VÁRIAS COLLECTIONS PODE FAZER SENTIDO...
+
+
+
+
+
+
+
+
+
+--> TEMOS VÁRIOS CITIZENS... 
+
+
+
+
+
+--> AÍ CADA CITY TEM UMA REGISTRY COM TODAS AS PESSOAS VIVENDO NESSA CIDADE....
+
+
+
+
+
+
+
+
+
+
+
+--> AÍ, DE UM PONTO DE VISTA DE APPLICATION,
+
+
+
+
+VOCÊ FREQUENTEMENTE 
+
+
+
+VAI TER INTERESSE EM FETCHEAR AS CITIES, COM TODA A METADATA DAS CITIES,
+
+MAS NÃO VAI 
+
+
+SEMPRE TER INTERESSE EM FETCHEAR TODOS ESSES USERS NAS SUAS FORMAS EMBEDDED (pq aí o tamanho ficaria mt ggiante)...  ---> ISSO PQ 
+
+TEMOS MILHÕES DE PESSOAS,
+
+
+UM MONTE DE OVERHEAD DATA, DE QUE NÃO PRECISAMOS.... -> ADICIONALMENTE,
+
+
+PARA CIDADES 
+
+
+MAIORES,
+
+
+COM MTAS PESSOAS,
+
+ESSE LIMITE DE 16MB DO OVERALL DOCUMENT PODE SER ATINGIDO (pq esses 16mb contam para  todo o document,
+
+
+O DOCUMENT E TODOS OS NESTED DOCUMENTS NELE...)...
+
+
+
+
+
+
+
+
+
+
+-----> 16MB PARA O 'OVERALL DOCUMENT' --> ESSE LIMITE PODE REALMENTE SER ATINGIDO,
+
+NO CASO....
+
+
+
+
+
+
+
+
+
+
+
+
+--> É POR ISSO QUE O 'SPLIT UP' DESSA DATA, AQUI, FAZ SENTIDO..
+
+
+
+
+
+
+
+
+
+
+--> É POR ISSO QUE NOSSO FORMATO FICARÁ ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+
+
+City 
+
+
+
+{
+
+
+
+       _id: ObjectId(aaaaaa),
+       name: "new york city",
+       coordinates: {lat: 21, lng: 55}
+
+       citizens: ['c1', 'c2', 'c3', 'c4']
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+citizen: 
+
+
+
+
+
+
+
+
+{
+       name: 'Max',
+
+       _id: 'c1',
+
+
+
+       cityId: ObjectId(aaaaa)
+
+
+}
+
+
+
+
+
+
+
+----------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+MAS ATÉ MESMO ESSE NOSSO 'ARRAY' 
+
+
+aí de 
+
+CITIZENS SERIA UMA IDEIA BURRA, PQ FICARÍAMOS COM MILHÕES DE CITIZENS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> NENHUMA DATA SOBRE CITIZENS SERÁ ARMAZENADA DIRETAMENTE NESSE DOCUMENT.....
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO SIGNIFICA QUE SÓ TEREMOS A METADATA, MESMO....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK.... TEREMOS A CITY TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+> db.cities.findOne()
+{
+        "_id" : ObjectId("62009563f7c74fb9db301e73"),
+        "name" : "new york city",
+        "coordinates" : {
+                "lat" : 21,
+                "lng" : 55
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> JÁ OS CITIZENS PODEM FICAR EM UMA COLLECTION SEPARADA,
+
+TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+
+citizens:
+
+
+
+
+
+
+
+{
+
+       name: "max schwarzmueller",
+       cityId: ObjectId("asojasoasjoasjasosjasoj")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... AGORA NOSSO CITZEN TERÁ 
+
+
+
+ESSA REFERÊNCIA À CITY.... ----> AGORA PODEMOS 
+
+
+
+FETCHEAR SÓ OS CITIZENS, E AÍ MATCHEÁ-LOS COM A CITY, POR MEIO DO 'cityId',
+
+se precisamos disso...
+
+
+
+
+
+
+
+
+
+
+-> ÁI NÃO ATINGIREMOS O LIMITE DE 16MB 
+
+do negócio...
+
+
+
+
+
+
+
+-> NÓS TAMBÉM NÃO VAMOS FETCHEAR TODOS OS CITIZENS JUNTO COM A CITY,
+
+
+
+ISSO PQ 
+
+
+
+
+ESTAMOS/ESTAREMOS INTERESSADOS SÓ NA 'CITY METADATA' (
+
+
+       que pode ser obtida, aqui, tanto pelo uso de 'citizens',
+
+
+       como pelo find por um id específico, manualmente,
+
+
+       de nossa city...
+)

@@ -1,0 +1,394 @@
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA QUE DEMOS UMA OLHADA EM UM PUNHADO DE OPERATORS QUE 
+
+
+
+
+FUNCIONAM BEM COM NUMBERS/CHANGING THE VALUES DE FIELDS EM GERAL,
+
+
+
+
+DEVEMOS DAR UMA OLHADA 
+
+
+
+
+
+
+EM ALGUNS OPERATORS QUE 
+
+___TRABALHAM COM O FIELD EM SI__ (
+
+
+    apagam-no,
+
+    no caso...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> QUEREMOS, NA VERDADE,
+
+
+
+DROPPAR ALGUNS DE NOSSO FIELDS EM NOSSOS DOCUMENTS...- > QUEREMOS 
+
+
+DROPPAR 
+
+
+
+
+
+
+
+O 
+
+
+VALOR/FIELD DE 'phone' 
+
+
+
+
+EM TODAS AS PERSONS 
+
+QUE 
+
+SÃO 
+
+
+'isSporty: true'...
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO,
+
+
+ESCREVEMOS NOSSO FILTER ASSIM:
+
+
+
+
+
+
+
+
+
+
+db.users.updateMany(
+    {isSporty: true},
+
+
+
+
+    {
+
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> OK... MAS COMO PODEMOS 'DROP' 
+
+
+
+
+OS FIELDS QUE NAÕ QUEREMOS MAIS? 
+
+
+
+
+
+
+
+
+
+COMO DROPPAMOS 'phone', nesse caso?   
+
+
+
+
+
+--> o professor quer 'DROP THE PHONE VALUE'....
+
+
+
+
+
+
+------->  UMA COISA QUE VOCÊ PODE FAZER, NESSE CASO,
+
+
+É SETTAr 
+
+
+
+
+'$set: {
+    phone: null
+}
+'
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SETTAR TODOS OS FIELDS DE PHONE COMO 'null' -->
+
+
+
+
+
+
+
+
+
+aí todos seus phones ficarão como 'null'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS 'null' 
+
+
+
+AINDA SIGNIFICA QUE 
+
+
+SEU FIELD ESTARÁ LÁ.... --> já o 'drop'
+
+
+
+
+vai significar que o field 
+
+
+VAI DEIXAR DE EXISTIR POR INTEIRO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, COMO PODEMOS DROPPAR OS FIELDS POR INTEIRO?
+
+
+
+
+
+
+
+
+
+--> DEVEMOS USAR O OPERATOR DE '$unset',
+
+
+
+
+cujo propósito é precisamente esse....
+
+
+
+
+
+
+
+
+
+
+
+
+--> UNSET TE DEIXA UNSETTAR 1 FIELD,
+se livrar de 1 field...
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+db.users.updateMany({isSporty: true}, {$unset: {}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VAMOS UNSETTAR PHONE.... -->  
+
+
+
+
+
+
+
+
+PARA UNSETTAR PHONE,
+
+
+
+escreva 
+
+
+'phone: '' ' ,
+
+
+
+
+
+
+
+
+
+
+
+
+ESCREVA ESSA EMPTY STRING,
+
+MAS O QUE VOCÊ ESCREVE ALI NÃO INTERESSA,
+
+PQ ESSE VALOR SERÁ INTEGRALMENTE IGNORADO (não faz diferença escrever uma empty string ou não)....
+
+
+
+
+
+
+
+
+
+
+-_> O QUE INTERESSA É O NOME DO FIELD,
+
+QUE SERÁ REALMENTE DROPPADO...
+.
+
+
+
+
+
+ex:
+
+
+
+db.users.updateMany({isSporty: true}, {$unset: {phone: ""}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+VOCÊ VERÁ QUE TODOS OS OBJECTS com 'isSporty: true' 
+
+
+VÃO TER O FIELD DE 'phone' deletado/droppado....

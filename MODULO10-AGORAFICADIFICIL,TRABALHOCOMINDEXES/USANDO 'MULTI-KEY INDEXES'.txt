@@ -1,0 +1,2229 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> OK.... DEMOS UMA OLHADA, NAS ÚLTIMAS AULAS,
+
+
+EM
+
+
+'
+SINGLE-FIELD INDEXES' 
+
+
+
+e 
+
+
+
+
+'COMPOUND INDEXES' (indexes mistos, com mais de 1 field no seu 'index')...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VIMOS O QUE PODEMOS FAZER COM ELES,
+
+E COMO PODEMOS 'MEASURE THEIR EFFICIENCY'... ------> 
+
+
+
+
+
+
+
+
+
+
+TODAS ESSAS SÃO COISAS SUPER IMPORTANTES...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA O PROFESSOR DEVE INTRODUZIR 2 NOVOS TYPES DE INDEX...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1o tipo -------> É O INDEX DE type 'MULTI-KEY'...
+
+
+
+
+
+
+
+
+
+
+
+
+------> PARA ISSO,
+
+
+O PROFESSOR 
+
+
+
+ASSEGUROU QUE 
+
+
+NOSSA COLLECTION DE 'contacts'
+
+está como DROPPADA,
+
+
+
+por meio de 
+
+
+
+
+
+db.persons2.drop()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> ISSO VAI DROPPAR AQUELA NOSSA GIGANTE COLLECTION DE PERSONS, QUE TÍNHAMOS ANTES...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA, NO CASO,
+
+O PROFESSOR 
+
+
+VAI ADICIONAR 
+
+
+1
+ NOVO VALUE 
+
+
+
+
+
+
+
+ NESSA COLLECTION...
+
+
+
+
+
+
+
+
+
+
+ NOMEAREMOS ESSA COLLECTION DE 
+
+
+
+
+
+ 'persons4'...
+
+
+
+
+
+
+
+
+
+
+ > use exemploPersons
+switched to db exemploPersons
+> db.persons4.insertOne({}
+
+
+
+
+
+
+
+
+
+
+
+
+FICOU TIPO ASSIM:
+
+
+
+
+
+
+
+
+db.persons4.insertOne({name:"Max", hobbies: ["cooking", "sports"], addresses: [{street: "Main street"}, {street: "Second Street"}]})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> DEPOIS DISSO DAMOS UMA OLHADA 
+
+NO QUE INSERIMOS....
+
+
+
+
+
+
+
+
+
+
+
+
+--> FICOU ASSIM:
+
+
+
+
+
+
+
+
+
+{
+        "_id" : ObjectId("620f17526bea33a58893702c"),
+        "name" : "Max",
+        "hobbies" : [
+                "cooking",
+                "sports"
+        ],
+        "addresses" : [
+                {
+                        "street" : "Main street"
+                },
+                {
+                        "street" : "Second Street"
+                }
+        ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> É 1 DOCUMENT com 2 keys que são arrays, e aí 'name'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> NO PRIMEIRO ARRAY, TEMOS 2 HOBBIES, QUE SÃO STRINGS..
+
+
+
+
+
+
+
+--> JÁ NO SEGUNDO TEMOS 'documents'..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... AGORA VAMOS QUERER ADICIONAR UM INDEX 
+
+
+
+
+A 1 DESSES ARRAYS....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOCÊ PODE, APARENTEMENTE, INDEXAR ARRAYS... -> essa é outra possibilidade que você tem, com o mongodb.... (até agora, só indexamos single values)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO, PROFESSOR VAI CRIAR UM INDEX, COMO ANTES...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+será tipo assim:
+
+
+
+
+db.contacts.createIndex(
+        {
+                hobbies: 1
+        }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESSE HOBBIES É UM ARRAY, COMO VOCÊ DEVE SE LEMBRAR...
+
+
+
+
+
+
+
+
+
+
+APERTAMOS ENTER, E ISSO 'FUNCIONA'...
+
+
+
+
+
+> db.persons4.createIndex({hobbies: 1})
+{
+        "numIndexesBefore" : 1,
+        "numIndexesAfter" : 2,
+        "createdCollectionAutomatically" : false,
+        "ok" : 1
+}
+> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA VAMOS TENTAR USAR ISSO... --> VAMOS RODAR UMA QUERY EM QUE 
+
+
+
+PROCURAMOS POR 
+
+
+
+
+
+"hobbies": "sports"
+
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+db.persons4.explain().find(
+        {
+                "hobbies": "sports"
+        }
+)
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+> db.persons4.explain().find(
+...         {
+...                 "hobbies": "sports"
+...         }
+... )
+{
+        "explainVersion" : "1",
+        "queryPlanner" : {
+                "namespace" : "exemploPersons.persons4",
+                "indexFilterSet" : false,
+                "parsedQuery" : {
+                        "hobbies" : {
+                                "$eq" : "sports"
+                        }
+                },
+                "queryHash" : "895C9692",
+                "planCacheKey" : "439794C9",
+                "maxIndexedOrSolutionsReached" : false,
+                "maxIndexedAndSolutionsReached" : false,
+                "maxScansToExplodeReached" : false,
+                "winningPlan" : {
+                        "stage" : "FETCH",
+                        "inputStage" : {
+                                "stage" : "IXSCAN",
+                                "keyPattern" : {
+                                        "hobbies" : 1
+                                },
+                                "indexName" : "hobbies_1",
+                                "isMultiKey" : true,
+                                "multiKeyPaths" : {
+                                        "hobbies" : [
+                                                "hobbies"
+                                        ]
+                                },
+                                "isUnique" : false,
+                                "isSparse" : false,
+                                "isPartial" : false,
+                                "indexVersion" : 2,
+                                "direction" : "forward",
+                                "indexBounds" : {
+                                        "hobbies" : [
+                                                "[\"sports\", \"sports\"]"
+                                        ]
+                                }
+                        }
+                },
+                "rejectedPlans" : [ ]
+        },
+        "command" : {
+                "find" : "persons4",
+                "filter" : {
+                        "hobbies" : "sports"
+                },
+                "$db" : "exemploPersons"
+        },
+        "serverInfo" : {
+                "host" : "DESKTOP-V43A7S1",
+                "port" : 27017,
+                "version" : "5.0.6",
+                "gitVersion" : "212a8dbb47f07427dae194a9c75baec1d81d9259"
+        },
+        "serverParameters" : {
+                "internalQueryFacetBufferSizeBytes" : 104857600,
+                "internalQueryFacetMaxOutputDocSizeBytes" : 104857600,
+                "internalLookupStageIntermediateDocumentMaxSizeBytes" : 104857600,
+                "internalDocumentSourceGroupMaxMemoryBytes" : 104857600,
+                "internalQueryMaxBlockingSortMemoryUsageBytes" : 104857600,
+                "internalQueryProhibitBlockingMergeOnMongoS" : 0,
+                "internalQueryMaxAddToSetBytes" : 104857600,
+                "internalDocumentSourceSetWindowFieldsMaxMemoryBytes" : 104857600
+        },
+        "ok" : 1
+}
+>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> VEMOS, NO CASO,
+
+
+
+QUE FOI UTILIZADO O 'IXSCAN' (nosso index)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E ELE ENCONTROU 'MAX',
+
+
+PQ É MAX QUE TEM ESSES NEGÓCIOS de array....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR EXECUTA NOSSO FIND, AGORA COM 
+
+
+'executionStats'
+
+
+
+
+no 'explain'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO ME MOSTRA QUE O WINNINGPLAN FOI UM INDEX SCAN,
+
+E TAMBÉM OBSERVAMOS ISTO:
+
+
+
+
+  "indexName" : "hobbies_1",
+                                "isMultiKey" : true,
+                                "multiKeyPaths" : {
+                                        "hobbies" : [
+                                                "hobbies"
+                                        ]
+
+
+
+
+
+
+
+
+
+
+
+--> MULTIKEY, PORTANTO, ESTÁ SETTADO COMO TRUE.... 
+
+
+
+
+
+
+
+
+
+
+--> isso para meu INDEX DE 'HOBBIEs'... ('hobbies_1')....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O MONGODB TRATA ESSE NOSSO INDEX COMO UM 'MULTI-KEY INDEX'
+
+
+
+JUSTAMENTE PQ É UM INDEX _ SOBRE__ UM ARRAY _ _DE VALUES (o array de hobbies, no caso)...
+
+
+
+
+
+
+
+
+
+
+
+--> E, TECNICAMENTE,
+
+MULTI-KEY INDEXES 
+
+
+
+TRABALHAM COMO 'NORMAL KEY INDEXES (de 1 só valor)',
+
+
+
+
+MAS __ ELES__ SÃO ARMAZENADOS 1 POUCO DIFERENTEMENTE... ------> O QUE O MONGODB FAZ É 
+
+
+
+
+'PULL OUT' TODOS OS VALUES NA SUA KEY INDEXADA.... (
+
+
+        no caso, 
+
+        os values 'sports' e 'cooking',
+
+
+
+
+
+
+        PUXA TODOS OS VALORES NESSE ARRAY....
+) ----> E AÍ, PUXADOS TODOS ESSES VALORES,
+
+
+
+O 
+
+
+
+MONGODB 
+
+
+OS ARMAZENA COMO 'SEPARATE ELEMENTS'
+
+
+
+em 1 index... --------> ISSO QUER DIZER, CLARO, QUE 
+
+
+
+
+
+'MULTI-KEY INDEXES' SERÃO, PARA UM MONTE DE DOCUMENTS,
+
+
+
+MAIORES DO QUE 
+
+
+'SINGLE-FIELD INDEXES' ---------> isso pq 
+
+
+
+
+
+se cada document tem 1 array com 4 VALUES,
+
+E VOCÊ 
+
+TEM 
+
+1000 DOCUMENTS,
+
+
+ 
+
+
+
+ESSE 'MULTI-KEY INDEX' QUE VOCÊ INCORPORAR _ TERÁ __ 4 MIL ELEMENTOS.... 4 x 1000... ----------> É POR ISSO 
+
+
+QUE 
+
+
+
+
+
+
+
+ISSO É ALGO A SE CONSIDERAR: 
+
+
+
+MULTI-KEY INDEXES SÃO POSSÍVEIS, SIM, MAS 
+
+
+TIPICAMENTE SÃO MAIORES.... --> MAS ISSO NÃO QUER DIZER QUE NÃO DEVEM SER UTILIZADOS... --> SE VOCê 
+
+
+
+
+
+
+
+
+
+TIPICAMENTE 
+
+
+FARÁ QUERY __ POR UM ARRAY, E 1 VALOR NESSE ARRAY,
+
+
+AÍ 
+
+
+
+TALVEZ FAÇA SENTIDO CRIAR UM MULTI-KEY INDEX PARA ESSE ARRAY..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK, APRENDEMOS:
+
+
+1) QUE PODEMOS USAR UM MULTI-KEY INDEX, E ESTAMOS USANDO 1 EM 'HOBBIES'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> AGORA VAMOS TENTAR FAZER A MESMA COISA, MAS COM 'addresses',
+
+que 
+
+
+
+é um array DE OBJECTS,
+
+
+E NÃO __ DE ___ 'single values'...
+
+
+
+
+
+
+ex:
+
+
+
+        "addresses" : [
+                {
+                        "street" : "Main street"
+                },
+                {
+                        "street" : "Second Street"
+                }
+        ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.persons4.createIndex(
+        {
+              "addresses": 1  
+        }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO TAMBÉM VAI FUNCIONAR, VAI RETORNAR ESTE RESULTAOD:
+
+
+
+
+
+> db.persons4.createIndex(
+...         {
+...               "addresses": 1  
+...         }
+... )
+{
+        "numIndexesBefore" : 2,
+        "numIndexesAfter" : 3,
+        "createdCollectionAutomatically" : false,
+        "ok" : 1
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA DEVEMOS TENTAR UTILIZAR ESSE INDEX de 'addresses'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR escreve 
+
+
+
+
+
+
+
+
+
+
+
+
+db.persons4.explain("executionStats").find({"addresses.street": "Main street"});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESSE FIND ESTÁ PROCURANDO PELO VALUE DE 'main street' no field 'street' de cada OBJECT no nosso array de 'addresses'..
+
+
+
+
+
+
+
+
+
+-----> E SE RODARMOS ESSA QUERY,
+
+
+VEREMOS QUE O QUE FOI UTILIZADO FOI UM 'COLLSCAN'( collection scan, default),
+
+
+
+E NÃO UM 'IXSCAN'...
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+> db.persons4.explain("executionStats").find({"addresses.street": "Main street"});
+{
+        "explainVersion" : "1",
+        "queryPlanner" : {
+                "namespace" : "exemploPersons.persons4",
+                "indexFilterSet" : false,
+                "parsedQuery" : {
+                        "addresses.street" : {
+                                "$eq" : "Main street"
+                        }
+                },
+                "maxIndexedOrSolutionsReached" : false,
+                "maxIndexedAndSolutionsReached" : false,
+                "maxScansToExplodeReached" : false,
+                "winningPlan" : {
+                        "stage" : "COLLSCAN",
+                        "filter" : {
+                                "addresses.street" : {
+                                        "$eq" : "Main street"
+                                }
+                        },
+                        "direction" : "forward"
+                },
+                "rejectedPlans" : [ ]
+        },
+        "executionStats" : {
+                "executionSuccess" : true,
+                "nReturned" : 1,
+                "executionTimeMillis" : 0,
+                "totalKeysExamined" : 0,
+                "totalDocsExamined" : 1,
+                "executionStages" : {
+                        "stage" : "COLLSCAN",
+                        "filter" : {
+                                "addresses.street" : {
+                                        "$eq" : "Main street"
+                                }
+                        },
+                        "nReturned" : 1,
+                        "executionTimeMillisEstimate" : 0,
+                        "works" : 3,
+                        "advanced" : 1,
+                        "needTime" : 1,
+                        "needYield" : 0,
+                        "saveState" : 0,
+                        "restoreState" : 0,
+                        "isEOF" : 1,
+                        "direction" : "forward",
+                        "docsExamined" : 1
+                }
+        },
+        "command" : {
+                "find" : "persons4",
+                "filter" : {
+                        "addresses.street" : "Main street"
+                },
+                "$db" : "exemploPersons"
+        },
+        "serverInfo" : {
+                "host" : "DESKTOP-V43A7S1",
+                "port" : 27017,
+                "version" : "5.0.6",
+                "gitVersion" : "212a8dbb47f07427dae194a9c75baec1d81d9259"
+        },
+        "serverParameters" : {
+                "internalQueryFacetBufferSizeBytes" : 104857600,
+                "internalQueryFacetMaxOutputDocSizeBytes" : 104857600,
+                "internalLookupStageIntermediateDocumentMaxSizeBytes" : 104857600,
+                "internalDocumentSourceGroupMaxMemoryBytes" : 104857600,
+                "internalQueryMaxBlockingSortMemoryUsageBytes" : 104857600,
+                "internalQueryProhibitBlockingMergeOnMongoS" : 0,
+                "internalQueryMaxAddToSetBytes" : 104857600,
+                "internalDocumentSourceSetWindowFieldsMaxMemoryBytes" : 104857600
+        },
+        "ok" : 1
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> A RAZÃO PARA ISSO, É CLARO,
+
+
+
+É QUE 
+
+
+
+NOSSO INDEX 
+
+
+
+
+
+ESTÁ 
+
+
+
+'HOLDING THE WHOLE DOCUMENTS',
+
+
+
+
+
+
+
+E NÃO __ OS __ FIELDS__ NOS DOCUMENTS.... --->  ISSO SIGNIFICA QUE 
+
+
+
+
+
+
+
+
+
+
+O MONGODB NÃO VAI 'TÃO LONGE' A PONTO DE TAMBÉM 'PULL OUT' 
+
+
+ 
+
+ OS VALUES DE 1 ARRAY E AÍ PULLAR OS 'FIELD VALUES' de um nested document/object que esse array talvez segure...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ---------> isso quer dizer que meu INDEX SÓ SERÁ CONSIDERADO SE EU PROCURAR POR UM DOCUMENT INTEIRO EM 
+
+
+ 'addresses',
+
+ 
+
+
+ tipo assim:
+
+
+
+
+
+
+
+
+
+
+
+
+ db.persons4.explain("executionStats").find({addresses: {street: "Main street"}})
+
+
+
+
+
+
+
+
+
+
+
+ RESULTADO:
+
+
+
+
+
+
+
+
+ db.persons4.explain("executionStats").find({addresses: {street: "Main street"}})
+{
+        "explainVersion" : "1",
+        "queryPlanner" : {
+                "namespace" : "exemploPersons.persons4",
+                "indexFilterSet" : false,
+                "parsedQuery" : {
+                        "addresses" : {
+                                "$eq" : {
+                                        "street" : "Main street"
+                                }
+                        }
+                },
+                "maxIndexedOrSolutionsReached" : false,
+                "maxIndexedAndSolutionsReached" : false,
+                "maxScansToExplodeReached" : false,
+                "winningPlan" : {
+                        "stage" : "FETCH",
+                        "inputStage" : {
+                                "stage" : "IXSCAN",
+                                "keyPattern" : {
+                                        "addresses" : 1
+                                },
+                                "indexName" : "addresses_1",
+                                "isMultiKey" : true,
+                                "multiKeyPaths" : {
+                                        "addresses" : [
+                                                "addresses"
+                                        ]
+                                },
+                                "isUnique" : false,
+                                "isSparse" : false,
+                                "isPartial" : false,
+                                "indexVersion" : 2,
+                                "direction" : "forward",
+                                "indexBounds" : {
+                                        "addresses" : [
+                                                "[{ street: \"Main street\" }, { street: \"Main street\" }]"
+                                        ]
+                                }
+                        }
+                },
+                "rejectedPlans" : [ ]
+        },
+        "executionStats" : {
+                "executionSuccess" : true,
+                "nReturned" : 1,
+                "executionTimeMillis" : 5,
+                "totalKeysExamined" : 1,
+                "totalDocsExamined" : 1,
+                "executionStages" : {
+                        "stage" : "FETCH",
+                        "nReturned" : 1,
+                        "executionTimeMillisEstimate" : 0,
+                        "works" : 2,
+                        "advanced" : 1,
+                        "needTime" : 0,
+                        "needYield" : 0,
+                        "saveState" : 0,
+                        "restoreState" : 0,
+                        "isEOF" : 1,
+                        "docsExamined" : 1,
+                        "alreadyHasObj" : 0,
+                        "inputStage" : {
+                                "stage" : "IXSCAN",
+                                "nReturned" : 1,
+                                "executionTimeMillisEstimate" : 0,
+                                "works" : 2,
+                                "advanced" : 1,
+                                "needTime" : 0,
+                                "needYield" : 0,
+                                "saveState" : 0,
+                                "restoreState" : 0,
+                                "isEOF" : 1,
+                                "keyPattern" : {
+                                        "addresses" : 1
+                                },
+                                "indexName" : "addresses_1",
+                                "isMultiKey" : true,
+                                "multiKeyPaths" : {
+                                        "addresses" : [
+                                                "addresses"
+                                        ]
+                                },
+                                "isUnique" : false,
+                                "isSparse" : false,
+                                "isPartial" : false,
+                                "indexVersion" : 2,
+                                "direction" : "forward",
+                                "indexBounds" : {
+                                        "addresses" : [
+                                                "[{ street: \"Main street\" }, { street: \"Main street\" }]"
+                                        ]
+                                },
+                                "keysExamined" : 1,
+                                "seeks" : 1,
+                                "dupsTested" : 1,
+                                "dupsDropped" : 0
+                        }
+                }
+        },
+        "command" : {
+                "find" : "persons4",
+                "filter" : {
+                        "addresses" : {
+                                "street" : "Main street"
+                        }
+                },
+                "$db" : "exemploPersons"
+        },
+        "serverInfo" : {
+                "host" : "DESKTOP-V43A7S1",
+                "port" : 27017,
+                "version" : "5.0.6",
+                "gitVersion" : "212a8dbb47f07427dae194a9c75baec1d81d9259"
+        },
+        "serverParameters" : {
+                "internalQueryFacetBufferSizeBytes" : 104857600,
+                "internalQueryFacetMaxOutputDocSizeBytes" : 104857600,
+                "internalLookupStageIntermediateDocumentMaxSizeBytes" : 104857600,
+                "internalDocumentSourceGroupMaxMemoryBytes" : 104857600,
+                "internalQueryMaxBlockingSortMemoryUsageBytes" : 104857600,
+                "internalQueryProhibitBlockingMergeOnMongoS" : 0,
+                "internalQueryMaxAddToSetBytes" : 104857600,
+                "internalDocumentSourceSetWindowFieldsMaxMemoryBytes" : 104857600
+        },
+        "ok" : 1
+}
+>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> AÍ SIM SERÁ USADO UM 'IXSCAN';
+
+
+
+será considerado o index multi-key que criamos para esse array,
+
+para cada 1 dos OBJECTS ___ INTEIROS__ (E não seus values fraturados)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> É O 'WHOLE DOCUMENT' nesteado no array que __ é 'PULLED OUT' pelo 
+
+mongodb e colocado no index...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> E, PORTANTO,
+
+ISSO É ALGO QUE VOCÊ DEVE TER EM MENTE....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA CONSEGUIR __ FAZER UM INDEX PARA O VALUE DENTRO  DAQUELE NESTED DOCUMENT NO SEU ARRAY,
+
+
+
+
+
+
+
+
+VOCê 
+
+
+
+PODE 
+
+
+
+
+
+CRIAR UM INDEX ASSIM:
+
+
+
+
+
+
+
+
+
+
+db.persons4.createIndex({"addresses.street": 1})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE VOCÊ FIZER ISSO,
+
+
+
+SEU INDEX TAMBÉM SERÁ UM 'MULTI-KEY INDEX',
+
+
+
+MAS AGORA 
+
+
+
+TAMBÉM CONSIDERANDO/FAZENDO PULL OUT DESSE VALUE dessa key 'street' dentro de cada nested document 'address' em 'addresses'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> VEJA O RESULTADO:
+
+
+
+
+> db.persons4.createIndex({"addresses.street": 1})
+{
+        "numIndexesBefore" : 3,
+        "numIndexesAfter" : 4,
+        "createdCollectionAutomatically" : false,
+        "ok" : 1
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+E O RESULTADO DE NOSSA QUERY DE ANTES, AGORA COM ESSE 
+
+
+
+INDEX ESPECIALIZADO....
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+
+
+> db.persons4.explain("executionStats").find({addresses: {street: "Main street"}})
+{
+        "explainVersion" : "1",
+        "queryPlanner" : {
+                "namespace" : "exemploPersons.persons4",
+                "indexFilterSet" : false,
+                "parsedQuery" : {
+                        "addresses" : {
+                                "$eq" : {
+                                        "street" : "Main street"
+                                }
+                        }
+                },
+                "maxIndexedOrSolutionsReached" : false,
+                "maxIndexedAndSolutionsReached" : false,
+                "maxScansToExplodeReached" : false,
+                "winningPlan" : {
+                        "stage" : "FETCH",
+                        "inputStage" : {
+                                "stage" : "IXSCAN",
+                                "keyPattern" : {
+                                        "addresses" : 1
+                                },
+                                "indexName" : "addresses_1",
+                                "isMultiKey" : true,
+                                "multiKeyPaths" : {
+                                        "addresses" : [
+                                                "addresses"
+                                        ]
+                                },
+                                "isUnique" : false,
+                                "isSparse" : false,
+                                "isPartial" : false,
+                                "indexVersion" : 2,
+                                "direction" : "forward",
+                                "indexBounds" : {
+                                        "addresses" : [
+                                                "[{ street: \"Main street\" }, { street: \"Main street\" }]"
+                                        ]
+                                }
+                        }
+                },
+                "rejectedPlans" : [ ]
+        },
+        "executionStats" : {
+                "executionSuccess" : true,
+                "nReturned" : 1,
+                "executionTimeMillis" : 0,
+                "totalKeysExamined" : 1,
+                "totalDocsExamined" : 1,
+                "executionStages" : {
+                        "stage" : "FETCH",
+                        "nReturned" : 1,
+                        "executionTimeMillisEstimate" : 0,
+                        "works" : 2,
+                        "advanced" : 1,
+                        "needTime" : 0,
+                        "needYield" : 0,
+                        "saveState" : 0,
+                        "restoreState" : 0,
+                        "isEOF" : 1,
+                        "docsExamined" : 1,
+                        "alreadyHasObj" : 0,
+                        "inputStage" : {
+                                "stage" : "IXSCAN",
+                                "nReturned" : 1,
+                                "executionTimeMillisEstimate" : 0,
+                                "works" : 2,
+                                "advanced" : 1,
+                                "needTime" : 0,
+                                "needYield" : 0,
+                                "saveState" : 0,
+                                "restoreState" : 0,
+                                "isEOF" : 1,
+                                "keyPattern" : {
+                                        "addresses" : 1
+                                },
+                                "indexName" : "addresses_1",
+                                "isMultiKey" : true,
+                                "multiKeyPaths" : {
+                                        "addresses" : [
+                                                "addresses"
+                                        ]
+                                },
+                                "isUnique" : false,
+                                "isSparse" : false,
+                                "isPartial" : false,
+                                "indexVersion" : 2,
+                                "direction" : "forward",
+                                "indexBounds" : {
+                                        "addresses" : [
+                                                "[{ street: \"Main street\" }, { street: \"Main street\" }]"
+                                        ]
+                                },
+                                "keysExamined" : 1,
+                                "seeks" : 1,
+                                "dupsTested" : 1,
+                                "dupsDropped" : 0
+                        }
+                }
+        },
+        "command" : {
+                "find" : "persons4",
+                "filter" : {
+                        "addresses" : {
+                                "street" : "Main street"
+                        }
+                },
+                "$db" : "exemploPersons"
+        },
+        "serverInfo" : {
+                "host" : "DESKTOP-V43A7S1",
+                "port" : 27017,
+                "version" : "5.0.6",
+                "gitVersion" : "212a8dbb47f07427dae194a9c75baec1d81d9259"
+        },
+        "serverParameters" : {
+                "internalQueryFacetBufferSizeBytes" : 104857600,
+                "internalQueryFacetMaxOutputDocSizeBytes" : 104857600,
+                "internalLookupStageIntermediateDocumentMaxSizeBytes" : 104857600,
+                "internalDocumentSourceGroupMaxMemoryBytes" : 104857600,
+                "internalQueryMaxBlockingSortMemoryUsageBytes" : 104857600,
+                "internalQueryProhibitBlockingMergeOnMongoS" : 0,
+                "internalQueryMaxAddToSetBytes" : 104857600,
+                "internalDocumentSourceSetWindowFieldsMaxMemoryBytes" : 104857600
+        },
+        "ok" : 1
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> OK.... ISSO QUER DIZER QUE VOCÊ TAMBÉM PODE  USAR 
+
+
+
+
+UM 'INDEX' 
+
+EM 
+
+1 
+
+
+FIELD 
+
+EM 1 
+
+EMBEDDED DOCUMENT QUE FAZ PARTE 
+
+
+
+DE 1 
+
+ARRAY,
+
+
+COM ESSA FEATURE DE 'MULTI-KEY' ---------> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+VOCÊ SÓ DEVE TER EM MENTE 
+
+QUE 
+
+
+'''USAR MULTIPLAS MULTI-KEY FEATURES EM 1 ÚNICA COLLECTION VAI 
+
+RAPIDAMENTE LEVAR A PROBLEMAS DE PERFORMANCE COM WRITES,
+PQ PARA 
+
+CADA 
+
+NOVO DOCUMENT QUE VOCê 
+ADICIONAR, 
+
+TODOS ESSES MULTI-KEY INDEXES DEVEM SER UPDATADOS''' -----> E SE VOCÊ ADICIONA 1 NOVO DOCUMENT COM 10 VALORES NESSE ARRAY,
+
+
+QUE VOCê ARMAZENA EM 1 
+
+
+MULTI-KEY INDEX,
+
+
+AÍ 
+
+ESSAS 
+10 NOVAS 
+
+ ENTRIES TERÃO DE SER ADICIONADAS AO 'INDEX REGISTRY' --->  E SE VOCÊ TIVER 4-5 DESSES MULTI-KEY INDEXES 
+
+
+
+ EM CADA DOCUMENT,
+
+
+
+
+ AÍ VOCÊ 
+
+
+
+ TERÁ UM MUNDO DE 
+
+ PERFORMANCE RUIM....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> AINDA ASSIM,
+
+
+
+ MULTI-KEY INDEXES SÃO SUPER ÚTEIS SE VOCê TEM QUERIES QUE 
+
+ REGULARMENTE 
+
+ TARGETTAM 
+
+
+ ARRAY VALUES, OU ATÉ MESMO 'NESTED VALUES'/values em 1 embedded document, em arrays...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -------> MAS HÁ UMA RESTRIÇÃO IMPORTANTE NO USO DE INDEXES.... -->  essa restrição é vista 
+
+
+
+ SE VOCÊ 
+
+
+ ADICIONAR 1 MULTI-KEY INDEX __ COMO PARTE_ DE 
+
+
+ 1
+  
+
+  'compound index'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  -------->  E ISSO É REALMENTE POSSÍVEL...
+
+
+
+
+
+
+
+
+
+
+  CHEQUE ESTE EXEMPLO:
+
+
+
+
+
+
+
+
+
+
+  db.persons4.createIndex(
+          {
+                  name: 1,
+                  hobbies: 1
+                  
+          }
+  )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ---------> ISSO FUNCIONARÁ, E SERÁ UM 'COMPOUND' index,
+  pq 
+
+  temos esses 2 fields 
+
+
+
+  discriminados no index...
+
+
+
+
+
+
+
+
+
+  --> E O CREATE DESSE INDEX REALMENTE FUNCIONARÁ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> ENTRETANTO, O QUE NÃO FUNCIONARÁ, NO CASO,
+
+
+  SÃO TENTATIVAS DE CREATE 
+
+
+  DE 
+
+
+
+  'compound indexes'
+
+
+
+
+
+  __ COM MÚLTIPLOS 'MULTI-KEY' INDEXES...
+
+
+
+
+
+
+
+
+
+
+
+
+
+  OU SEJA,
+
+
+  ISTO AQUI:
+
+
+
+
+  
+  db.persons4.createIndex(
+          {
+                  addresses: 1,
+                  hobbies: 1
+                  
+          }
+  )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO NÃO FUNCIONARÁ, DARÁ ESSA MENSAGEM DE ERRO:
+
+
+
+
+
+}
+>   db.persons4.createIndex(
+...           {
+...                   addresses: 1,
+...                   hobbies: 1
+...
+...           }
+...   )
+{
+        "ok" : 0,
+        "errmsg" : "Index build failed: 05e0929b-2013-4d34-91a5-88a03add1a83: Collection exemploPersons.persons4 ( 84a704d0-57b2-4537-86ae-5e4727efd72d ) :: caused by :: cannot index parallel arrays [hobbies] [addresses]",
+        "code" : 171,
+        "codeName" : "CannotIndexParallelArrays"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> VOCÊ NÃO PODE INDEXAR PARALLEL ARRAYS... --> A RAZÃO DESSE ERRO É SIMPLES:
+
+
+
+
+
+
+
+
+
+
+''''MONGODB TERIA DE ARMAZENAR O "CARTESIAN PRODUCT"
+
+DOS VALUES _ DE AMBOS OS ARRAYS""""" --> isso quer dizer que 
+
+
+ELE 
+
+TERIA 
+
+
+DE 
+
+PULLAR TODOS OS ADDRESSES,
+
+
+
+
+E PARA CADA 'ADDRESS',
+
+
+ELE TERIA 
+
+
+
+
+DE 
+
+_ ARMAZENAR__ TODOS __OS 'HOBBIES'... (
+        isso quer dizer que 
+
+        se você tiver 2 ADDRESSES, e 5 HOBBIES em 1 document,
+
+
+        VOCÊ JÁ TERÁ DE ARMAZENAR 10 VALUES NO SEU INDEX...
+) -----> E ISSO,
+
+É CLARO,
+
+
+FICA CADA VEZ 
+
+
+PIOR A MEDIDA QUE VOCê VAI ADICIONANDO mais values 
+
+
+
+no seu array de 'addresses'.... -----------> É POR ISSO 
+
+
+
+
+
+
+QUE COMPOUND INDEXES 
+
+
+
+COM 
+
+
+
+2+ MULTI-KEY INDEXES __ NÃO FUNCIONAM...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> VOCÊ PODE TER 2+ MULTI-KEY INDEXES __ EM INDEXES __ sEPARADOS,
+
+
+
+mas 
+
+
+em 
+COMPOUND INDEXES,
+
+VOCÊ SÓ PODE COLOCAR 1 único multi-key index...
+
+
+
+

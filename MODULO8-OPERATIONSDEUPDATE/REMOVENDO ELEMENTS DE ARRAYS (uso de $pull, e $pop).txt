@@ -1,0 +1,685 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SER CAPAZ DE FAZER 'PUSH' 
+de novos valores É NICE, CLARO,
+
+
+
+
+MAS 
+
+
+DEVIDO 
+
+
+
+ 
+
+ AO NOSSO EXEMPLO DE ANTES,
+
+
+ AGORA TEMOS DUPLICATE DATA EM MARIA,
+
+ QUE FICOU ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+ {
+
+
+     name: "maria",
+     age: 29,
+     hobbies: [
+         {title: 'sports', frequency: 3, goodFrequency: true},
+
+
+
+            {title: 'sports', frequency: 2},
+
+                {title: 'hiking', frequency: 2},
+                      {title: 'hiking', frequency: 2},
+
+                            {title: 'good wine', frequency: 1},
+                            {title: 'good wine', frequency: 1} 
+
+
+     ]
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --. HIKING E GOODWINE ESTÃO ALI MT FREQUENTEMENTE, QUEREMOS REDUZIR ISSO,
+
+ FAZER 
+
+
+ 'pull' DA DATA QUE TENHO EM MEU ARRAY... -->  O QUE POSSO FAZER, AQUI,
+
+
+ É 
+
+
+ USAR 
+
+ NOVAMENTE 
+
+
+
+
+ 'db.users.updateOne()',
+
+
+
+ e aí escrever 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ db.users.updateOne({name: "Maria"}, {})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> AÍ, NESSA HIPÓTESE, USAREMOS O OPERATOR_ __ OPOSTO__ de 'push'
+ ,
+
+
+ QUE É 
+
+
+
+ '$pull '----------> E USAREMOS 'pull' 
+
+ PARA 
+
+
+
+
+ PUXAR PARA FORA ALGUNS ELEMENTS LÁ DE 
+
+ 'hobbies'...
+
+
+
+
+
+
+
+
+
+
+ ex:
+
+
+
+
+ 
+
+ db.users.updateOne({name: "Maria"}, {
+
+
+
+$pull: {
+
+}
+
+
+
+ })
+
+
+
+
+
+
+
+
+
+
+
+--> A ESCRITA É BEM PARECIDA COM A DE '$push':
+
+
+
+
+
+
+
+
+
+
+1) PRIMEIRAMENTE ESPECIFICAMOS O ARRAY CUJO ELEMENT QUEREMOS 'PULLAR'...
+
+
+(será 'hobbies')....
+
+
+
+
+2) O SEGUNDO PARÂMETRO É A 'CONDITION PARA O PULL',
+
+
+qual condição deve ser satisfeita para que aquele element/embedded document seja 
+
+
+
+
+
+PULLADO..  -------> BEM, VOU QUERER PULLAR TODOS OS 
+
+
+
+
+ELEMENTS EM QUE O title 
+
+é 
+
+
+
+igual a 'hiking',
+
+
+
+
+VAMOS DIZER....
+
+
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+ db.users.updateOne({name: "Maria"}, {
+
+
+
+$pull: {
+        hobbies: {title: "hiking"}
+}
+
+
+
+ })
+
+
+
+
+
+
+
+
+--------------------
+
+
+
+
+
+
+
+
+
+OK... MAS ISSO TERÁ REMOVIDO __ TODOS OS DOCUMENTS DE 'hiking'...
+
+
+
+
+
+
+
+
+
+
+
+--> E É CLARO QUE PODERÍAMOS USAR TODOS OS OPERATORS 
+
+
+
+DIFERENTES, COMO '$gt',
+
+
+TODOS AQUELES COMPARISON OPERATORS QUE CONHECEMOS...
+
+
+
+
+
+--> MAS VAMOS QUERER REMOVER __ aPENAS __ 1 
+
+
+
+
+ELEMENT, O QUE É UMA 'DUPLICATA'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> àS VEZES, DIZ O PROFESSOR, VOCÊ VAI QUERER REMOVER APENAS O ''ÚLTIMO ELEMENT DE UM ARRAY'... ------> 
+
+
+
+
+
+
+
+
+NESSAS HIPÓTESES, VOCÊ NÃO VAI ESCREVER NENHUM 'filter criteria',
+
+
+
+e sim 
+
+SÓ VAI DIZER 'QUERO REMOVER O ÚLTIMO ELEMENTO DESSE ARRAY'... --> COMO DIZER ISSO?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO,
+
+
+
+DEVEMOS 
+
+
+'mix it up'
+
+
+
+
+
+E updatar 1 document em que o NOME É CHRIS,
+
+
+
+
+
+
+E PARA O CHRIS,
+
+
+O ÚLTIMO ELEMENTO É 'hiking' --> 
+
+
+
+
+
+
+DIGAMOS QUE QUEREMOS REMOVER ESSE 'hiking',
+
+
+
+
+
+
+
+QUE ESTÁ POR ÚLTIMO.... --------> PARA ISSO, PODEMOS SIMPLESMENTE USAR O 
+
+
+OPERATOR DE '$pop',
+
+
+
+
+
+
+
+
+
+QUE É ESCRITO ASSIM:
+
+
+
+
+
+
+
+
+db.users.updateOne({name: "Chris"}, {$pop})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> MAS É CLARO QUE 'pop' DEMANDA UM PARÂMETRO.... --> VOCÊ DEVE ENTÃO ESPECIFICAR QUAL __ ARRAY/FIELD DEVE SER 'POPPADO' (ter o último element REMOVIDO)..
+
+
+
+
+
+
+
+
+
+
+
+----> EX:
+
+
+
+
+
+
+db.users.updateOne({name: "Chris"}, {$pop: {hobbies: }})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> CERTO... E O VALOR NESSE 'hobbies'
+
+
+
+VAI 
+
+DIZER __ SE VOCê QUER 'POP THE LAST ELEMENT'
+
+OU 'POP THE FIRST ELEMENT'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+POP THE LAST ELEMENT ---> VOCÊ ESCREVE '1'...
+
+
+
+
+
+
+
+
+
+POP THE FIRST ELEMENT --> VOCÊ ESCREVE '-1'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+FICA TIPO ASSIM:
+
+
+
+
+
+
+
+
+db.users.updateOne({name: 'Chris'} , {$pop: {hobbies: 1} })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> ISSO VAI TER REMOVIDO O 
+
+
+
+
+'hiking' que estava no array de hobbies, vai essencialmente transformar ISTO:
+
+
+
+
+
+
+
+
+> db.users.find({name: "Chris"}).pretty()
+{
+        "_id" : ObjectId("6209f1279207fe373c205a87"),
+        "name" : "Chris",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2,
+                        "highFrequency" : true
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3,
+                        "goodFrequency" : true
+                },
+                {
+                        "title" : "Souji",
+                        "frequency" : 3
+                }
+        ],
+        "age" : 30,
+        "phone" : 120212012108
+}
+
+
+
+
+
+
+db.users.updateOne({name: 'Chris'} , {$pop: {hobbies: 1} })
+
+
+
+
+
+--> EM ISTO:
+
+
+
+
+
+
+
+
+
+
+
+
+
+{
+        "_id" : ObjectId("6209f1279207fe373c205a87"),
+        "name" : "Chris",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2,
+                        "highFrequency" : true
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3,
+                        "goodFrequency" : true
+                }
+        ],
+        "age" : 30,
+        "phone" : 120212012108
+}
+
+
+
+
+
+
+
+-------------------------------
+
+
+
+
+
+
+
+
+
+OK... ESSE FOI O 'pop',
+
+
+
+
+
+QUE É ÓTIMO SE VOCÊ QUER REMOVER O PRIMEIRO/ÚLTIMO ITEM DE UM ARRAY...

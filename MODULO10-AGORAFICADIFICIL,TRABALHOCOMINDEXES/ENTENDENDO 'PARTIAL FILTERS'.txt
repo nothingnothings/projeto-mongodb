@@ -1,0 +1,1738 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> OK.... OUTRO ASPECTO INTERESSANTE DE 'CONFIGURING A FILTER'
+
+
+
+é 
+
+
+
+o 
+
+
+
+
+SETUP DE AQUILO QUE CHAMAMOS DE 'partials'...
+
+
+
+
+
+
+
+
+
+
+
+-_> PARTIAL FILTER... ------> 
+
+
+
+
+
+
+
+
+
+
+
+PARA EXEMPLIFICAR ISSO,
+
+
+NA NOSSA COLLECTION DE PERSONS 
+TEMOS 
+
+
+
+
+
+
+
+
+
+
+
+
+PERSONS MAIS VELHAS DO QUE 20, MAIS VELHAS DO QUE 30,
+ 
+ ETC..
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -> OK... DIGAMOS QUE O SEU APP CALCULA O QUE 
+
+ SEUS AMIGOS VAO CONSEGUIR 
+
+
+
+
+
+
+ QUANDO 
+
+ ELES 
+
+
+
+
+
+ 'RETIRE'... (quando se aposentarem)....
+
+
+
+
+
+
+
+
+
+
+
+
+ --> BEM, COMO O APP É DEDICADO A QUERY DE GENTE VELHA,
+
+
+ VOCê TIPICAMENTE PROCURARÁ 
+ POR PESSOAS 
+
+
+
+
+ __ MAIS VELHAS__ DO QUE __60...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> QUANTO A ISSO, ACERCA DESSE APP,
+
+
+
+
+ TER 
+
+
+
+ 1 INDEX 
+
+
+
+ SOBRE O FIELD DE "dob.age"  
+
+
+ talvez faça BASTANTE SENTIDO..
+
+
+
+
+
+
+
+
+
+ MAS O PROBLEMA,AQUI,
+
+
+ É QUE 
+
+ VOCÊ TERÁ UM MONTE DE VALUES NO SEU INDEX (lista ordenada de nossos elements, ordenada por 'age', no nosso caso)
+
+
+
+ QUE 
+
+
+
+ VOCÊ NUNCA VAI 
+ 'QUERY FOR'... (
+
+
+
+
+
+
+     ou seja,
+
+
+
+     ages como '30' e '40' nunca serão considerados nesse app 
+
+     de aposentadoria,
+
+
+     pq 
+
+     você n se aposenta nessa idade..
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> BEM, SEUS INDEXES AINDA VÃO SER EFICIENTES, SIM,
+
+
+
+
+ MAS _ ELES__ SERÃO DESNECESSARIAMENTE _ GRANDES_...
+
+
+
+
+
+
+
+
+
+
+
+ --> E OUTRO PONTO NEGATIVO DOS INDEXES 
+
+
+ É 
+
+ QUE 
+
+
+ ELES 
+
+ 'COMEM ESPAÇO DO SEU DISCO'....
+
+
+
+
+
+
+
+
+
+
+
+ --> ADICIONALMENTE,
+
+ QUANTO MAIOR O INDEX,
+
+
+
+ MAIS 
+
+
+ 'PERFORMANCE' 
+
+
+
+ certas queries vão tomar,
+
+
+ para simplificar o assunto...
+
+
+
+
+ 
+
+
+
+
+ -> ISSO SIGNIFICA QUE SE VOCê SABE QUE _ CERTOS _ VALUES _NÃO VÃO SER 
+
+
+ 'LOOKED AT',
+
+
+
+
+
+
+
+
+ OU QUE VAO SER VISTOS ___MTTTTT RARAMENTE__,
+  
+
+
+
+casos em que vocÊ ficaria FINE __ SE UM 'COLLECTION SCAN' ACONTECESSE (devido à raridade desses cases),
+
+
+
+
+
+
+
+VOCÊ PODE ACTUALLY __ CRIAR 
+UM 
+
+
+'PARTIAL INDEX',
+
+
+
+
+
+EM QUE 
+
+VOCê __ SÓ _ ADICIONA OS VALUES COM QUE VOCÊ REGULARMENTE TRABALHARÁ/VERÁ....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NO NOSSO CASE,
+
+
+
+
+
+
+
+escrevemos:
+
+
+
+
+
+
+db.persons2.getIndexes() 
+
+
+
+
+
+
+
+
+
+
+-> VAMOS RECEBER SÓ O '_id', default,
+
+pq não adicionamos nada ainda..... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> AÍ 
+
+CRIAMOS UM NOVO INDEX,
+
+
+
+com 'createIndex'...
+
+
+
+
+
+
+
+
+
+
+
+
+---------> VAMOS QUERER CRIAR ESSE INDEX NO FIELD DE "dob.age".... --> 
+
+
+
+
+colocamos ascending order (1),
+
+
+
+
+MAS AÍ 
+
+
+
+
+VAMOS COLOCAR UM ADDITIONAL ARGUMENT 
+
+
+
+
+
+NESSE CREATE INDEX...
+
+
+
+
+
+
+tipo assim:
+
+
+
+
+
+
+
+
+
+
+
+db.persons2.createIndex({"dob.age": 1}, {})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> DENTRO DO 'CONFIG OBJECT' 
+
+
+do index,
+
+
+
+O PROFESSOR ESCREVE 
+
+a key de 
+
+'partialFilterExpression' 
+
+
+
+
+
+
+
+
+
+----> ESSA É A KEY QUE _'CRIA PARTIAL FILTERS'....
+
+
+
+
+
+
+
+
+
+
+
+SIDENOTE:::: VOCÊ TAMBÉM PODE ADICIONAR ESSA KEY de 'partialFilterExpression' 
+
+
+
+
+
+NOS SEUS 'compound indexes' (indexes mistos, de múltiplos fields),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PQ AGORA,
+
+DENTRO 
+
+
+
+DESSE 'partialFilterExpression',
+
+
+
+
+VAMOS DEFINIR, com um object ({}),
+
+
+
+QUAL FIELD 
+
+
+É 
+
+
+
+
+
+
+'''O FIELD QUE INTERESSA PARA FAZER O NARROW DOWN DO SET DE VALUES 
+
+QUE VOU QUERER ADICIONAR/escrever no meu index''' ----->  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+NO NOSSO CASO, BEM SIMPLES,
+
+
+VAMOS ESCREVER 
+
+"dob.age",
+
+
+
+PQ É ELE QUE VAI INTERESSAR PARA 'CUSTOMIZARMOS' quais 
+
+
+
+values desse nosso field 
+
+vão ser REALMENTE ADICIONADOS AO 
+
+
+INDEX...
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+db.persons2.createIndex({"dob.age": 1}, {partialFilterExpression: {"dob.age"}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+É CLARO QUE PODERÍAMOS ESCREVER FIELDS COMPLETAMENTE DIFERENTES, SE QUISÉSSEMOS...
+
+
+
+
+
+
+
+
+
+TIPO ''' AH, EU SEI QUE MINHAS QUERIES SÓ VÃO RETORNAR PERSONS QUE POSSUEM GENDER DE MALE''',
+
+
+aí poderíamos settar algo como "{gender: }",
+
+
+
+e aí 
+
+
+
+DEFINIR QUE 
+
+
+APENAS 
+
+
+
+
+OS values de "male" em 'gender'
+
+
+
+
+SERÃO SETTADOS 
+
+
+
+NOS MEUS INDEXES....
+
+
+
+
+ficaria tipo assim:
+
+
+
+
+
+db.persons2.createIndex({"dob.age": 1}, {partialFilterExpression: {"gender": "male"}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> E ISSO, É CLARO, UMA 'NORMAL EXPRESSION FOR EQUALITY'  ($gt e $lt também é suportado, $exists também)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.persons2.createIndex(
+    {
+        "dob.age": 1
+    },
+
+    {
+        partialFilterExpression: 
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+---------> AGORA, DENTRO DESSe 'partialFilterExpression'
+
+
+VOU ESPECIFICAR QUAL FIELD 
+
+
+
+
+
+
+estou interessado em 'narrow down the set of values we wanna add'...
+
+
+
+
+
+
+
+
+
+
+--> E O PROFESSOR VAI ADICIONAR O FIELD DE 'dob.age'...
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+db.persons2.createIndex(
+    {
+        "dob.age": 1
+    },
+    {
+        partialFilterExpression: {"gender": "male"}
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------> ok.... mas e aí, o que escrevemos aí?
+ 
+
+
+
+
+
+
+
+ BEM, O QUE 
+
+
+ VAMOS 
+
+ CRIAR 
+
+
+ É 
+
+ 1 INDEX EM 'age',
+
+ sim,
+
+ MAS APENAS 
+
+
+
+EM/PARA  ELEMENTS EM QUE  
+
+
+
+
+
+
+
+
+
+O UNDERLYING DOCUMENT SERÁ PARA 1 'male'... ( e os documents com 'gender: female' não serão adicionados ao index)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> CONTUDO, AQUI TAMBÉM PODERÍAMOS TER 'NARROWED DOWN'
+ 
+
+
+
+ o filter de 
+
+
+
+
+ 'age'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ------> OU SEJA,
+
+ A ALTERNATIVA QUE PODERÍAMOS TER ESCRITO É ESTA:
+
+
+
+
+
+
+ db.persons2.createIndex(
+    {
+        "dob.age": 1
+    },
+    {
+        partialFilterExpression: {"dob.age": {$gt: 60}}
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> POR MEIO DESSE CÓDIGO, 
+
+
+
+
+FARÍAMOS 'FILTER FOR THE SAME FIELD' ,
+
+
+
+
+E AÍ 
+ 
+ APENAS _ _ARMAZENAR 
+
+
+ ELEMENTS/DOCUMENTS COM A AGE 'maior do que 60',
+
+ lá no nosso INDEX DESSE FIELD.... (field de 'age')....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> OK, MAS VAMOS PROSSEGUIR COM ESSE INDEX de 
+
+ 'age'
+  
+
+
+
+  QUE TOMA COMO BASE O 'male' no field de gender...
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> CONTINUANDO, O PROFESSOR 
+
+
+
+
+  EXECUTA 
+
+
+
+  'db.persons2.find({})',
+
+
+
+
+
+
+
+
+
+  E AÍ 
+
+
+
+  COLOCA COMO FILTER ALGO COMO 
+
+
+
+
+
+
+
+
+
+  "dob.age": {$gt: 60} 
+
+
+
+
+
+
+
+
+
+
+  --> A AGE DEVERÁ SER MAIOR DO QUE 60....
+
+
+
+
+
+
+
+
+
+
+
+  --> AÍ, COM ISSO, VEREMOS ALGO INTERESSANTE:
+
+
+
+
+
+
+
+
+
+  SE OLHARMOS NOSSO OUTPUT,
+
+
+
+  VEREMOS:
+
+
+
+
+
+
+
+
+
+
+  1 DOCUMENT COM 'gender: male', sim....
+
+
+
+
+
+
+
+
+
+  --> MAS AÍ TAMBÉM TEREMOS UM DOCUMENT COM 
+
+  'gender: female'.... (misturado com os males)..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> OK, MAS COMO ISSO 
+
+
+ENCAIXA/FUNCIONA COM 
+
+
+
+NOSSO 'PARTIAL INDEX'? (
+
+
+    pq agora estamos PROCURANDO POR DOCUMENTS TENDO COMO BASE 
+
+
+    aquele field de 'age',
+
+
+    QUE JÁ ESTÁ INDEXADO COM 
+
+
+    O 
+
+    INDEX com aquele partial filter de 
+
+
+
+    'gender: male'...
+)
+
+
+
+
+
+
+
+
+--> teoricamente,
+
+nosso result de 'female' 
+
+
+
+no meio dos males não faria sentido.... --> mas professor vai EXPLICAR ISSO, AGORA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PQ ESSE RESULTADO FICOU ASSIM?
+
+
+
+
+
+
+
+
+
+
+
+-> professor usa 'explain()' antes 
+
+
+
+do 'find()'....
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+
+db.persons2.explain().find({"dob.age": {$gt: 60}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NO RESULTADO DESSE FIND COM EXPLAIN,
+
+
+veremos 
+
+
+
+
+
+"winningPlan": {
+    "stage": "COLLSCAN"
+}
+
+
+
+
+
+
+
+
+
+
+,
+
+SINAL DE QUE 
+UM 'COLLECTION SCAN' FOI EXECUTADO,
+
+
+E __ NÃO __ UM IXSCAN (index scan)... -----> PQ ISSO ACONTECEU? PQ O IXSCAN N FOI UTILIZADO? (pq teoricamente nós realmente já temos um INDEX nesse field)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> BEM, ISSO ACONTECE/ACONTECEU 
+
+PQ O MONGODB VIU QUE SIM,
+
+
+
+NÓS ESTAMOS PROCURANDO PELO FIELD DE 'dob.age',
+
+
+
+QUE É 
+
+UM FIELD QUE FAZ PARTE DE 1 INDEX.... --> MAS O MONGODB TAMBÉM 
+
+
+DETERMINOU _ _ QUE __ COMO _ _NÓS NÃO FALAMOS _ 
+
+NADA SOBRE A 'gender'
+
+
+
+NA NOSSA QUERY DE FIND({dob.age: {$gt: 60}}),
+
+
+
+
+
+
+
+
+
+SERIA MT 
+
+
+
+
+
+ARRISCADO USAR O __ 'INDEX' PARA ISSO...... ----> seria arriscado JUSTAMENTE PQ ESSE INDEX QUE 
+
+
+ESCREVEMOS É UM 'PARTIAL INDEX' -------> E O MONGODB, COMO 
+
+
+
+
+UMA TOP PRIORITY,
+
+
+SEMPRE TENTA __ ASSEGURAR_ QEU VOCÊ NÃO VAI PERDER QUALQUER DATA -------->  OU SEJA,
+
+
+
+
+ELE 
+
+
+
+''NÃO FUNCIONA DE UMA MANEIRA NATURAL DE FILTRAR SEUS RESULT SETS''' ----> EM VEZ DISSO,
+
+
+
+O QUE 
+
+
+
+VOCÊ 
+
+TEM QUE FAZER/ESCREVER __ PARA _ ACABAR__ USANDO AQUELE 'index' 
+
+
+
+
+COM 
+
+
+
+
+ESSE RUN de 'find({"dob.age": {$gt: 60}})' 
+
+
+
+
+
+
+
+
+
+É _______ TAMBÉM _ ACABAR 
+
+
+'FILTERING FOR THE GENDER',
+
+
+
+aqui....
+
+
+
+
+
+
+
+
+
+
+
+
+-> OU SEJA,
+
+PRECISAMOS DEFINIR UM SEGUNDO PARÂMETRO (ou solto, ou COM $AND)... --->  ISSO SIGNIFIICA QUE 
+
+
+
+SE ADICIONARMOS UM FILTER DE 'gender:'male' '
+
+
+
+DENTRO DESSA QUERY, TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+
+db.persons2.explain().find(
+    {
+        "dob.age": {$gt: 60}, 
+        "gender": "male"
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+COMO ESSE NOSSO 'PARTIAL INDEX' acabou lidando tanto com 'age' (que é o field em que foi inserido) COMO 
+
+
+COM 
+
+
+'gender' (condição USADA PARA ENFIAR APENAS CERTA PARTE DE ENTRIES NO INDEX, apenas as entries QUE SÃO 'male', no gender)...
+
+
+
+
+----------> COMO ELE ACABOU 
+
+
+
+
+
+
+LIDANDO COM OS 2 ,
+
+
+VOCê NÃO PODE ESCREVER '''APENAS 1 FILTER, RELATIVO A 1 DOS FIELDS'''
+
+
+e aí esperar que 
+
+
+esse 
+
+
+
+'partial index'
+
+acabe utilizado 
+
+
+
+
+
+na sua find de 'APENAS AGE'......
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> PARA SOLUCIONAR ESSE PROBLEMA,
+
+PARA ACABAR USANDO ESSE INDX,
+
+
+
+
+O QUE VOCê PRECISA FAZER É TAMBÉM 'FILTER FOR THE GENDER',
+
+
+tipo assim:
+
+
+
+
+
+
+db.persons2.explain().find(
+    {
+        "dob.age": {$gt: 60},
+
+        "gender": "male"
+    }
+)
+
+
+
+
+
+
+
+ISSO VAI ACABAR USANDO NOSSO 'PARTIAL FILTER/PARTIAL INDEX',
+
+
+
+
+
+
+PQ QUANDO RODARMOS ISSO, VEREMOS 
+
+
+
+'stage: IXSCAN' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... MAS AGORA VOCê DEVE ESTAR SE PERGUNTANDO:
+
+
+
+
+
+
+
+
+QUAL É A DIFERENÇA ENTRE UM 'PARTIAL INDEX' 
+
+
+
+
+
+
+
+E UM 'COMPOUND INDEX'?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PQ AMBOS INDEXES PEDEM QUE VOcÊ FAÇA FIND/UPDATE/DELETE 
+
+
+
+
+
+
+POR '''2 FIELDS, CONJUNTAMENTE''' -------> a diferença, eu acho. é que o 'partialFilterExpression' 
+
+VAI ADICIONAR SÓ UM PEDAÇO 
+
+
+
+
+DA SUA COLLECTION LÁ NO INDEX,
+
+apenas as partes que realmente importam a vocÊ (como 'users maiores do que 60 anos', no nosso exemplo)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> A DIFERNEÇA -----> ''''FOR THE PARTIAL INDEX, THE OVERALL INDEX IS SIMPLY SMALLEr'''  -----> NO NOSSO EXEMPLO,
+
+
+REALMENTE SÓ EXISTIRÃO AS 'AGES' dos MALES__, inseridas NO 'INDEX'.... -----> JÁ AS KEYS DE 'FEMALES'
+NÃO SERÃO STORADAS nesse index( 
+
+
+
+POR CONSEQUÊNCIA DISSO,
+
+O 
+
+
+'INDEX SIZE' 
+
+
+NESSA SUA COLLECTION __ SERÁ __ MENOR_, O QUE LEVARÁ/LEVA A 
+ 
+
+ _ UM ___ MENOR __ IMPACTO NO SEU HARD DRIVE,
+
+
+ e também 
+
+
+ SUAS WRITE QUERIES TAMBÉM SERÃO 'sped up' -----> SERÃO ACELERADAS CONSIDERAVELMENTE,
+
+ NESSE EXEMPLO,
+
+ JUSTAMENTE PQ OS DOCUMENTS COM 'gender: female'
+
+
+
+ NUNCA TERÃO DE SER 
+
+
+ADICIONADOS AO INDEX (rapidez extrema, portanto)....
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> OK... ISSO SIGNIFICA QUE 'partial filters' fazem MUTO SENTIDO,
+
+
+
+
+
+
+
+PARTICULARMENTE SE VOCê FOR FAZER 'FILTERS FOR THIS COMBINATION' ( de age e gender, gender de APENAS MALES )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> É NESSES CASOS QUE UM 
+
+PARTIAL INDEX PODE FAZER SENTIDO; CASES EM QUE VOCê RARAMENTE PROCURARÁ (find) POR SEUS 'OTHER RESULTS',,
+
+RESULTS que não serão usados para 1 determinada parte de nosso app....
+
+
+(no nosso case, quase nunca vamos procurar por 'female' em 'gender', por isso faz sentido)
+
+
+
+
+
+
+
+
+
+
+
+
+-----> OBSS:::: SEMPRE QUE O MONOGDB 
+
+
+TIVER 'A IMPRESSÃO' DE QUE 
+
+SEU FIND REQUEST 
+
+__ VAI YIELDAR
+___ 
+
+
+
+
+'''MAIS ELEMENTOS OD QUE OS ELEMENTOS QUE VOCÊ TEM NO SEU INDEX''', ELE _ NÃO UTILIZARÁ SEU INDEX --> MAS SE VOCÊ 
+
+TIPICAMENTE 
+
+
+RODA QUERIES EM QUE 
+
+
+VOCê 
+
+'ESTÁ DENTRO DO SEU INDEX/FILTERED INDEX',
+
+
+
+AÍ O MONGODB VAI TIRAR VANTAGEM DISSO, E AÍ VOCê VAI SE BENEFICIAR DISSO COM:
+
+
+
+
+
+
+
+
+
+
+
+
+1) INDEX MENOR 
+
+
+
+
+
+
+2) MENOR IMPACTO COM 'writes' (Sped up)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> OK.. DE NOVO, TUDO ISSO DEPENDE DO APP QUE VOCÊ ESTÁ ESCREVENDO... ------> 
+
+
+
+
+
+
+
+
+
+
+
+VOCê TEM QUE AVALIAR SE VOCê VAI PRECISAR DE 1 'subset' de uma collection,
+E NÃO O CONTEÚDO 
+
+
+INTEIRO DE UMA COLLECITON  ------> SE VOCÊ VAI 'RETURN/QUERY EVERYTHING' de uma dada collection,
+
+
+
+AÍ 
+
+
+
+GERALMENTE NÃO SERÁ PRECISO USAR um 'partial index',
+
+PQ ELES NÃO FARÃO MT SENTIDO...

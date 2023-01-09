@@ -1,0 +1,740 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA, ANTES DE OLHARMOS MAIS ALGUNS INDEX TYPES SUPORTADOS PELO MONGODB,
+
+
+
+
+DEVEMOS VER '''COMO CONFIGURAR OS INDEX TYPES QUE JÁ CONHECEMOS''' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO,
+
+
+DEVEMOS NOVAMENTE DAR UMA OLHADA 
+
+
+
+em 
+
+1 única person,
+
+
+
+na nossa collection de 'persons2':
+
+
+
+
+
+
+
+
+
+
+{
+        "_id" : ObjectId("620c8cee53c75eb1f48892b5"),
+        "gender" : "female",
+        "name" : {
+                "title" : "miss",
+                "first" : "maeva",
+                "last" : "wilson"
+        },
+        "location" : {
+                "street" : "4962 36th ave",
+                "city" : "jasper",
+                "state" : "northwest territories",
+                "postcode" : "U0A 4J6",
+                "coordinates" : {
+                        "latitude" : "-31.6359",
+                        "longitude" : "111.3806"
+                },
+                "timezone" : {
+                        "offset" : "+9:00",
+                        "description" : "Tokyo, Seoul, Osaka, Sapporo, Yakutsk"
+                }
+        },
+        "email" : "maeva.wilson@example.com",
+        "login" : {
+                "uuid" : "8f2d499c-6a7e-4606-8c58-211fdb880c31",
+                "username" : "smallgoose815",
+                "password" : "weston",
+                "salt" : "TyL1q8hK",
+                "md5" : "bcedea61753320688ea27be01982556d",
+                "sha1" : "9e075df851fdaf292170d8e0a92c19ee37fba0f2",
+                "sha256" : "6f022405c6a384de3ab5cfc98cccdd97570e5b412046d05dfb79c23ae37612fa"
+        },
+        "dob" : {
+                "date" : "1962-08-11T20:51:07Z",
+                "age" : 56
+        },
+        "registered" : {
+                "date" : "2016-10-03T10:02:55Z",
+                "age" : 1
+        },
+        "phone" : "727-218-6012",
+        "cell" : "443-382-6538",
+        "id" : {
+                "name" : "",
+                "value" : null
+        },
+        "picture" : {
+                "large" : "https://randomuser.me/api/portraits/women/96.jpg",
+                "medium" : "https://randomuser.me/api/portraits/med/women/96.jpg",
+                "thumbnail" : "https://randomuser.me/api/portraits/thumb/women/96.jpg"
+        },
+        "nat" : "CA"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... 
+
+
+
+
+
+
+
+
+
+
+AGORA VAMOS CRIAR NOSSO PRÓPRIO 'UNIQUE INDEX'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> O index de '_id',
+
+
+
+QUE GANHAMOS 'OUT OF THE BOX'
+
+
+para 
+
+
+AQUELE FIELD DE 
+
+
+'_id: ObjectId("assaashsavzl1210i210asjoasjo")' 
+
+
+
+
+
+
+ACTUALLY SEMPRE É __ 'UNIQUE',
+
+
+POR DEFAULT... --> É UMA SETTING QUE O MONGODB TE DÁ.. -> ISSO ASSEGURA QUE VOCÊ 
+
+
+
+NÃO VAI CONSEGUIR 
+
+  
+  CRIAR OUTRO DOCUMENT COM O 
+
+  MESMO VALUE DE 'ObjectId()'
+
+
+
+
+  EM 1 MESMA COLLECTION....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> MAS VOCÊ TAMBÉM TERÁ CASOS,
+
+
+
+
+  REALMENTE,
+
+  EM QUE 
+
+  VOCê 
+
+
+  VAI QUERER TER ESSE BEHAVIOR DE 
+
+
+  'unique id' 
+
+
+
+  EM OUTROS FIELDS DE SEUS DOCUMENTS,
+
+
+
+  para outros propósitos...
+
+
+
+
+
+
+
+
+
+
+
+  --> É POR ISSO QUE PODEMOS '''ADICIONAR NOSSOS PRÓPRIOS UNIQUE INDEXES'''',
+
+
+
+
+  complementando aquele '_id' (que é o UNIQUE INDEX DEFAULT de seus documents)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> DIGAMOS QUE QUEREMOS USAR UM 'UNIQUE INDEX'
+
+  PARA 
+
+
+
+
+  O FIELD DE 'email',
+
+
+  nesses nossos documents (mas também poderíamos fazer a mesma coisa com  "login.uuid', esse field aí, se QUISÉSSEMOS).......
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> MAS VAMOS USAR ESSE ELEMENTO 'email' 
+
+  TOP-LEVEL... 
+
+
+
+
+
+
+
+
+
+
+
+
+  -> PROFESSOR CRIA UM INDEX 
+
+  top-level,
+
+
+
+  por meio da escrita 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  db.persons2.createIndex(
+      {
+          "email": 1
+      }
+  )
+
+
+
+
+
+
+
+
+
+
+  --> SERÁ 1 INDEX EM 'ASCENDING ORDER'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> E AÍ, DENTRO desse createIndex,
+
+
+  PARA 
+
+  CONSEGUIRMOS CRIAR UM 'UNIQUE INDEX',
+
+
+
+
+
+
+
+
+
+
+
+
+  PRECISAMOS PASSAR UM SEGUNDO PARÂMETRO ('{}')...
+
+
+
+
+
+
+
+
+  --> NESSE PARÂMETRO,
+
+
+
+
+
+  SERÁ FEITA A  _ _cONFIGURAÇÃO DESSE INDEX..
+
+
+
+
+
+
+
+
+
+  --> PROFESSOR ESCREVE 'unique: true'..
+
+
+
+
+
+
+
+
+
+
+
+
+  FICA TIPO ASSIM:
+
+
+
+   
+
+
+
+
+
+
+   db.persons2.createIndex(
+       {
+           "email": 1
+       },
+
+       {
+           unique: true
+       }
+   )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   -> SE ENVIAMOS ISSO AÍ,
+
+
+
+
+   GANHAMOS UM ___ ERROR__...
+
+
+
+
+
+
+
+
+
+   O ERROR É:
+
+
+
+
+
+
+
+   {
+        "ok" : 0,
+        "errmsg" : "Index build failed: 1b353266-45ab-46b5-9bc1-48a8a90185bd: Collection exemploPersons.persons2 ( 1477c334-143d-44c8-a864-86f8ec69ec7f ) :: caused by :: E11000 duplicate key error collection: exemploPersons.persons2 index: email_1 dup key: { email: \"abigail.clark@example.com\" }",
+        "code" : 11000,
+        "codeName" : "DuplicateKey",
+        "keyPattern" : {
+                "email" : 1
+        },
+        "keyValue" : {
+                "email" : "abigail.clark@example.com"
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+--> GANHAMOS UM ERROR DIZENDO QUE TEMOS UMA 'DUPLICATE KEY'....
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO SIGNIFICA QUE ISSO 'GENERALLY WORKED',
+
+
+
+
+
+MAS JÁ ENCONTROU UMA DUPLICATE KEY PARA 'abigail.clark@example.com'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> PODEMOS CONFIRMAR A RAZÃO DESSE ERROR com um run de find,
+
+tipo assim:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.persons2.find(
+    {
+        "email": "abigail.clark@example.com"
+    }
+).count()
+
+
+
+
+
+
+
+
+
+
+
+
+--> GANHAMOS '2' 
+
+
+de return,
+
+o que significa que temos 2 DOCUMENTS 
+
+
+
+com 1 mesmo 'email'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> 
+
+
+
+
+
+
+
+2 PERSONS COM ESSE EMAIL... --> E ISSO JÁ É UMA VANTAGEM DO 'UNIQUE INDEX' --> NÓS JÁ VAMOS GANHAR UM 
+
+
+WARNING 
+
+
+
+
+
+
+DESSES 
+
+SE QUEREMOS ADICIONAR UM INDEX,
+
+
+OU SE JÁ TÍNHAMOS UM INDEX NO LUGAR E ENTÃO 
+
+
+
+'''TENTAMOS ADICIONAR UM DOCUMENT COM UM VALUE QUE 
+
+JÁ EXISTE NESSA KEY, EM OUTRO DOCUMENT, NA COLLECTION''''...
+
+
+(
+
+aí ganharíamos um error nessa insert operation, no caso...
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO SIGNIFICA QUE 
+
+UNIQUE INDEXES PODEM TE AJUDAR, COMO DESENVOLVEDOR,
+
+
+
+A GARANTIR 
+
+
+
+
+
+
+'''DATA CONSISTENCY''',
+
+E 
+
+
+A __ EVITAr__ DATA DUPLICADA PARA FIELDS__ QUE VOCê QUER QUE SEJAM 100% UNIQUE ENTRE DOCUMENTS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+_id --> É UNIQUE, POR DEFAULT....
+
+
+
+
+
+
+
+
+
+
+
+MAS AÍ VOCÊ TERÁ ALGUNS USE CASES,
+
+COMO ESSE 'email',
+
+
+
+EM QUE 
+
+
+
+VOCê 
+
+
+
+
+PODE USAR 
+
+
+o UNIQUE INDEX ('unique: true') PARA 
+
+
+
+NÃO SÓ 
+
+'SPEED UP YOUR FIND QUERIES',
+
+MAS 
+
+
+PARA 
+
+
+GARANTIR 
+
+QUE 
+
+VOCÊ TERÁ
+ UNIQUE VALUES PARA ESSE FIELD ESPECÍFICO, PARA ESSA COLLECTION....

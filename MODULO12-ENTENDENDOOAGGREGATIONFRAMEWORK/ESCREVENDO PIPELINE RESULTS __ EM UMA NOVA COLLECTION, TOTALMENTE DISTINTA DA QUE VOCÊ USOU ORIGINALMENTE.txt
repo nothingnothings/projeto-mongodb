@@ -1,0 +1,557 @@
+
+
+
+
+
+
+
+
+
+
+
+
+O PROFESSOR VOLTA ÀQUELA PIPELINE 
+
+
+
+DE 
+
+
+'geojson'
+
+
+QUE CONSTRUÍMOS MAIS CEDO....
+
+
+
+
+
+
+
+
+
+
+
+
+ELA TINHA ESTA ESTRUTURA:
+
+
+
+
+
+
+
+
+
+
+
+db.persons
+  .aggregate([
+    {
+      $project: {
+        _id: 0,
+        gender: 1,
+        personAge: '$dob.age',
+        'date of birth': { $toDate: '$dob.date' },
+        fullName: {
+          $concat: [
+            { $toUpper: { $substrCP: ['$name.first', 0, 1] } },
+            {
+              $substrCP: [
+                '$name.first',
+                1,
+                { $subtract: [{ $strLenCP: '$name.first' }, 1] },
+              ],
+            },
+            ' ',
+            { $toUpper: { $substrCP: ['$name.last', 0, 1] } },
+            {
+              $substrCP: [
+                '$name.last',
+                1,
+                { $subtract: [{ $strLenCP: '$name.first' }, 1] },
+              ],
+            },
+          ],
+        },
+
+        location: {
+          type: 'Point',
+          coordinates: [
+            { $toDouble: '$location.coordinates.longitude' },
+            { $toDouble: '$location.coordinates.latitude' },
+          ],
+        },
+      },
+    },
+    {
+      $group: {
+        _id: {
+          birthYear: { $isoWeekYear: '$date of birth' },
+        },
+      },
+    },
+  ])
+  .pretty(); 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  -----> ESSA PIPELINE VAI NOS 
+
+
+
+  RETORNAR 'PERSONS' 
+
+  de um 
+
+  modo reestruturado,
+
+
+
+
+  forma diferente,
+
+
+
+
+  em que 
+
+
+
+  TAMBÉM TEREMOS AS 'LOCATION'...
+
+
+
+
+
+
+
+
+
+
+
+  -> BEM, SE QUEREMOS 
+
+
+  USAR ESSA LOCATION
+
+
+
+
+
+
+  DENTRO DE NOSSA PIPELINE,
+
+
+
+
+  FALHAREMOS.... --> não podemos 
+
+
+  usar 
+
+
+
+  A PRÓPRIA DATA QUE 
+
+  SERÁ 
+
+  RETRIEVADA DA PIPELINE DENTRO DA PRÓPRIA PIPELINE... 
+
+
+
+
+
+
+
+
+
+
+
+
+  --> NA VERDADE, NÓS __TEMOS __ UMA PIPELINE STAGE USADA PARA 
+
+  TRABALHAR COM 'GEOJSON DATA',
+
+
+
+
+
+
+  MAS ESSE STAGE SEMPRE DEVE VIR __ PRIMEIRO __ NA NOSSA PIPELINE,
+
+
+
+  PARA TIRAR VANTAGEM DE 'INDEXES' --->  
+
+
+
+
+
+
+
+
+  OK, MAS O QUE PODEMOS FAZER PARA 
+
+
+  USAR ESSA 
+
+  DATA QUE 
+
+
+  VAMOS CRIAR DENTRO DE NOSSA PRÓPRIA PIPELINE? 
+
+
+
+
+
+
+
+
+
+
+-> BEM, A BOA NOTÍCIa
+
+É QUE VOCÊ PODE PEGAR 
+
+OS RESULTADOS DE UMA PIPELINE E ENTÃO OS EMBUTIR/ADICIONAR A UMA NOVA COLLECTION... ----> e é claro que 
+
+VOCÊ 
+
+SEMPRE PODE FAZER 
+
+
+
+ISSO,
+
+
+COM QUALQUER TIPO DE DATA,
+
+E NÃO SÓ 
+
+
+
+GEOJSON DATA...
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO,
+
+
+VOCÊ PRECISA DEFINIR UM OUTRO PIPELINE STAGE,
+
+
+QUE 
+
+SERÁ 
+
+O 
+
+'{
+    $out: 
+}
+' ,
+
+
+
+
+
+
+
+
+
+
+
+
+É O STAGE DE 'output',
+
+essencialmente...
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESSE STAGE VAI PEGAR O  RESULT DE SUA OPERATION E VAI 
+
+
+
+
+A ARMAZENAR EM UMA COLLECTION..... PODE SER UMA COLLECTION QUE JÁ EXISTE,
+
+
+OU ENTÃO 
+
+CRIARÁ UMA NOVA COLLECTION... 
+
+
+
+
+
+
+
+
+
+
+--> professor vai usar o nome de 'transformedPersons'...
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+`
+{
+    out: "transformedPersons'
+}
+
+'
+
+
+
+
+
+
+
+
+
+
+
+--> AÍ NOSSA QUERY/PIPELINE INTEIRA FICA ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.persons.aggregate([
+    {
+      $project: {
+        _id: 0,
+        gender: 1,
+        personAge: '$dob.age',
+        'date of birth': { $toDate: '$dob.date' },
+        fullName: {
+          $concat: [
+            { $toUpper: { $substrCP: ['$name.first', 0, 1] } },
+            {
+              $substrCP: [
+                '$name.first',
+                1,
+                { $subtract: [{ $strLenCP: '$name.first' }, 1] },
+              ],
+            },
+            ' ',
+            { $toUpper: { $substrCP: ['$name.last', 0, 1] } },
+            {
+              $substrCP: [
+                '$name.last',
+                1,
+                { $subtract: [{ $strLenCP: '$name.first' }, 1] },
+              ],
+            },
+          ],
+        },
+
+        location: {
+          type: 'Point',
+          coordinates: [
+            { $toDouble: '$location.coordinates.longitude' },
+            { $toDouble: '$location.coordinates.latitude' },
+          ],
+        },
+      },
+    },
+    {
+      $group: {
+        _id: {
+          birthYear: { $isoWeekYear: '$date of birth' },
+        },
+      },
+    },
+    {
+      $out: 'transformedData',
+    },
+  ]).pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> E ISSO DEU CERTO:
+
+
+
+
+  persons
+transformedData
+
+
+
+
+
+
+
+
+
+
+
+> db.transformedData.find({})
+{ "_id" : { "birthYear" : NumberLong(1953) } }
+{ "_id" : { "birthYear" : NumberLong(1979) } }
+{ "_id" : { "birthYear" : NumberLong(1991) } }
+{ "_id" : { "birthYear" : NumberLong(1968) } }
+{ "_id" : { "birthYear" : NumberLong(1982) } }
+{ "_id" : { "birthYear" : NumberLong(1951) } }
+{ "_id" : { "birthYear" : NumberLong(1969) } }
+{ "_id" : { "birthYear" : NumberLong(1986) } }
+{ "_id" : { "birthYear" : NumberLong(1976) } }
+{ "_id" : { "birthYear" : NumberLong(1984) } }
+{ "_id" : { "birthYear" : NumberLong(1966) } }
+{ "_id" : { "birthYear" : NumberLong(1944) } }
+{ "_id" : { "birthYear" : NumberLong(1978) } }
+{ "_id" : { "birthYear" : NumberLong(1949) } }
+{ "_id" : { "birthYear" : NumberLong(1983) } }
+{ "_id" : { "birthYear" : NumberLong(1973) } }
+{ "_id" : { "birthYear" : NumberLong(1962) } }
+{ "_id" : { "birthYear" : NumberLong(1972) } }
+{ "_id" : { "birthYear" : NumberLong(1954) } }
+{ "_id" : { "birthYear" : NumberLong(1996) } }
+
+
+
+
+
+
+
+
+
+
+----------------------------
+
+
+
+
+
+
+
+
+
+
+
+---> OK... ESSA É UMA FEATURE QUE PODE SER ÚTIL, OCASIONALMENTE...
+
+
+
+
+
+
+
+
+
+
+
+--> O OPERATOR DE '$out' 
+
+
+
+
+
+
+
+
+É GREAT QUANDO VOCê PRECISA 
+
+
+
+
+TER UMA PIPELINE EM QUE 
+
+
+VOCÊ VAI 'FUNNEL' SEUS RESULTS DIRETAMENTE A UMA NOVA COLLECTION ---> 
+
+
+
+
+
+
+
+
+
+
+
+RESUMINDO:
+
+
+
+
+GERALMETNE VOCÊ VAI QUERER USAR O AGGREGATE E JÁ FETCHEAR SUA DATA,
+
+
+
+MAS 
+
+QUANDO VOCÊ PRECISA,
+VOCÊ 
+
+PODE ARMAZENAR 
+
+
+ESSA DATA EM UMA COLLECTION, POR MEIO DE 'out'...

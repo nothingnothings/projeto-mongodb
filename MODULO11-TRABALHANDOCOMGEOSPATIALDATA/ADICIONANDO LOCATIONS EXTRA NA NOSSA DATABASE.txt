@@ -1,0 +1,442 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> NA ÚLTIMA LIÇÃO,
+
+
+
+
+
+
+RESPONDEMOS, POR MEIO DESTA QUERY:
+
+
+
+
+
+
+
+
+
+
+db.places.find({
+  location: {
+    $near: {
+      $geometry: {
+        type: 'Point',
+        coordinates: [-52.5466813, -27.724483256429384],
+      },
+      $maxDistance: 500000000,
+      //$minDistance: xxxxx
+    },
+  },
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+A PERGUNTA 
+
+
+
+'
+QUAL POINTS ESTÃO PRÓXIMOS DE NOSSA LOCATION?' 
+
+
+
+
+
+
+
+
+
+
+--> MAS OUTRA QUESTÃO COMUM QUE SEUS APPS/USERS DE SEUS APPS 
+
+VÃO PERGUNTAR É 
+
+
+''''hey,
+
+
+
+
+EU TENHO _ ESSA ÁREA__ AQUI (pode ser uma esfera, um polígono, etc),
+
+
+
+
+
+
+EU QUERO SABER ___QUAIS POINTS__ FICAM __ DENTRO DESSA ÁREA (locations, restaurantes, bares, etc)....''''
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> ESSA É OUTRA PERGUNTA TÍPICA feita em apps --------------> para responder isso,
+
+
+
+
+
+
+
+
+DEVEMOS ADICIONAR MAIS ALGUNS POINTS NA NOSSA DATABASE....
+
+
+
+
+
+
+
+
+
+
+
+---------> ADICIONAMOS MAIS ALGUMAS LOCATIONS....
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+37.770412230737094, -122.49182600352387
+
+
+
+
+
+
+
+37.76978923166615, -122.48956963050625
+
+
+
+
+
+
+
+
+
+
+
+
+OK, ADICIONAMOS ASSIM:
+
+
+
+
+
+
+
+
+
+db.places.insertMany(
+    [
+        {
+            name: "Flowers", location: {
+                type: "Point",
+                coordinates: [
+                    -122.49182600352387, 37.770412230737094
+                ]
+            }
+        },
+        {
+            name: "Stones", location: {
+                type: "Point",
+                coordinates: [
+                    -122.48956963050625, 37.76978923166615
+                ]
+            }
+        }
+
+
+
+    ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> OK.... ADICIONAMOS ESSAS 2 COISAS...
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+ db.places.insertMany([
+...   {
+...     name: 'Flowers',
+...     location: {
+...       type: 'Point',
+...       coordinates: [-122.49182600352387, 37.770412230737094],
+...     },
+...   },
+...   {
+...     name: 'Stones',
+...     location: {
+...       type: 'Point',
+...       coordinates: [-122.48956963050625, 37.76978923166615],
+...     },
+...   },
+... ]);
+{
+        "acknowledged" : true,
+        "insertedIds" : [
+                ObjectId("62125201279681a0f040fbe7"),
+                ObjectId("62125201279681a0f040fbe8")
+        ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+--------> OBS: a url de seu browser vai sempre refletir o EXATO CENTRO DE SUA TELA (as coordenadas)....
+
+
+
+
+
+
+(
+
+    basta mexer um pouco o mapa,
+    para ver que as coordenadas mudam...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> VAMOS COLOCAR MAIS UM QUARTO LUGAR, LUGAR QUE EXISTIRÁ
+ 
+
+
+
+ EM UM LUGAR BEM LONGE...
+
+
+
+
+
+ ex;
+
+
+
+
+
+
+
+
+ db.places.insertOne(
+     {
+         name: "Adriano",
+         location: {
+             type: "Point",
+             coordinates: [
+                 -2.6016748434018884, 54.990021587207075
+             ]
+         }
+     }
+ )
+
+
+
+
+
+
+
+ -----------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+ OK.... 4 DIFERENTES LUGARES, COM 4 DIFERENTES COORDINATES....
+
+
+
+
+
+
+
+
+ EX:
+
+
+
+
+
+
+
+
+
+
+
+ {
+        "_id" : ObjectId("6211d26f4bf425539a521037"),
+        "name" : "California Academy of Sciences",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -122.4757474,
+                        37.7689999
+                ]
+        }
+}
+{
+        "_id" : ObjectId("62125201279681a0f040fbe7"),
+        "name" : "Flowers",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -122.49182600352387,
+                        37.770412230737094
+                ]
+        }
+}
+{
+        "_id" : ObjectId("62125201279681a0f040fbe8"),
+        "name" : "Stones",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -122.48956963050625,
+                        37.76978923166615
+                ]
+        }
+}
+{
+        "_id" : ObjectId("621252ab279681a0f040fbe9"),
+        "name" : "Adriano",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -2.6016748434018884,
+                        54.990021587207075
+                ]
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+--> NA PRÓXIMA LIÇÃO,
+
+VAMOS 
+
+RODAR ESSA QUERY DE 
+
+
+
+'''QUANTOS DESSES PLACES EXISTEM DENTRO DESSA ÁREA ESPECÍFICA''' (range...)

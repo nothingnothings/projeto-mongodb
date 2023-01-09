@@ -1,0 +1,772 @@
+
+
+
+
+
+
+
+
+
+
+
+PROFESSOR EXPLICA QUE, PARA O 'DELETE',
+
+
+ele tem que REALIZAR 2 DIFERNETS 
+
+
+
+ETAPAS.. (tvz seja por isso que meu código não funcionou...)
+
+
+
+
+
+
+
+
+
+
+
+MEU CÓDIGO, NO MOMENTO, ESTAVA ASSim:
+
+
+
+
+
+
+
+
+
+
+router.patch('/:id', (req, res, next) => {
+  const db = getDb().db();
+
+  const updatedProduct = {
+    name: req.body.name,
+    description: req.body.description,
+    price: parseFloat(req.body.price),
+    image: req.body.iamge,
+  };
+  console.log(updatedProduct);
+
+  db.collection('products')
+    .updateOne({ _id: req.params.id }, updatedProduct)
+    .then((result) => {
+      res
+        .status(200)
+        .json({ message: 'Product updated', productId: result.insertedId });
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> QUANDO CLICAMOS em 'update',
+
+
+
+
+UM REQUEST SERÁ 
+
+
+
+
+ENVIADO À ROUTE DE 'router.patch'...
+
+
+
+
+
+
+
+
+
+
+
+--> OK, MAS PRECISO DE UM CÓDIGO QUE UPDATE 
+
+
+
+ESSE NEGÓCIO NA NOSSA DATABASE.. --> RODAMOS 'updateOne',
+
+
+
+e aí passamos o id encodado no 'request url' --> ou seja, em 'req.params.id'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA UPDATAR,
+
+
+
+
+PROFESSOR 
+
+USA 
+
+O
+ 
+
+
+ '$set'
+
+ PARA DEFINIR A LÓGICA 
+
+ QUE 
+
+ QUER EXECUTAR NESSE NEGÓCIO.... (
+
+
+
+
+
+   opsss.... não fiz isso, ou seja,
+
+
+
+   fiz coisas erradas....
+ )
+
+
+
+
+
+
+
+
+ FICOU TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+
+ router.patch('/:id', (req, res, next) => {
+  const db = getDb().db();
+
+  const updatedProduct = {
+    name: req.body.name,
+    description: req.body.description,
+    // price: parseFloat(req.body.price),
+    price: req.body.price,
+    image: req.body.iamge,
+  };
+  console.log(updatedProduct);
+
+  db.collection('products')
+    .updateOne(
+      { _id: req.params.id },
+
+      {
+        $set: {
+          name: updatedProduct.name,
+          description: updatedProduct.description,
+          price: NumberDecimal.fromString(updatedProduct.price.toString()),
+        },
+      }
+    )
+    .then((result) => {
+      res
+        .status(200)
+        .json({ message: 'Product updated', productId: result.insertedId });
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OPS, MAS ESQUECI A IMAGEURl....
+
+
+
+
+
+
+
+
+
+
+
+--> MAS O PROFESSOR ESCREVE UMA FORMA AINDA MAIS SUCINTA, TIPO ASSIM:
+
+
+
+
+
+  const updatedProduct = {
+    name: req.body.name,
+    description: req.body.description,
+    // price: parseFloat(req.body.price),
+    price: Decimal128.fromString(req.body.price.toString()),
+    image: req.body.iamge,
+  };
+  console.log(updatedProduct);
+
+  db.collection('products')
+    .updateOne(
+      { _id: req.params.id },
+
+      {
+        $set: {
+ updatedProduct
+        },
+      }
+    )
+
+
+
+
+
+
+
+
+    --------------------------
+
+
+
+
+
+
+
+
+
+
+
+    AGORA VEJAMOS SE ESSE CÓDIGO FUNCIONA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+REINICIAMOS O BACKEND SERVER,
+
+
+E AÍ 
+
+TENTAMOS fazer isso...
+
+
+
+
+
+
+
+
+
+
+
+--> SE CLICAMOS 
+
+
+UPDATE PRODUCT,
+
+
+NÃO CONSEGUIMOS MUDANÇA ALGUMA....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> MAS SE EXAMINARMOS NOSSA DATABASE,
+
+
+VEREMOS ALGO ESTRNAHO:
+
+
+
+
+
+
+
+
+
+TERÁ SIDO ADICIONADO/INCORPORADO 
+
+
+
+
+
+UM OBJETO 'updatedProduct'
+
+
+
+DENTRO DO NOSSO PRODUCT,
+
+
+
+
+com toda aquela data... --> MAS 
+
+
+PQ ISSO ACONTECEU?
+
+
+
+
+
+
+
+
+É PQ 
+
+
+
+
+O JEITO QUE EU ESCREVI MEU CÓDIGO DE '$set'
+
+
+FOI BASICAMENTE TRADUZIDO PARA FICAR ASSIM:
+
+
+
+
+
+
+$set: {
+  updatedProduct: updatedProduct
+}
+
+
+
+
+
+
+
+
+
+
+
+--> e o que eu queria era O _ SPREAD__ das propriedades desse 'updatedProduct',
+
+por isso vou USAR O SPREAD OPERATOR, AQUI...
+
+
+
+
+
+ex:
+
+
+
+
+
+$set: {
+  ...updatedProduct
+}
+
+
+
+
+
+
+
+-----------------------------------
+
+
+
+
+
+
+
+UMA ALTERNATIVA A ISSO É SÓ ESCREVER ASSIM;
+
+
+
+
+'''
+$set: updatedProduct
+
+
+''''
+
+
+
+
+
+
+
+
+
+MAS AINDA ESTOU RECEBENDO ERRO DE CORS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> OK.... O DELETE EU JÁ ACERTEI,
+
+FIZ TIPO ASSIM:
+
+
+
+
+
+
+
+router.delete('/:id', (req, res, next) => {
+  const db = getDb().db();
+
+  db.collection('products')
+    .deleteOne({ _id: ObjectId(req.params.id) })
+    .then((result) => {
+      console.log(result);
+      res.status(200).json({ message: 'Product deleted.' });
+    })
+    .catch((err) => {
+      res.status(300).json({ message: 'Deleting failed.' });
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> TENHO QUE CONSERTAR ESSE NEGÓCIO DO 
+
+CORS...
+
+
+
+
+
+
+
+
+
+
+--> será que a razão é porque esqueci um '/' 
+
+no send do request?
+
+
+
+
+
+
+
+
+
+
+
+
+talvez...
+
+
+
+
+
+
+
+
+
+--> ERA REALMENTE ISSO....
+
+
+
+
+
+
+
+
+--> ah, e essa sintaxe aqui:
+
+
+
+
+
+
+
+
+      {
+        $set: {
+          name: updatedProduct.name,
+          description: updatedProduct.description,
+          price: NumberDecimal.fromString(updatedProduct.price.toString()),
+          image: updatedProduct.image
+        },
+      }
+
+
+
+
+
+
+
+
+
+
+
+
+      --> NÃO FUNCIONA.... --> o document não está sendo updatado...
+
+
+
+
+
+
+
+
+
+      --> era pq estava faltando o 'ObjectId()"....
+
+
+
+
+
+
+
+
+
+
+      -> aGORA QUE CONSERTEI ISSO,
+
+
+
+      tudo está funcionando, dessas crud operations...
+
+
+
+
+
+
+
+
+
+
+
+  ----> certo....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  -> o professor muda o comportamento do react para updatar o negóccio....
+
+
+
+
+
+
+
+
+
+
+  --> ele faz o outsource 
+
+
+
+DO CÓDIGO DENTRO DE 'componentDidMount()',
+
+
+
+
+
+
+
+
+PARA QUE ELE SE TORNE UMA FUNÇÃO 
+
+
+'this.fetchData()'....
+
+
+
+
+
+
+--> ESSA FUNCTION DE 'this.fetchData()'
+
+
+DEVE 
+
+
+SER 
+EXECUTADA 
+
+
+
+tanto no 'componentDidMount'
+
+
+
+como 
+
+no 
+
+
+'deleteProductHandler'...
+
+
+
+
+
+
+
+
+
+(
+  mas o meu approach tbm funciona, e é totalmente válido...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, AGORA PODEMOS 
+
+
+
+
+
+FAZER:
+
+
+
+
+
+
+
+1) ADD DE PRODUCT 
+
+
+
+2 )DELETE DE PRODUCT 
+
+
+
+3) FETCH DE 1 SINGLE PRODUCT 
+
+
+
+
+4) FETCH DE ALL PRODUCTS....
+
+
+
+
+
+
+
+
+
+
+--> AGORA O PROFESSOR QUER NOS MOSTRAR COMO PODEMOS ADICIONAR PAGINATION,
+
+ANTES DE ADICIONAR USER AUTH AO NOSSO APP...

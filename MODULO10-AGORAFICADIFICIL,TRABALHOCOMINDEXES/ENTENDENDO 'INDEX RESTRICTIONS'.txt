@@ -1,0 +1,981 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... DEMOS UMA OLHADA NO NOSSO PRIMEIRO INDEX, QUE FOI CRIADO COM O CÓDIGO DE 
+
+
+
+
+
+
+
+db.persons2.createIndex({"dob.age": 1}),
+
+
+
+
+
+
+
+
+
+
+
+E QUE RETORNOU ESTE CÓDIGO DE RESULTADO:
+
+
+
+
+
+
+
+
+
+
+> db.persons2.createIndex(
+...         {
+...                 "dob.age": 1
+...         }
+... )
+{
+        "numIndexesBefore" : 1,
+        "numIndexesAfter" : 2,
+        "createdCollectionAutomatically" : false,
+        "ok" : 1
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> QUANDO EXECUTAMOS 'find' com 'explain',
+
+
+
+
+
+
+OBTIVEMOS ESTE RESULTADO:
+
+
+
+
+
+
+
+
+
+> db.persons2.explain("executionStats").find(         {                 "dob.age": {$gt: 60}         } )
+{
+        "explainVersion" : "1",
+        "queryPlanner" : {
+                "namespace" : "exemploPersons.persons2",
+                "indexFilterSet" : false,
+                "parsedQuery" : {
+                        "dob.age" : {
+                                "$gt" : 60
+                        }
+                },
+                "maxIndexedOrSolutionsReached" : false,
+                "maxIndexedAndSolutionsReached" : false,
+                "maxScansToExplodeReached" : false,
+                "winningPlan" : {
+                        "stage" : "FETCH",
+                        "inputStage" : {
+                                "stage" : "IXSCAN",
+                                "keyPattern" : {
+                                        "dob.age" : 1
+                                },
+                                "indexName" : "dob.age_1",
+                                "isMultiKey" : false,
+                                "multiKeyPaths" : {
+                                        "dob.age" : [ ]
+                                },
+                                "isUnique" : false,
+                                "isSparse" : false,
+                                "isPartial" : false,
+                                "indexVersion" : 2,
+                                "direction" : "forward",
+                                "indexBounds" : {
+                                        "dob.age" : [
+                                                "(60.0, inf.0]"
+                                        ]
+                                }
+                        }
+                },
+                "rejectedPlans" : [ ]
+        },
+        "executionStats" : {
+                "executionSuccess" : true,
+                "nReturned" : 1222,
+                "executionTimeMillis" : 1,
+                "totalKeysExamined" : 1222,
+                "totalDocsExamined" : 1222,
+                "executionStages" : {
+                        "stage" : "FETCH",
+                        "nReturned" : 1222,
+                        "executionTimeMillisEstimate" : 0,
+                        "works" : 1223,
+                        "advanced" : 1222,
+                        "needTime" : 0,
+                        "needYield" : 0,
+                        "saveState" : 1,
+                        "restoreState" : 1,
+                        "isEOF" : 1,
+                        "docsExamined" : 1222,
+                        "alreadyHasObj" : 0,
+                        "inputStage" : {
+                                "stage" : "IXSCAN",
+                                "nReturned" : 1222,
+                                "executionTimeMillisEstimate" : 0,
+                                "works" : 1223,
+                                "advanced" : 1222,
+                                "needTime" : 0,
+                                "needYield" : 0,
+                                "saveState" : 1,
+                                "restoreState" : 1,
+                                "isEOF" : 1,
+                                "keyPattern" : {
+                                        "dob.age" : 1
+                                },
+                                "indexName" : "dob.age_1",
+                                "isMultiKey" : false,
+                                "multiKeyPaths" : {
+                                        "dob.age" : [ ]
+                                },
+                                "isUnique" : false,
+                                "isSparse" : false,
+                                "isPartial" : false,
+                                "indexVersion" : 2,
+                                "direction" : "forward",
+                                "indexBounds" : {
+                                        "dob.age" : [
+                                                "(60.0, inf.0]"
+                                        ]
+                                },
+                                "keysExamined" : 1222,
+                                "seeks" : 1,
+                                "dupsTested" : 0,
+                                "dupsDropped" : 0
+                        }
+                }
+        },
+        "command" : {
+                "find" : "persons2",
+                "filter" : {
+                        "dob.age" : {
+                                "$gt" : 60
+                        }
+                },
+                "$db" : "exemploPersons"
+        },
+        "serverInfo" : {
+                "host" : "DESKTOP-V43A7S1",
+                "port" : 27017,
+                "version" : "5.0.6",
+                "gitVersion" : "212a8dbb47f07427dae194a9c75baec1d81d9259"
+        },
+        "serverParameters" : {
+                "internalQueryFacetBufferSizeBytes" : 104857600,
+                "internalQueryFacetMaxOutputDocSizeBytes" : 104857600,
+                "internalLookupStageIntermediateDocumentMaxSizeBytes" : 104857600,
+                "internalDocumentSourceGroupMaxMemoryBytes" : 104857600,
+                "internalQueryMaxBlockingSortMemoryUsageBytes" : 104857600,
+                "internalQueryProhibitBlockingMergeOnMongoS" : 0,
+                "internalQueryMaxAddToSetBytes" : 104857600,
+                "internalDocumentSourceSetWindowFieldsMaxMemoryBytes" : 104857600
+        },
+        "ok" : 1
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NESSE RESULT VIMOS QUE 
+
+
+A NOSSA QUERY FOI 'SPED UP' --> E NOSSA QUERY FOI ACELERADA/SPED UP __ PARA TODAS AQUELAS PESSOAS COM AGE MAIOR DO QUE '60'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> MAS O PROFESSOR DIZ QUE _ ALGO INTERESSANTE ACONTECERÁ 
+
+SE ALTERARMOS NOSSA QUERY,
+
+
+
+
+
+FAZERMOS ELA PROCURAR 
+
+
+
+
+POR '''AGE MAIOR DO QUE 20'.....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+> db.persons2.explain("executionStats").find(         {                 "dob.age": {$gt: 20}         } )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE RODAMOS ESSA QUERY, ELA AINDA VAI SER SUPER RÁPIDA,
+
+
+
+
+
+
+
+
+MAS PERCEBEREMOS QUE 
+
+
+
+
+
+
+'''NÃO TEREMOS/TEMOS NENHUMA PERSON NA NOSSA COLLECTION QUE TEM UMA AGE MENOR DO QUE 20''''
+
+
+
+
+(ISSO SIGNIFICA QUE _ _TODOS __ OS DOCUMENTS SERÃO RETORNADOS, PQ TODOS ELES SÃO MAIORES DO QUE 20)....
+
+
+
+
+
+
+
+
+
+
+---> OBSERVAMOS OS 'executionStats':
+
+
+
+
+
+
+
+
+
+
+
+  "executionStats" : {
+                "executionSuccess" : true,
+                "nReturned" : 5000,
+                "executionTimeMillis" : 5,
+                "totalKeysExamined" : 5000,
+                "totalDocsExamined" : 5000,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    --> COMO VOCÊ PODE VER,
+
+
+
+
+
+    TODAS AS PESSOAS SÃO MAIORES DO QUE 20..... ---->  COMO TODOS MATCHEARAM A QUERY,
+
+
+    TODOS SÃO FETCHEADOS..
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E VOCê PERCEBE, LÁ EM 'executionTimeMillis',
+
+
+
+
+QUE O EXECUTION TIME FOI DE '12'....  -------> OU SEJA, PERCEBEMOS QUE O 
+
+
+
+TEMPO PARA ESSE FETCH __ FOI BEM SUPERIOR __àQUELA 
+
+
+
+
+QUERY EM QUE PROCURAMOS POR 'documents com age maior do que 60'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> MAS UMA COISA INTERESSANTE ACONTECERÁ __ SE NOS __ LIVRARMOS__ DESSE INDEX QUE CRIAMOS ANTES...
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> PARA ISSO,
+
+
+VOCÊ DEVE USAR 
+
+'db.persons2.dropIndex()'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> OK..... MAS SÓ ESSE CALL ACHO QUE NÃO VAI SURTIR EFEITO... ----> DENTRO DE 
+
+
+
+
+
+
+
+
+dropIndex(),
+
+
+DEVEMOS ESPECIFICAR EXATAMENTE O MESMO DOCUMENT QUE ESPECIFICAMOS/ESCREVEMOS 
+
+
+
+PARA CRIAR NOSSO INDEX, TIPO ASSIM:
+
+
+
+
+
+
+db.contacts.dropIndex(
+    {
+        "dob.age": 1 
+    }
+)
+
+
+
+
+
+
+
+
+ 
+
+
+--> ISSO VAI __ DELETAR/DROPPAR O NOSSO INDEX...
+
+
+
+
+
+
+
+
+A RESPOSTA DO MONGODB A ISSO SERÁ 
+
+
+{
+    "nIndexesWas: 2, "ok": 1
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> OK..... AÍ RODAMOS A MESMA QUERY DNV,
+
+aquela query de 
+
+
+
+
+db.persons2.explain("executionStats").find(         {                 "dob.age": {$gt: 20}         } )
+
+
+
+
+
+
+
+
+
+
+
+-----------> E O QUE VOCÊ DESCOBRIRÁ, AOGRA, É QUE O 'executionTimeMillis'
+
+
+
+
+VAI __ ACTUALLY_ SER SUPERIOR ÀQUELE DOS 
+
+
+
+
+
+
+
+
+INDEXES, do query que SE UTILIZOU DE 1 INDEX......... -------> A RAZÃO PARA ISSO TER SIDO MAIS RÁPIDO, NO CASO,
+
+
+
+É 
+
+
+_JUSTAMENTE__ O FATO __ DE QUE 'POUPAMOS' 
+
+
+O 
+
+
+MONGODB O TRABALHO DE 
+
+
+
+'''GO THROUGH THE INDEX''' (COISA built-in nele, mas que pode causar lentidão)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO QUER DIZER QUE SE VOCÊ 
+
+
+
+
+**** TEM UMA  QUERY QUE VAI _ RETORNAR _ UMA LARGA PORÇÃO/MAIORIA DE SEUS DOCUMENTS,
+
+
+
+
+AÍ 1 INDEX PODE 'ACTUALLY SER MAIS LENTO'... ------> PQ AÍ VOCÊ TERÁ UMA 'EXTRA STEP' PARA CONSEGUIR IR POR DENTRO 
+
+DE QUASE SUA LISTA  DE 'index' INTEIRA,
+
+
+
+E AÍ 
+
+
+VOCÊ AINDA TEM DE IR ATÉ A COLLECTION,
+ e aí 
+
+ fazer get de todos esses documents que você encontrou no 'index'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> ISSO PQ SE VOCê FIZER UM 'FULL COLLSCAN' (collection scan),
+
+
+
+
+
+ O PROCESSO __ PODE__ SER MAIS RÁPIDO... --> E __ CERTAMENTE, ___ 100%, 
+
+
+
+ SERÁ MAIS RÁPIDO,
+
+ SE VOCÊ 
+
+ TIVER QUE RETORNAR TODOS OS ELEMENTOS.... ------------>
+
+
+
+
+
+
+ MAS MESMO NOS CASOS EM QUE É APENAS 'A MAIORIA',
+
+ E NAÕ 
+
+ 'TODOS OS DOCUMENTS',
+
+
+
+ o 
+
+
+
+ 'COLLSCAN'
+
+
+ vai ser mais rápido do que o 'IXSCAN + FETCH'..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ resumindo:
+
+
+
+
+NÃO USE INDEXES QUANDO:
+
+
+
+
+
+
+1) no seu app você FREQUENTEMENTE VAI RETORNAR TODOS OS DOCUMENTS POR MEIO DESSE FIELD AÍ 
+
+
+
+
+2) NO SEU APP VOCê FREQUENTEMENTE RETORNARÁ _ A MAIORIA __ DOS DOCUMENTS POR MEIO DESSE FIELD AÍ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    ISSO ACONTECE PQ 
+--> COM UM 'FULL COLLECTION SCAN',
+
+ 
+
+
+
+
+ VOCê _ JÁ __ TEM TODOS ___ OS _ DOCUMENTS NA 'MEMORY' ------> e aí o index não vai te ajudar em nada,
+
+
+ pq 
+
+ ele 
+ É,
+
+
+ na verdade,
+
+ uma 
+
+
+ 
+
+ 'extra step'... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -------> EM VEZ DISSO, AQUI JÁ TEMOS TODOS OS DOCUMENTS NA MEMORY... --> vamos ter que ir por dentro desses documents 
+
+
+ DE QUALQUER FORMA,
+
+
+
+ PARA OS FETCHEAR (a partir dos pointers que os indexes nos dão)... ----> E COMO TEMOS NECESSIDADE DA GRANDE MAIORIA DOS DOCUMENTS,
+
+
+ LER TUDO 'DE UMA VEZ' e aí 
+
+ já 
+
+ ir 
+
+
+ fetcheando, sem recorrer aos indexes, é MAIS RÁPIDO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> ISSO QUER DIZER QUE SE VOCê TIVER QUERIES QUE FREQUENTEMENTE RETORNAM 'A MAIORIA' ou 'TODOS SEUS DOCUMENTS',
+
+
+
+
+
+
+
+
+ UM __ INDEX__ NÃO VAI TE AJUDAR EM NADA,
+
+  E VAI ATÉ MESMO 'SLOW DOWN THE EXECUTION'.... -----> E ISSO É IMPORTANTE DE SE TER EM MENTE....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ESSA É A PRIMEIRA RESTRICTION QUE VOCÊ TERÁ, NO SEU APP, quando o assunto é INDEXES....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> VOCÊ PRECISA SABER DISSO QUANDO PLANEJAR SUAS QUERIES...
+
+
+
+
+
+
+
+
+
+
+
+  -> SE VOCê TEM UM DATA SET EM QUE SUAS QUERIES FREQUENTEMENTE RETORNAM UMA FRAÇÃO DE SEUS DOCUMENTS,
+
+  como 
+
+  10% dos documents, 20%,
+
+
+  ou até menos,
+
+
+
+
+
+
+
+
+
+
+
+  AÍ __ OS 'INDEXES' VÃO QUASE 100% TE AJUDAR,
+
+
+
+  vão 
+
+
+
+  em quase todos os casos 'speed up' suas queries...
+
+
+
+
+
+
+
+
+
+
+
+
+  ----> SE VOCÊ TEM UM MONTE DE QUERIES QUE FAZEM RETURN DE QUASE TODOS OS DOCUMENTS/TODOS OS DOCUMENTS,
+
+
+
+  INDEXES NÃO VÃO PODER TE AJUDAR TANTO ASSIM.....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> E ISSO FAZ TOTAL SENTIDO, LOGICAMENTE:
+
+
+
+
+
+
+
+
+  PQ FAZ SENTIDO? 
+
+
+
+  PQ A FUNÇÃO DOS 
+
+
+
+
+  'INDEXES' É JUSTAMENTE TE AJUDAR A CHEGAR AO DOCUMENT ESPECÍFICO QUE VOCÊ DESEJA,
+
+
+  A 'narrow down',
+
+
+  UMA 
+
+
+  'NARROW SUBSET' 
+
+
+  de seu 
+
+
+  DOCUMENT LIST,
+
+
+
+  e não A MAIOR PARTE DA DOCUMENT LIST...

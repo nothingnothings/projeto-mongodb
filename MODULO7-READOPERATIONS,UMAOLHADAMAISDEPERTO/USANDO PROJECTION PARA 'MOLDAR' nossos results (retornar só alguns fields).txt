@@ -1,0 +1,1229 @@
+
+
+
+
+
+
+
+
+
+
+
+ANTERIORMENTE,
+
+LÁ NOS PRIMEIROS MÓDULOS,
+
+
+vimos que 
+
+
+
+
+
+
+find()
+
+
+
+
+POSSUI UM SEGUNOD PARÂMETRO,
+
+EM QUE ESPECIFICMAOS __ QUAIS FIELDS DAQUELE DOCUMENT QUEREMOS REALMENTE RETORNAR...
+
+
+
+
+
+
+
+
+EX:
+
+
+> db.movies.find({}, {runtime: 1})
+> use movieData
+switched to db movieData
+> db.movies.find({}, {runtime: 1})
+{ "_id" : ObjectId("62052b52d9ec2278a3f59325"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59326"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59327"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59328"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59329"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5932a"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5932b"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5932c"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5932d"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5932e"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5932f"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59330"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59331"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59332"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59333"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59334"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59335"), "runtime" : 50 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59336"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59337"), "runtime" : 25 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59338"), "runtime" : 60 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------------------------------
+
+
+
+
+
+
+
+
+
+
+
+-_> ISSO REALMENTE VAI RETORNAR 
+
+
+
+
+
+
+
+APENAS O FIELD/ OS FIELDS QUE DESEJAMOS....
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+> db.movies.find({}, {runtime: 1}).sort({runtime: -1}).forEach((doc) => {printjson(doc)})
+{ "_id" : ObjectId("62052b52d9ec2278a3f59368"), "runtime" : 120 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59369"), "runtime" : 120 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59325"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59326"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59327"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59328"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59329"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5932a"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5932b"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5932c"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5932d"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5932e"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5932f"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59330"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59331"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59332"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59333"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59334"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59338"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59339"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5933b"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5933c"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5933d"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5933e"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5933f"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59340"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59341"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59342"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59343"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59344"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59345"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59346"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59347"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59348"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5934b"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5934c"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5934d"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5934e"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5934f"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59350"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59351"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59352"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59353"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59354"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59355"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59357"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59358"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59359"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5935b"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5935d"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5935e"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5935f"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59360"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59361"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59362"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59364"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59365"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59366"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59367"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5936a"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5936b"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5936d"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5936e"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59370"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59373"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59376"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59377"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59378"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59379"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5937a"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5937b"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5937f"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59380"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59382"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59383"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59384"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59385"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59386"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59387"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59388"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59389"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5938a"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5938c"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5938e"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5938f"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59390"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59391"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59394"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59396"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59398"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59399"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5939d"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5939e"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593a1"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593a5"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593a7"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593b2"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593b3"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593b4"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593b5"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593b6"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593b7"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593b8"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593b9"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593ba"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593bb"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593bd"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593be"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593c0"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593c1"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593c2"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593c3"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593c4"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593c5"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593c6"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593c7"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593c8"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593ca"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593cd"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593ce"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593cf"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593d0"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593d1"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593d2"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593d3"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593d5"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593d6"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593d7"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593d8"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593d9"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593da"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593db"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593de"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593df"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593e0"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593e1"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593e2"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593e3"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593e4"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593e5"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593e6"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593e7"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593e8"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593e9"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593ea"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593eb"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593ec"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593ee"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593f0"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593f1"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593f2"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593f5"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593f6"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593f7"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593f8"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593f9"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593fa"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593fc"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593fe"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593ff"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59402"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59403"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59404"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59406"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59407"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59408"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5940a"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5940c"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5940d"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59410"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59412"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59413"), "runtime" : 60 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59335"), "runtime" : 50 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593bf"), "runtime" : 50 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593ef"), "runtime" : 45 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5937c"), "runtime" : 42 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59336"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5933a"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59349"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5934a"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59356"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5935a"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5935c"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59363"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5936c"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5936f"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59371"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59372"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59374"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59375"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5937d"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5937e"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59381"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5938b"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5938d"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59392"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59393"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59395"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59397"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5939a"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5939b"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5939c"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5939f"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593a0"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593a2"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593a3"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593a4"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593a6"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593a8"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593a9"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593aa"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593ab"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593ac"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593ad"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593ae"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593af"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593b0"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593b1"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593bc"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593c9"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593cb"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593cc"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593dc"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593dd"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593ed"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593f3"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593f4"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593fb"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593fd"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59400"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59401"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59405"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59409"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5940b"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5940e"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f5940f"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59411"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59414"), "runtime" : 30 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f59337"), "runtime" : 25 }
+{ "_id" : ObjectId("62052b52d9ec2278a3f593d4"), "runtime" : 25 }
+
+
+
+
+
+
+
+
+---------------------------------------------------
+
+
+
+
+
+OK... AGORA FINALMENTE ESTÁ FAZENDO MAIS SENTIDO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> APRENDEMOS MT SOBRE QUERYING,
+OPERATORS,
+
+
+E TAMBÉM SOBRE CURSORS....
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA DEVEMOS FALAR SOBRE COMO PODEMOS 'SHAPE' A DATA 
+
+QUE 
+
+
+GANHAMOS DE VOLTA,
+
+
+
+NO FORMATO 
+
+
+QUE QUEREMOS ....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> A MOVIEDATA QUE TEMOS 
+
+
+
+É MT EXTENSA,
+
+
+E CADA DOCUMENT TEM 
+
+
+
+MT MT MT DATA,
+
+
+um monte de redundant data transferida over the wire -->  É MAIS DIFÍCIL DE TRABALHAR COM ELA,
+
+
+SE TIVERMOS QUE 
+
+
+
+'work with all of that'..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> COM PROJECTION, PODEMOS CONTROLAR QUAIS PARTES DA DATA SÃO RETORNADAS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> DIGAMOS QUE SÓ TEMOS INTERESSE NOS: 
+
+
+
+
+1) name 
+
+
+2) genres 
+
+
+
+
+3) runtime 
+
+
+
+
+4) a rating...
+
+
+
+
+
+
+
+
+
+
+
+
+
+UM OBJECT/document 'movie' possui este formato:
+
+
+
+
+
+
+
+{
+        "_id" : ObjectId("62052b52d9ec2278a3f59338"),
+        "id" : 10,
+        "url" : "http://www.tvmaze.com/shows/10/grimm",
+        "name" : "Grimm",
+        "type" : "Scripted",
+        "language" : "English",
+        "genres" : [
+                "Drama",
+                "Crime",
+                "Supernatural"
+        ],
+        "status" : "Ended",
+        "runtime" : 60,
+        "premiered" : "2011-10-28",
+        "officialSite" : "http://www.nbc.com/grimm",
+        "schedule" : {
+                "time" : "20:00",
+                "days" : [
+                        "Friday"
+                ]
+        },
+        "rating" : {
+                "average" : 8.5
+        },
+        "weight" : 95,
+        "network" : {
+                "id" : 1,
+                "name" : "NBC",
+                "country" : {
+                        "name" : "United States",
+                        "code" : "US",
+                        "timezone" : "America/New_York"
+                }
+        },
+        "webChannel" : null,
+        "externals" : {
+                "tvrage" : 28352,
+                "thetvdb" : 248736,
+                "imdb" : "tt1830617"
+        },
+        "image" : {
+                "medium" : "http://static.tvmaze.com/uploads/images/medium_portrait/69/174906.jpg",
+                "original" : "http://static.tvmaze.com/uploads/images/original_untouched/69/174906.jpg"
+        },
+        "summary" : "<p><b>Grimm </b>is a drama series inspired by the classic Grimm Brothers' Fairy Tales. After Portland homicide detective Nick Burkhardt discovers he's descended from an elite line of criminal profilers known as \"Grimms\", he increasingly finds his responsibilities as a 
+detective at odds with his new responsibilities as a Grimm.</p>",
+        "updated" : 1531998068,
+        "_links" : {
+                "self" : {
+                        "href" : "http://api.tvmaze.com/shows/10"
+                },
+                "previousepisode" : {
+                        "href" : "http://api.tvmaze.com/episodes/1009811"
+                }
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... EU ACHO QUE O CÓDIGO FICARÁ ASSIM:
+
+
+
+
+
+
+
+
+
+
+> db.movies.find({}, {name: 1, genres: 1, runtime: 1, "ratings.average": 1}).forEach((doc) => {printjson(doc)}) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> _ QUASE__ DEU CERTO....  -----> só não deu totalmente certo pq 
+
+"ratings.average" NÃO FICOU COMO FIELD 
+
+NOS NOSSOS COISOS RETORNADOS...
+
+
+
+
+
+
+
+
+
+
+--> AGORA CONSEGUI... ERA UM MISTYPE: 
+
+
+é 'rating',
+
+e não 'ratings':
+
+
+
+
+
+
+EX:
+
+
+
+db.movies.find({}, {name: 1, genres: 1, runtime: 1, rating: 1}).limit(20).forEach((doc) => {printjson(doc)})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> RODO UM 'limit()',
+
+PARA LIMITAR A SEARCH APENAS A 20 ITEMS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+> db.movies.find({}, {name: 1, genres: 1, runtime: 1, rating: 1}).limit(20).forEach((doc) => {printjson(doc)})
+{
+        "_id" : ObjectId("62052b52d9ec2278a3f59325"),
+        "name" : "Under the Dome",
+        "genres" : [
+                "Drama",
+                "Science-Fiction",
+                "Thriller"
+        ],
+        "runtime" : 60,
+        "rating" : {
+                "average" : 6.5
+        }
+}
+{
+        "_id" : ObjectId("62052b52d9ec2278a3f59326"),
+        "name" : "Person of Interest",
+        "genres" : [
+                "Drama",
+                "Action",
+                "Crime"
+        ],
+        "runtime" : 60,
+        "rating" : {
+                "average" : 9
+        }
+}
+{
+        "_id" : ObjectId("62052b52d9ec2278a3f59327"),
+        "name" : "Bitten",
+        "genres" : [
+                "Drama",
+                "Horror",
+                "Romance"
+        ],
+        "runtime" : 60,
+        "rating" : {
+                "average" : 7.6
+        }
+}
+{
+        "_id" : ObjectId("62052b52d9ec2278a3f59328"),
+        "name" : "Arrow",
+        "genres" : [
+                "Drama",
+                "Action",
+                "Science-Fiction"
+        ],
+        "runtime" : 60,
+        "rating" : {
+                "average" : 7.6
+        }
+}
+{
+        "_id" : ObjectId("62052b52d9ec2278a3f59329"),
+        "name" : "Continuum",
+        "genres" : [
+                "Drama",
+                "Crime",
+                "Science-Fiction"
+        ],
+        "runtime" : 60,
+        "rating" : {
+                "average" : 8.2
+        }
+}
+{
+        "_id" : ObjectId("62052b52d9ec2278a3f5932a"),
+        "name" : "Constantine",
+        "genres" : [
+                "Drama",
+                "Action",
+                "Horror"
+        ],
+        "runtime" : 60,
+        "rating" : {
+                "average" : 7.4
+        }
+}
+{
+        "_id" : ObjectId("62052b52d9ec2278a3f5932b"),
+        "name" : "The Flash",
+        "genres" : [
+                "Drama",
+                "Action",
+                "Science-Fiction"
+        ],
+        "runtime" : 60,
+        "rating" : {
+                "average" : 8.1
+        }
+}
+{
+        "_id" : ObjectId("62052b52d9ec2278a3f5932c"),
+        "name" : "The Amazing Race",
+        "genres" : [
+                "Action",
+                "Adventure",
+                "Family"
+        ],
+        "runtime" : 60,
+        "rating" : {
+                "average" : 7.5
+        }
+}
+{
+        "_id" : ObjectId("62052b52d9ec2278a3f5932d"),
+        "name" : "Penny Dreadful",
+        "genres" : [
+                "Drama",
+                "Horror",
+                "Thriller"
+        ],
+        "runtime" : 60,
+        "rating" : {
+                "average" : 8.3
+        }
+}
+{
+        "_id" : ObjectId("62052b52d9ec2278a3f5932e"),
+        "name" : "Supernatural",
+        "genres" : [
+                "Drama",
+                "Action",
+                "Supernatural"
+        ],
+        "runtime" : 60,
+        "rating" : {
+                "average" : 8.4
+        }
+}
+{
+        "_id" : ObjectId("62052b52d9ec2278a3f5932f"),
+        "name" : "The Last Ship",
+        "genres" : [
+                "Drama",
+                "Action",
+                "Thriller"
+        ],
+        "runtime" : 60,
+        "rating" : {
+                "average" : 7.8
+        }
+}
+{
+        "_id" : ObjectId("62052b52d9ec2278a3f59330"),
+        "name" : "True Blood",
+        "genres" : [
+                "Drama",
+                "Romance",
+                "Supernatural"
+        ],
+        "runtime" : 60,
+        "rating" : {
+                "average" : 8
+        }
+}
+{
+        "_id" : ObjectId("62052b52d9ec2278a3f59331"),
+        "name" : "The Strain",
+        "genres" : [
+                "Drama",
+                "Horror",
+                "Thriller"
+        ],
+        "runtime" : 60,
+        "rating" : {
+                "average" : 7.6
+        }
+}
+{
+        "_id" : ObjectId("62052b52d9ec2278a3f59332"),
+        "name" : "Hawaii Five-0",
+        "genres" : [
+                "Drama",
+                "Action",
+                "Crime"
+        ],
+        "runtime" : 60,
+        "rating" : {
+                "average" : 7.9
+        }
+}
+{
+        "_id" : ObjectId("62052b52d9ec2278a3f59333"),
+        "name" : "Glee",
+        "genres" : [
+                "Drama",
+                "Music",
+                "Romance"
+        ],
+        "runtime" : 60,
+        "rating" : {
+                "average" : 6.7
+        }
+}
+{
+        "_id" : ObjectId("62052b52d9ec2278a3f59334"),
+        "name" : "Once Upon a Time in Wonderland",
+        "genres" : [
+                "Adventure",
+                "Fantasy"
+        ],
+        "runtime" : 60,
+        "rating" : {
+                "average" : 6.7
+        }
+}
+{
+        "_id" : ObjectId("62052b52d9ec2278a3f59335"),
+        "name" : "Hellsing Ultimate",
+        "genres" : [
+                "Drama",
+                "Action",
+                "Anime",
+                "Horror"
+        ],
+        "runtime" : 50,
+        "rating" : {
+                "average" : 8.1
+        }
+}
+{
+        "_id" : ObjectId("62052b52d9ec2278a3f59336"),
+        "name" : "Hellsing",
+        "genres" : [
+                "Anime",
+                "Horror",
+                "Supernatural"
+        ],
+        "runtime" : 30,
+        "rating" : {
+                "average" : 8.3
+        }
+}
+{
+        "_id" : ObjectId("62052b52d9ec2278a3f59337"),
+        "name" : "Berserk",
+        "genres" : [
+                "Anime",
+                "Fantasy",
+                "Horror"
+        ],
+        "runtime" : 25,
+        "rating" : {
+                "average" : 9.2
+        }
+}
+{
+        "_id" : ObjectId("62052b52d9ec2278a3f59338"),
+        "name" : "Grimm",
+        "genres" : [
+                "Drama",
+                "Crime",
+                "Supernatural"
+        ],
+        "runtime" : 60,
+        "rating" : {
+                "average" : 8.5
+        }
+}
+
+
+
+
+
+
+----------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK.... ISSO DEU CERTO....
+
+
+
+
+
+
+
+
+
+
+
+
+-> ISSO SIGNIFICA QUE TUDO INTERESSA É O SEGUNDO PARÂMETRO, 
+
+QUE É 
+
+
+
+O OBJECT QUE ESPECIFICA COMO 
+
+DEVEM SER PROJETADOS OS FIELDS,
+
+
+COMO DEVEM SER EXTRAÍDOS E POSICIONADOS 
+
+
+
+NO DOCUMENT RETRIEVADO COM 'find'...
+
+
+
+
+
+
+
+
+
+
+-> e o professor escreve exatamente o que escrevi:
+
+
+
+
+
+
+
+
+
+
+db.movies.find({}, {name: 1, genres: 1, runtime: 1, rating: 1}).pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> TODOS OS FIELDS 
+
+
+QUE NÃO ESCREVO FICARÃO COM '0' por default, e não serõa incorporados...
+
+
+
+
+
+
+
+
+
+--> SÓ O '_ID'
+
+
+SERÁ INCLUÍDO.... ----> SE VOCÊ QUER EXCLUIR O "_id',
+
+
+VOCÊ PRECISA ESPECIFICAMENTE ESCREVER '_id: 0'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CERTO.... JÁ SABIA DISSO....
+
+
+
+
+
+
+
+
+
+
+
+--> RETORNAR SÓ OS FIELDS EM QUE ESTAMOS INTERESSADOS É __ MUITO ÚTIL__...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOCÊ TAMBÉM PODE 'PROJECT' em embedded documents,
+
+
+
+
+como para 'rating'...
+
+
+
+
+
+
+
+
+
+
+
+--> SE VOCÊ ESTIVER INTERESSADO SÓ NO FIELD DE 'average' dentro do object/embedded document de 'rating',
+
+
+
+
+VOCê DEVE ESCREVEr 
+
+
+
+aquela sintaxe DE PATH,
+
+que é 
+
+
+
+"rating.average": 1
+
+
+
+
+
+
+EX:
+
+
+
+db.movies.find({}, {name: 1, genres: 1, runtime: 1, "rating.average": 1}).limit(20).forEach((doc) => {printjson(doc)})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> CLARO QUE ISSO VAI DAR NA MESMA, AQUI, PQ SÓ TÍNHAMOS/TEMOS 
+
+
+'average'
+
+dentro do document 'rating'....
+
+
+
+
+
+
+
+
+--> mas isso realmente funcionará, não tenha dúvida...
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS PROJECTION TAMBÉM PODE NOS AJUDAR COM 'ARRAYS',
+
+
+E COM ARRAY DATA QUE NÓS INCLUÍMOS...
+
+
+
+
+
+
+
+
+----- O PROFESSOR NOS MOSTRARÁ COMO ISSO FUNCIONA....

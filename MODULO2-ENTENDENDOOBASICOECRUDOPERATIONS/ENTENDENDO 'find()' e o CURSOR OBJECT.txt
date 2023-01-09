@@ -1,0 +1,1098 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NÓS TRABALHAMOS COM NOSSA FLIGHTDATA UM BOCADO, ATÉ AGORA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA TRABALHAREMOS COM OUTRO TIPO DE DATA....
+
+
+
+
+
+
+
+
+
+
+
+--> professor adiciona uma collection de 'passengers'
+
+
+
+À nossa database de 'flights'..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EXECUTAMOS AS LINHAS DE CÓDIGO:
+
+
+
+
+
+
+
+1) use flights --> seleciona ESSA DATABASE 
+
+
+
+
+
+2) db.passengers.insertMany([
+  {
+    "name": "Max Schwarzmueller",
+    "age": 29
+  },
+  {
+    "name": "Manu Lorenz",
+    "age": 30
+  },
+  {
+    "name": "Chris Hayton",
+    "age": 35
+  },
+  {
+    "name": "Sandeep Kumar",
+    "age": 28
+  },
+  {
+    "name": "Maria Jones",
+    "age": 30
+  },
+  {
+    "name": "Alexandra Maier",
+    "age": 27
+  },
+  {
+    "name": "Dr. Phil Evans",
+    "age": 47
+  },
+  {
+    "name": "Sandra Brugge",
+    "age": 33
+  },
+  {
+    "name": "Elisabeth Mayr",
+    "age": 29
+  },
+  {
+    "name": "Frank Cube",
+    "age": 41
+  },
+  {
+    "name": "Karandeep Alun",
+    "age": 48
+  },
+  {
+    "name": "Michaela Drayer",
+    "age": 39
+  },
+  {
+    "name": "Bernd Hoftstadt",
+    "age": 22
+  },
+  {
+    "name": "Scott Tolib",
+    "age": 44
+  },
+  {
+    "name": "Freddy Melver",
+    "age": 41
+  },
+  {
+    "name": "Alexis Bohed",
+    "age": 35
+  },
+  {
+    "name": "Melanie Palace",
+    "age": 27
+  },
+  {
+    "name": "Armin Glutch",
+    "age": 35
+  },
+  {
+    "name": "Klaus Arber",
+    "age": 53
+  },
+  {
+    "name": "Albert Twostone",
+    "age": 68
+  },
+  {
+    "name": "Gordon Black",
+    "age": 38
+  }
+]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> OK.... COLAMOS ISSO AÍ, E AÍ ADICIONAMOS à NOSSA DATABASE...
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+> db.passengers.find({})
+{ "_id" : ObjectId("61ff432914ef90797a42a0ea"), "name" : "Max Schwarzmueller", "age" : 29 }
+{ "_id" : ObjectId("61ff432914ef90797a42a0eb"), "name" : "Manu Lorenz", "age" : 30 }       
+{ "_id" : ObjectId("61ff432914ef90797a42a0ec"), "name" : "Chris Hayton", "age" : 35 }      
+{ "_id" : ObjectId("61ff432914ef90797a42a0ed"), "name" : "Sandeep Kumar", "age" : 28 }     
+{ "_id" : ObjectId("61ff432914ef90797a42a0ee"), "name" : "Maria Jones", "age" : 30 }       
+{ "_id" : ObjectId("61ff432914ef90797a42a0ef"), "name" : "Alexandra Maier", "age" : 27 }   
+{ "_id" : ObjectId("61ff432914ef90797a42a0f0"), "name" : "Dr. Phil Evans", "age" : 47 }    
+{ "_id" : ObjectId("61ff432914ef90797a42a0f1"), "name" : "Sandra Brugge", "age" : 33 }     
+{ "_id" : ObjectId("61ff432914ef90797a42a0f2"), "name" : "Elisabeth Mayr", "age" : 29 }    
+{ "_id" : ObjectId("61ff432914ef90797a42a0f3"), "name" : "Frank Cube", "age" : 41 }
+{ "_id" : ObjectId("61ff432914ef90797a42a0f4"), "name" : "Karandeep Alun", "age" : 48 }
+{ "_id" : ObjectId("61ff432914ef90797a42a0f5"), "name" : "Michaela Drayer", "age" : 39 }
+{ "_id" : ObjectId("61ff432914ef90797a42a0f6"), "name" : "Bernd Hoftstadt", "age" : 22 }
+{ "_id" : ObjectId("61ff432914ef90797a42a0f7"), "name" : "Scott Tolib", "age" : 44 }
+{ "_id" : ObjectId("61ff432914ef90797a42a0f8"), "name" : "Freddy Melver", "age" : 41 }
+{ "_id" : ObjectId("61ff432914ef90797a42a0f9"), "name" : "Alexis Bohed", "age" : 35 }
+{ "_id" : ObjectId("61ff432914ef90797a42a0fa"), "name" : "Melanie Palace", "age" : 27 }
+{ "_id" : ObjectId("61ff432914ef90797a42a0fb"), "name" : "Armin Glutch", "age" : 35 }
+{ "_id" : ObjectId("61ff432914ef90797a42a0fc"), "name" : "Klaus Arber", "age" : 53 }
+{ "_id" : ObjectId("61ff432914ef90797a42a0fd"), "name" : "Albert Twostone", "age" : 68 }
+Type "it" for more
+>
+
+
+
+
+
+
+
+
+------------------------------------
+
+
+
+
+
+OK .... EU DIGITO 'it' 
+
+
+E VEJO MAIS 1 
+
+
+RESULTADO,
+
+
+
+o de 'gordon black...
+
+
+
+
+
+
+
+
+Type "it" for more
+> it
+{ "_id" : ObjectId("61ff432914ef90797a42a0fe"), "name" : "Gordon Black", "age" : 38 }
+> it
+
+
+
+
+
+
+
+
+
+
+
+-----------------------
+
+
+
+
+
+
+
+
+
+
+--> OK... ISSO SIGNIFICA QUE O GORDON BLACK FOI EXCLUÍDO/postponeado...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'TYPE IT FOR MORE '--->
+
+
+
+
+
+
+
+ESSE COMANDO DE 'it' 
+
+
+
+É UMA __ FEATURE__ MOSTRADA__ 
+
+
+
+
+
+
+NA SHELL, APENAS....
+
+
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR VAI NOS MOSTRAR OUTRA MANEIRA DE CONSEGUIR ESSA DATA,
+
+
+
+
+EM UM MONGODB DRIVER,
+
+EM UM APLICATIVO,
+
+
+
+LOGO LOGO..
+
+
+
+
+
+
+
+
+
+
+
+--> MAS O FATO DE QUE TIVEMOS QUE USAR 'it' 
+
+
+__ NAÕ É 'SHELL-SPECIFIC'.... --------> 
+
+
+
+
+
+
+
+
+
+
+ISSO SIGNIFICA QUE 
+
+O 
+
+COMANDO 
+
+
+'db.passengers.find()',
+
+
+
+e o 
+
+
+
+'find()'
+
+EM GERAL,
+
+
+
+
+
+NO CASO,
+
+
+
+
+__ SEMPRE VAI TE DAR DE VOLTA UM 'cursor,'
+
+
+E NUNCA 
+
+
+
+'ALL THE DATA'...
+
+
+
+
+
+
+
+
+
+--> ANTERIORMENTE PODE TER PARECIDO QUE ELE ESTAVA 'NOS DANDO DE VOLTA ALL THE DATA',
+
+
+
+MAS ACTUALLY ELE SÓ NOS DAVA AQUILO QUE CHAMAMOS DE 'CURSOR OBJECT'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO SIGNIFICA QUE 'find()' 
+
+
+NÃO VAI NOS DAR UM ARRAY COM TODOS OS DOCUMENTS EM UMA COLLECTION .... --> E ISSO FAZ MT SENTIDO,
+
+
+PQ ESSA COLLECTION PODE/PODERIA SER MT GRNADE....
+
+
+
+
+
+
+
+
+
+
+
+-> E SE FIND() fosse enviar de volta todos os documents,
+
+
+isso aí 
+
+
+DEMORARIA UM MONTE, E TAMBÉM 
+
+
+'''WOULD SEND A LOT OF THE DATA OVER THE WIRE''' (inseguro)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E É EXATAMENTE POR ISSO QUE 'find()'
+
+
+VAI NOS RETORNAR UM 'CURSOR OBJECT'..
+
+
+--> ESSE CURSOR OBJECT É UM __ OBJECT___ 
+
+
+COM UM MONTE DE METADATA POR TRÁS DELE,
+
+ 
+
+ E QUE NOS DEIXA 
+
+
+ 'CYCLE THROUGH THE RESULTS'.... --> E É EXATAMENTE PARA ISSO QUE SERVE AQUELE COMANDO DE 'it'...
+
+ (
+
+
+     ELE BASICAMENTE USOU ESSE CURSOR PARA 'FETCH' O PRÓXIMO BUNDLE OF DATA...
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+ --> OK... ISSO SIGNIFICA QUE 
+
+ FIND REALMENTE SÓ VAI NOS DAR ESSE CURSOR....
+
+
+
+
+
+
+
+
+
+
+
+
+ --> E PODEMOS CONSTATAR ISSO, NO CASO,
+
+ POR MEIO DE OUTROS METHODS,
+
+ COMO '.toArray()',
+
+
+ chamado EM CIMA DE 'find()'...
+
+
+
+
+
+
+
+
+
+
+
+ --> SE VOCÊ EXECUTAR 'toArray',
+
+ VOCê VERÁ QUE O GORDON BLACK APARECERÁ COMO 
+
+ ELEMENTO FINAL... -----> E TAMBÉM NÃO VEREMOS 'IT TO SEE MORE'....
+
+
+
+
+
+
+
+
+
+
+
+ --> ISSO SIGNIFICA QUE ESSE CÓDIGO VAI __ FORÇAR__ 
+
+
+ O 
+
+
+
+ MONGODB A EXAURIR ESSE CURSOR,
+
+ FETCHEAR TODOS OS DOCUMENTS E NÃO PARAR APÓS 'THE FIRST TWENTY' (essa é uam feature do mongodb shell)... ( TE DÁ OS PRIMEIROS 20 ELEMENTOS E AÍ PARA , ESSA É A FEATURE)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> ex:
+
+
+
+ db.passengers.find().toArray()
+
+
+
+
+
+
+
+
+
+
+
+ -> ISSO TE DÁ UM ARRAY... 
+
+
+
+
+
+
+
+
+
+
+
+ --> ISSO É FINE AQUI,
+
+
+ MAS NÃO É FINE QUANDO VOCê TEM UM MONTE DE DOCUMENTS...
+
+
+
+
+
+
+
+
+
+
+
+ --> NO SEU APP VOCê PROVAVELMENTE USARÁ ALGO COMO
+
+
+
+
+ 'forEach()'...
+
+
+
+
+
+
+
+
+
+
+
+
+ --> ESSE METHOD DE 'forEach()'
+
+
+
+ SIMPLESMENTE TE DEIXA ESCREVER UM CÓDIGO 
+
+
+ QUE '''FAZ ALGO EM CADA ELEMENT/DOCUMENT QUE VOCÊ TEM EM SUA DATABASE'''...
+
+
+
+
+
+
+
+
+
+
+
+ -->  JÁ A EXATA SINTAXE QUE VOCê PODE USAR PARA RETRIEVAR CADA DOCUMENT É ALGO QUE VOCÊ ENCONTRA 
+
+
+ NOS DOCS DE CADA 1 DOS DRIVERS DO MONGODB.. (
+
+
+     ex: 'php mongodb driver'...
+
+
+
+
+
+
+     
+ )
+
+
+
+
+
+
+
+
+
+ --> JÁ PARA O JAVASCRIPT ( A SHELL É BASEADA NO JAVASCRIPT) 
+
+
+
+ VOCÊ PODE PASSAR UMA ANON FUNCTION, ARROW FUNCTION,
+
+ EM QUE 
+
+ VOCÊ 
+
+ VAI RECEBER 1 ARGUMENT NA FUNCTION AUTOMATICAMENTE, ARGUMENT QUE SERÁ NOSSO DOCUMENT...
+
+
+
+
+
+
+
+
+
+
+
+ --> AÍ VOCÊ PODE USAR UM COMANDO DE 'printjson',
+
+
+ existente NA SHELL DO MONGODB,
+
+
+
+
+ QUE _ VOCÊ __ PDOE USAR__ PARA __ PASSAR NOSSA JSON DATA,
+
+ JSON DATA QUE QUEREMOS OUTPUTTAR..
+
+
+
+
+
+
+
+ ex:
+
+
+
+ db.passengers.find().forEach(
+     (passengerData) => {
+         printjson(passengerData);
+     }
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+ --> ISSO OUTPUTTA:
+
+
+
+
+ {
+        "_id" : ObjectId("61ff432914ef90797a42a0ea"),
+        "name" : "Max Schwarzmueller",
+        "age" : 29
+}
+{
+        "_id" : ObjectId("61ff432914ef90797a42a0eb"),
+        "name" : "Manu Lorenz",
+        "age" : 30
+}
+{
+        "_id" : ObjectId("61ff432914ef90797a42a0ec"),
+        "name" : "Chris Hayton",
+        "age" : 35
+}
+{
+        "_id" : ObjectId("61ff432914ef90797a42a0ed"),
+        "name" : "Sandeep Kumar",
+        "age" : 28
+}
+{
+        "_id" : ObjectId("61ff432914ef90797a42a0ee"),
+        "name" : "Maria Jones",
+        "age" : 30
+}
+{
+        "_id" : ObjectId("61ff432914ef90797a42a0ef"),
+        "name" : "Alexandra Maier",
+        "age" : 27
+}
+{
+        "_id" : ObjectId("61ff432914ef90797a42a0f0"),
+        "name" : "Dr. Phil Evans",
+        "age" : 47
+}
+{
+        "_id" : ObjectId("61ff432914ef90797a42a0f1"),
+        "name" : "Sandra Brugge",
+        "age" : 33
+}
+{
+        "_id" : ObjectId("61ff432914ef90797a42a0f2"),
+        "name" : "Elisabeth Mayr",
+        "age" : 29
+}
+{
+        "_id" : ObjectId("61ff432914ef90797a42a0f3"),
+        "name" : "Frank Cube",
+        "age" : 41
+}
+{
+        "_id" : ObjectId("61ff432914ef90797a42a0f4"),
+        "name" : "Karandeep Alun",
+        "age" : 48
+}
+{
+        "_id" : ObjectId("61ff432914ef90797a42a0f5"),
+        "name" : "Michaela Drayer",
+        "age" : 39
+}
+{
+        "_id" : ObjectId("61ff432914ef90797a42a0f6"),
+        "name" : "Bernd Hoftstadt",
+        "age" : 22
+}
+{
+        "_id" : ObjectId("61ff432914ef90797a42a0f7"),
+        "name" : "Scott Tolib",
+        "age" : 44
+}
+{
+        "_id" : ObjectId("61ff432914ef90797a42a0f8"),
+        "name" : "Freddy Melver",
+        "age" : 41
+}
+{
+        "_id" : ObjectId("61ff432914ef90797a42a0f9"),
+        "name" : "Alexis Bohed",
+        "age" : 35
+}
+{
+        "_id" : ObjectId("61ff432914ef90797a42a0fa"),
+        "name" : "Melanie Palace",
+        "age" : 27
+}
+{
+        "_id" : ObjectId("61ff432914ef90797a42a0fb"),
+        "name" : "Armin Glutch",
+        "age" : 35
+}
+{
+        "_id" : ObjectId("61ff432914ef90797a42a0fc"),
+        "name" : "Klaus Arber",
+        "age" : 53
+}
+{
+        "_id" : ObjectId("61ff432914ef90797a42a0fd"),
+        "name" : "Albert Twostone",
+        "age" : 68
+}
+{
+        "_id" : ObjectId("61ff432914ef90797a42a0fe"),
+        "name" : "Gordon Black",
+        "age" : 38
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------> ISSO TBM VAI OUTPUTTAR TODOS NOSSOS DOCUMENTS... --> ISSO ACONTECE PQ 
+
+o 
+
+
+'forEach'
+
+executou esse method de 
+
+'printjson'
+
+
+EM CADA 1 DE NOSSOS DOCUMENTS....
+
+
+
+
+
+
+
+
+
+
+
+--> AQUI NÓS PRINTAMOS AS COISAS,
+
+
+
+
+mas no seu app, com SUA FAVORITE LANGUAGE,
+
+
+VOCÊ PODE FAZER O QUE QUISER COM ESSA DATA,
+
+
+
+RENDERIZAR NA PAGE,
+
+ENVIAR COM UM HTML REQUEST,
+
+
+ETC ETC...
+
+
+
+
+
+
+
+
+
+
+
+
+--> É ISSO QUE APRENDEMOS NESSA LIÇÃO:
+
+
+
+
+O find() não vai nos dar todos os documents em 1 array,
+
+e sim 
+
+
+UM __ CURSOR___... --> E AÍ TEMOS QUE UTILIZAR ESSE CURSOR,
+
+
+
+com 
+
+'toArray', para forçar todos os documents em 1 array,
+
+
+
+o que Às vezes não é óptimo,
+
+
+
+
+
+
+OU ENTÃO,
+
+MELHOR, PARA GRANDES QUANTIDADES DE DOCUMENTS,
+
+USAR 'forEAch'...
+
+
+
+
+
+
+
+
+
+--------> E É CLARO QUE HÁ MAIS METHODS DISPONÍVEIS, OS QUAIS VOCÊ ENCONTRA NOS DOCS 
+
+DE SEUS DRIVERS....
+
+
+
+
+
+
+
+
+----------> TECNICAMENTE,
+
+
+VOCÊ TEM QUE SABER QUE COM 'forEach'
+
+
+
+ELE 
+
+
+
+VAI REALMENTE 
+
+
+PROCURAR O PRÓXIMO DOCUMENT PARA CADA 'LOOP CYCLE'... ----> ISSO SIGNIFICA QUE ESSE PROCESSO É MT EFICIENTE,
+
+
+PQ 
+
+
+
+
+ELE REALMENTE FETCHEIA A DATA 'ON DEMAND',
+
+
+sem 
+
+
+SOBRECARREGAR SUA BANDWIDTH E CARREGAR MT COISA NA MEMÓRIA....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESSA TBM É A RAZÃO PELA QUAL É IMPOSSÍVEL USAr '.pretty()'
+
+
+em 
+
+'findOne()' ....  --------> ISSO PQ 
+
+
+
+'pretty()'
+
+É UM METHOD __ QUE __ SÓ EXISTE NO CURSOR__ de 'find'... -------> É POR ISSO QUE    'findOne()'
+
+
+NÃO SUPORTA ISSO,
+PQ 
+
+ELE 
+
+NÃO TE DÁ 
+
+
+
+
+1 CURSOR, E SIM APENAS 1 DOCUMENT... ----> 
+
+
+
+
+
+
+É POR ISSO 
+
+
+
+
+
+QUE O 'pretty()'
+
+
+
+só FUNCIONA COM o 'find()'....,
+
+
+
+deixar o 'CURSOR' bonito...
+
+
+
+
+
+
+
+
+
+
+
+--> PARA OUTROS METHODS, COMO INSERT, UPDATE E DELETE,
+
+O 'pretty()" não existe pq ELES NÃO FETCHEIAM DATA, E SIM APENAS A MANIPULAM...

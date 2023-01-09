@@ -1,0 +1,284 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> TALVEZ NÃO TENHAMOS INTERESSE NOS 'examScoreS',
+
+
+
+
+
+
+
+E SIM 
+
+
+
+
+TENHAMOS INTERESSE EM 'QUANTOS EXAMS ESSE USER TEM'....
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+{
+        "_id" : ObjectId("6215b908ecbbf58f4c1d5e5b"),
+        "name" : "Max",
+        "hobbies" : [
+                "Sports",
+                "Cooking"
+        ],
+        "age" : 29,
+        "examScores" : [
+                {
+                        "difficulty" : 4,
+                        "score" : 57.9
+                },
+                {
+                        "difficulty" : 6,
+                        "score" : 62.1
+                },
+                {
+                        "difficulty" : 3,
+                        "score" : 88.5
+                }
+        ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO TAMBÉM É ALGO QUE VOCê CONSEGUE FAZER FACILMENTE,
+
+
+
+NA PHASE DE '$project'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR ADICIONA UM FIELD DE 'numScores'
+
+
+
+
+nos nossos documetns, na phase de 'project',
+
+ 
+
+
+
+
+ E AÍ _ ELE __ USA 
+
+
+
+
+
+ UM 
+
+
+ 'HELPFUL OPERATOR',
+
+
+
+
+ QUE É O OPERATOR DE '$size' -------> NÓS JÁ VIMOS ESSE OPERATOR.... --> ELE CALCULA A _ LENGTH__ 
+
+
+
+ DE 
+
+ 1 ARRAY..
+
+
+
+
+
+
+
+
+ eX:
+
+
+
+
+
+db.arrayCollection.aggregate(
+    [
+        {$project: {_id: 0, numScores: { $size: }}}
+    ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> DENTRO DO OPERATOR '$size',
+
+
+você vai colocar o NAME DO ARRAY CUJA LENGTH VOCÊ QUER CHECAR...
+
+
+
+
+
+
+eX:
+
+
+
+
+
+db.arrayCollection.aggregate(
+    [
+        {$project: {_id: 0, numScores: { $size: "$examScores" }}}
+    ]
+)
+
+
+
+
+-----------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+db.arrayCollection.aggregate(
+...     [
+...         {$project: {_id: 0, numScores: { $size: "$examScores" }}}
+...     ]
+... )
+{ "numScores" : 3 }
+{ "numScores" : 3 }
+{ "numScores" : 3 }
+
+
+
+
+
+
+
+
+
+
+------------------------
+
+
+
+
+
+
+
+
+
+OK... CONSEGUIMOS 3 PARA CADA USER,
+PQ 
+
+
+TODOS OS USERS POSSUEM 3 
+
+
+
+
+
+'exam' objects em cada array de 'examScores'...
+
+
+
+
+
+
+
+
+
+
+
+--> OK, MAS É ASSIM QUE CONSEGUIMOS PEGAR A LENGTH DE UM ARRAY,
+
+
+
+BASTA USAR O 
+
+
+OPERATOR DE 
+
+'$size',
+
+
+
+
+
+apontar 
+
+ao field cujo length queremos calcular,
+
+e aí
+
+
+
+PODEMOS ARMAZENAR ESSE VALOR EM UM NOVO FIELD (só escrever seu nome, que pode ser qualquer um, que será adicionado ao document customizado/projetado retrievado por '$project')

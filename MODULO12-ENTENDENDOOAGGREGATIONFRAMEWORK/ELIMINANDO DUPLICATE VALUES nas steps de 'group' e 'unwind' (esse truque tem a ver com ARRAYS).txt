@@ -1,0 +1,301 @@
+
+
+
+
+
+
+
+
+
+
+
+
+---> NA ÚLTIMA AULA,
+
+
+
+TIVEMOS ESTA QUERY:
+
+
+
+
+
+> db.arrayCollection.aggregate([
+...   {$unwind: "$hobbies"},
+...   {
+...     $group: {
+...       _id: {
+...         personAge: '$age',
+...       },
+...       allHobbies: { $push: '$hobbies' }
+...     },
+...   },
+... ]).pretty();
+{
+        "_id" : {
+                "personAge" : 29
+        },
+        "allHobbies" : [
+                "Cooking",
+                "Skiing",
+                "Sports",
+                "Cooking"
+        ]
+}
+{
+        "_id" : {
+                "personAge" : 30
+        },
+        "allHobbies" : [
+                "Eating",
+                "Data Analytics"
+        ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NESSA QUERY,
+
+
+
+ACABAMOS TENDO UM ARRAY DE 'allHobbies'
+
+
+QUE POSSUÍA DUPLICATE VALUEs:
+
+
+
+
+
+        "allHobbies" : [
+                "Cooking",
+                "Skiing",
+                "Sports",
+                "Cooking"
+        ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        --> PARA _ EVITAR__ A EXISTÊNCIA DE 'DUPLICATE VALUES
+
+
+
+
+
+        no seu array novo, recém críado (e críado a partir da utilização de data em nossos documents originários),
+
+
+
+
+
+
+
+        PODEMOS USAR UM _ OUTRO OPERATOR,
+
+        DIFERNETE DE 
+
+
+        '$push'...
+
+
+
+
+
+
+
+
+
+
+        --> É AQUELE OPERATOR DE 
+
+
+        '$addToSet' 
+
+
+
+
+
+
+
+        --> PQ 'addToSet'
+
+
+        NÃO DEIXA 
+
+
+        QUE 
+
+
+
+
+
+
+        VOCê 
+        ADICIONE/SETTE 
+
+
+        1 VALUE 'DUPLICADO' em alguma coisa...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        --> ADDTOSET faz QUASE A MESMA COISA QUE 'push',
+
+
+
+
+
+
+
+
+        MAS SE O EXECUTARMOS,
+
+
+        NÃO TEREMOS 
+
+
+
+
+
+
+
+        NENHUM 'DUPLICATE VALUE' (
+
+
+            pq 
+
+
+            O 
+
+            ADDTOSET
+
+            TAMBÉM FAZ PUSH,
+
+
+            MAS AO MESMO 
+
+            TEMPO 
+
+            'AVOIDS DUPLICATE VALUEs'...
+        )
+
+
+
+
+
+
+
+
+
+
+
+
+
+        --> SE ELE ENCONTRA QUE UMA ENTRY JÁ EXISTE,
+
+        ELE 
+
+
+        APENAS 'DOESNT PUSH THE NEW VALUE'...
+
+
+
+
+
+
+
+
+
+        --> é isso que o 'addToSet' 
+
+        faz... 
+
+
+
+
+
+
+
+
+
+
+
+
+        --> COM 'ADDTOSET'
+
+
+        E 'PUSH'
+
+
+        no group stage,
+
+
+
+
+
+
+
+
+
+
+
+
+
+e com 'unwind'
+,
+
+
+
+VOCÊ GANHA PODEROSAS FEATURES UQE 
+
+TE DEIXAM
+
+
+
+
+
+TRANSFORMAR SUA ARRAY DATA DE FORMA EFICIENTE,
+
+E A TRANSFORMÁ-LA 
+
+
+
+
+
+EM QUALQUER FORMATO QUE VOCÊ REQUER...

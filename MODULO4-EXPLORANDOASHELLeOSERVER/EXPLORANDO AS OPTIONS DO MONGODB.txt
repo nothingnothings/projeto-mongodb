@@ -1,0 +1,354 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, O PROFESSOR RODA 'mongod --help',
+
+ 
+
+ novamente...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> TEMOS MTAS E MTAS OPTIONS, AQUI...
+
+
+
+
+
+
+
+
+ --> AS OPTIONS MAIS DE BAIXO POSSUEM RELAÇÃO COM 
+
+
+
+ 'wildTiger' (que é nossa storage engine)...
+
+
+
+
+
+
+
+
+
+
+ -_> PODEMOS USAR AS DEFAULT SETTINGS.... --> PODERÍAMOS MUDAR ALGUMAS CONFIGS 
+
+
+
+
+ sobre o wildTiger,
+
+ caso você saiba o que você está fazendo... --> MAS NESSE CURSO NÃO VAMOS ALTERAR 
+
+ O COMPORTAMENTO DA 
+
+
+ STORAGE ENGINE,
+
+ E USAREMOS AS DEFAULT SETTINGs...
+ .
+
+
+
+
+
+
+
+
+
+ --> TAMBÉM TEMOS COMANDOS ÚTEIS  como '--repair',
+
+
+
+ que é 
+
+
+
+ ÓTIMO DE SER USADO 
+
+
+
+ SE VOCÊ ESTIVER 
+
+ TENDO DIFICULDADES COM O CONNECT A  ALGUMA DE SUAS 
+
+ DATABASES,
+
+
+OU VENDO ERRORS 
+
+
+
+
+
+SOBRE FILES DE DATABASES ESTAREM CORROMPIDAS, ETC...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> JÁ '--directoryperdb' 
+
+
+É UMA SETTING 
+
+
+
+
+QUE FAZ COM QUE _ VOCÊ NÃO TENHA UM 'DB FOLDER' ( com suas collection files agrupadas todas no root folder),
+
+
+
+
+
+E SIM 
+
+
+PARA QUE 
+
+
+
+VOCÊ 
+
+
+
+TENHA 
+
+
+SUAS FILES 'GROUPED IN SUBFOLDERS',
+
+
+
+
+
+
+
+
+
+COM 1 SUBFOLDER POR DATABASE,
+
+NO SEU DATABASE ENVIRONMENT..(
+
+
+
+    ex:
+
+
+    1 folder para posts,
+
+    outro para 'users',
+
+
+
+    outro para 'threads',
+
+    etc..
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> COM ISSO,
+
+
+
+
+CADA SUBFOLDER PASSARÁ A TER SUA PRÓPRIA COLLECTION, COM SUAS PRÓPRIAS 'INDEX FILES' ( files do WT...)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VEREMOS INDEX FILES MAIS TARDE NO CURSO....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> TAMBÉM PODEMOS __ MUDAR__ A STORAGE __ ENGINE __ DE NOSSO SERVIDOR....
+
+
+
+
+
+
+
+--> A ENGINE DE STORAGE DEFAULT É A 'WIRED TIGER'... ---> E VOCÊ DEVE USAR O WIREDTIGER...
+
+
+
+
+
+
+
+
+
+
+
+--> TEORICAMENTE,
+
+
+
+O 
+
+MONGODB SUPORTA MÚLTIPLAS 
+
+STORAGE ENGINES,
+
+MAS O WIREDTIGER É O DEFAULT.... --> É DE HIGH PERFORMANCE, E MT BOA....
+
+
+
+
+
+
+
+
+
+
+
+---> VOCÊ SÓ DEVE USAR OUTRAS STORAGE ENGINES SE REALMENTE SABE O QUE VOCê ESTÁ FAZENDO...
+
+
+
+
+
+
+
+
+
+
+-> JÁ TODAS AS OPTIONS/CONFIG de '-ssl'
+
+
+
+SÃO COISAS QUE O PROFESSOR VOLTARÁ 
+
+A VER,
+
+LÁ NOS MÓDULOS DE 
+
+
+
+'SECURITY E AUTHENTICATION'....
+
+
+
+
+
+
+
+
+
+
+
+
+--> O MESMO SE APLICA AOS 'REPLICA SET OPTIONS',
+
+
+
+
+e o 'SHARDING OPTIONS'... --------> VEREMOS ISSO BEM MAIS TARDE NO CURSO..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... ESTAMOS QUASE ACABADOS,
+
+MAS HÁ UMA SETTING QUE É BOM MENCIONAR... --------> É A SETTING DE 
+
+
+
+
+'--fork'... -----> É A 'OPTION' DE 'FORK'....
+
+
+
+
+
+
+
+
+O QUE ISSO FAZ?

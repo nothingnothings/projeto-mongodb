@@ -1,0 +1,289 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> OK.... COM ISSO,
+
+DEVEMOS VER QUERY SELECTORS E 'PROJECTION OPERATORS'..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> PARA OS QUERY SELECTORS,
+
+
+TEMOS UM PUNHADO DE SUBCATEGORIAS:
+
+
+
+
+
+
+
+
+
+
+
+
+1) COMPARISON 
+
+
+
+2) LOGICAL _
+
+
+
+
+3) ELEMENT  
+
+
+
+
+
+
+
+
+4) EVALUATION 
+
+
+
+5) ARRAY 
+
+
+
+
+6) COMMENTS...
+
+
+
+
+
+
+7) geospatial 
+
+
+
+
+
+
+
+
+
+--> E, NO CASO, 
+
+O PROFESSOR FALARÁ SOBRE ESSAS DIFERENTES CATEGORIAS,
+
+
+
+O QUE HÁ DENTRO DE CADA UMA,
+
+E COMO AS USAMOS, COM DETALHES,
+
+NESSE MÓDULO...
+
+
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR EXPLICA QUE TAMBÉM TEMOS SELECTORS DE 'geospatial',
+
+
+
+QUE __ NOS DEIXAM 
+
+
+
+
+
+
+
+
+
+
+''''''WORK WITH LOCATION DATA''',
+E AÍ 
+
+FAZER 
+
+COISAS COMO 
+
+
+
+'FINDOUT WHICH PLACE IS NEAREST TO SOME COORDINATES WE HAVE '--> E VEREMOS ISSO EM UM MÓDULO SEPARADO,
+
+
+O MÓDULO DE 
+
+
+
+
+'geospatial'.....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... QUANTO AOS 'ProjectionOperators '( que modal a data que é RETRIVADA DO SERVER, SEU LOOK),
+
+
+
+
+
+
+
+
+
+
+
+
+temos '$'
+
+
+
+
+
+'$elemMatch' 
+
+
+e 
+
+
+
+'$meta' 
+
+
+
+e 
+
+
+
+'$slice'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E ISSO TUDO É ALGO QUE VEREMOS NESSE MÓDULO, QUANDO FALARMOS SOBRE 'PROJECTION OPERATORS'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SÓ O '$meta' é mt complicado, e será explicado em 1 módulo posterior.... (e isso é relacionado a INDEXES)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> OK... COM ISSO,
+
+DEVEMOS ACABAR COM A TEORIA,
+
+
+
+E COMEÇAR 
+
+
+COM O'DIVE-IN'
+
+
+E
+
+
+
+
+
+
+O _ START DE 'QUERY OF OUR DATA',
+
+
+
+
+
+
+
+
+
+
+COM TODOS ESSES OPERATORS E FILTERS....

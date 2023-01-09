@@ -1,0 +1,582 @@
+
+
+
+
+
+
+
+JSON VS BSON....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MONGODB NÃO USA JSON, E SIM BSON...
+
+
+
+
+
+
+
+
+
+
+--> NÃO PRECISAMOS NOS IMPORTAR COM ISSO,
+
+PQ TUDO QUE 
+
+
+
+ESCREVEREMOS SERÁ JSON DATA....
+
+
+
+
+
+
+
+
+
+--------> {
+
+    "name": "Max",
+    "age": 29
+}
+
+
+
+
+
+
+
+
+
+
+--> a conversão DE JSON EM BSON É BASICAMENTE FEITA POR SEUS DRIVERS...
+
+
+
+
+
+
+
+
+
+
+
+
+--> ELES CONVERTEM SEU JSON EM BINARY DATA -->
+
+
+
+
+
+BINARY DATA --> 'EXTENDS JSON TYPES' ---> (NUMBER TYPES MAIS DETALHADOS, DIZ O PROFESSOR)...
+
+
+
+
+
+
+
+--> ALÉM DISSO,
+
+O BSON DATA É MAIS RÁPIDO E EFICIENTE, DE UMA PERSPECTIVA DE SPACE/SIZE...
+
+
+
+
+
+
+
+
+
+
+
+
+--> ALÉM DISSO,
+
+O BSON SUPORTA 'ADDITIONAL TYPES'... --> EX: O OBJECTID  _ NÃO É VALID__ 
+
+
+
+JSON CODE.... --> ELE SÓ É SUPORTADO EM 'BSON',
+
+mesmo...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(
+
+
+    ok, isso eu havia esquecido...
+)
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+
+[
+    {
+        "departureAirport": "MUC",
+        "arrivalAirport": "SF0",
+        "aircraft": "AIRBUS A380",
+        "distance": 12000,
+        "intercontinental": true
+    },
+        {
+        "departureAirport": "LHR",
+        "arrivalAirport": "TXL",
+        "aircraft": "AIRBUS A320",
+        "distance": 950,
+        "intercontinental": false,
+        "invalidJSON": ObjectId("fashiasaishais");
+    }
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK.... ENTENDI...
+
+
+
+
+
+
+
+
+
+--> TAMBÉM HÁ OUTROS TYPES QUE SÃO VIABILIZADOS POR ELE, COMO 
+
+
+'VERY BIG NUMBERS' (com decimals, etc) ---> 
+
+
+
+
+
+E ELES SÃO ARMAZENADOS COM O USO DESSE BSON,
+
+POR TRÁS 
+
+DAS CENAS...
+
+
+
+
+
+
+
+
+
+
+
+
+--> SEMPRE TRABALHAREMOS COM NOSSA DATA EM JSON FORMAT...
+
+
+
+
+
+
+
+
+
+
+-> OUTRA COISA QUE TEMOS QUE ENTENDER SOBRE ESSA DATA... --> 
+
+
+
+SE TENTARMOS INSERIR OUTRO 
+
+
+DOCUMENT NO NOSSO FLIGHT DATA,
+
+
+
+
+PODEMOS 
+
+
+
+ACTUALLY OMITIR o "" DESDE QUE 
+
+
+NÃO EXISTA 
+
+
+
+SPACES ENTRE O NOME...
+
+
+
+
+
+
+
+
+ex
+
+
+        {
+        "departureAirport": "LHR",
+        "arrivalAirport": "TXL",
+        "aircraft": "AIRBUS A320",
+        "distance": 950,
+        "intercontinental": false,
+        "example course": true
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    -_> ISSO É VÁLIDO,
+
+
+    ESSE 
+
+
+    'example course',
+
+
+
+
+    MESMO TENDO ESPAÇO ENTRE SEUS TERMOS....
+
+
+
+
+
+
+
+
+
+
+    -_> JÁ SE QUISERMOS ESCREVER A MESMA COISA NO NOSSO SHELL,
+
+    SOMOS FORÇADOS A ESCREVER ASSIM:
+
+
+
+
+
+
+
+
+
+
+    db.flightData.insertOne({"example course": true})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    -------------------------------
+
+
+
+
+
+
+
+
+
+
+    --> OK, MAS O VALUE, SE FOR UMA STRING,
+
+
+    PRECISA 
+
+
+
+    SER 
+
+com 
+
+"".....
+
+
+
+
+
+
+
+
+
+
+
+
+-----> PODEMOS TER MIXED DOCUMENTS EM UMA MESMA COLLECTION...
+
+
+
+
+
+
+(
+
+    schemaless....
+)
+
+
+
+
+
+
+
+
+
+------> PODEMOS TER DIFERENTES TIPOS DE DOCUMENTS E ETC...
+
+
+
+
+
+
+
+
+
+
+--> VEREMOS DETALHES SOBRE SCHEMA DESIGN E ESTRUTURA DE NOSSA DATA 
+
+EM UM MÓDULO SEPARADO...
+
+
+
+
+
+
+
+
+--> EM MONGODB,
+
+
+
+2 DOCUMENTS EM 1 MESMA COLLECTION NÃO PRECISAM TER 1 MESMO SCHEMA... --> VOCÊ FREQUENTEMENTE TERÁ 
+
+INTERSECTIONS ENTRE 
+
+SCHEMAS,
+
+
+
+
+mas os documents não precisam ser identicos...
+
+
+
+
+
+
+
+
+
+
+
+
+--> OUTRA COISA:
+
+
+
+VOCÊ NÃO PRECISA OBRIGATORIAMENTE 
+
+USAR O '_id', 
+
+
+
+VOCÊ SÓ PRECISA DE 1 UNIQUE ID,
+
+
+
+
+MAS 
+
+
+
+VOCÊ 
+PODE ASSIGNAR IDS POR CONTA PRÓPRIA, SE QUISER....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> SE QUISERMOS 
+
+
+
+
+OVERWRITTAR O ID DEFINIDO PELO 
+
+
+MONGODB,
+
+
+DEVEMOS ESCREVER ASSIM:
+
+
+
+  db.flightData.insertOne({"example course": true, _id: "EXEMPLODEID"})
+
+
+
+
+
+
+
+
+
+
+
+
+
+O RESULTADO, CHAMADO o 'FIND',
+
+
+É ESTE:
+
+
+
+
+
+
+
+
+
+
+{ "_id" : ObjectId("61fef34ffc186957c008a01a"), "name" : "Dubhai" }
+{ "_id" : ObjectId("61fef822fc186957c008a01b"), "departureAirport" : "MUC", "arrivalAirport" : "SF0", "aircraft" : "AIRBUS 
+A380", "distance" : 12000, "intercontinental" : true }
+{ "_id" : "EXEMPLODEID", "example course" : true }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> OK... --> AGORA TEREMOS NOSSO DOCUMENT COM NOSSO PRÓPRIO ID...
+
+
+
+
+
+
+
+
+
+
+
+--> MAS O PROBLEMA (na verdade, a parte BOA) É QUE SE AGORA TENTARMOS 
+
+ADICIONAR UM DOCUMENT COM ESSE MESMO '_id',
+
+
+
+
+
+
+RECEBEREMOS UM ERROR 
+DE QUE 
+
+'TEMOS UMA DUPLICATE KEY NESSA COLLECTION, E ESSA KEY É UM _ID'...
+
+
+(
+
+
+
+    E ISSO NÃO É PERMITIDO, E ISSO É BOM....
+)

@@ -1,0 +1,728 @@
+
+
+
+
+
+
+
+
+
+
+
+
+-----> FALAMOS UM MONTE SOBRE 
+
+
+INT32 (simple)
+
+
+
+
+e 
+
+
+INT64 (números integrais mais longos do que os de int32 )
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR QUER RESSALTAR, DE NOVO,
+
+QUE 
+PODEMOS 
+
+SORTAR POR ESSES NUMBERS,
+
+
+ 
+
+
+
+
+
+ PROCURAR COM '$gt', '$lt',
+
+
+ etc... --> TUDO É POSSÍVEL COM 
+
+
+ O 
+
+
+
+
+
+
+
+
+ 'Number int 32',
+
+
+
+
+ 'int 64' (long integers)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -> OS CONSTRUCOTRS QUE USAMOS PARA CONVERTER NOSSO DEFAULT DE 64 BIT DOUBLES 
+
+
+
+ é 
+
+
+
+ NumberInt("número")
+
+
+ e 
+
+
+
+
+ "NumberLong("número")...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> BEM, AGORA DEVEMOS ESTUDAR NOSSO 'HIGH PRECISION DOUBLE',
+
+
+
+ o double de 128 bits, complexo,
+
+
+
+ PQ 
+
+
+
+ ELE É INTERESSANTE DE ENTENDER...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -> PARA SABER O QUE ELE FAZ,
+
+
+ DEVEMOS 
+
+
+ SUPOR QUE TEMOS UMA 
+
+ DATABASE CIENTÍFICA,
+
+ QUE USAMOS PARA CÁLCULOS DIVERSOS...
+
+
+
+
+
+
+
+
+
+
+
+ --> SUPONHA QUE TEMOS UMA COLLECTION DE SCIENCE,
+
+ com documents com 2 values.... --> 
+
+
+
+
+ a: 0.3 
+
+
+
+
+ b: 0.1 
+
+
+
+
+
+
+
+
+
+
+
+ ex:
+
+
+
+
+
+
+
+
+
+
+ db.science.insertOne(
+     {
+         a: 0.3, 
+         
+         b: 0.1
+     }
+ )
+
+
+
+
+
+
+ 
+
+ -> ESSES VALUES SERÃO NORMAL FLOATING POINT NUMBERS (64 bit doubles).... -> ISSO SIGNIFICA QUE 
+
+ ELES NÃO SÃO AQUELES 'HIGH PRECISION DECIMALS'..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> OK, ARMAZENAMOS ESSE NEGÓCIO, SUCESSO.... 
+
+
+
+
+
+
+
+
+
+
+ --> AÍ O PROFESSOR RODA UM FIND 
+
+
+
+
+ nesses documents:
+
+
+
+
+
+
+
+ db.science.find().pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+ ISSO RETRIEVA ISTO:
+
+
+
+
+ {
+     _id: ObjectId("asihasihasi"), a: 0.3, b: 0.1
+ }
+
+
+
+
+
+
+
+
+
+
+
+ --> ISSO __ PODE PARECER COM__, 
+
+
+ E 
+
+
+
+
+ O QUE FOI ARMAZENADO __ __APARENTA__ SER O MESMO QUE VOCÊ PASSOU.... --> ENTRETANTO,
+
+
+
+ POR T´RAS DAS CENAS,
+
+ É QUASE GARANTIDO QUE 
+
+
+
+O VALUE QUE VOCÊ ARMAZENOU NÃO TERÁ PRECISÃO PERFEITA;
+
+
+
+
+
+
+
+
+O NUMBER TERÁ 
+
+
+
+
+MAIOR NUMERO DE DECIMAL PLACES,
+
+
+
+
+
+
+E AÍ __ EXISTIRÁ UM POUCO DE IMPRECISION...
+
+
+
+
+
+
+
+
+-------> ISSO QUER DIZER QUE EXISTIRÃO MAIS CASAS DECIMAIS NA DIREITA,   e que 
+
+
+
+existirá um pouco de IMPRECISÃO.. (
+
+
+
+    OS VALORES SIMPLESMENETE 
+
+
+
+    SERÃO APROXIMADOS A ESSE VALOR.... --------> MAS PODEMOS 
+
+
+    _____ PERCEBER____ 
+
+
+A dIFERENÇA SE EXECUTARMOS UM METHOD/CÁLCULo, tudo com a ajuda do aggregatE FRAMEWORK....
+)
+
+
+
+
+
+
+
+
+
+
+--> NA NOSSA PIPELINE, VAMOS QUERER PASSAR APENAS 1 STAGE,
+QUE SERÁ 
+O 
+
+STAGE DE 
+
+ 
+
+ '$project' ------> 
+
+
+
+
+
+
+
+
+
+ VAMOS ENCONTRAR TODOS OS documents e aí vamos adicionar um novo field, 'result',
+
+
+
+ EM QUE 
+
+
+ VAMOS QUERER _ SUBTRAIr__ 2 VALRES QUE SERÃO PASSADOS A SEU ARRAY.
+
+
+
+
+
+
+
+
+
+
+db.science.find(
+    {
+        _id: Objct "asijsaijasijasisa",
+        a: 0.3,
+        b; 0.1
+    }
+).pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> O PROBLEMA É SE VOCÊ 
+
+
+
+
+
+TENTAR SUBTRAIR '0.3' 
+
+de 
+
+'0.1'
+
+
+
+
+
+
+
+
+-> PQ O RESULTADO  COM NOSSA QUERY,
+DE 
+
+
+
+
+db.science.aggregate(
+    [
+        {
+            $project: {result: {$subtract: ["$a", "$b"]}}
+        }
+    ]
+)
+
+
+
+
+
+
+
+
+
+
+
+--> SERÁ:
+
+
+
+
+
+
+{
+    _id: xxxx,
+    "result": 0.19999999999999999999999999999
+}
+
+
+
+
+
+
+
+
+
+------> O RESULTADO NÃO SERÁ '0.2',
+
+
+
+como você esperava,
+
+
+
+
+E SIM 
+
+
+
+SERÁ 
+
+
+'0.1999999999999999999' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PQ ISSO? 
+
+
+
+
+
+
+
+
+
+
+É PQ 
+
+
+
+OS VALORES DE '0.3' 
+
+
+
+e 
+
+'0.1' 
+
+
+
+
+NÃO TERÃO SIDO ARMAZENADOS COM EXATIDÃO (
+
+
+
+
+    pq tínhamos os armazenado como DOUBLES, como FLOATS,
+
+
+    e floats sempre são 
+
+    assim:
+
+
+
+
+
+    0.300000000000000000000000001
+
+
+    0.100000000000000000000002
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> EM ALGUNS USE CASES,
+
+
+isso não vai importar.... --> talvez n importe até mesmo no caso de uma 'ONLINE SHOP',
+
+
+
+EM QUE 
+
+
+
+VOCÊ TEM PRODUCTS EM QUE 
+
+VOCê 
+
+
+TEM PRICE (
+
+
+    ''não quero perder 1 fraçao de um cent''' 
+) ------>  pq 
+
+
+
+
+
+no seu app 
+
+
+
+já pode ter uma aproximação no display de seu result 
+
+
+(
+
+
+
+    '''isso aqui é 0.2, em vez de 1.999999'''...
+
+
+
+
+)
+
+
+
+
+
+
+
+
+
+
+outro use-case é que você vai enviar a um 'THIRD PARTY SERVICE'
+
+
+a cobrança de '0.3',
+
+
+
+
+e aí 
+
+o provider já vai entender que será exatamente '0.3',
+
+e não 
+
+'0.300000001'  
+
+
+(
+
+
+    ex:
+
+
+    'stripe'....
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS SE VOCê FOR TRABALHAR COM ESSES VALORES, RODAR CALCULATIONS COM ELES,
+
+
+
+
+
+__ LÁ NO SEU SERVER/DATABASE,
+
+
+  
+
+  como com nOSSAS QUEREIES com 'aggregate' (
+
+
+
+
+
+que é usado para 
+
+
+EXTRACT DATA, RETURN VALUE,
+
+TUDO DA DATABASE.... 
+
+  ),
+
+
+
+
+
+
+
+
+  AÍ VOCÊ TERÁ UM PROBLEMA.... --> 
+
+
+
+
+  E É EXATAMENTE 
+
+  NESSES CASOS QUE 
+
+  O 
+
+
+
+  '128 BIT DOUBLE' pode nos ajuda.r...
+
+
+
+
+
+
+
+
+
+
+  VEREMOS ESSE TYPE NA PRÓXIMA AULA...

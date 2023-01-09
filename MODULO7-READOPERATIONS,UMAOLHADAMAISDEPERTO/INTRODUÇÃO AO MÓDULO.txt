@@ -1,0 +1,318 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+READING documents com OPERATORS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NO ÚLTIMO MÓDULO, DEMOS UMA OLHADA EM COMO VOCÊ PODE CONSEGUIR DATA 'INTO THE DATABASE'....
+
+
+
+
+
+'''acessando a data requerida de forma EFICIENTE''....
+
+
+
+
+
+
+
+
+--> É CLARO QUE O INSERT DE DATA EM UMA DATABASE SÓ __ É ÚTIL SE VOCê É CAPAZ DE, POSTERIORMENTE,
+
+
+
+
+GET DATA __ OUT__ OF THE DATABASE,
+
+
+por meio de coisas como 'find()".....
+
+
+
+
+
+
+
+
+
+--> É EXATMENTE ISSO QUE VEREMOS NESSE MÓDULO,
+
+
+
+VEREMOS COMO FAZER 'READ' DA DATA NA NOSSA DATABASE,
+
+
+DE FORMA EFICIENTE..
+
+
+
+
+
+
+
+
+
+
+
+
+--> NO PASSADO JÁ USAMOS 
+
+
+
+FIND,
+
+
+
+
+
+
+
+
+
+sim.... ---> 
+
+
+
+MAS FIND 
+
+SEMPRE 
+
+
+
+
+NOS DAVA DE VOLTA 
+
+
+
+'ALL THE DATA',
+
+essencialmente..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> É CLARO QUE VOCÊ PODE 'FILTER' 
+sua data 
+
+PARA RETRIEVAR DOCUMENTS ESPECÍFICOS.... --> VOCÊ NÃO ESTÁ LIMITADO A CONSEGUIR TODA A DATA TODO O TEMPO....
+
+
+
+
+
+
+
+
+
+
+
+
+--> E VOCÊ TAMBÉM PODE, NO CASO,
+
+TRANSFORMAR 
+
+OS OBJECTS QUE 
+
+VOCê RETRIEVA,
+
+
+
+
+até certa medida....
+
+
+
+
+
+
+
+
+
+
+
+
+-> EVENTUALMENTE FALAREMOS SOBRE AQUELE 'cursor'
+
+
+mais uma vez...
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> OK...
+
+
+
+
+
+
+
+
+
+
+O QUE ESTUDAREMOS:
+
+
+
+
+
+
+
+
+
+1) METHODS, FILTERS E OPERATORS ---> O QUE SÃO TODOS ELES, E COMO FUNCIONAM JUNTOS....
+
+
+
+
+
+
+
+
+
+
+
+
+
+2) QUERY SELECTORS --> 'findOne()' e 'find()',
+
+
+
+E COMO __ TRABALHAMOS COM FILTERS LÁ DENTRO...
+
+
+
+
+
+
+
+3) VEREMOS OS 'PROJECTION OPERATORS',
+
+
+
+
+QUE VÃO NOS AJUDAR COM O 'TRANSFORM' da data que 
+
+
+
+pegamos de volta, você poderia dizer...
+
+
+
+(
+
+
+
+    retornar só alguns fields nos seus documents retornados....
+)
+
+
+
+
+
+
+
+
+
+
+OK... É ISSO QUE FAREMOS NESSE MÓDULO...
+
+
+
+
+
+
+
+
+
+--> VAMOS COMEÇAR COM O DATA SET 
+
+
+
+
+
+que importamos ao final do último módulo,
+
+aquele arquivo de 
+
+'tv-movies.json'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE VOCê JÁ SABE COMO USAR O MONGOIMPORT,
+
+E JÁ O UTILIZOU PARA IMPORTAR ESSE 
+
+ARQUIVO NA SUA DATABASE,
+
+NÃO PRECISA O REEXECUTAR...
+
+
+
+
+
+
+--> VAMOS VER O READ DE DATA....

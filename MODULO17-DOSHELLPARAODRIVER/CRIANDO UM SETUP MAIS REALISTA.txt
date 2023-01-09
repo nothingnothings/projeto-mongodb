@@ -1,0 +1,528 @@
+
+
+
+
+HORA DE OPTIMIZAR NOSSO 
+
+
+SETUP, DEIXAR ELE MAIS REALISTA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR CRIA UM FOLDER TIPO 'util',
+
+
+
+
+
+
+
+
+
+
+
+com um arquivo 
+
+
+
+
+'database.js':
+
+
+
+
+
+
+
+
+
+
+
+
+
+tipo assim:
+
+
+
+
+
+
+
+
+
+
+
+
+const { MongoClient } = require('mongodb');
+
+const url =
+  'mongodb+srv://madblorga:papanacuas@cluster0.nhtjo.mongodb.net/shop2';
+// Database Name
+let dbName = 'shop';
+// Connect using MongoClient
+
+const mongoConnect = (callback) => {
+  MongoClient.connect(url)
+    .then((client) => {
+      dbName = client.db();
+      callback();
+    })
+    .catch((err) => {
+      console.log(err);
+      throw err;
+    });
+};
+
+const getDb = () => {
+  if (dbName) {
+    return dbName;
+  } else {
+    throw 'No Database Found!';
+  }
+};
+
+exports.mongoConnect = mongoConnect;
+
+exports.getDb = getDb;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> mas o código dele ficou diferente:
+
+
+
+
+
+
+
+
+
+
+const initDb = callback => {
+
+
+    if (_db) {
+        console.log('Database is already initialized!');
+        return callback(null, _db)
+    }
+
+
+
+    MongoClient.connect(mongoDbUrl )
+}
+
+
+
+
+
+
+
+
+
+
+
+----------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> ok, aí ele complementa:
+
+
+
+
+
+const initDb = callback => {
+
+
+    if (_db) {
+        console.log('Database is already initialized!');
+        return callback(null, _db)
+    }
+
+
+
+    MongoClient.connect(mongoDbUrl)
+    .then(
+        () => {
+
+        }
+    )
+    .catch(
+        (err) => {
+
+        }
+    )
+}
+
+
+
+
+
+
+
+
+
+
+
+-----------> no error case, vamos executar o callback e aí passar o 'err' 
+
+
+
+
+
+como parâmetro...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ELE ESCREVE UM NEGÓCIO QUE É BASICAMENTE ISTO:
+
+
+const getDb = () => {
+  if (dbName) {
+    return dbName;
+  } else {
+    throw 'No Database Found!';
+  }
+};
+
+
+
+---------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> OK, AÍ IMPORTAMOS 
+
+O UTILITY METHOD De 
+
+''mongoCOnnect'
+
+
+
+lá 
+
+
+
+no app.js...
+
+
+
+
+(
+    pq já exportamos esses negócios com 
+
+'''
+exports.mongoConnect = mongoConnect;
+
+exports.getDb = getDb;
+
+
+'''
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, O 
+
+
+
+
+
+'mongoConnect'
+
+
+
+VAI 
+
+TER AQUELE THEN BLOCK EM QUE RODAMOS O 'app.listen()'...
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+mongoConnect(() => {
+  app.listen(3100);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ok... lá no products colocamos o import de 'getDb()'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, TUDO ISSO ESTÁ FUNCIONANDO....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> você quase nunca precisa rodar 'client.close()'...
+
+
+
+
+
+
+
+ok, agora temos a mesma funcionalidade de antes, mas agora com essa utility file que nos ajuda um monte....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O PRÓXIMO PASSO É 
+
+
+FAZER 
+O 
+
+'GET' 
+
+DE 
+
+DATA 
+
+PARA 
+
+1 
+
+ÚNICO PRODUCT (single product)....
+
+
+
+
+
+
+
+
+
+
+
+-> PROFESSOR QUER 
+
+FALAR 
+
+TBM 
+
+SOBRE 
+O 
+'RE-USE'
+
+
+de uma mesma connection -------> ISSO É ALGO QUE VOCÊ DEVE FAZER SEMPRE,
+
+PQ 
+
+
+VOCÊ 
+
+
+
+ACABA USANDO UM RECURSO CHAMADO DE 'CONNECTION POOLING',
+
+
+
+
+
+
+em que 
+
+
+MÚLTIPLOS REQUESTS SÃO HANDLADOS POR SUA REST API, SIMULTANEAMENTE... --> e isso é bom --> MESMO QUE 
+
+VOCÊ TENHA MÚLTIPLAS 
+
+
+
+INCOMING CONNECTIONS AO NODEJS,
+
+você 
+
+pode 
+
+
+FORWARDAR ESSAS CONNECTIONS AO MONGODB,
+
+GRAÇAS A ESSE CONNECTION POOLING... (
+
+
+    essa é a vantagem de reutilizar um mesmo client..
+)
+
+
+
+
+
+
+
+
+
+
+
+
+-> OK, AGORA DEVEMOS TENTAR CONSEGUIR FAZRE O GET DE UM 'SINGLE PRODUCT'...
+
+
+
+
+
+
+
+
+-> ok, funcionou...

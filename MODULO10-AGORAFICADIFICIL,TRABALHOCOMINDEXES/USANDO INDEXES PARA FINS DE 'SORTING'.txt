@@ -1,0 +1,689 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA QUE DEMOS UMA OLHADA NO BÁSICO DOS INDEXES,
+
+
+
+É IMPORTANTE ENTENDER QUE INDEXES NÃO EXISTEM APENAS PARA O 'FIND' DE DOCUMENTS,
+
+
+PQ 
+
+ELES TAMBÉM NOS AJUDAM COM OUTRAS 
+
+
+
+
+
+
+COISAS,
+
+
+
+COMO 
+
+'update', 'delete'
+
+
+
+E, AGORA,
+
+_SORTINg__..... s------> ISSO PQ 
+
+
+
+TEMOS UMA 
+
+'SORTED LIST' 
+
+
+
+de elementos, LÁ  NOS INDEXES....... ----->  E O MONGODB PODE _ USAR ISSO __, essa SORTED LIST,
+
+
+
+
+NOS CASOS EM QUE VOCÊ QUER 
+
+
+'SORTEAR DA MESMA MANEIRA QUE ESTÃO SORTEADOS OS DOCUMENTS, LÁ NA LIST DOS INDEXES'''...
+
+
+
+
+
+
+
+
+
+
+
+----> NO NOSSO EXEMPLO,
+
+
+
+podemos fazer 'find',
+
+
+
+
+
+
+
+tipo assim;
+
+
+
+
+
+
+
+
+
+
+
+
+db.persons2.explain().find(
+    {
+        "dob.age": 35
+    }
+)
+
+
+
+
+
+
+
+
+,
+
+
+E AÍ 
+
+FAZER SORT DESSAS PERSONS QUE SÃO ENCONTRADAS....
+
+
+
+
+-----> 
+
+
+AÍ VAMOS QUERER SORT POR 'gender',
+
+
+EM UMA ASCENDING ORDER...
+
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+db.persons2.explain().find({ "dob.age": 35 }).sort(
+    {
+        "gender": 1
+    }
+)
+
+
+
+
+
+
+
+------------------------
+
+
+
+EXECUTADO ISSO,
+
+
+
+VOCê VERÁ:
+
+
+
+
+
+
+
+> db.persons2.explain().find({ "dob.age": 35 }).sort(
+...     {
+...         "gender": 1
+...     }
+... )
+{
+        "explainVersion" : "1",
+        "queryPlanner" : {
+                "namespace" : "exemploPersons.persons2",
+                "indexFilterSet" : false,
+                "parsedQuery" : {
+                        "dob.age" : {
+                                "$eq" : 35
+                        }
+                },
+                "queryHash" : "4E9D85A4",
+                "planCacheKey" : "6398D3CC",
+                "maxIndexedOrSolutionsReached" : false,
+                "maxIndexedAndSolutionsReached" : false,
+                "maxScansToExplodeReached" : false,
+                "winningPlan" : {
+                        "stage" : "FETCH",
+                        "inputStage" : {
+                                "stage" : "IXSCAN",
+                                "keyPattern" : {
+                                        "dob.age" : 1,
+                                        "gender" : 1
+                                },
+                                "indexName" : "dob.age_1_gender_1",
+                                "isMultiKey" : false,
+                                "multiKeyPaths" : {
+                                        "dob.age" : [ ],
+                                        "gender" : [ ]
+                                },
+                                "isUnique" : false,
+                                "isSparse" : false,
+                                "isPartial" : false,
+                                "indexVersion" : 2,
+                                "direction" : "forward",
+                                "indexBounds" : {
+                                        "dob.age" : [
+                                                "[35.0, 35.0]"
+                                        ],
+                                        "gender" : [
+                                                "[MinKey, MaxKey]"
+                                        ]
+                                }
+                        }
+                },
+                "rejectedPlans" : [ ]
+        },
+        "command" : {
+                "find" : "persons2",
+                "filter" : {
+                        "dob.age" : 35
+                },
+                "sort" : {
+                        "gender" : 1
+                },
+                "$db" : "exemploPersons"
+        },
+        "serverInfo" : {
+                "host" : "DESKTOP-V43A7S1",
+                "port" : 27017,
+                "version" : "5.0.6",
+                "gitVersion" : "212a8dbb47f07427dae194a9c75baec1d81d9259"
+        },
+        "serverParameters" : {
+                "internalQueryFacetBufferSizeBytes" : 104857600,
+                "internalQueryFacetMaxOutputDocSizeBytes" : 104857600,
+                "internalLookupStageIntermediateDocumentMaxSizeBytes" : 104857600,
+                "internalDocumentSourceGroupMaxMemoryBytes" : 104857600,
+                "internalQueryMaxBlockingSortMemoryUsageBytes" : 104857600,
+                "internalQueryProhibitBlockingMergeOnMongoS" : 0,
+                "internalQueryMaxAddToSetBytes" : 104857600,
+                "internalDocumentSourceSetWindowFieldsMaxMemoryBytes" : 104857600
+        },
+        "ok" : 1
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------------> OK......
+
+
+
+
+
+
+
+
+LEMBRE-SE DE QUE AINDA TEMOS AQUELE 'compound index'
+
+
+
+DE 
+
+
+
+'age' e 'gender' (nessa ordem)...
+
+
+
+
+
+
+
+
+
+
+
+---------> 
+
+
+
+
+
+
+SE EXECUTAMOS TUDO ISSO,
+
+VEREMOS QUE 
+
+
+ELE USOU:
+
+
+
+
+
+
+
+   "winningPlan" : {
+                        "stage" : "FETCH",
+                        "inputStage" : {
+                                "stage" : "IXSCAN",
+                                "keyPattern" : {
+                                        "dob.age" : 1,
+                                        "gender" : 1
+                                },
+
+
+
+
+                                --> USOU UM IXSCAN (index scan)
+
+
+
+
+                                TANTO PARA 'age'
+                                 
+                                 quanto para 'gender'....
+
+
+
+
+
+
+
+
+
+
+
+------> MAS O ESTRANHO É QUE AQUI SÓ FIZEMOS 'filter' POR 'AGE',
+
+e não por gender...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> indexes podem nos ajudar com sorting... --> a própria lista, dos 'indexes', é uma SORTED LIST....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> o mongodb nos dá opções para SORTEAR nossa collection da MESMA MANEIRA QUE NOSSO INDEX ESTÁ ORGANIZADO..
+
+
+
+
+
+
+
+
+
+
+para isso,
+
+
+
+rodamos 
+
+
+
+
+db.persons2.explain().find({"dob.age": 35}).sort({gender: 1})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE EXECUTAMOS ISSO, NA RESPOSTA 
+
+
+
+VEMOS QUE 
+
+
+FOI UTILIZADO UM 'IXSCAN'
+
+
+para tanto 
+
+
+'dob.age'
+
+como para 
+
+
+'gender'...
+
+
+
+
+
+
+
+
+
+
+
+--> MAS NÓS SÓ USAMOS 'age'... pq diabos ele usou 'gender information' para a sorting?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> BEM, ESSA É OUTRA FEATURE LEGAL DOS INDEXES... --> COMO __ JÁ __ TEMOS UMA 'ORDERED LIST OF VALUES'( os indexes),
+
+
+
+O MONGODB 
+
+
+PODE UTILIZAR ISSO AÍ PARA 
+
+
+'RAPIDAMENTE NOS DAR A ORDER DE DOCUMENTS DE QUE PRECISAMOS'... 
+
+
+
+
+
+
+
+
+
+
+
+(
+
+        ou seja,
+
+        o 
+
+        sorting TAMBÉM É ACELERADO, COM INDEXES...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS O QUE É IMPORTANTE DE ENTENDER, AQUI,
+
+ 
+
+ É QUE 
+
+
+
+
+ SE VOCÊ __________NÃO ESTÁ USANDO INDEXES__ 
+
+
+
+
+ E AÍ VOCÊ FAZ 'SORT' EM UMA LARGA QUANTIA DE DOCUMENTS,
+
+
+
+
+
+ VOCÊ PODE ACABAR 
+
+
+
+
+DANDO 'TIMEOUT' -----> ISSO PQ O MONGODB TEM UM 
+
+
+'threshold' 
+
+
+
+
+
+
+
+DE 
+
+
+
+32MB, NA MEMÓRIA,
+
+
+PARA 
+
+
+O __ SORTING__... ----->E SE VOCê NÃO TEM NENHUM INDEX PARA ESSE FIELD,
+
+
+
+O MONGODB VAI ESSENCIALMENTE 
+
+
+
+'''fetch all your documents'',
+
+
+OS EMBUTIR NA MEMORY E AÍ __ FAZER O SORTING__ lá mesmo... -----> E PARA GRANDES QUANTIDADES DE 
+
+
+
+DOCUMENTS,
+
+
+ISSO 
+
+
+PODE SIMPLESMENTE SER 'TOO MUCH' PARA SORTEAR --------> ISSO QUER DIZER QUE 
+
+
+
+
+
+
+
+
+
+
+
+
+àS VEZES VAMOS PRECISAR DAS QUERIES PARA FAZER MAIS DO QUE 'SPEED UP THE QUERIES' (o que faz sentido, na realidade),
+
+
+
+
+MAS __ TAMBÉM _ PARA 
+
+
+
+VIABILIZAR O SORT 'AT ALL' --------> claro que esse não é o caso para nosso pequeno data set-exemplo....
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS SE VOCÊ TEM MILHOES DE DOCUMENTS,
+
+É BEM POSSÍVEL
+ 
+
+ VOCÊ TER UMA QUERY EM QUE VOCÊ FAZ FETCH DE TANTOS E TANTOS DOCUMENTS,
+
+ QUE VOCÊ SORTEA,
+
+
+ 
+
+ SORTEA POR MEIO DA 'IN-MEMORY SORT' (Que é o default),
+
+
+
+
+
+
+
+ _ E ISSO ACABA DANDO 'TIMEOUT',
+
+
+
+ PQ O LIMITE NÃO SERÁ SUFICIENTE. .. --> E AÍ VOCÊ PRECISARÁ DE UM 
+
+
+
+
+
+ 'INDEX',
+
+ UMA 'ALREADY SORTED LIST',
+
+
+ TUDO PARA 
+
+
+
+
+
+ QUE O MONGODB NÃO TENHA QUE SORTEAR TUDO NA MEMORY,
+
+
+
+ PARA QUE POSSA SIMPLESMENTE TOMAR O INDEX COMO BASE PARA FAZER SEU SORTNIG...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -> OK... ISSO, PORTANTO, É OUTRA COISA DE SE TER EM MENTE... --> SE VOCê ESTÁ SORTANDO DOCUMENTS EM 
+
+
+ UMA GIVEN QUERY,
+
+
+
+
+
+ VOCÊ TALVEZ PRECISE DE UM 'INDEX' 
+
+ PARA CONSEGUIR SORTEÁ-LOS 'at all' ,
+
+
+ TUDO POR CONTA DESSE LIMITE DE 32MB 
+
+
+
+ da 'memory' do mongodb dedicada ao sorting...

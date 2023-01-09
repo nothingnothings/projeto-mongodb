@@ -1,0 +1,857 @@
+
+
+
+
+
+
+
+
+
+
+
+ACABAMOS COM ESTE MÓDULO.
+
+
+
+
+
+
+
+
+
+FALAMOS SOBRE SEGURANÇA... RESUMO:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+É ÓBVIO QUE SEGURANÇA É MAIS DO QUE FALAMOS NESSE MÓDULO, MAS O PROFESSOR NOS MOSTROU COISAS QUE 
+
+IMPORTAM PARA NÓS, COMO DEVELOPERS... -->  as coisas 
+
+de 
+
+segurança
+
+
+
+
+são mais importantes para database administrators -> segurança da database em si é algo com que 
+
+
+
+o mongodb não consegue te ajudar....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> BEM, PARA MONGODB DEVELOPERS,
+
+é 
+IMPORTANTE 
+
+
+ENTENDER 
+
+QUE 
+
+VOCÊ 
+
+
+
+TRABALHA COM:
+
+
+
+
+
+
+
+
+
+1) USERS E ROLES... 
+
+
+
+
+
+
+
+
+
+
+
+USERS --> NÃO SIGNIFICA 'USUÁRIOS DE SEU APP',
+
+e sim 
+
+
+SEU APP EM SI, OU VOCÊ, COMO DEV, OU 1 DATA SCIENTIST, etc... também os database admins.... --> são os diferentes users/parties que interagem diretamente com sua database...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+MONGODB USA UM APPROACH 'ROLE BASED ACESS CONTROL '-->  USA ISSO PARA CONTROLAR 'QUEM FAZ O QUE' ..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2) VOCÊ CRIA USERS EM DATABASES, E AÍ VOCê FAZ LOGIN 
+
+
+com suas credenciais,
+COMO USER,
+
+
+
+NESSAS DATABASES -->  E VOCê PODE USAR A 
+
+
+
+
+DATABASE DE 'ADMIN' PARA 
+
+'global users', gerais,
+
+
+ 
+
+
+ ou então 
+
+ RESTRINGIR 1 USER APENAS A 1 ÚNICA DATABASE,
+
+
+ PARA DEIXAR BEM CLARO QUE 
+
+
+ ESSE USER 
+
+
+ SÓ DEVE TRABALHAR COM 
+
+ a DATABASE 
+
+ DE 
+ SHOP....
+
+
+
+
+
+
+
+
+
+
+
+
+ --> USERS, POR DEFAULT,
+
+ NÃO POSSUEM RIGHTS ---> 
+
+ VOCÊ 
+
+
+ PRECISA ADICIONAR 'ROLES' 
+
+ PARA 
+
+
+ POSSIBILITAR CERTAS OPERAÇÕES...
+
+
+
+
+
+
+
+
+
+ --> 1 MESMO USER PODE TER ACESSO A 2+ DATABASES,
+
+ BASTA VOCÊ ASSIGNAR OS ROLES PERTINENTES (ação x na database y)....
+
+
+
+
+
+
+
+
+
+ --> PERMISSION QUE SÃO GARANTIDAS POR 'ROLES' 
+
+
+ SÓ SÃO CONCEDIDAS PARA 'A DATABASE EM QUE O USER FOI ADICIONADO' (se user foi criado na database de 'shop' e você escreve uma role sem especificar sua database ({}), esse role/o user com esse role FICARÁ ADSTRITO A ESSA DATABASE DE 'shop'...)
+
+
+
+
+
+
+
+
+ --> SÓ SÃO CONCEDIDAS PARA OUTRAS DAATABASES SE VOCÊ EXPLICITAMENTE 
+
+
+
+COMUNICA QUE QUER ISSO,
+
+tipo assim:
+
+
+
+
+
+db.createUser(
+    {
+        user: "Arthur",
+        pwd: "yourPassword",
+        roles: [
+            "readWrite", {
+                action: "readWrite", 
+                db: "blog" ////////EIS O CÓDIGO EM QUESTAÕ.
+            }
+        ]
+    }
+)
+
+
+
+
+
+-------------------------------
+
+
+
+
+
+
+
+
+
+A ÚNICA EXCEÇÃO A ESSA REGRA GERAL 
+
+
+
+é 
+
+
+
+usar aqueles roles de 
+
+'..AnyDatabase',
+
+
+
+
+
+
+
+
+
+
+
+que são usados para ter 
+
+
+
+
+'CROSS-DATABASE ACCESS' --> dão acesso 
+
+
+
+A 
+
+TODAS AS DATABASES,
+
+COM AQUELA ACTION ALI...
+
+
+
+
+
+
+eX:
+
+
+readWriteAnyDatabase 
+
+
+
+
+
+------> ESSE ACESSO É TIPICAMENTE CONCEDIDO A ADMINS/global user manager, etc etc... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E NÓS TAMBÉM DEMOS UMA OLHADA BREVE EM 
+
+'ENCRYPTION':
+
+
+
+
+
+
+
+
+
+
+--> podemos ENCRYPT DATA 'DURANTE O SEU TRANSPORTE', por meio do tls/ssl...  ------> 
+
+
+
+
+
+PARA ISSO, PRECISAMOS DE ARQUIVOS 'mongodb.pem', que são criados a partir de 'mongodb-cert.key' e 'mongodb-cert.crt' 
+
+e aquele 
+
+comando 
+
+de 
+
+'type mongodb-cert.key mongodb-cert.crt > mongodb.pem' 
+
+LÁ NO CMD (isso se você estiver usando o 'OPENSSL', que é usado naquele approach chinelo de criar um SELF-SIGNED CERTIFICATE FILE)....
+
+
+
+
+
+---> aí, depois disso,
+
+
+vocÊ precisa ou colocar flags 
+
+
+
+em 'mongod' (run no terminal)
+
+
+ou então 
+
+
+
+ADICIONAR ENTRIES DE 'net' lá 
+
+
+no mongodb.cfg nos seus arquivos do servidor, 
+
+
+
+em QUE
+
+
+você 
+
+especificará 
+
+''   
+net:
+    tls:
+      mode: requireTLS
+      certificateKeyFile: C:\Program Files\MongoDB\Server\5.0\bin\mongodb.pem
+
+
+'''
+
+
+
+
+
+--> isso feito,
+
+
+você vai ter que rodar a SHELL, aquele comando de 'mongo',
+
+COM FLAGS,
+
+
+flags que 
+serão 
+
+
+
+'mongo --tls --tlsCAFile mongodb.pem --host localhost' 
+
+
+
+
+
+
+
+--> em '--host' 
+
+vocÊ deve ESPECIFICAR O IP/localhost de seu server,
+
+
+
+
+A DEPENDER SE VOCê ESTIVER RODANDO SUA DATABASE EM PRODUCTION/DEVELOPMENT...
+
+
+
+
+
+
+
+
+
+--> MAS PARA PRODUCTION,
+ 
+
+
+VOCÊ NÃO DEVE USAR 
+
+
+'SELF-SIGNED SSL/TLS CERTIFICATES',
+
+
+
+
+E SIM 
+
+
+TLS 
+
+
+CERTFICATES PRODUZIDOS POR UMA 
+
+
+
+
+
+TLS CERTIFICATE AUTHORITY (
+
+e aí utilizar 
+
+
+esse arquivo 
+
+JUNTO DAQUELE ARQUIVO 'CA'
+
+que voCê vai receber,
+
+
+para 
+
+aí 
+
+
+
+REALMENTE FAZER LOCKDOWN DE SEU SERVER A CONEXÕES EXTERNAS QUE NÃO POSSUAM ESSE CERTIFICATE (só seus apps/servers possuirão esse certificate)....c
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> QUANTO AO ENCRYPTION 'AT REST' ( ou seja, com os arquivos PARADOS),
+
+
+
+
+VOCÊ PDOE 
+
+ENCRYPTAR TANTO AS FILES QUE 
+
+SEGURAM SUA DATA (
+
+
+    o arquivo/arquivos GERAIS 
+
+    de data que contêm todos seus documents.... --> ISSO É FEITO COM O MONGODB ENTERPRISE, É BEM SIMPLES....
+)
+
+
+
+
+
+
+
+COMO 
+
+
+
+
+TAMBÉM 
+
+OS 
+
+'VALUES DENTRO DE SEUS DOCUMENTS' (
+
+    ou seja,
+
+    values armazenados DENTRO DE SEUS FIELDS; 
+
+    EX: HASHEAR/ENCRYPTAR SENHAS....
+)
+
+
+
+
+
+
+
+
+
+
+
+--> OS VALUES QUE VOCê ENCRIPTA DENTRO DOS DOCUMENTS É ALGO QUE TEREMOS DE FAZER POR CONTA PRÓPRIA (bcrypt.js)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> A PARTE DO 'MONGODB ENTERPRISE' é bem fácil, temos um link ao final deste módulo...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+https://docs.mongodb.com/manual/core/security-encryption-at-rest/
+
+
+
+
+
+
+
+
+
+
+
+
+If encryption is enabled, the default encryption mode that MongoDB Enterprise uses is the AES256-CBC (or 256-bit Advanced Encryption Standard in Cipher Block Chaining mode) via OpenSSL. AES-256 uses a symmetric key; i.e. the same key to encrypt and decrypt text. MongoDB Enterprise for Linux also supports authenticated encryption AES256-GCM (or 256-bit Advanced Encryption Standard in Galois/Counter Mode). FIPS mode encryption is also available.
+
+
+
+
+
+
+
+
+
+
+The data encryption process includes:
+
+Generating a master key.
+Generating keys for each database.
+Encrypting data with the database keys.
+Encrypting the database keys with the master key.
+
+
+
+
+The encryption occurs transparently in the storage layer; i.e. all data files are fully encrypted
+
+ from a filesystem perspective, and data only exists in an unencrypted state in memory and during transmission.
+
+
+
+
+
+
+
+
+
+
+
+
+hmmm entendi... só na memória, no layer mais externo...
+
+
+
+
+To encrypt all of MongoDB's network traffic, you can use TLS/SSL
+
+
+ (Transport Layer Security/Secure Sockets Layer). See Configure mongod and mongos for
+ 
+  TLS/SSL and TLS/SSL Configuration for Clients.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Key Management
+IMPORTANT
+Secure management of the encryption keys is critical.
+
+
+The database keys are internal to the server and are only paged to disk in an encrypted format. 
+
+
+MongoDB never pages the master key to disk under any circumstances.
+
+Only the master key is external to the server
+
+
+ (i.e. kept separate from the data and the database keys), 
+ 
+ and requires external management. To manage the master key, MongoDB's encrypted storage engine 
+ supports two key management options:
+
+Integration with a third party key management appliance via the Key Management Interoperability Protocol (KMIP). Recommended
+Local key management via a keyfile.
+To configure MongoDB for encryption and use one of the two key management options, see Configure Encryption.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+The log file is not encrypted as a part of MongoDB's encrypted storage engine. 
+
+
+A mongod running with logging may output potentially sensitive information to log 
+
+files as a part of normal operations, depending on the configured log verbosity.
+
+
+
+
+
+
+
+
+
+
+
+
+
+https://docs.mongodb.com/manual/tutorial/configure-encryption/
+
+
+
+
+
+
+
+
+
+
+
+This page discusses server configuration to support encryption at rest. If you use MongoDB Atlas, 
+your data is already encrypted. MongoDB manages Atlas encryption at the cloud provider level, but you can
+ also use your own key management solution. See the Atlas key management documentation for details.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+MongoDB Enterprise 3.2 introduces a native encryption option for the WiredTiger storage engine.
+
+
+ Outside Atlas, encryption is only available for enterprise installations that use the WiredTiger Storage Engine.
+
+Secure management of the encryption keys is a critical requirement for storage encryption.
+ MongoDB uses a master key that is not stored with the MongoDB installation. Only the master key is 
+ externally managed, other keys can be stored with your MongoDB instance.
+
+
+
+
+
+MongoDB's encrypted storage engine supports two key management options for the master key:
+
+Integration with a third party key management appliance via the Key Management Interoperability Protocol (KMIP). 
+Recommended
+
+
+
+
+Use of local key management via a keyfile.
+
+
+
+
+
+
+MongoDB cannot encrypt existing data. When you enable encryption with a new key, the MongoDB instance cannot have any pre-existing data. If your MongoDB installation already has existing data,
+
+
+ see Encrypt Existing Data at Rest for additional steps.
+
+
+ https://docs.mongodb.com/manual/tutorial/configure-encryption/#std-label-encrypt-existing-data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Key Manager
+MongoDB Enterprise supports secure transfer of keys with compatible key management appliances. Using a key manager allows for the keys to be stored in the key manager.
+
+MongoDB Enterprise supports secure transfer of keys with Key Management Interoperability Protocol (KMIP) compliant key management appliances. Any appliance vendor that provides support for KMIP is expected to be compatible.
+
+For a list of MongoDB's certified partners, refer to the Partners List.
+
+
+
+https://www.mongodb.com/partners/list?_ga=2.193254894.219029225.1646067472-1728318531.1646067254
+
+
+
+
+
+
+
+
+
+
+
+To create a new key, connect mongod to the key manager by starting mongod with the following options:
+
+--enableEncryption
+--kmipServerName
+--kmipPort
+--kmipServerCAFile
+--kmipClientCertificateFile
+Include additional options as required for your configuration. For instance, if you wish remote clients to connect to your deployment or your deployment members are run on different hosts, specify the --bind_ip. For more information, see Localhost Binding Compatibility Changes.
+
+The following operation creates a new master key in your key manager which mongod uses to encrypt the keys mongod generates for each database.
+
+
+
+
+
+
+
+mongod --enableEncryption --kmipServerName <KMIP Server HostName> \
+  --kmipPort <KMIP server port> --kmipServerCAFile ca.pem \
+  --kmipClientCertificateFile client.pem
+
+
+
+

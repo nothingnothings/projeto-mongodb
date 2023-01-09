@@ -1,0 +1,167 @@
+
+
+
+
+
+
+
+
+
+
+DOCUMENT E CRUD BASICS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> TRABALHO COM A DATABASe....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VEREMOS OS CORE BASICS QUE DEVEMOS SABER QUANDO TRABALHAMOS COM O MONGODB...
+
+
+
+
+
+
+
+
+
+
+
+--> os documents e tal....
+
+
+
+
+
+
+
+
+
+
+
+--> VEREMOS TUDO SOBRE OS CRUD BASICS...
+.
+
+
+
+
+
+
+
+
+
+
+
+
+--> CREATE READ UPDATE DELETE...
+
+
+
+
+
+
+
+
+
+--. TÍPICAS OPERAÇÕES QUE VOCÊ FAZ COM SEUS DOCUMENTS...
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOCÊ QUER SER CAPAZ DE LER, UPDATAR,
+
+
+MODIFICAR, DELETAR SEUS 
+
+
+DOCUMENTS..
+
+
+
+
+
+
+
+
+
+
+-----> VEREMOS:
+
+
+
+
+
+
+
+1) CONCEITOS BÁSICOS SOBRE COLLECTIONS E DOCUMENTS...
+
+
+
+
+
+
+
+2) BASIC DATA TYPES COM QUE TRABALHAMOS NO MONGODB... 
+
+
+
+(como armazenar diferentes datas no mongodb)...
+
+
+
+
+
+
+
+
+3) VEREMOS AS QUERIES PARA RETRIEVAR DATA,
+
+ALTERAR DATA,
+
+
+DELETAR DATA, ETC...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK....

@@ -1,0 +1,693 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> PROFESSOR VAI NOS DAR EXEMPLOS DE RELATIONS 'one-to-one', do tipo EMBEDDED...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NESSE EXEMPLO, 1 PACIENTE TERÁ UM __DISEASE SUMMARY.... E ESSE DISEASE SUMMARY 
+
+
+VAI SEMPRE PERTENCER APENAS A 1 PACIENTE.... 
+
+
+
+
+
+
+
+
+
+--> one-to-one....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PATIENT A <-> SUMMARY A 
+
+
+
+
+PATIENT B <-> SUMMARY B 
+
+
+
+PATIENT C <-> SUMMARY C
+
+
+
+
+
+
+
+
+
+
+para isso,
+
+teremos 
+
+
+de escrever algo assim:
+
+
+
+
+
+
+
+Patient: 
+
+
+
+
+{
+_id: ObjectId(aaa);
+name: 'Max',
+summary: {
+
+    disease: 'flu',
+    date: new Date()
+}
+
+
+}
+
+
+
+
+SUMMARY: 
+
+
+
+
+{
+    userId: ObjectId(aaa);
+    disease: 'flu',
+    date: new Date()
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> MAS PARA EXEMPLIFICAR ISSO,
+
+PROFESSOR ESCREVE UMA DATABASE DE 'hospital',
+
+
+com 'use hospital',
+
+
+e aí 
+
+
+adiciona uma collection de 'patients'...
+
+
+
+
+
+
+
+
+
+
+
+com 
+
+
+
+db.patients.insertOne()
+
+
+
+
+
+
+
+
+
+--> ok.. ele insere um patient com 
+
+
+
+{
+
+    name: 'Max',
+
+    age: 29,
+
+    diseaseSummary: "summary-max-1"
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR QUER COMEÇAR PELO __ APPROACH DE 'REFERENCE'...
+
+
+
+
+
+
+
+DEPOIS DISOS,
+
+
+
+
+PROFESSOR CRIA UMA SEGUNDA COLLECTION, De 'diseaseSummaries'...
+
+
+
+
+
+
+
+
+
+
+
+
+-> AÍ, LÁ DENTRO, ELE TAMBÉM VAI INSERIR 1 SUMMARY... -> ELE VAI EXPLICITAMENTE DEFINIR 1 
+
+ID,
+
+
+QUE SERÁ 
+
+
+'summary-max-1',
+
+
+DEFININDO 
+
+
+UMA 
+
+RELATION DE REFERENCE ENTRE ESSES 2 NEGÓCOIS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SIM... aí ele 
+
+
+
+
+
+
+faz um findOne só pra displayar esse negócio:
+
+
+
+
+EX:
+
+
+
+
+> db.diseaseSummaries.findOne()
+{ "_id" : "summary-max-1", "diseases" : [ "flu", "broken leg" ] }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> agora DIGAMOS QUE 
+
+
+
+NO MOBILE APP QUE ESTAMOS 
+
+CONSTRUINDO,
+
+TEMOS UM REQUEST EM QUE PRECISMAOS DESSE PATIENT,
+
+
+E TAMBÉM DA DISEASE SUMMARY.... ---------> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+AÍ CHEGA O INCOMING REUQEST,
+
+
+
+QUE VIRA UM FIND REQUEST....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PRIMEIRAMENTE VAMOS ENCONTRAR NOSSOS PATIENTS,
+
+
+provavelmente assim:
+
+
+
+
+
+
+
+
+db.patients.findOne() ------> ISSO VAI RETORNAR O 'MAX'... --> 
+
+ 
+
+
+
+ O PROBLEMA,
+
+ AQUI, NO CASO,
+
+ É QUE 
+
+
+
+
+
+ ISSO VAI ME RETORNAR O MAX INTEIRO.... -------> E, NO CASO, 
+
+
+
+
+
+
+ NÓS SÓ ESTAMOS INTERESSADOS 
+
+
+
+
+
+
+
+ NA 'diseaseSummary' do max...
+
+
+
+
+
+
+
+
+
+
+
+ --> O QUE O PROFESSOR PODE FAZER, NO APP,
+
+
+
+
+
+
+ é 
+
+ escrever algo assim:
+
+
+
+
+
+
+
+ db.patients.findOne().diseaseSummary ----------> ISSO VAI RETORNAR 
+
+
+
+
+ 'summary-max-1'...
+
+
+
+
+
+
+
+
+
+
+
+
+ --> COM ESSA KEY,
+
+
+
+
+ TERÍAMOS DE RODAR UMA QUERY EM CIMA DESSE NEGÓCIO,
+
+
+
+
+ com tipo 
+
+
+
+
+ 'db.diseaseSummaries.find({_id: summary-max-1})' 
+
+
+
+
+
+
+
+
+ ---------> MAS É CLARO QUE ISSO É SUBÓPTIMO... 2 queries para pegar apenas 1 negócio...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> OK... O PROFESSOR EXPLICA QUE NA LINGUAGEM DE PROGRAMAÇÃO QUE USAMOS 
+
+
+
+ PROVAVELMENTE 
+
+
+
+ FETCHEAMOS DATA DE UM SERVER E ENTÃO A ARMAZENAMOS EM UMA CONSTANTE,
+
+ TIPO  
+
+
+
+
+
+ 'var diseaseId = db.patients.findOne().diseaseSummary'
+
+
+
+
+
+
+
+
+
+
+
+ aí usaríamos esse 'db.diseaseSummaries.find({_id: diseaseId})',
+
+
+
+
+
+
+
+
+
+
+
+
+ MAS ISSO, NOVAMENTE, É SUBÓPTIMO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -----> SERIA BEM MAIS PRÁTICO SE 
+
+
+
+ NÓS TIVÉSSEMOS 
+
+ SÓ essas INFO 
+
+ dentro do 'diseaseSummary',
+
+
+ LÁ NO 
+
+
+
+ PATIENT EM SI...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> ISSO SERIA SUPER RÁPIDO, NA VIDA REAL,
+
+
+ MAS SE VOCÊ TIVER UMA DATABASE SUPER GIGANTE,
+
+
+
+
+
+ PDOE FICAR 
+
+
+ MEIO LENTO....
+
+
+
+
+
+
+
+ -_> É UMA STRONG ONE-TO-ONE RELATION,
+
+
+ POR ISSO 
+
+
+ A MELHOR OPÇÃO É USAR UM 'EMBEDDED DOCUMENT'....
+
+
+
+
+
+
+
+
+
+
+ --> PROFESSOR ESCREVE A MESMA COISA DE ANTES,
+
+ MAS AGORA COM UM EMBEDDED DOCUMENT, TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+
+ db.patients.insertOne({name: 'Max', age: 29, diseaseSummary: {diseases: ['cold', 'broken leg']}})  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> AÍ A VANTAGEM É QUE PODEMOS SÓ ESCREVER 
+
+
+
+ 'db.patients.findOne()'
+
+
+
+ E AÍ 
+
+ JÁ TEREMOS 
+
+ TODA A 
+
+ DATA 
+
+
+ DE QUE PRECISAMOS....
+
+
+
+
+
+
+ TIPO ASSIM:
+
+
+
+
+
+
+
+ > db.patients.find()
+{ "_id" : ObjectId("62003101cc1f7323e85e8c9a"), "name" : "Max", "age" : 29, "diseaseSummary" : { "diseases" : [ "cold", "broken leg" ] } }
+> db.patients.findOne().diseaseSummary.diseases
+[ "cold", "broken leg" ]
+>
+
+
+
+
+
+
+
+
+
+
+
+
+
+É ASSIM QUE FACILMENTE PEGAMOS 
+
+
+A DATA QUE QUEREMOS,
+E É A GRANDE VANTAGEM DE EMBEDDED DOCUMENTS,
+
+
+particularmente nessas strong one-to-one relations...

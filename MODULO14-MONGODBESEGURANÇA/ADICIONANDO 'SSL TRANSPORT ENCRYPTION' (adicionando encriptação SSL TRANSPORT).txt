@@ -1,0 +1,2875 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> OK.... DEMOS UMA BOA OLHADA SOBRE COMO PODEMOS 'CREATE' E 'MANAGE' USERS.... --> também  
+
+
+
+
+
+VIMOS 'COMO USERS SÃO GERALMETNE SETUP,
+
+E COMO TRABALHAMOS COM ELES'...
+
+
+
+
+
+
+
+
+
+
+--> COMO DEVELOPERS,
+
+
+
+
+NÃO 
+
+
+TEMOS QUE NOS IMPORTAR MT COM ESSE PROCESSO DE CRIAÇÃO,
+
+
+MAS 
+
+É 
+
+LEGAL 
+
+
+SABER COMO ISSO FUNCIONA POR TRÁS DAS CENAS,
+
+
+
+E É POR ISSO QUE 
+
+O 
+
+PROFESSOR NOS MOSTROU ISSO...
+
+
+
+
+
+
+
+
+
+
+--> MAS AGORA QUE NOSSAS DATABASES ESTÃO 'LOCKED DOWN',
+
+
+
+TEMOS QUE 
+
+ASSEGURAR QUE 
+A 
+
+DATA 
+QUE 
+É 
+
+TRANSFERIDA 
+
+
+DE NOSSO APP PARA A DATABASE __ 
+
+TAMBÉM _ 
+
+
+SEJA__ SEGURA (seja higienizada) ------->  ISSO 
+
+
+
+
+
+PQ 
+
+
+
+
+
+
+
+
+
+O SETUP TÍPICO QUE VOCê TERÁ QUANDO 
+
+
+
+
+
+
+CONSTRUIR UM APP QUE USA 
+
+
+
+O MONGODB 
+
+
+será 
+
+
+
+assim:
+
+
+
+
+
+
+
+
+
+
+
+
+
+CLIENT |
+-----    |
+   APP   |
+    ^    |
+    |    |
+    V    |
+ DRIVER | ---------------------------> MONGODB SERVER ....
+        |
+-------
+
+
+
+
+
+
+
+
+--> TEMOS NOSSO APP,
+
+
+
+QUE PODE SER UM NODE, PHP, PHYTON, C++ APP... --->  QUALQUER UM DESSES ... --> 
+
+VAI 
+
+
+USAR 
+
+O 
+
+MONGODB DRIVER PARA 
+
+SE COMUNICAR 
+
+
+
+AO MONGODB SERVER E AÍ ARMAZENAR DATA ---> É CLARO QUE 
+
+
+
+
+É IMPORTANTE QUE 
+
+A 
+
+DATA 
+
+
+
+QUE 
+É 
+
+ENVIADA 
+
+FIQUE _ ENCRIPTADA__ ENQUANTO 
+É 
+
+
+TRANSPORTADA 
+
+
+AO 
+
+MONGODB SERVER (
+
+    'ENCRYPTED!'
+)
+
+
+
+
+
+
+
+
+
+
+
+---_> PRECISA SER ENCRIPTADA PARA QUE PESSOAS QUE TENTEM SPOOFAR NOSSA CONEXÃO _ NÃO CONSIGAM __ 
+
+LER NOSSA DATA....
+
+
+
+
+
+
+
+
+--> E O MONGODB TEM TUDO QUE PRECISAMOS PARA ISSO,
+
+
+DE FORMA 'BUILT-IN'...
+
+
+
+
+
+
+
+
+
+--> É POR ISSO QUE O PROFESSOR QUER NOS MOSTRAR COMO 
+
+PODEMOS 
+
+'EASILY SECURE OUR DATA'
+ 
+
+
+
+ ENQUANTO 
+
+ ELA 
+
+ ESTIVER 
+
+
+ NO TRAJETO CLIENT-SERVER..
+
+
+
+
+
+
+
+
+
+
+
+ -----> PARA ENCRIPTAR A NOSSA DATA SENDO TRANSPORTADA,
+
+
+
+ O 
+
+ MONGODB USA 
+
+
+
+ SSL (ou TLS, que é o seu sucessor),
+
+
+
+
+
+
+
+
+
+
+
+ SSL, QUE É O MAIS COMUM --> SSL É 
+
+
+ SÓ 
+
+
+
+ UMA MANEIRA 
+
+
+ EFICIENTE DE 
+
+
+ ENCRIPTAR SUA DATA ENQUANTO ELA ESTÁ SENDO ENVIADA... -> E 
+
+
+ VAMOS 
+
+
+
+
+ USAR 
+
+
+ UM 
+
+ 'PUBLIC PRIVATE KEY-PAIR' 
+
+
+
+
+
+ PARA __ DECRIPTAr__ ESSA INFO __ LÁ 
+
+ NO SERVER,
+
+ E 
+
+ PARA 
+
+ PROVAR QUE 
+
+ NÓS,
+
+ COMO CLIENT,
+
+  
+  SOMOS 
+
+
+AQUELES QUE O SERVER _ PENSA_ QUE SOMOS... ------> ESSENCIALMENTE,
+
+
+
+
+É UMA MANEIRA 
+
+SECURE 
+
+
+DE 
+
+ENCRIPTAR NOSSA DATA 
+
+E 
+DECRIPTAR NO 
+
+SERVER... --> E ENQUANTO 
+
+ESSA 
+
+
+DATA 
+
+
+ESTÁ 
+
+SENDO ENVIADA,
+
+
+ELA É CONSTANTEMENTE ENCRIPTADA ... ----> 
+
+
+
+
+
+PROFESSOR VAI COLOCAR UM LINK SOBRE A TECNOLOGIA 
+
+
+NA ÚLTIMA AULA 
+
+DO 
+
+CURSO..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SSL --> PROFESSOR mostra a page de 
+
+
+
+https://docs.mongodb.com/manual/tutorial/configure-ssl/
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> TEMOS ESSE ARTIGO AÍ,
+
+QUE
+
+
+DESCREVE AS ETAPAS QUE TEMOS QUE SEGUIR....
+
+
+
+
+
+
+
+
+
+--> VAMOS PRECISAR DE 1 COMANDO NESSA PÁGINA AÍ,
+
+
+QUE 
+
+VAMOS EXECUTAR NO NOSSO TERMINAL...
+
+
+
+
+
+
+
+
+
+--> É UM COMANDO BEM LONGO,
+
+
+
+que 
+
+nem sei se ainda é usado hoje em dia...
+
+
+
+
+
+
+
+
+
+
+
+
+--> é o comando de 
+
+
+
+
+
+cd /etc/ssl/
+openssl req -newkey rsa:2048 -new -x509 -days 365 -nodes -out mongodb-cert.crt -keyout mongodb-cert.key
+
+
+
+
+
+
+
+
+
+
+
+
+
+ESSE É ESSENCIALMENTE UM COMANDO QUE 
+
+
+
+VAMOS PRECISAR PARA 'CRIAR OS ARQUIVOS DE QUE PRECISAMOS'... ----> ARQUIVOS QUE PRECISAMOS 
+
+
+
+
+PARA 
+
+ENABLAR 
+
+
+ESSA 
+
+'SSL ENCRYPTION',
+
+
+
+
+QUE 
+
+É 
+
+BASICAMENTE 
+
+
+
+
+
+
+ESSE 
+
+'PUBLIC-PRIVATE KEY PAIR'...
+
+
+
+
+
+
+--> NO LINUX/MAC,
+
+
+VOCÊ PODE SIMPLESMENTE 
+
+RODAR 
+
+
+ESSE COMANDO NO TERMINAL..
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS SE VOCê ESTIVER NO WINDOWS,
+
+
+VOCê PROCURA POR 
+
+'open ssl' 
+
+E AÍ 
+
+
+
+VOCÊ ENCONTRA 
+UM 
+
+
+
+
+SITE DE 
+
+
+
+
+https://wiki.openssl.org/index.php/Binaries
+
+
+
+
+
+
+
+
+
+-> ESSE LINK AÍ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> ÁI, NESSE SITE,
+
+
+VOCê 
+
+VAI 
+
+
+
+ENCONTRAR ALGUMAS IMPLEMENTAÇÕES 'OPENSSL' 
+
+
+para o windows...
+
+
+
+
+
+
+
+
+
+--> PEGUE A MAIS DE CIMA,
+
+
+
+
+
+que você será levado a uma página feia..
+
+
+
+
+
+
+
+
+
+
+
+--> LÁ NO FINAL,
+
+
+VOCÊ VAI ENCONTRAR 
+
+WIN64 OPENSSL V.1.1.1 light,
+
+
+
+
+
+BAIXE 
+
+
+
+
+O EXECUTÁVEL,
+
+
+
+INSTALE O OPENSSL --->  
+
+
+
+
+
+
+
+
+QUANDO VOCÊ INSTALAR ESSE NEGÓCIO,
+
+
+NAVEGUE ATÉ O FOLDER 
+
+DESSE 
+
+
+
+
+NEGÓCIO,
+
+
+
+com o terminal do windows... --> 
+
+
+
+
+
+
+AÍ, DENTRO DO FOLDER DE 'bin' 
+
+desse 
+
+
+
+INSTALL,
+
+
+RODE 
+
+O 
+
+
+MESMO COMANDO QUE VIMOS ALI EM CIMA:
+
+
+
+
+
+
+
+
+
+
+openssl req -newkey rsa:2048 -new -x509 -days 365 -nodes -out mongodb-cert.crt -keyout mongodb-cert.key
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> EU JÁ HAVIA INSTALADO ISSO....
+
+
+
+
+
+
+
+
+
+
+O CÓDIGO DO TERMINAL VAI SER ASSIM:
+
+
+
+
+
+
+PS C:\Program Files\OpenSSL-Win64> cd bin
+PS C:\Program Files\OpenSSL-Win64\bin> openssl req -newkey rsa:2048 -new -x509 -days 365 -nodes -out mongodb-cert.crt -keyout mongodb-cert.key
+...+......+..+...+.+......+..+......+......+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*...+.........+..+..........+...+......+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*...+...+.......+.....+......+....+........+....+......+..+.+......+........+..........+..+.........+.+.....+................+............+.....+.+.....+.+......+...+.....+...............+.......+........+....+..+.+........+.+.....+.........+.......+...+..+....+...+...........+.........+.+..+............+.+......+.....+.+..+..........+.....+...+.........+.............+.....................+..+...+.......+........+.......+..+......+.+......+............+..+.+.....+...+..........+..+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+.+......+....+..+.+.....+.............+..+...+.........+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*...+................+..+......+....+..+.+...+.....+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*..+...+.+......+...........+....+...+........+............+.......+......+........+.+.....+.+..+......+..........+.....+....+...+..+.+......+..................+......+.........+..+.........+......+.+........+....+..+.+............+......+.....+....+............+..............+.......+.....+...+......+...+.+.....+.+.....+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+-----
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [AU]:
+
+
+
+
+
+
+
+
+
+
+
+
+------> OK... --> AÍ ELE VAI TE PEDIR ALGUMAS 
+
+
+
+
+PERGUNTAS... --> RESPONDA QUALQEUR COISA NAS PRIMEIRAS PERGUNTAS...
+
+
+
+
+
+
+
+
+
+
+
+
+--> A PARTE IMPORTANTE É O 'COMMON NAME':
+
+
+
+
+
+
+PS C:\Program Files\OpenSSL-Win64> cd bin
+PS C:\Program Files\OpenSSL-Win64\bin> openssl req -newkey rsa:2048 -new -x509 -days 365 -nodes -out mongodb-cert.crt -keyout mongodb-cert.key
+...+......+..+...+.+......+..+......+......+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*...+.........+..+..........+...+......+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*...+...+.......+.....+......+....+........+....+......+..+.+......+........+..........+..+.........+.+.....+................+............+.....+.+.....+.+......+...+.....+...............+.......+........+....+..+.+........+.+.....+.........+.......+...+..+....+...+...........+.........+.+..+............+.+......+.....+.+..+..........+.....+...+.........+.............+.....................+..+...+.......+........+.......+..+......+.+......+............+..+.+.....+...+..........+..+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+.+......+....+..+.+.....+.............+..+...+.........+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*...+................+..+......+....+..+.+...+.....+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*..+...+.+......+...........+....+...+........+............+.......+......+........+.+.....+.+..+......+..........+.....+....+...+..+.+......+..................+......+.........+..+.........+......+.+........+....+..+.+............+......+.....+....+............+..............+.......+.....+...+......+...+.+.....+.+.....+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+-----
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [AU]:BR
+State or Province Name (full name) [Some-State]:RS
+Locality Name (eg, city) []:Porto Alegre
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:SSD
+Organizational Unit Name (eg, section) []:DEG
+Common Name (e.g. server FQDN or YOUR name) []:
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> NO 'COMMON NAME',
+
+
+
+VOCÊ 
+
+
+DEVE 
+
+
+
+
+DIGITAR 
+
+'localhost' --------> LOCALHOST, DURANTE O DEVELOPMENT.... --> MAS SE VOCÊ FOSSE 
+
+
+FAZER 
+
+
+
+'DEPLOY' 
+
+
+
+
+
+da sua mongo database 
+
+EM 1 SERVER NA WEB,
+
+
+
+
+VOCê 
+
+
+PRECISA, AQUI,
+
+
+
+FILL IN
+
+
+O 
+
+__ADDRESs__ DESSE WEB SERVER... -----------> E VOCê ___ _TEM QUE __ FAZER ISSO,
+
+
+
+CASO CONTRÁRIO 
+
+
+A 
+
+CONEXÃO 
+
+ __ FALHARÁ__...
+
+
+
+
+
+
+
+
+
+
+
+
+ --> isso é importante pq 
+
+
+mais tarde,
+
+ESSE NEGÓCIO VAI SER VALIDADO... --> SE VOCê ESTIVER SE CONECTANDO A 1 SERVER,
+
+
+
+
+
+
+O SERVER A QUE VOCê VAI SE CONECTAR __ DEVERÁ _ SER O SERVER 
+
+QUE VOCê 
+
+TEM 
+
+NESSE SEU 'certificate'.. 
+
+
+
+
+
+
+
+
+
+--> COMO VAMOS NOS CONECTAR AO 'LOCALHOST',
+
+
+DEVEMOS Inputtar 
+
+'localhost' aqui....
+
+
+
+
+
+
+
+
+
+
+--> OK, AÍ COLOQUE QUALQUER EMAIL ADDRESs....
+
+
+
+
+
+
+
+
+
+
+--> AÍ DPS DISSO 
+
+VOCê TERÁ ACABADO.... --> COM ISSO,
+
+
+
+2 
+
+Files 
+
+
+TERÃO SIDO GERADAS:
+
+
+
+
+
+
+
+
+
+
+1) mongodb cert KEY FILE.... mongodb-cert.key
+
+
+
+
+
+2) mongodb cert.crt file... mongodb-cert.crt
+
+
+
+
+
+
+
+
+
+
+---> PRECISAMOS, AGORA, CONCATENAR ESSES 2 ARQUIVOS EM 1 ÚNICO ARQUIVO....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, MAS COMO CONCATENAR?
+
+
+
+
+
+
+
+
+
+
+--> BEM, ESSA É OUTRA ETAPA QUE É DESCRITA NOS OFFICIAL DOCS DO MONGODB...
+
+
+
+
+
+
+
+
+
+
+
+--> NO MAC E LINUX,
+
+
+EXECUTE 
+
+
+cat mongodb-cert.key mongodb-cert.crt > mongodb.pem 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> MAS 
+
+
+
+NO WINDOWS,
+
+
+VOCê 
+
+
+VAI EXECUTAR 
+
+
+
+type mongodb-cert.key mongodb-cert.crt > mongodb.pem 
+
+
+
+
+
+
+
+
+
+
+
+------> OK... AÍ EXECUTE ISSO AÍ 
+
+
+
+NO FOLDER 
+
+EM QUE VOCÊ TEM ESSES ARQUIVOS...
+
+
+
+
+
+
+
+
+
+-> ESSE CÓDIGO FARÁ COM QUE UM ARQUIVO 
+
+
+'mongodb.pem' 
+
+
+
+
+SEJA PRODUZIDO.
+
+
+
+
+
+
+
+
+
+
+
+-> MAS NO MEU CASO, GANHEI 1 ERROR... 
+
+
+
+
+
+
+
+
+--> não, espere... -> ganhei 1 error, mas o ARQUIVO FOI PRODUZIDO.... ---> MAS É UM ARQUIVO VAZIO...
+
+
+
+
+
+
+
+
+-_> TENTEI VÁRIAS VEZES, MAS NÃO FUNCIONA:
+
+
+
+type mongodb-cert.key mongodb-cert.crt > mongodb.pem
+
+
+
+
+
+
+
+SOLUÇÃO:
+
+
+
+
+Always put your path between quotes when it contains spaces.
+
+Get-Content -Path "C:\Program Files\Microsoft SQLServer\MSSQL.1\MSSQL\LOG\ERRORLOG" -TotalCount 5
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> SÓ FUNCIONOU __ quando eu 
+
+coloquei no CMD.... -----> 
+
+
+
+
+E APENAS QUANDO EU EXECUTEI ESSE NEGÓCIO COM OS 2 ARQUIVOS LÁ NO ROOT DO C DRIVe...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ARQUIVO PEM: 
+
+
+
+
+
+
+
+
+
+
+
+-----BEGIN PRIVATE KEY-----
+MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC4Xu0GHIUk4GIY
+w549+cwYP/i83nTusDzpAAs3+hdWhJJDA49jdf4B6+oHGXaZGLRR+/j1wwy5AOh3
+g4LOiUApMeqr2TKaScQHAwiFzwRY5/H/t0qk35xJAqBzPQ/MONs7UyC2tE24jJhx
+LXZ6FvGox2lxjtWxqHKXQTfNiSu3EG0CvFtzEuoj6S3JIczObG5x/BtQWSuKHPt5
+Xz23IiVE1Fl6TFvuKDQEfRihEQXgelAfrLSt48ac7eJVCy2f0Ow/J3tcuIXf0+Y/
+9jyY5m2ZYxHwzMDNn/czvBuntK4A0AWhCEW5u0iKf103ejQYfUOUN3oxSsk4nEVD
+lzbiRd/LAgMBAAECggEAT2v479qGUoHkUCWoe6spS8L2/ClaNt4thvORYZ42wnre
+ZMbaVG6mKp69VCyYZc/6EZ0ZPIk26FUnTyCUTzNZs8VAgaHRRhyDuL+KQtYQWdok
+6dLD8W0wLlVW1/2UWhWd/xrKq1nVZywNmSeL84EBvgKU/imZDWxyXIzoJH60Gana
+rHvGjRbRgAfQL4+8tfKoELd0clqR1qqGma2q0jfg5gsHTtXpjQoKsAYy9Zg+Rg8K
+oSUZX2jVnvxQ6GOO0+FR+KsklRvIKOY5wIwWHQ6A6OqDBZD8kFtaz7ytXzvUXVX4
+phZrKtqF7FXxJdSUuuCVTxFBmEaj6JeVucOzUSlggQKBgQDLQokvBPVzqt8nSkmI
+1qh2FUWbBfVzqhYDevMwUuktDNjZk1O8JZcBjOcCL+g8yCYmeOIhiI7qyK3koQ3X
+7Gjush+IXMvvkUxhi8uTVh3tlXVgqAhBOq4jmt8rBVsO7eugucvP43eFNUbbqlDj
+aHk+rSfnv4TSZTKcZv6xzTHhgQKBgQDoNbA7pIquHDVYYS83CQzTcqzVUmaeRRE+
+qHOZ8LIkh5S651Yg8TxdcZtmztseyvoSUXOM1aHIA0tzAzBVysOEuwI78tTU1SzG
+UQdnXidPRGI7yVKp2GoYz7ugy/qaR6jgkg+YOXYKvBVgkazUqXTvcAIKkilh/hYV
+I13kBRJPSwKBgEFEWDCU8wv1Ljq7i+k4pFdmdTdWLn65euAbNsOpm94vZeJXgGfF
+2jtRN0xofbYmvrlTz6jc5KdXUR885+kRrJAY+i8bPRDsIw6fiPsCiBGmEE69Jgls
+AkbEkCyMR7T/iM3PWzah39sSRHJ8ugSLo4MQruOnh8rXW+0E1XvaW84BAoGAfsD/
+yC7TPKNNQ0cZfNNF2w5X5cIrHe3ZsfhF0hwfQe14dGXfD/Be4SsohwAXgEGQK/um
+NZRP0VxrDQcKlWovO/7RA2RUZTFQVZjZj8VHc++CJ9yHcQsfLxgF9Yoi66B+QMe6
+F4AWPVnZ2XLrgtJVcHYVxyttx33pE/TQRa23Bu0CgYAXOKaOgncylKuQsniTfx/J
+bgCeGyZHR3PG0Iou4j3ZtCuofDd/fgG+FoLTROYhfXWaZOaBkWUFvQrHckZNCHdh
+r1oK4NHRy6JGee4jtrvXMYV9SJXFuFLraoxByvrBIM3a+obLuncwSmXlPPmNsaIT
+4RSUeLjV7LQaAEXOmeMD5g==
+-----END PRIVATE KEY-----
+-----BEGIN CERTIFICATE-----
+MIID5zCCAs+gAwIBAgIUc95t2kzUJ5mk53FJwUtSd8Fi7towDQYJKoZIhvcNAQEL
+BQAwgYIxCzAJBgNVBAYTAkJSMQswCQYDVQQIDAJSUzEVMBMGA1UEBwwMUG9ydG8g
+QWxlZ3JlMQwwCgYDVQQKDANTU0QxDDAKBgNVBAsMA0RFRzESMBAGA1UEAwwJbG9j
+YWxob3N0MR8wHQYJKoZIhvcNAQkBFhBleGVtcGxvQHRlc3QuY29tMB4XDTIyMDIy
+NzIxMDYwOVoXDTIzMDIyNzIxMDYwOVowgYIxCzAJBgNVBAYTAkJSMQswCQYDVQQI
+DAJSUzEVMBMGA1UEBwwMUG9ydG8gQWxlZ3JlMQwwCgYDVQQKDANTU0QxDDAKBgNV
+BAsMA0RFRzESMBAGA1UEAwwJbG9jYWxob3N0MR8wHQYJKoZIhvcNAQkBFhBleGVt
+cGxvQHRlc3QuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuF7t
+BhyFJOBiGMOePfnMGD/4vN507rA86QALN/oXVoSSQwOPY3X+AevqBxl2mRi0Ufv4
+9cMMuQDod4OCzolAKTHqq9kymknEBwMIhc8EWOfx/7dKpN+cSQKgcz0PzDjbO1Mg
+trRNuIyYcS12ehbxqMdpcY7Vsahyl0E3zYkrtxBtArxbcxLqI+ktySHMzmxucfwb
+UFkrihz7eV89tyIlRNRZekxb7ig0BH0YoREF4HpQH6y0rePGnO3iVQstn9DsPyd7
+XLiF39PmP/Y8mOZtmWMR8MzAzZ/3M7wbp7SuANAFoQhFubtIin9dN3o0GH1DlDd6
+MUrJOJxFQ5c24kXfywIDAQABo1MwUTAdBgNVHQ4EFgQU1TFtWhIznhWl9s0ZCp4o
+TV48Eb8wHwYDVR0jBBgwFoAU1TFtWhIznhWl9s0ZCp4oTV48Eb8wDwYDVR0TAQH/
+BAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAcaFOF+D7TB8fvKo0ZaMGDTrDYOQv
+fK8g/h2Wfx8sSj5pcxV27vFNIZGqLp7G4oZliP9AyFcApRiRES+jInbcXVNDis6M
+pngoQG7fW8IW6HQ2GdYOLkZdZ225fJQbhdV4wedRHGm/VXVqkBV7weLMOaiSctmC
+nGVYqdnBqkPnUobhgeEywL3DHNbLBqoc6UHzMrY/K+UmpcjmGa+Ne+MREnRr2wGj
+lAWk+cQOtLZ/0Hf4p5JKikj5cwdYnu0V4poJrOIgsePjhf5h++xAbXgJlhPo4jtm
+cNsfME1wTUh0eBa7z3JhZkrL3uvo//9XOyqXJmRI/rsoZe4QKe7iwtt+yw==
+-----END CERTIFICATE-----
+
+
+
+
+
+
+
+
+
+
+
+-----------------------------------
+
+
+
+
+
+
+
+
+
+
+OK, TEMOS ESSE ARQUIVO '.pem',
+
+
+
+QUE É 
+
+O ARQUIVO 
+
+
+QUE 
+
+
+PRECISAMOS PARA USAR 
+
+
+
+
+
+
+'SSL ENCRPYTION'...
+
+
+
+
+
+
+
+
+
+
+
+--> MAS COMO ISSO FUNCIONA?
+
+
+
+
+
+
+
+
+
+--> BEM, NESSE FOLDER EM QUE 
+
+
+VOCê 
+
+ 
+
+ ARMAZENOU ESSE ARQUIVO 
+
+ '.pem',
+
+
+ VOCÊ 
+
+ PODE INICIAR 
+
+
+
+ SEU SERVER 
+
+
+
+ 'mongod',
+
+
+
+
+
+ ou com
+
+
+
+ 'net start mongoDB' 
+
+
+
+
+
+
+
+
+
+ --> SE VOCê ESCREVER 
+
+ 'mongod --help',
+
+
+
+
+ VOCê ENCONTRA ALGUMAS OPTIONS QUE TE AJUDAM 
+
+
+
+ COM 
+
+
+
+ O FUNCIONAMENTO DESSA SSL ENCRYPTION...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> temos a categoria 'SSL options':
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> mas 'net start mongodb --help' NÃO TE DÁ AJUDA...
+
+
+
+
+
+
+
+
+
+
+ EX:
+
+
+
+
+
+
+
+
+ TLS Options:
+  --tlsOnNormalPorts                    Use TLS on configured ports
+  --tlsMode arg                         Set the TLS operation mode
+                                        (disabled|allowTLS|preferTLS|requireTLS
+                                        )
+  --tlsCertificateKeyFile arg           Certificate and key file for TLS
+  --tlsCertificateKeyFilePassword arg   Password to unlock key in the TLS
+                                        certificate key file
+  --tlsClusterFile arg                  Key file for internal TLS
+                                        authentication
+  --tlsClusterPassword arg              Internal authentication key file
+                                        password
+  --tlsCAFile arg                       Certificate Authority file for TLS
+  --tlsClusterCAFile arg                CA used for verifying remotes during
+                                        inbound connections
+  --tlsCRLFile arg                      Certificate Revocation List file for
+                                        TLS
+  --tlsDisabledProtocols arg            Comma separated list of TLS protocols
+                                        to disable [TLS1_0,TLS1_1,TLS1_2,TLS1_3
+                                        ]
+  --tlsAllowConnectionsWithoutCertificates
+                                        Allow client to connect without
+                                        presenting a certificate
+  --tlsAllowInvalidHostnames            Allow server certificates to provide
+                                        non-matching hostnames
+  --tlsAllowInvalidCertificates         Allow connections to servers with
+                                        invalid certificates
+  --tlsFIPSMode                         Activate FIPS 140-2 mode at startup
+  --tlsCertificateSelector arg          TLS Certificate in system store
+  --tlsClusterCertificateSelector arg   SSL/TLS Certificate in system store for
+                                        internal TLS authentication
+  --tlsLogVersions arg                  Comma separated list of TLS protocols
+                                        to log on connect [TLS1_0,TLS1_1,TLS1_2
+                                        ,TLS1_3]
+
+
+
+
+
+
+
+
+
+
+
+--> OK, TEMOS VÁRIAS OPÇÕES...
+
+
+
+
+
+
+
+A QUE INTERESSA DEVE SER ESTA:
+
+
+  --tlsCertificateKeyFile arg           Certificate and key file for TLS
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> MAS ANTES DISSO,
+
+
+PROFESSOR EXPLICA QUE TEMOS QUE SETTAR o 
+
+
+
+
+'--sslMode arg' 
+
+
+
+
+
+
+
+
+
+
+
+
+--> 
+
+
+
+
+
+OS MODES 
+
+
+
+
+DISPONÍVEIS SÃO: 
+
+
+
+
+
+
+disabled 
+
+
+allowSSL 
+
+
+preferSSL 
+
+
+requireSSL
+
+
+
+
+
+
+
+
+
+
+---> O SSLMODE 
+
+
+
+
+define 
+
+
+se ele 
+É 
+
+DISABLED,
+
+
+
+se 
+
+
+
+
+ele 
+
+
+'ALLOWS CLIENTS TO CONNECT VIA SSL,
+ BUT THEY CAN STILL CONNECT WITHOUT SSL' 
+
+
+
+
+
+
+
+
+
+ --> OU ENTAÕ 
+
+
+ ''PREFERS SSL, 
+
+ O QUE SÓ É IMPORTANTE SE VOCê ESTÁ USANDO REPLICA SETS'''...
+
+
+
+
+
+
+
+
+
+
+
+POR FIM, TEMOS 'REQUIRED',
+
+
+
+que significa que 
+
+
+QUAISQUER CONEXÕES QUE NÃO USEM 
+
+SSL SERÃO 'DENIED' --> É ISSO QUE O PROFESSOR VAI QUERER USAR....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ok... POR ISSO VAMOS TER QUE 
+
+
+
+ESCREVER: 
+
+
+
+
+
+
+
+A) no 'mongod', se executarmos assim, 'mongod --sslMode requireSSL' 
+
+
+
+
+
+
+
+
+B) na CONFIG do mongo server, se optamos/optarmos/estivermos optando por 'net start Mongodb' ---> vamos ter que habilitar alguma option nessa cfg file...
+
+
+
+
+c)   --tlsCertificateKeyFile arg           (Certificate and key file for TLS)
+
+
+
+
+--> POR MEIO DESSE COMANDO, PRECISAMOS APONTAR AO NOSSO ARQUIVO 
+
+'pem',
+
+que 
+
+
+
+compilou tanto a public como private keys...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> OK... ---> TEORICAMENTE,
+
+VOCÊ PODERIA 
+
+A
+TÉ MESMO 
+
+
+CRIAR 
+
+
+
+1 CERTIFICATE/PEM FILE 
+
+
+
+COM  
+
+1 
+SENHA,
+
+
+A QUAL 
+
+
+
+VOCÊ TERIA DE ENTER 
+
+em 
+
+
+
+  --tlsCertificateKeyFilePassword arg   Password to unlock key in the TLS
+                                        certificate key file
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> POR FIM,
+ 
+
+
+ TEMOS O IMPORTANTE 
+
+
+   --tlsCAFile arg                       Certificate Authority file for TLS
+
+
+
+
+
+
+
+isso é basicamente o arquivo 
+
+
+'CERTIFICATE OF AUTHORITY',
+
+
+QUE VOCê OBTERÁ 
+
+100% DAS VEZES SE VOCê 
+
+CONSEGUIR SEU 'SSL CERTIFICATE'
+
+ATRAVÉS 
+
+DE UMA 
+
+AUTORIDADE OFICIAL  (pagando),
+
+
+
+
+
+EXISTEM TANTO PAID COMO FREE ONES... -->  ESSE É UM ARQUIVO QUE É ADICIONAL 
+
+
+ao 
+
+
+seu 
+
+
+arquivo 
+
+'.pem',
+
+
+
+
+
+é como uma VALIDAÇÃO EXTRA,
+
+
+
+
+
+esse arquivo 
+
+
+'CA' (certificate of authority)  -------> NÓS TEMOS SÓ O ARQUIVO '.pem',
+
+
+
+
+
+E NÃO TEMOS ESSE 'CA' --> o CA é uma 
+
+
+'
+camada extra de segurança',
+
+
+
+que 
+
+
+BASICAMENTE 
+
+
+
+PREVINE A OCORRÊNCIA 
+
+DE 
+
+ATAQUES 
+
+
+'MAN-IN-THE-MIDDLE'... -----------> SE VOCÊ 
+
+
+
+
+
+FOR DEPLOYAR SEU MONGODB 
+
+
+
+SERVER EM PRODUCTION,
+
+
+
+VOCÊ 
+
+VAI 
+
+
+GANHAR/GANHARIA 
+
+
+
+
+
+1 
+
+
+
+
+
+''SSL CERTIFICATE'' 
+
+
+DE UMA 
+
+CERTIFICATE AUTHORITY,
+
+
+
+E AÍ 
+
+
+
+ELE 
+
+TE DARIA
+ 
+
+ 1 ARQUIVO PEM 
+
+ e 
+
+ um 
+
+ arquivo 
+
+
+ 'CA',
+
+
+
+ e aí 
+
+
+ você 
+
+
+
+
+
+ BASICAMENTE 
+
+
+
+
+ ADICIONARIA/ADICIONARÁ 
+
+
+ESSAS 2 FILES COMO ARGUMENTOS,
+
+
+QUANDO 
+
+FIZER LAUNCH DO SEU SERVER....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> OK... MAS NO NOSSO CASO,
+
+
+VAMOS 
+
+SÓ 
+
+
+LANÇAR 
+
+O 
+
+SV 
+
+
+COM 
+
+
+
+
+'--tlsMode requireSSL 
+
+
+--tlsCertificateKeyFile mongodb.pem' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK... 
+
+
+
+
+
+
+
+
+MAS E SE EU QUISER FAZER ISSO NO 
+
+
+'mongodb.cfg'? 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+VAMOS 
+
+
+
+TER QUE EDITAR ESSE CONTEÚDO:
+
+
+
+
+
+# mongod.conf
+
+# for documentation of all options, see:
+#   http://docs.mongodb.org/manual/reference/configuration-options/
+
+# Where and how to store data.
+storage:
+  dbPath: C:\Program Files\MongoDB\Server\5.0\data
+  journal:
+    enabled: true
+#  engine:
+#  wiredTiger:
+
+# where to write logging data.
+systemLog:
+  destination: file
+  logAppend: true
+  path:  C:\Program Files\MongoDB\Server\5.0\log\log\mongod.log
+
+# network interfaces
+net:
+  port: 27017
+  bindIp: 127.0.0.1
+
+
+#processManagement:
+
+#security:
+
+#operationProfiling:
+
+#replication:
+
+#sharding:
+
+## Enterprise-Only Options:
+
+#auditLog:
+
+#snmp:
+
+
+
+
+
+
+
+
+
+
+
+--> PROVAVELMENTE SERÁ EM 'security'
+
+
+
+--> hmm mas eu me lembro que HAVIA EDITADO ESSE ARQUIVO...
+
+
+
+
+
+
+
+--> e eu havia, mesmo:
+
+#security:
+security:
+   authorization: "enabled"
+
+
+
+
+
+
+
+
+
+--> MAS AGORA PRECISO ADICIONAR ESSAS OPTIONS DO 'SSL'...
+
+
+
+
+
+EX:
+
+
+
+
+
+
+net:
+   port: <int>
+   bindIp: <string>
+   bindIpAll: <boolean>
+   maxIncomingConnections: <int>
+   wireObjectCheck: <boolean>
+   ipv6: <boolean>
+   unixDomainSocket:
+      enabled: <boolean>
+      pathPrefix: <string>
+      filePermissions: <int>
+   tls:
+      certificateSelector: <string>
+      clusterCertificateSelector: <string>
+      mode: <string>
+      certificateKeyFile: <string>
+      certificateKeyFilePassword: <string>
+      clusterFile: <string>
+      clusterPassword: <string>
+      CAFile: <string>
+      clusterCAFile: <string>
+      CRLFile: <string>
+      allowConnectionsWithoutCertificates: <boolean>
+      allowInvalidCertificates: <boolean>
+      allowInvalidHostnames: <boolean>
+      disabledProtocols: <string>
+      FIPSMode: <boolean>
+      logVersions: <string>
+   compression:
+      compressors: <string>
+
+
+
+
+
+
+
+
+
+
+
+
+      -> OK, É SÓ ADICIONAR ESSA OPTION DE TLS...
+
+
+
+
+
+
+
+
+
+
+
+      --> FICOU TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+
+      # mongod.conf
+
+# for documentation of all options, see:
+#   http://docs.mongodb.org/manual/reference/configuration-options/
+
+# Where and how to store data.
+storage:
+  dbPath: C:\Program Files\MongoDB\Server\5.0\data
+  journal:
+    enabled: true
+#  engine:
+#  wiredTiger:
+
+# where to write logging data.
+systemLog:
+  destination: file
+  logAppend: true
+  path:  C:\Program Files\MongoDB\Server\5.0\log\log\mongod.log
+
+# network interfaces
+net:
+   port: 27017
+   bindIp: 127.0.0.1
+   tls:
+      mode: requireTLS
+      certificateKeyFile: C:\Program Files\MongoDB\Server\5.0\mongodb.pem
+
+
+
+
+
+
+--------------------------------
+
+
+
+
+
+agora basta testar, ver se isso funciona...
+
+
+
+
+
+
+
+
+
+
+--> como posso ver se isso funcionou?
+
+
+
+
+
+
+--> bem, eu tenho que rodar algum comando no meu server/mongod instance....
+
+
+
+
+
+
+
+-> hmmmm posso checar o arquivo '.log'
+
+
+
+
+
+QUE É CRIADO POR NOSSA INSTANCE DE MONGOD,
+
+lá 
+
+
+
+
+na sua pasta de arquivos...
+
+
+
+
+
+
+
+
+
+PARA TESTAR, FAÇA ISSO:
+
+
+
+
+
+
+
+To test the TLS/SSL configuration, use the mongo shell with the
+
+ --ssl option to verify that you can connect to the server and execute a command. Run the commands
+
+
+
+
+
+
+
+
+
+
+BEM, MAS ISSO FALHOU:
+
+
+
+
+
+
+MongoDB shell version v5.0.6
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Error: couldn't connect to server 127.0.0.1:27017, connection attempt failed: HostUnreachable: Connection reset by peer :
+connect@src/mongo/shell/mongo.js:372:17
+@(connect):2:6
+exception: connect failed
+exiting with code 1
+PS A:\projeto6-MONGODB\MODULO14-MONGODBESEGURANÇA>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> de fato, o ssl/tls 
+
+
+
+não está ativado no nosso mongod... (net start MongoDb)....
+
+
+
+
+
+
+
+
+
+
+--> encontrei o local do 'mongod.cfg' --> era dentro do folder de 'bin'...
+
+
+
+
+
+
+
+
+
+
+
+-_> AGORA FINALMENTE DEU CERTO....
+
+
+
+
+
+
+
+
+
+
+O CÓDIGO DO CONFIG FICOU ASSIM:
+
+
+
+
+
+
+
+
+# mongod.conf
+
+# for documentation of all options, see:
+#   http://docs.mongodb.org/manual/reference/configuration-options/
+
+# Where and how to store data.
+storage:
+  dbPath: C:\Program Files\MongoDB\Server\5.0\data
+  journal:
+    enabled: true
+#  engine:
+#  wiredTiger:
+
+# where to write logging data.
+systemLog:
+  destination: file
+  logAppend: true
+  path:  C:\Program Files\MongoDB\Server\5.0\log\log\mongod.log
+
+# network interfaces
+net:
+   port: 27017
+   bindIp: 127.0.0.1
+   tls:
+      mode: requireTLS
+      certificateKeyFile: C:\Program Files\MongoDB\Server\5.0\bin\mongodb.pem
+
+
+
+#processManagement:
+
+#security:
+security:
+   authorization: "enabled"
+
+
+#operationProfiling:
+
+#replication:
+
+#sharding:
+
+## Enterprise-Only Options:
+
+#auditLog:
+
+#snmp:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> agora quando TENTO CONECTAR 
+
+
+
+
+
+
+A MINHA DATABASE DE 'mongod/net start mongodb'
+
+
+
+
+
+
+
+
+
+COM AQUELE COMANDO DE 'mongo' automático,
+
+
+
+
+RECEBO IMEDIATAMENTE UM ERRO:
+
+
+
+
+
+
+
+
+MongoDB shell version v5.0.6
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Error: network error while attempting to run command 'isMaster' on host '127.0.0.1:27017'  :
+connect@src/mongo/shell/mongo.js:372:17
+@(connect):2:6
+exception: connect failed
+exiting with code 1
+PS A:\projeto6-MONGODB\MODULO14-MONGODBESEGURANÇA>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------> pq recebo esse erro?
+
+
+
+
+
+
+
+
+
+
+duuuh, é pq 
+
+
+
+o SSL/TLS 
+
+
+ESTÁ IMPLEMENTADO NO MEU SERVER;
+
+
+
+COMO ELE ESTÁ IMPLEMENTADO, ELE VAI SEMPRE EXIGIR AQUELE ARQUIVO '.pem' 
+
+
+
+NA SUA CONEXÃO.... --> você 
+
+
+
+faz isso 
+
+
+
+por 
+
+
+meio 
+
+
+do 
+
+write 
+
+de 
+
+
+'mongo' + 'FLAGS DE SSL/TLS'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> essas flags são coisas como 
+
+
+
+--tlsCertificateKeyFile mongodb.pem,
+
+
+
+
+
+
+
+
+
+E OUTRAS COISAS..
+
+
+
+
+
+--> PRECISAMOS TAMBÉM DEFINIR A FLAG DE '--tls'...
+
+
+
+
+
+
+
+
+BEM, MAS ISSO ME DEU OUTRO ERRO:
+
+
+
+
+
+
+
+
+
+
+
+
+PS A:\projeto6-MONGODB\MODULO14-MONGODBESEGURANÇA> mongo --tlsCertificateKeyFile mongodb.pem --tls
+MongoDB shell version v5.0.6
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+{"t":{"$date":"2022-02-28T17:20:09.896Z"},"s":"E",  "c":"NETWORK",  "id":23279,   "ctx":"js","msg":"SSL peer certificate validation failed","attr":{"errorCode":"800B0109","error":"Uma cadeia de certificação foi processada, mas terminou em um certificado raiz que não é confiável para o provedor de confiabilidade."}}
+{"t":{"$date":"2022-02-28T17:20:09.897Z"},"s":"E",  "c":"NETWORK",  "id":23279,   "ctx":"js","msg":"SSL peer certificate validation failed","attr":{"errorCode":"800B0109","error":"Uma cadeia de certificação foi processada, mas terminou em um certificado raiz que não é confiável para o provedor de confiabilidade."}}
+Error: couldn't connect to server 127.0.0.1:27017, connection attempt failed: SSLHandshakeFailed: SSL peer certificate validation failed: (800B0109)Uma cadeia de certificação foi processada, mas terminou em um certificado raiz que não é confiável para o provedor de confiabilidade. :
+connect@src/mongo/shell/mongo.js:372:17
+@(connect):2:6
+exception: connect failed
+exiting with code 1
+PS A:\projeto6-MONGODB\MODULO14-MONGODBESEGURANÇA>
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> TENTO TAMBÉM ESTE AQUI:
+
+
+PS A:\projeto6-MONGODB\MODULO14-MONGODBESEGURANÇA> mongo --tls --tlsCAFile mongodb.pem
+
+
+
+
+
+
+
+--> TAMBÉM FALHA:
+
+
+
+
+
+
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Error: couldn't connect to server 127.0.0.1:27017, connection attempt failed: SSLHandshakeFailed: The server certificate does not match the host name. Hostname: 127.0.0.1 does not match , Subject Name: emailAddress=exemplo@test.com,CN=localhost,OU=DEG,O=SSD,L=Porto Alegre,ST=RS,C=BR :
+connect@src/mongo/shell/mongo.js:372:17
+@(connect):2:6
+exception: connect failed
+exiting with code 1
+PS A:\projeto6-MONGODB\MODULO14-MONGODBESEGURANÇA>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> PARA CONSERTAR ESSE ERRO,
+
+
+PROFESSOR EXPLICA QUE SOMOS OBRIGADOS A ESCREVER 
+
+
+
+
+'--tlsCAFile mongodb.pem --host localhost' 
+
+
+
+
+
+
+
+
+(
+
+  OU SEJA, PRECISAMOS PASSAR UMA FLAG de 'host' com nosso ip/localhost (localhost em casos de development)...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> COM ISSO,
+
+
+FINALMENTE SERÁ ESTABELECIDA UMA CONNECTION COM O MONGOD:
+
+
+
+
+
+
+
+
+
+
+
+PS A:\projeto6-MONGODB\MODULO14-MONGODBESEGURANÇA> mongo --tls --tlsCAFile mongodb.pem --host localhost
+MongoDB shell version v5.0.6
+connecting to: mongodb://localhost:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("8ed6042b-8dae-4221-8bd1-10ef78292dbd") }
+MongoDB server version: 5.0.6
+================
+Warning: the "mongo" shell has been superseded by "mongosh",
+which delivers improved usability and compatibility.The "mongo" shell has been deprecated and will be removed in
+an upcoming release.
+For installation instructions, see
+https://docs.mongodb.com/mongodb-shell/install/
+
+
+
+
+
+
+
+----------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> E VOCÊ PRECISA ESPECIFICAR O '--host',
+
+
+
+PQ 
+
+
+CASO CONTRÁRIO, 
+
+
+
+ELE 
+
+VAI 
+
+TENTAR 
+
+
+
+SE CONECTAR AO IP ADDRESS DE '127.0.0.1',
+
+
+
+
+
+QUE É O LOCALHOST,
+
+
+
+MAS QUE 
+
+
+TECNICAMENTE '''É UMA PALAVRA DIFERENTE'',
+
+
+E É EXATAMENTE POR ISSO QUE É 'CONSIDERADO UMA PALAVRA DIFERENTE'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... QUANDO ESPECIFICAMOS ESSE NEGÓCIO BEM CERTINHO,
+
+
+
+
+DEIXAMOS BEM CLARO QUE ESSE É O HOST QUE ESPERAMOS 'VER COMO UM NAME' 
+
+
+
+no backend,
+
+
+
+
+
+
+
+
+
+
+que 
+
+ESSE É O HOST QUE FAZ PARTE DE NOSSO 
+
+
+CERTIFICATE,
+
+
+
+e que 
+
+
+nossa database ddeve funcionar...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS É CLARO QUE __VOCê PODE TER SETUPS MAIS ELABORADOS ---> 
+
+
+
+É BEM MELHOR TER UM 
+
+CERTIFICATE PRODUZIDO POR UMA AUTORIDADE,
+
+
+E NÃO POR VOCÊ MESMO ('self-signed')
+
+
+
+
+
+
+
+
+
+
+
+-_> é assim que 
+
+
+
+MANDAMOS ARQUIVOS COM ENCRIPTAÇÃO TLS APLICADA A ELES...
+
+
+
+--> OK, ISSO SIGNIFICA QUE AGORA TODOS OS ARQUIVOS QUE SÃO MANDADOS DO CLIENT/MONGOSHELL __ 
+
+
+
+AO __ SERVER__ SERÃO__ ENCRIPTADOS__>...

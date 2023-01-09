@@ -1,0 +1,1034 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> JÁ FIZ ISSO VÁRIAS VEZES,
+
+SETUP DE UMA DATABASE MONGODB COM O MONGODB ATLAS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> CRIE UMA CONTA,
+
+
+CREATE A NEW CLUSTER.... --> 
+
+
+SELECIONE AWS,
+
+
+N VIRGINia...
+
+
+
+
+
+
+
+
+
+
+
+
+
+DIFERENTES PARTES 
+
+DO MUNDO TEM DIFERENTES CLUSTERS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SUA DATA DEVE FICAR DISTRIBUÍDA 
+
+
+AO LONGO DO MUNDO, PARA QUE O TEMPO 
+
+DE 'REACH OUT' 
+
+seja 
+
+o mais 
+
+curto possível (
+
+
+
+
+
+dividir nossa database 
+
+
+em 
+
+
+zonas...
+
+)
+
+--> é a config de 'global cluster configuration'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> O MONGODB não tem seus 'own data centers' --> EM VEZ DISSO,
+
+
+A SOLUÇÃO
+
+
+
+MONGODB 
+
+VAI 
+
+USAR 
+
+
+SOLUÇÕES 
+
+que vocÊ 
+
+
+query deployar (
+
+
+    AWS, Google cloud platform, azure,...
+)
+
+
+
+
+
+
+
+
+
+-> O PRÓXIMO PASSO É O 'CLUSTER TIER' --> ISSO DEFINE O PODER DO SEU STORAGE,
+
+
+E O QUE VOCê PODE FAZER.. .-> 
+
+
+
+
+
+vamos escolher a instance 'free'..
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS O PROFESSOR QUER USAR UMA INSTANCE 
+
+1 POUCO DIFERENTE,
+
+
+
+PQ 
+
+ELE 
+
+QUER MOSTRAR ALGO 
+
+QUE 
+NÃO É DISPONÍVEL DE GRAÇA,
+
+
+
+
+CONFIGURAR ALGO QUE 
+
+É PAGO,
+
+
+
+mas que vocÊ não precisa fazer.... -----> E O PROFESSOR ESCOLHE A INSTANCE DE 
+
+'M10',
+
+
+
+
+
+pq 
+
+
+isso vai permitir ele fazer outra coisa...
+
+
+
+
+
+
+
+
+
+--> VOCÊ GANHA MAIS POWER quanto mais você paga...
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESSE SERÁ APENAS 1 DOS SERVERS... --> 
+
+
+
+
+
+
+O PROFESSOR VAI VOLTAR
+ 
+
+
+
+ AO TÓPICO DE 'COMO VOCÊ PODE ADICIONAR SHARDING' 
+
+
+
+
+ logo logo.... -------> 
+
+
+
+VOCê 
+
+
+TAMBÉM 
+
+PODE CUSTOMIZAR O 'AVAILABLE 
+
+
+DATA STORAGE',
+
+
+ou seja 
+
+
+
+A QUANTIDADE EM GIGABYTES,
+
+
+
+e aí 'auto-expand storage',
+
+
+se você quer que o espaço seja automaticmaente expandido quando estiver perto de ser preenchido por inteiro...
+
+
+
+
+
+
+
+
+
+
+
+--> VOCê TAMBÉM PODE SELECIONAR A VERSÃO DA DATABASE 
+
+
+
+
+
+QUE VOCê QUER USAR, 
+
+
+se estiver usando a versão PAGA 
+
+
+do 
+
+
+mongodb ATLAS.... -----> 
+
+
+
+
+
+
+SE VOCê ESTIVER usando 
+
+
+
+A VERSÃO FREE,
+
+VOCÊ NÃO PODE ESCOLHER A VERSÃO DO WIREDTIGEr (
+
+
+
+
+
+    há as versões 3.4, 3.6 e 4.0
+)
+
+
+
+
+
+
+
+
+
+----> O PROFESSOR QUER NOS MOSTRAR ALGO NO PRÓXIMO MÓDULO QUE ___ REQUER_ A VERSÃO 4.0,
+
+
+PORTANTO
+
+
+ELE ESCOLHEU A 'PAID VERSION'...
+
+
+
+
+
+
+
+
+
+
+
+--> mas você não é obrigado a pagar, você pode só assistir os videos do professor, follow along...
+
+
+
+
+
+
+
+
+
+
+
+
+----> VOCê __ TAMBÉM PODE CONFIGURAR 'BACKUPS' --> E AÍ VOCÊ 
+
+
+
+TEM 
+
+
+A ESCOLHA ENTRE 2 TIPOS DE BACKUPS..
+
+
+
+
+
+
+
+
+
+
+1) CONTINUOUS --> SIGNIFICA QUE SUA DATA É BACKEDUP __ A CADA SEGUNDO,
+
+
+
+SEMPRE QUE VOCê ESCREVE ALGO E ETC.... --> é sempre que vocÊ ESCREVE ALGO,
+
+
+
+NÃO É 1 VEZ A CADA 24 HORAS,
+
+
+E SIM 
+
+''ALWAYS BACKUP TO THE LATEST STAGE YOU WERE IN'...
+
+
+
+
+
+
+2) CLOUD PROVIDER SNAPSHOTS (mais barato) ----> É A ALTERNATIVA -> SNAPSHOTS ,
+
+
+
+SNAPSHOTS TIRADAS A CADA 24 HORAS... ----> VOCê TEM O PERIGO DE PERDER DATA, SE ELA FOI ALTERADA NAS ÚLTIMAS 
+
+24 HORAS...
+
+
+
+
+
+
+
+
+
+
+
+
+--> É POR ISSO QUE O PROFESSOR VAI ESCOLHER 'CONTINUOUS' -> MAS ESSAS 2 OPTIONS SÓ FICAM DISPONÍVEIS SE VOCÊ PAGAR...
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOCê NÃO PODE SETTAR BACKUPS SE NÃO PAGAR....
+
+
+
+
+
+
+
+
+
+-> PRODUCTION SOLUTIONS FREQUENTEMENTE ENVOLVEM PAGAMENTO, PORTANTO ISSO ESTÁ 'FINE'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> POR FIM,
+
+
+VOCê PODE SETTAR 'SHARDING'... .->  
+
+
+
+
+
+
+
+
+
+
+BEM, MAS PARA O SHARDING,
+
+O PROFESSOR EXPLICA QUE 
+
+ele 
+PRECISA 
+
+
+DE UMA INSTANCE 
+
+aINDA MAIOR,
+
+
+
+um 
+
+'m10' 
+
+
+NÃO É O SUFICIENTE (10gb storage)...
+
+
+
+
+
+
+
+
+
+
+-> ELE TROCA PARA UMA INSTANCE DE M30  (54 centavos de dolar a hora).. --> 40gb storage....
+
+
+
+
+
+
+
+
+
+
+
+
+------------> AÍ VOCê PODE SETTAR SHARDING,
+
+
+E AÍ ESCOLHER 
+
+
+
+
+__ QUANTOS __ SHARDS__ VOCê VAI QUERER ... --> 2 SHARDS --> 
+
+
+
+E É ASSIM 
+
+QUE 
+
+VOCê ADICIONA 'AINDA MAIS PODER',
+
+poder que 
+
+vai 
+Além 
+
+da mudança/upgrade de tier 
+
+
+
+
+
+de storage...
+
+
+
+
+
+
+
+
+
+
+--> COMO NÃO PRECISAMOS DE SHARDING AQUI,
+
+o 
+
+PROFESSOR VOLTA PARA 
+
+
+
+
+O 'M10'....
+
+
+
+
+
+
+
+->  HÁ TBM ALGUMAS OUTRAS OPTIONS,
+
+
+como 
+
+
+
+'ENABLE BUSINESS INTELLIGENCE CONNECTOR (M10 and up)' 
+
+
+
+
+
+
+
+
+
+
+
+
+--> TAMBÉM A OUTRA OPÇÃO:
+
+
+
+'ENCRYPTION AT REST USING YOUR KEY MANAGEMENT (M10 e acima)'...
+
+(
+
+    VOCÊ DEVE CHECAR OS OFFICIAL DOCS SE PLANEJA IMPLEMENTAR ISSO... 
+)
+
+
+
+
+
+
+
+
+
+
+----> AS OPTIONS ADICIONAIS PODEM SER IGNORADAS...
+
+
+
+
+
+
+
+
+
+
+--> ex:
+
+
+
+
+set Oplog Size 
+
+
+
+Set Minimum TLS Protocol Version 
+
+
+
+
+Enforce Index Key Limit 
+
+
+
+
+
+
+
+
+
+Require Indexes for All Queries -----> você poderia dizer que 
+
+
+VOCê 
+
+SÓ VAI QUERER 
+
+
+
+TER INDEXES SOBRE ALGUMAS QUERIES,
+E NÃO SOBRE TODAS ELAS (
+    ISSO É VERDADE, pq às vezes indexes podem levar A PIORES PERFORMANCES..
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> ENFORCE INDEX KEY LIMIT --> 
+
+
+
+
+
+VOCÊ HABILITA ESSA OPTION PARA EVITAR QUE SUAS INDEX  KEYS FIQUEM MT LONGAS... -> 
+
+
+
+
+
+
+E O DEFAULT É 'ON'...
+
+
+
+
+
+
+
+
+
+
+-> NO FINAL, VOCê ASSIGNA UM CLUSTERNAME,
+
+COLOCA 
+
+
+
+
+'Create Cluster'...
+
+
+
+
+
+
+
+
+
+--> COM ISSO, VOCÊ JÁ TERÁ UM SERVER MONGODB RODANDO NA NUVEM... seguro, com as 'best practices'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> ELE TAMBÉM JÁ É UM 'REPLICA SET' 
+automatiacmente,
+
+
+esse seu cluster... ----> 
+
+
+
+
+SERÁ AUTOMATICMAENTE, OUT OF THE BOX,
+
+UM REPLICA 
+
+SET 
+
+COM 
+
+3 
+
+NODES... ------> E VOCÊ AINDA PODE ADICIONAR SHARDING 
+
+
+
+
+
+AO SEU SETUP,
+
+a esse cluster aí (se for o pago),
+
+
+tudo 
+
+
+
+enquanto ele está rodando...
+
+
+
+
+
+
+
+
+--> ENQUANTO ISSO VAI SENDO CRIADO,
+
+
+
+VOCê PODE 
+
+
+
+
+IR ATÉ A ABA DE 'SECURITY' --> e lá 
+
+
+você 
+
+
+PODE 
+
+
+
+'SECURE ACCESS' 
+
+
+ao seu mongodb database.... --> 
+
+
+
+
+
+
+
+
+
+
+
+
+JÁ VAMOS TER ALGUNS USERS....
+
+
+
+
+
+
+
+
+
+--> VOCÊ PODE CRIAR 1 NOVO USER,
+
+
+CRIAR QUANTOS USERS VOCÊ QUISER...
+
+
+
+
+
+
+
+-> ASSIGNE 1 USERNAME E 1 PASSWORD...
+
+
+
+
+
+
+
+
+
+--> VAMOS PRECISAR DESSE PASSWORD MAIS TARDE...
+
+
+
+
+
+
+
+
+-- >AÍ VOCê PODE SETTAR PRIVILEGES PARA ESSE USER.. 
+
+
+
+
+
+
+
+
+--> privileges mais comuns:
+
+
+
+
+ATLAS ADMIN 
+
+
+
+READ AND WRITE TO ANY DATABASE 
+
+
+
+
+
+ONLY READ ANY DATABASe (data analyst)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> CHEQUE O MÓDULO DE SEGURANÇA 
+
+
+PARA 
+
+MAIS DETALHES --> 
+
+
+
+
+
+
+você pode assignar roles avançados se você achar necessário...
+
+
+
+
+
+
+--> ROLES A CERTAS DATABASES, A CERTAS COLLECTIONS...
+
+
+
+
+
+
+
+
+
+
+
+
+-> OK... -> PROFESSOR ADICIONOU O 
+
+
+
+
+
+USER DE 'max'...
+
+
+
+
+
+
+
+-> DEPOIS DISSO,
+
+PROFESSOR VAI ATÉ A IMPORTANTE OPTION DE 'IP WHITELIST.'..
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR DIZ QUE DEVEMOS ADICIONAR 1 IP ADDRESS,
+
+
+QUE SERÁ O IP ADDRESS 
+
+
+DO 
+
+
+
+
+APP/USER QUE VAI USAR SEU MONGODATABASE... -------> DURANTE O DEVELOPMENT,
+
+
+VOCÊ VAI COLOCAR 
+
+SEU 
+
+
+
+'CURRENT IP ADDRESS' --> 
+
+
+
+
+
+
+
+HÁ TAMBÉM O BOTÃO DE 'allow access from anywhere',
+
+
+MAS 
+
+ISSO 
+
+
+É 
+
+DESENCORAJADO, PQ ABRE SUA DATABASE 
+
+
+A TODAS AS PESSOAS,
+
+de qualquer lugar... -> ABRE SUA DATABASE A TODO MUNDO --> VOCê AINDA TEM O MONGODB USER E PASSWORD como segurança,
+
+
+mas vocÊ terá menos 1 layer de segurança..
+
+
+
+
+
+
+
+
+--> TAMBÉM PODEMOS 
+
+
+
+LIGAR ALGUNS 'ENTERPRISE SECURITY' features....
+
+
+
+
+
+
+
+
+TIPO LDAP AUTHENTICATION --> é um tipo diferente de authentication... ---> MAS ISSO VAI ALÉM DESSE CURSO..
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS O PROFESSOR QUER NOS CONTAR MAIS ALGUMAS COISAS QUE PODEMOS 
+
+FAZER COM O MONGODB ATLAS,
+
+NA PRO´XIMA AULA...

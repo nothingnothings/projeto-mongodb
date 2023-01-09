@@ -1,0 +1,304 @@
+
+
+
+
+
+
+
+
+
+ACABAMOS COM ESTE MÓDULO...
+
+
+
+
+
+
+
+
+--> NESSE MÓDULO, A PRIMEIRA COISA QUE VIMOS FOI 'COMO ARMAZENAR GEOSPATIAL DATA'...
+
+
+
+
+
+
+
+
+
+
+
+--> VIMOS QUE CADA 'GEOJSON OBJECT'
+
+
+
+pode ser diferente,
+
+mas que sua estrutura é mais ou menos a mesma,
+
+
+
+sempre é 
+
+
+
+
+
+
+
+{
+
+    type: xxxx,
+    coordinates: [long, lat]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOCÊ ARMAZENA GEOSPATIAL DATA 'AO LADO DO RESTO DE SUA DATA, NOS SEUS DOCUMENTS'...
+
+
+
+
+
+
+
+--> A PARTE ESPECIAL DA GEOSPATIAL DATA É QUE 
+
+ELA 
+
+TEM QUE SEGUIR O FORMATO 'GEOJSON',
+
+
+ e nele 
+ você 
+
+
+DEVE SEGUIR AQUELE EXATO 
+
+
+FORMATO DE 
+
+
+
+
+{
+
+    type: xxxx,
+    coordinates: [long, lat]
+}
+
+
+
+
+
+
+
+
+
+--> OS TYPES PODEM SER 'Point', 'Polygon', e outros...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> VOCê TAMBÉM PODE CRIAR 'GEOSPATIAL INDEXES'...
+
+
+
+
+
+
+
+
+
+
+
+--> GEOSPATIAL INDEXES SÃO NECESSÁRIOS PARA RODAR ALGUMAS QUERIES...
+
+
+
+
+
+
+
+
+--> você os adiciona com a sintaxe:
+
+
+
+
+
+db.places.createIndex(
+    {
+        nomeDoFieldEmQueEstaSuaGeoJsonData: "2dsphere"
+    }
+)
+
+
+
+
+
+
+
+
+
+
+-----> A OPERATION DE '$near'
+
+
+REQUER 
+
+
+ESSE INDEX AÍ... ------> OUTRAS OPERATIONS, como '$geoWithin',
+
+
+NÃO REQUEREM... --> ainda assim,
+
+isso vai SPEED UP SUAS QUERIES...
+
+
+
+
+
+
+
+
+
+
+--> FALANDO DE QUERIES,
+
+
+VIMOS 
+
+
+3  
+
+OPERATORS IMPORTANTES:
+
+
+
+
+
+
+
+1) $near 
+
+
+
+2) $geoWithin 
+
+
+
+3) $geoIntersects
+
+
+
+
+
+
+
+
+
+
+
+-> ESSES 3 TE AJUDAM MT....
+
+
+
+
+
+
+
+
+
+-> TE DEIXAM:
+
+
+
+ A) FIND LOCATIONS/DOCUMENTS THAT ARE NEAR YOU,
+
+
+
+ B) RESTRICT THE RADIUS OF THE FIND (geoWithin e near) 
+
+
+
+ C) SORTAR AS LOCATIONS POR DISTANCE 
+
+
+
+
+ D) DESCOBRIR SE ALGO ESTÁ EM UMA ÁREA, ETC ETC..
+
+
+
+
+
+
+
+
+
+ -> E TODAS ESSAS GEOSPATIAL QUERIES TRABALHAM COM GEOJSON DATA,
+
+ POR ISSO 
+
+
+
+ VOCÊ DEVE ENTENDER 
+
+ ESSE FORMATO BEM,
+
+
+ E DEVE O UTILIZAR 
+
+
+ TANTO NA DATA QUE VOCê 
+
+
+ ARMAZENA,
+
+ COMO NAS SUAS QUERIES.
+
+
+
+
+
+
+
+
+
+
+
+
+ --> ESSA FOI A 'GEOSPATIAL DATA',
+
+
+
+
+
+
+ feature mt forte do mongodb,
+
+ que faz o trabalho com locations e areas ser bem mais fácil...

@@ -1,0 +1,2345 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... O QUE FIZEMOS NA ÚLTIMA LIÇÃO foi 'update the MATCHED ARRAY 
+
+ELEMENt'.. -> 
+
+
+
+
+
+
+
+O CÓDIGO FOI ESTE:
+
+
+
+
+
+
+db.users.updateMany(   {     hobbies: {       $elemMatch: {         title: 'Sports',         frequency: { $gte: 2 },  
+     },     },   },   {     $set: {       'hobbies.$.highFrequency': true,     },   } );
+{ "acknowledged" : true, "matchedCount" : 4, "modifiedCount" : 4 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO RESULTOU NESTE CÓDIGO:
+
+
+
+
+
+
+> db.users.find().pretty()
+{
+        "_id" : ObjectId("62087cf32867f483687f8345"),
+        "name" : "Anna",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2,
+                        "highFrequency" : true
+                },
+                {
+                        "title" : "Yoga",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : 24
+}
+{
+        "_id" : ObjectId("62087cf32867f483687f8346"),
+        "name" : "CJ",
+        "hobbies" : [
+                {
+                        "title" : "Gym",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Swimming",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : 35
+}
+{
+        "_id" : ObjectId("62087cf32867f483687f8347"),
+        "name" : "Yan",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2,
+                        "highFrequency" : true
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : null
+}
+{
+        "_id" : ObjectId("620880e92867f483687f8348"),
+        "name" : "TK",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2,
+                        "highFrequency" : true
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3
+                },
+                {
+                        "title" : "Souji",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : null
+}
+{
+        "_id" : ObjectId("620881262867f483687f8349"),
+        "name" : "TKO",
+        "hobbies" : [
+                "1",
+                "2",
+                "3"
+        ],
+        "phone" : "800808080",
+        "age" : null
+}
+{
+        "_id" : ObjectId("620883f22867f483687f834a"),
+        "title" : "The Last Student Returns",
+        "meta" : {
+                "rating" : 9.5,
+                "aired" : 2018,
+                "runtime" : 100
+        },
+        "visitors" : 1300000,
+        "expectedVisitors" : 15500000,
+        "genre" : [
+                "action",
+                "drama"
+        ]
+}
+{
+        "_id" : ObjectId("620883f22867f483687f834b"),
+        "title" : "DEEP",
+        "meta" : {
+                "rating" : 8,
+                "aired" : 2019,
+                "runtime" : 140
+        },
+        "visitors" : 1100000,
+        "expectedVisitors" : 13000000,
+        "genre" : [
+                undefined,
+                "drama",
+                "action"
+        ]
+}
+{
+        "_id" : ObjectId("6209f1279207fe373c205a87"),
+        "name" : "Chris",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2,
+                        "highFrequency" : true
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3
+                },
+                {
+                        "title" : "Souji",
+                        "frequency" : 3
+                }
+        ],
+        "age" : 30,
+        "phone" : 120212012108
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> OK...  MAS O QUE FIZEMOS NA ÚLTIMA LIÇÃO, EM QUE UPDATAMOS O 'MATCHING ARRAY ELEMENT',
+
+
+
+
+
+
+PODE TAMBÉM SER FEITO PARA 'MULTIPLE ARRAY MATCHING ELEMENTS'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> PARA DEMONSTRAR ISSO,
+
+
+o professor faz find de MÚLTIPLOS DOCUMENTS,
+
+por meio de 
+
+
+
+
+db.users.find({})
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VAI ENCONTRAR OBJECTS LEVANDO EM CONSIDERAÇÃO 
+
+
+
+
+
+
+
+UMA 
+'ARRAY-BASED QUERY'... (de hobbies),
+
+
+
+EM QUE 
+
+
+
+
+EU TALVEZ ENCONTRE HOBBIES QUE POSSUIRÃO UMA FREQUENCY QUE 
+
+SERÁ 
+
+
+__MAIOR__ DO QUE 2.....
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+db.users.find({"hobbies.frequency": {$gt: 2}}).pretty
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> COM ISSO, ENCONTRAREMOS UM MONTE DE DOCUMENTS... (e sempre se lembre que os documents são 'THE OVERALL PERSONS/documents', E NÃO OS DOCUMENTS EMBEDDADOS...)
+
+
+(
+
+
+
+    ou seja,
+
+
+    não será o  'hobbies: [
+        {title: "Good Food"} 
+
+    ]
+
+    '
+
+
+
+
+
+
+
+
+
+
+
+
+)
+
+
+
+
+
+
+
+--> BEM,
+ 
+
+
+
+
+
+
+ O PROFESSRO DIZ QUE ENCONTRAMOS 'Maria'
+
+
+ PQ 
+
+
+
+ ELA TEM UM HOBBY QUE 
+
+
+ É MAIOR DO QUE '3'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ db.users.find({"hobbies.frequency": {$gt: 2}}).pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+ -> encontramos todos os documents, sim.... (overall documents),
+
+
+
+ pq 
+
+
+ TODOS ELES TINHAM ARRAY EMBEDDED DOCUMENTS/objects que possuiam 'frequency' que era maior do que 2...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -------------> entretanto, o que interessa é que 
+
+
+
+
+ ''''NEM TODOS ESSES OBJECTS POSSUIAM 
+
+ FREQUENCY MAIOR DO QUE 2'''''.... 
+
+
+(
+    por exemplo, 'Max'
+
+    tinha um que era 
+
+
+
+
+''''
+    {
+        title: "Sports",
+        frequency: 1
+    }
+
+    ''''
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> mas digamos, ENTAÕ,
+
+QUE QUERMEOS 
+
+
+
+
+
+
+'MUDAR TODOS OS EMBEDDED DOCUMENTS QUE 
+
+
+
+
+
+
+
+
+TENHAM COMPLETADA ESSE QUERY POR FREQUENCY MAIOR DO QUE 2'... ----> 
+
+
+
+
+
+
+
+
+
+
+
+PARA ISSO,
+
+
+
+
+
+
+
+PROFESSOR COMEÇA PELA QUERY DE ANTES:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.users.find({"hobbies.frequency": {gt: 2}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> ESSA QUERY, ANTERIORMENTE, NOS DEU TODOS OS DOCUMENTS DE NOSSA COLLECTION (pq todos eles tinham um object 'hobby' com uma propriedade de 'frequency' que era 'SUPERIOR A 2'...)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA DEVEMOS 'UPDATEMANY'
+
+
+documents....
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> REPETIMOS ESSA QUERY DO FIND,
+
+
+
+tipo assim:
+
+
+
+
+
+db.users.updateMany({"hobbies.frequency": {gt: 2}},
+
+
+
+{
+
+}
+
+
+
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA, NO CASO, VAMOS QUERER __ UPDATAR__ OS VALORES DESSES DOCUMENTS (2o parâmetro de 'updateMany)'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NOVAMENTE,
+ 
+ PODEMOS UTILIZAR 
+
+
+
+
+
+
+ '$set',
+
+
+
+
+ "$inc'
+
+
+
+ E ASSIM 
+
+
+ POR DIANTE.... -------> ENTRETANTO,
+
+ AQUI O PROFESSOR VAI QUERER 
+
+
+
+
+ ''SET A NEW VALUE'''
+
+
+
+
+
+
+ DE ALGUMA COISA,
+
+
+
+ POR ISSO O 
+
+
+
+
+
+ USO DE 
+
+ '$set'
+
+
+ É O CORRETO.....
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> E, NO CASO,
+
+
+ PROFESSOR VAI QUERER 'CHANGE'
+
+
+
+
+ ___ TODOS ESSES 'hobbies' QUE FORAM MATCHEADOS ( ou seja, todos '{}" com frequency SUPERIOR a 2 )...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ----> UÉ, MAS COMO ESCREVER ISSO?
+
+
+
+
+
+
+
+
+
+
+
+ --> BEM, ANTES TIVEMOS ISTO: 
+
+
+
+
+
+
+
+
+ 1) "hobbies.$' -----> usamos isso para 'OVERWRITTAR' 
+
+
+
+ esse 'matchedElement',
+
+ overwrittar seu VALUE., 
+
+
+ tipo assim:
+
+
+
+
+
+ {$set: {"hobbies.$": 'novoValor'}}
+
+
+
+
+
+-----> e isso aí pode/deve ser usado TAMBÉM PARA 'set a new field'/EDIT UM EXISTING FIELD,
+
+
+
+tudo por meio da DOT NOTATION...
+
+
+
+
+
+ex:
+
+$set: {
+    "hobbies.$.ibirapueira": "valor" ///nova propriedade adicionada, com um novo valor...
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ENTRETANTO, HÁ UM PROBLEMA COM 
+
+
+'hobbies.$' -------> ISSO SÓ VAI MATCHEAR/EDITS 
+
+
+
+
+O 'FIRST MATCHING HOBBY' PARA __ CADA__ PERSON__.... -> ISSO SIGNIFICA QUE 
+
+
+
+SE 
+EXISTIREM/EXISTEM 
+
+
+
+
+'''MULTIPLE MATCHING HOBBIES'' dentro desse array 'hobbies', para 1 mesma pessoa,
+
+
+
+AÍ O '$set'
+
+
+NÕA VAI UPDATAR 
+
+TODOS OS DOCUMENTS,
+
+
+E SIM 
+
+
+
+
+__ APENAS__ 1...
+
+
+
+
+
+
+
+
+
+
+E PARA TESTAR ISSO,
+
+
+
+PROFESSOR 
+
+
+
+
+
+
+RODA ESTE CÓDIGO:
+
+
+
+
+
+db.users.updateMany({"hobbies.frequency": {gt: 2}},
+{
+    $set: {
+        "hobbies.$.goodFrequency": true
+    }
+}
+)
+
+
+
+
+
+
+
+
+
+
+CERTO, A RESPOSTA FOI ESTA:
+
+
+
+
+
+
+
+
+
+
+> db.users.updateMany({"hobbies.frequency": {gt: 2}},
+... {
+...     $set: {
+...         "hobbies.$.goodFrequency": true
+...     }
+... }
+... )
+{ "acknowledged" : true, "matchedCount" : 0, "modifiedCount" : 0 }
+>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OU SEJA, NENHUM 'MATCH' 
+
+
+de 
+
+
+
+
+documents...
+
+
+
+
+
+
+
+
+
+
+
+--> MINHA COLLECTION ESTÁ ASSIM:
+
+
+
+
+
+
+
+
+
+
+{
+        "_id" : ObjectId("62087cf32867f483687f8345"),
+        "name" : "Anna",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2,
+                        "highFrequency" : true
+                },
+                {
+                        "title" : "Yoga",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : 24
+}
+{
+        "_id" : ObjectId("62087cf32867f483687f8346"),
+        "name" : "CJ",
+        "hobbies" : [
+                {
+                        "title" : "Gym",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Swimming",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : 35
+}
+{
+        "_id" : ObjectId("62087cf32867f483687f8347"),
+        "name" : "Yan",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2,
+                        "highFrequency" : true
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : null
+}
+{
+        "_id" : ObjectId("620880e92867f483687f8348"),
+        "name" : "TK",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2,
+                        "highFrequency" : true
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3
+                },
+                {
+                        "title" : "Souji",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : null
+}
+{
+        "_id" : ObjectId("620881262867f483687f8349"),
+        "name" : "TKO",
+        "hobbies" : [
+                "1",
+                "2",
+                "3"
+        ],
+        "phone" : "800808080",
+        "age" : null
+}
+{
+        "_id" : ObjectId("620883f22867f483687f834a"),
+        "title" : "The Last Student Returns",
+        "meta" : {
+                "rating" : 9.5,
+                "aired" : 2018,
+                "runtime" : 100
+        },
+        "visitors" : 1300000,
+        "expectedVisitors" : 15500000,
+        "genre" : [
+                "action",
+                "drama"
+        ]
+}
+{
+        "_id" : ObjectId("620883f22867f483687f834b"),
+        "title" : "DEEP",
+        "meta" : {
+                "rating" : 8,
+                "aired" : 2019,
+                "runtime" : 140
+        },
+        "visitors" : 1100000,
+        "expectedVisitors" : 13000000,
+        "genre" : [
+                undefined,
+                "drama",
+                "action"
+        ]
+}
+{
+        "_id" : ObjectId("6209f1279207fe373c205a87"),
+        "name" : "Chris",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2,
+                        "highFrequency" : true
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3
+                },
+                {
+                        "title" : "Souji",
+                        "frequency" : 3
+                }
+        ],
+        "age" : 30,
+        "phone" : 120212012108
+}
+
+
+
+
+
+
+
+
+
+
+
+
+CONSERTEI:
+
+
+
+
+
+> db.users.updateMany({"hobbies.frequency": {$gt: 2}}, {     $set: {         "hobbies.$.goodFrequency": true     } } )
+{ "acknowledged" : true, "matchedCount" : 5, "modifiedCount" : 5 }
+
+
+
+
+
+
+
+
+
+
+
+
+---------> OK, 5 ELEMENTOS FORAM EDITADOS,
+
+assim:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+> db.users.find({}).pretty()
+{
+        "_id" : ObjectId("62087cf32867f483687f8345"),
+        "name" : "Anna",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2,
+                        "highFrequency" : true
+                },
+                {
+                        "title" : "Yoga",
+                        "frequency" : 3,
+                        "goodFrequency" : true
+                }
+        ],
+        "phone" : "800808080",
+        "age" : 24
+}
+{
+        "_id" : ObjectId("62087cf32867f483687f8346"),
+        "name" : "CJ",
+        "hobbies" : [
+                {
+                        "title" : "Gym",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Swimming",
+                        "frequency" : 3,
+                        "goodFrequency" : true
+                }
+        ],
+        "phone" : "800808080",
+        "age" : 35
+}
+{
+        "_id" : ObjectId("62087cf32867f483687f8347"),
+        "name" : "Yan",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2,
+                        "highFrequency" : true
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3,
+                        "goodFrequency" : true
+                }
+        ],
+        "phone" : "800808080",
+        "age" : null
+}
+{
+        "_id" : ObjectId("620880e92867f483687f8348"),
+        "name" : "TK",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2,
+                        "highFrequency" : true
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3,
+                        "goodFrequency" : true
+                },
+                {
+                        "title" : "Souji",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : null
+}
+{
+        "_id" : ObjectId("620881262867f483687f8349"),
+        "name" : "TKO",
+        "hobbies" : [
+                "1",
+                "2",
+                "3"
+        ],
+        "phone" : "800808080",
+        "age" : null
+}
+{
+        "_id" : ObjectId("620883f22867f483687f834a"),
+        "title" : "The Last Student Returns",
+        "meta" : {
+                "rating" : 9.5,
+                "aired" : 2018,
+                "runtime" : 100
+        },
+        "visitors" : 1300000,
+        "expectedVisitors" : 15500000,
+        "genre" : [
+                "action",
+                "drama"
+        ]
+}
+{
+        "_id" : ObjectId("620883f22867f483687f834b"),
+        "title" : "DEEP",
+        "meta" : {
+                "rating" : 8,
+                "aired" : 2019,
+                "runtime" : 140
+        },
+        "visitors" : 1100000,
+        "expectedVisitors" : 13000000,
+        "genre" : [
+                undefined,
+                "drama",
+                "action"
+        ]
+}
+{
+        "_id" : ObjectId("6209f1279207fe373c205a87"),
+        "name" : "Chris",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2,
+                        "highFrequency" : true
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3,
+                        "goodFrequency" : true
+                },
+                {
+                        "title" : "Souji",
+                        "frequency" : 3
+                }
+        ],
+        "age" : 30,
+        "phone" : 120212012108
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ENCONTRADAS TODAS ESSAS PERSONS,
+
+
+
+VEREMOS QUE 
+
+
+A GRANDE MAIORIA 
+
+
+delas 
+
+
+
+
+
+
+não vai ter os valores de 'frequency' alterados...
+
+
+
+
+
+
+
+
+
+
+
+
+O ESTRANHO É QUE ATÉ DOCUMENTS/EMBEDDED DOCUMENTS EM QUE 
+
+o valor da frequency ficou 
+
+
+SUPERIOR A 
+
+2
+
+
+
+ (
+
+
+
+     como 
+
+
+     em 'Chris',
+ 
+     com 
+
+
+     'frequency: 3' 
+ )
+,
+
+
+
+
+
+
+
+AINDA 
+
+
+
+NÃO SERÁ 
+
+
+
+
+
+
+CONSIDERADO,
+
+
+
+
+
+
+
+
+
+
+SENDO ___ APENAS_ O DOCUMENT/ELEMENTO INICIAL 
+
+
+
+
+
+UPDATADO COM SUCESSO -------> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> MAS NO CASO DE 'Max',
+
+
+
+
+
+
+
+
+
+O 
+
+
+SEGUNOD DOCUMENT DO ARRAY NÃO FOI EDITADO,
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.users.find(
+        {
+                "hobbies.frequency": {$gt: 2}
+        }
+).pretty()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> ok...
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+
+{
+        "_id" : ObjectId("62087cf32867f483687f8345"),
+        "name" : "Anna",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2,
+                        "highFrequency" : true
+                },
+                {
+                        "title" : "Yoga",
+                        "frequency" : 3,
+                        "goodFrequency" : true
+                }
+        ],
+        "phone" : "800808080",
+        "age" : 24
+}
+{
+        "_id" : ObjectId("62087cf32867f483687f8346"),
+        "name" : "CJ",
+        "hobbies" : [
+                {
+                        "title" : "Gym",
+                        "frequency" : 2
+                },
+                {
+                        "title" : "Swimming",
+                        "frequency" : 3,
+                        "goodFrequency" : true
+                }
+        ],
+        "phone" : "800808080",
+        "age" : 35
+}
+{
+        "_id" : ObjectId("62087cf32867f483687f8347"),
+        "name" : "Yan",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2,
+                        "highFrequency" : true
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3,
+                        "goodFrequency" : true
+                }
+        ],
+        "phone" : "800808080",
+        "age" : null
+}
+{
+        "_id" : ObjectId("620880e92867f483687f8348"),
+        "name" : "TK",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2,
+                        "highFrequency" : true
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3,
+                        "goodFrequency" : true
+                },
+                {
+                        "title" : "Souji",
+                        "frequency" : 3
+                }
+        ],
+        "phone" : "800808080",
+        "age" : null
+}
+{
+        "_id" : ObjectId("6209f1279207fe373c205a87"),
+        "name" : "Chris",
+        "hobbies" : [
+                {
+                        "title" : "Sports",
+                        "frequency" : 2,
+                        "highFrequency" : true
+                },
+                {
+                        "title" : "Cleaning",
+                        "frequency" : 3,
+                        "goodFrequency" : true
+                },
+                {
+                        "title" : "Souji",
+                        "frequency" : 3
+                }
+        ],
+        "age" : 30,
+        "phone" : 120212012108
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ok.... temos todos esses documents...
+
+
+
+
+
+
+
+
+
+MAS NEM TODOS embedded documents SATISFIZERAM NOSSO FILTER DE 'greater than 2'... ---->  MAS 
+
+
+
+
+COMO ALGUNS (apenas 1 já basta) 
+
+
+
+
+
+
+
+
+
+desses embedded documents satisfizeram esse critério,
+
+o 
+
+DOCUMENT INTEIRO É RETRIEVADO ( o overall document, com esse array de embedded documents)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> OK.... MAS DIGAMOS QUE 
+
+
+QUEREMOS MUDAR TODOS OS EMBEDDED DOCUMENTS 
+
+
+
+
+
+NO ARRAY DE 'HOBBIES'
+
+
+que 
+
+
+
+SATISFIZERAM 
+
+
+NOSSA QUERY... 
+
+
+
+
+
+
+
+
+
+
+
+
+--> para isso, professor começa escrevendo:
+
+
+
+
+
+
+
+
+
+
+
+
+db.users.updateMany(
+        {
+                "hobbies.frequency": {$gt: 2}
+        }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, AGORA QUEREMOS OS UPDATAR...
+
+
+
+
+
+
+
+
+
+
+
+-_> DE NOVO, VAMOS USAR 'set'...
+
+
+
+
+
+
+EX:
+
+
+
+
+db.users.updateMany(
+        {
+                "hobbies.frequency": {$gt: 2}
+        }
+        ,
+
+
+
+
+        {
+                $set: {
+
+                }
+        }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+-_> MAS QUEREMOS CHANGAR TODOS ESSES 'matched hobbies'... 
+
+
+
+
+
+
+
+
+
+
+--> mas não vamos escrever  "hobbies.$" ou "hobbies.$.xxxx',
+
+
+
+
+PQ ISSO 
+
+
+
+AÍ SÓ VAI UPDATE O 'FIRST MATCHING HOBBY ELEMENT' para 1 determinada person .. .- > E SE TEMOS 
+
+
+MÚLTIPLOS 
+
+MATCHING 
+
+
+
+HOBBIES POR PERSON,
+
+
+
+ESSA ESCRITA _ NÃO VAI _ UPDATAR _ TODOS ELES.... ( o que é indesejado, nesse caso, pq queremos updatar todos eles)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> ok... COMO ESCREVEMOS ISSO?
+
+
+
+
+
+
+
+
+
+
+
+
+usamos '$elemMatch'? 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> $ vai sempre se referir ao 'FIRST MATCH'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> vamos querer updatar TODOS OS ELEMENTS EM 1 ARRAY...
+
+
+
+
+
+
+
+
+--> QUEREMOS ENCONTRAR TODAS AS PERSONS COM UMA AGE MAIS VELHA DO QUE 30...
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+db.users.updateMany(
+        {
+        age: {$gt: 30}
+        }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ok... ------> ACHAMOS CHRIS E MANU... --> PARA ESSAS 2 PERSONS, QUERMOS 
+
+
+
+
+ADICIONAR UM NOVO FIELD,
+
+
+
+
+
+por meio de updateMany...
+
+
+
+
+
+
+-----> PROFESSOR VAI USAR 
+
+UM 
+
+
+'$inc'
+
+
+PARA MIX IT UP...
+
+
+
+
+
+ex:
+
+
+
+
+
+
+db.users.updateMany(
+        {
+        age: {$gt: 30}
+        },
+
+
+        {
+
+           $inc: {
+
+           }
+        }
+)
+
+
+
+
+-------------------->
+
+
+
+
+
+
+
+
+COM ISSO, COM O INC,
+
+O PROFESSOR VAI QUERER UPDATAR NOSSOS HOBBIES, SIM,
+
+MAS ELE NÃO VAI QUERER UPDATAR O FIELD INTEIRO DE 'hobbies'... (não vai querer substituir um array velho por um novo, no caso)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> ELE SÓ VAI QUERER ADICIONAR UM NOVO FIELD  A CADA DOCUMENT/OBJECT em 'hobbies'...
+
+
+
+
+
+
+
+
+
+
+
+
+para isso,
+
+
+
+ele escreve:
+
+
+
+
+
+
+
+{
+        $inc: {
+                "hobbies.frequency": -1
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+--> OU SEJA,
+
+VAMOS TENTAR REDUZIR A FREQUENCY DOS HOBBIES DE CADA PESSOA POR 1...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE ENVIAMOS ESSA QUERY, RECEBEMOS UM ERROR: 
+
+
+
+'''não é possível criar um field de FREQUENCY no elemento 'hobbies'''...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, O PROBLEMA AQUI É QUE 
+
+'hobbies' é um ARRAY,
+
+E NÃO UM DOCUMENT EM SI...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> mesmo que você consiga ACHAR ELEMENTS COM ESSA NOTAÇAÕ AQUI:
+
+
+
+
+db.users.updateMany({totalAge: {$gt: 30}}),
+
+
+
+
+
+
+
+
+
+
+
+você NÃO PODE OS UPDATAR com "{$inc: {"hobbies.frequency": -1}}" 
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS VOCÊ PODE, SIM, UPDATAR ___tODOs__ OS ARRAY ELEMENTS,
+
+
+
+
+POR MEIO DE OUTRO 
+
+
+
+
+
+CÓDIGO 'placeholder',
+
+
+
+
+
+
+
+
+
+
+CÓDIGO PROVIDENCIADO PELO MONGODB,
+
+que é 
+
+
+
+
+
+
+
+'$[]'....
+
+
+
+
+
+
+
+
+
+
+
+
+dollar sign + SQUARE BRACKETs....
+
+
+
+
+
+
+
+
+
+-> A ESCRITA COMPLETA FICA ASSIM:
+
+
+
+
+
+{
+        $inc: {
+                "hobbies.$[].frequency": -1
+        }
+}
+
+
+
+
+
+
+
+-------> ISSO SIMPLESMENTE SIGNIFICA 
+ 
+
+
+
+
+'''''UPDATE TODOS OS ELEMENTS NESSE ARRAY DE HOBBIES,
+
+
+
+E PARA CADA ELEMENT NESSE ARRAY DE HOBBIES, UPDATE O FIELD DE 'FREQUENCY', reduza seu valor por 1...'''
+
+
+
+
+
+
+
+
+
+
+--> isso funciona EXATAMENTE PORQUE 
+
+
+
+TEMOS 'EMBEDDED DOCUMENTS'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE NÃO TIVéssemos 'embedded documents' 
+
+
+
+no nosso array,
+
+
+
+ESCREVERÍAMOS SÓ 
+
+
+"hobbies.$[]": -1,
+
+
+
+NESSE CASO AÍ... (se isso fosse um número, é claro)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ A SINTAXE COMPLETA FICA ASSIM:
+
+
+
+
+
+
+
+ db.users.updateMany(
+        {
+        age: {$gt: 30}
+        },
+        {
+           $inc: {
+                   "hobbies.$[].frequency": -1
+           }
+        }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE AGORA 
+
+
+
+
+
+
+
+ENVIARMOS ESSA QUERY,
+
+
+
+ELA MODIFICARÁ 2 ELEMENTS.... --> NESSES ELEMENTS/DOCUMENTS,
+
+
+
+
+
+O 
+
+
+MONGODB TERÁ IDO 
+
+
+ATÉ 
+
+
+
+O ARRAY DE 'hobbies' E REDUZIDO 
+
+
+
+
+
+A PROPRIEDADE 'frequency' por 1 
+
+
+EM TODOS EMBEDDED DOCUMENTs....

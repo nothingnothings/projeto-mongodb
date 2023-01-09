@@ -1,0 +1,249 @@
+
+
+
+
+
+
+AGORA QUE TEMOS UMA SOLUÇÃO MONGODB QUE FUNCIONA NA WEB,
+
+
+
+
+
+
+COM REPLICA SETS E SHARDING (atlas),
+
+
+
+
+
+
+
+DEVEMOS 
+
+
+VER UM CERTO TÓPICO QUE FOI INTRODUZIDO COM O MONGODB 4.0... -->  
+
+
+
+
+
+
+
+
+
+SÃO 
+
+
+
+'TRANSACTIONS' --> PARA QUE TRANSACTIONS EXISTAM/FUNCIONEM,
+
+
+
+
+VOCê 
+
+PRECISA 
+
+
+
+DE UM AMBIENTE 
+
+DOTADO/MUNIDO DE 'REPLICA SETS'  --------> É POR ISSO QUE 
+
+O
+ 
+
+
+ PROFESSOR NÃO CONSEGUIA MOSTRAR ISSO MAIS CEDO NO CURSO,
+
+
+
+
+ NAQUELE MÓDULO DO MONGO SERVER LOCAL... (
+
+
+     pq o mongo server local não tem replica sets SE VOCÊ NÃO AS CONFIGURA... -> 
+
+
+     JÁ 
+
+
+     NO MONGODB ATLAS,
+
+
+     CLOUD SOLUTION,
+    
+
+
+    ESSES REPLICA SETS JÁ VÊM IMPLEMENTADOS 
+
+    OUT-OF-THE-BOX...
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'TRANSACTIONS '--> 'FAIL TOGETHER'....
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  COM O MONGODB ATLAS FUNCIONANDO,
+
+
+  DEPLOYED,
+
+
+  PODEMOS 
+
+
+
+
+  VER/USAR ESSAS TRANSACTIONS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  --> PROBLEMA: SE VOCê DEPLOYOU MONGODB ATLAS NA VERSÃO 'FREE',
+
+
+  VOCÊ 
+
+
+  SÓ 
+
+  PODE 
+
+  USAR 
+
+  A 
+  VERSÃO 
+
+  '3.6',
+
+
+  E NÃO A VERSÃO 4.0 (enterprise...)
+
+
+
+
+
+
+
+
+
+
+  --> BEM, MAS EU RODEI ISTO:
+
+
+
+
+  MongoDB Enterprise atlas-gc0c6b-shard-0:PRIMARY> db.version()
+5.0.6
+
+
+
+
+
+MongoDB 4.2 Now Available on the Atlas Free Tier
+
+
+
+
+
+
+
+
+
+
+--> 
+
+16 February 2022 Release
+Upgrades free (M0) and shared (M2 and M5) clusters to MongoDB 5.0.
+
+
+
+
+
+
+
+-_> OK, AGORA TEMOS MONGO 5.0...
+
+
+
+
+
+
+
+
+
+
+------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> OK, PODEMOS TESTAR ISSO NORMALMENTE...
+
+
+
+
+
+
+
+
+
+
+
+
+-> VAMOS VER TRANSACTIONS... MAS O QUE SÃO TRANSACTIONS?
+
+
+COMO AS UTILIZAMOS? 

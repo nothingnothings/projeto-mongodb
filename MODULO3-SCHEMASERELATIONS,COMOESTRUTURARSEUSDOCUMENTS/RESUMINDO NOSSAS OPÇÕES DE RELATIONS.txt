@@ -1,0 +1,261 @@
+
+
+
+
+
+
+
+
+
+
+
+OK, ESSAS SÃO NOSSAS OPÇÕES DE RELATIONS:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------
+ 
+
+
+NESTED/EMBEDDED DOCUMENTS: 
+
+
+
+--> EM GERAL, A IDEIA DESSE APPROACH É 'GROUP DATA TOGETHER LOGICALLY'...
+
+(mtas vezes isso faz sentido, e deixa o fetch de data mais fácil.... )
+
+
+
+--> ISSO É ÓTIMO PARA 'DATA THAT BELONGS TOGETHER',
+
+e é ÓTIMO PARA ONE-TO-MANY, 
+
+
+'ONE-TO-ONE' relations... -->   __ _NAÕ É TÃO BOM _ PARA MANY-TO-MANY RELATIONS...
+
+
+
+--> TAMBÉM É BOM QUANDO VOCÊ NÃO TEM PERIGO DE 'HIT THE LIMIT IMPOSED BY MONGODB' (limite de 16mb, overall, para cada document)...
+
+
+
+
+---> TAMBÉM É BOM QUANDO VOCÊ NÃO PRECISA SPLITTAR SUA DATA PARA SUAS APPLICATION NEEDS (ou seja, para quando você não tem hipóteses como O ANALYTICS DOS CARROS E DOS USERS, por exemplo; ou seja, sem SEPARAÇÃO ENTRE A DATA, SEM NECESSÁRIA SEPARAÇÃO ENTRE A data)...
+
+
+
+
+--> VOCÊ TAMBÉM  DEVE __EVITAR__ SUPER DEEP NESTING (100+ levels, pq 100 é o limite),
+
+
+OU ARRAYS EXTREMAMENTE LONGOS (16mb size limit por document)...------> 16MB É MT, MAS PARA REGISTRAR TODAS AS PESSOAS DE UMA CIDADE, POR EXEMPLO, ESSE LIMITE SERIA ATINGIDO...
+
+
+
+---------------------------------
+
+
+
+
+
+
+
+
+
+--------------------------------------
+
+
+
+REFERENCES 
+
+
+
+
+
+
+--> É A ALTERNATIVA... 
+
+
+
+
+--> você SPLITTA SUA DATA AO LONGO DE MÚLTIPLAS COLLECTIONS..
+
+
+
+
+--> É ÓTIMO PARA 'RELATED BUT SHARED DATA',
+
+
+OU SEJA,
+
+ÓTIMO PARA 'MANY-TO-MANY' RELATIONS... 
+
+
+
+
+
+
+--> TAMBÉM É BOM PARA DATA QUE É USADA em 'relations' e 'standalone'...
+
+
+
+
+
+
+
+-> TAMBÉM É ÓTIMO PARA CASOS EM QUE VOCÊ TEM UM MONTE DE DUPLICATES 
+
+
+entre 
+
+
+suas collections (pq como você vai updatar um monte sua data, só é armazenado o ID de uma determinada coisa, dentro de outra coisa, o que faz com que 
+
+nada precise ser updatado nessa coisa aí...)
+
+
+
+
+
+
+
+-------> SE VOCÊ PRECISA UPDATAR UM MONTE DE DOCUMENTS TODA HORA, 
+
+
+uso de 'duplicates',
+
+
+
+é uma ótima solução...
+
+
+
+
+
+-> TAMBÉM TE PERMITE 'SUPERAR LIMITES DE SIZE E NESTING',
+
+
+
+
+por meio do create de OUTROS DOCUMENTS EM OUTRAS COLLECTIONS (
+
+    splitting of your data...
+)
+
+----------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O USO DE CADA RELATION DEPENDE DO APP QUE VOCÊ ESTÁ CONSTRUINDO...
+
+
+--> depende, também:
+
+
+a) da frequência da alteração dos seus arquivos..
+
+
+
+
+b) se SNAPSHOT DATA é suficiente (ex: orders)
+
+
+
+
+
+
+c) a quantidade de data que você tem...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESSA É UMA FORMULA GERAL... --------> ESSAS DIRETRIZES GERAIS SÃO BOAS...
+
+
+
+
+
+
+TENHA OS POINTS EM MENTE:
+
+
+
+
+
+1) COMO EU USO MINHA DATA? 
+
+
+
+
+
+2) COM QUAL FREQUÊNCIA USO MINHA DATA?
+
+
+3) COM QUAL FREQUÊNCIA VOU ALTERAR MINHA DATA? 
+
+
+
+
+
+4) COMO MINHA DATA É RELATED? (one-to-one, one-to-many, many-to-many)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SE VOCÊ CONSIDERAR ESSES POINTS,
+
+VOCÊ CONSEGUIRÁ ESCREVER RELATIONS QUE FUNCIONAM PARA VOCÊ..

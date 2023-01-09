@@ -1,0 +1,889 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... UMA INTERESSANTE VARIAÇÃO/USE-CASE DO 
+
+
+
+
+
+
+
+
+
+
+
+'PARTIAL INDEX' 
+
+
+
+
+PODE SER VISTA EM CONJUNTO COM  UM 'UNIQUE INDEX' (propriedade de 'unique: true', no segundo parâmetro de 'createIndex()'))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO,
+ 
+ PROFESSOR TERÁ DE CRIAR 1 PEQUENO DEMO, AQUI..
+
+
+
+
+
+
+
+
+
+
+ ELE VAI CRIAR 1 PEQUENA COLLECTION PARA ISSO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -> será a collection de 'users3'...
+
+
+
+
+
+
+
+ -> PROFESSOR VAI USAR O INSERTMANY...
+
+
+
+
+
+
+
+
+ ELE ESCREVE ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+
+
+ db.users3.insertMany(
+     [
+         {name: "Max", email: "max@test.com"},
+         {
+             name: "Manu"
+         }
+     ]
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> OK.... ESSES 2 DOCUMENTS NÃO SÃO IGUAIS,
+
+ PQ 
+
+
+ 1 
+
+ DELES TEM O FIELD DE 'email',
+
+
+e o outro não....
+
+
+
+
+
+
+
+
+
+
+
+
+---------> BEM... O QUE O PROFESSOR PODE TENTAR, AGORA, É CRIAR 1 
+
+
+
+
+
+
+
+index em 'users',
+
+
+
+e aí 
+
+
+CRIAR 1 INDEX PARA O FIELD DE 'email'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+tipo assim:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.users3.createIndex(
+    {
+        "email": 1
+    }
+)
+
+
+
+
+
+
+
+
+
+-- OK, O CREATE DESSE INDEX  FUNCIONARÁ...
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+> db.users3.createIndex(
+...     {
+...         "email": 1
+...     }
+... )
+{
+        "numIndexesBefore" : 1,
+        "numIndexesAfter" : 2,
+        "createdCollectionAutomatically" : false,
+        "ok" : 1
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA VAMOS __DROPPAR__ ESSE INDEX....
+
+
+
+
+
+
+
+
+
+
+
+
+
+droppamos com 
+
+
+
+db.users3.dropIndex({email: 1})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO PQ AGORA O QUE VAMOS QUERER FAZER É ADICIONAR ESSE 'index' 
+
+de 
+
+email
+
+COMO SENDO UM 'UNIQUE INDEX' (não será permitido REPETIR emails, no field de 'email')...
+
+
+
+
+
+
+TIPO ASSIM:
+
+
+
+
+
+
+
+> db.users3.createIndex({"email": 1}, {unique: true})
+{
+        "numIndexesBefore" : 1,
+        "numIndexesAfter" : 2,
+        "createdCollectionAutomatically" : false,
+        "ok" : 1
+}
+
+
+
+
+
+
+
+
+
+-------------------------------------
+
+
+
+
+
+
+
+
+ISSO FUNCIONA.... --> MAS AGORA VAMOS CRIAR 1 PROBLEMA....
+
+
+
+
+
+
+
+
+
+
+
+
+----------->>>>>>> VAMOS INSERIR UM NOVO DOCUMENT, COM INSERTONE....
+
+
+
+
+
+
+
+
+
+
+
+
+db.users.insertOne(
+    {
+        name: "Anna"
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E ESSE USER __ TAMBÉM_ NÃO TERÁ UM FIELD DE 'email' -------> MAS ISSO IMEDIATAMENTE ME DÁ UM ERROR....
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, O CÓDIGO DO PROFESSOR DÁ UM ERRO, MAS O MEU, não... 
+
+
+
+--> ops, na verdade é pq errei a collection, era 'users3' e não 'users'..
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+> db.users3.insertOne(     {         name: "Anna"     } )
+WriteError({
+        "index" : 0,
+        "code" : 11000,
+        "errmsg" : "E11000 duplicate key error collection: exemploPersons.users3 index: email_1 dup key: { email: null }",
+        "op" : {
+                "_id" : ObjectId("620de258ab565ea29f03d71c"),
+                "name" : "Anna"
+        }
+}) :
+WriteError({
+        "index" : 0,
+        "code" : 11000,
+        "errmsg" : "E11000 duplicate key error collection: exemploPersons.users3 index: email_1 dup key: { email: null }",
+        "op" : {
+                "_id" : ObjectId("620de258ab565ea29f03d71c"),
+                "name" : "Anna"
+        }
+})
+WriteError@src/mongo/shell/bulk_api.js:465:48
+mergeBatchResults@src/mongo/shell/bulk_api.js:871:49
+executeBatch@src/mongo/shell/bulk_api.js:940:13
+Bulk/this.execute@src/mongo/shell/bulk_api.js:1182:21
+DBCollection.prototype.insertOne@src/mongo/shell/crud_api.js:264:9
+@(shell):1:1
+
+
+
+
+
+-----------------------------
+
+
+
+
+
+
+
+
+
+
+
+OK... GANHAREMOS UM ERROR CURIOSO,
+
+
+ERROR DE 'DUPLICATE KEY ERROR' -----> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+isso vai acontecer pq 
+
+
+
+AQUELE 
+
+
+
+DOCUMENT DE 
+
+
+'{name: 'Manu'}' 
+
+
+
+É TRATADO COMO SE TIVESSE 1 FIELD DE 
+
+
+
+
+
+'email', sim,
+
+MAS DEFINIDO COMO 'null'... (o seu valor)...
+
+
+
+
+
+
+
+
+
+
+
+--> E COMO '{name: "Anna}'
+
+
+
+TAMBÉM NÃO DEFINIU O VALOR DESSE 'email',
+
+
+pode-se dizer que 
+
+
+SEU FIELD DE 'email' TAMBÉM ESTÁ COMO 'null'...  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NO VALUE, NO VALUE ARMAZENADO,
+
+
+__ DUAS VEZES.. .. ------> E ESSE É UM COMPORTAMENTO ESTRANHO, CURIOSO, QUE VOCÊ DEVE TER EM MENTE....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> MONGODB TRATA 'NON-EXISTENT VALUES' AINDA COMO __ 'VALUES'__ no seu index (são tratados como um value de 'NOT THERE', que é o 'null', especificamente)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PORTANTO, SE VOCê TEM 2 DOCUMENTS SEM 1 VALUE PARA 1 FIELD QUE FOI INDEXADO COMO 'UNIQUE',
+
+
+
+
+
+
+
+
+
+VOCÊ VAI GANHAR ESSE ERROR TRASH AÍ....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> MAS SE VOCê TEM ESSE USE-CASE,
+
+
+
+
+use-case em que 
+
+
+QUEREMOS DEIXAR ESSE FIELD COMO 'unique index',
+
+
+
+
+
+
+E EM QUE ___ AINDA VAMOS QUERER DEIXAR ALGUNS DOCUMENTS __ NÃO TER ESSE FIELD/ tem esse field como null,
+
+
+
+
+
+
+
+
+SE VOCÊ TIVER ESSE USE-CASE,
+
+VOCÊ SERÁ __ FORÇADO__ A CRIAR __ SEU INDEX DE UMA  MANEIRA UM POUCO DIFERENTE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> DROPPAMOS NOSSO INDEX, E AÍ O RECRIAMOS...
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ESCREVER ISSO DE ACORDO COM ESSE USE-CASE,
+
+
+
+você 
+
+
+DEVE
+
+
+
+
+definir 'unique: true',
+
+
+COMO ANTES,
+
+
+
+MAS AÍ 
+
+VAI TER QUE 
+
+
+DEFINIR AQUELA KEY DE 
+
+
+'partialFilterExpression',
+
+
+
+
+
+
+
+E AÍ ADICIONAR UM FILTER/OBJECT ({})  PARA __ O FIELD DE 'email'.. ---> E AÍ, DENTRO DESSE FIELD,
+
+
+VOCê SIMPLESMENTE 
+
+EXECUTARÁ 
+
+O 
+
+
+operator de 
+
+
+'$exists: true'.. ----> ESSE FILTER 
+
+
+
+
+
+
+
+
+
+BASICAMENTE VAI DIZER 
+
+
+
+''SÓ QUERO ADICIONAR ELEMENTS, PARA DENTRO DO INDEX,
+
+
+
+EM QUE __ O FIELD DE 'email'
+
+EXISTE'''' 
+
+
+
+
+
+
+
+
+
+
+
+-> ISSO VAI FAZER COM QUE  SEJA_ EVITADO _o  CASE__ DE 'HAVING A CLASH' 
+
+
+
+
+
+
+
+com seus UNIQUE INDEXES em 'email'...
+
+
+
+
+
+
+
+
+
+
+
+
+O CÓDIGO FICA ASSIM:
+
+
+
+
+
+
+db.users3.createIndex(
+    {
+        email: 1
+    },
+    {
+        unique: true,
+        partialFilterExpression: {
+            email: {$exists: true}
+        }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> E AGORA,
+
+
+SE TENTAMOS ADICIONAR UM 
+
+
+
+document _ SEM O FIELD DE 'email',
+
+
+ISSO __ TAMBÉM FUNCIONARÁ....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E MANTEMOS O COMPORTAMENTO DESEJADO: PQ SE VOCê TENTAR ADICIONAR UM 
+
+{
+    "name": 'Anna',
+
+    "email": "max@test.com"
+},
+
+
+
+VOCÊ 
+
+
+AINDA VAI FALHAR,
+
+
+
+PQ 
+
+SEU 
+
+EMAIL VAI REPETIR 1 EMAIL QUE JÁ EXISTE...
+
+
+
+
+
+
+
+
+
+
+
+->         partialFilterExpression: {
+            email: {$exists: true}
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    --> isso faz com que APENAS OS DOCUMENTS QUE POSSUAM ESSE 'email' field 
+
+    SEJAM ADICIONADOS 
+
+
+    AO NOSSO 'index' desse field... ( que é exatamente o que desejamos; não vamos querer, no caso, que DOCUMENTS  SEM ESSE FIELD de 'email' __ SEJAM ADICIONADOS AO INDEX desse field de 'email')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,437 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O QUE É O AGGREGATION FRAMEWORK?
+
+
+
+
+
+
+
+
+
+
+
+-> NO CORE,
+
+
+
+É 
+
+SÓ UMA 
+
+ALTERNATIVA 
+
+AO 
+
+METHOD DE 'find',
+
+vocÊ poderia dizer...
+.
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> TEMOS NOSSA 'COLLECTION'..
+
+
+
+
+
+
+
+
+
+--> E, AGORA, O AGGREGATION FRAMEWORK É 'ALL ABOUT'
+
+
+CONSTRUIR 
+
+
+UMA 
+
+
+
+
+''''PIPELINE'''
+
+
+
+DE ETAPAS,
+
+ 
+
+ ETAPAS QUE 
+
+
+ SÃO 
+
+
+
+ RODADAS SOBRE A DATA QUE É RETRIEVADA 
+
+
+ DA SUA COLLECTION, 
+
+
+
+
+
+ E AÍ TE DÁ O OUTPUT, NA FORMA QUE VOCÊ 
+
+ REQUER...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ tipo assim:
+
+
+
+
+
+
+
+ COLLECTION 
+
+ |
+ v 
+
+
+
+{$match} 
+
+
+ |
+ v 
+
+
+
+{$sort} 
+
+
+ |
+ v 
+
+{$group} 
+
+
+ |
+ v 
+
+{$project} 
+
+
+ |
+ v 
+
+
+ OUTPUT (
+     List of Documents
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E ESSAS ETAPAS SÃO, 
+
+àS VEZES (muitas vezes),
+
+
+
+RELACIONADAS COM AQUILO QUE VOCÊ APRENDEU EM 'find' (como 'sort' e 'project, suponho)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> 'MATCH' --> É EQUIVALENTE AO 'FILTERING' do method de 'find({})' (ou seja, o primeiro parâmetro)...
+
+
+
+--> MATCH TE DEIXA 'FILTER DOWN' seus results...
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS O QUE INTERESSA É QUE 
+
+VOCê 
+
+TEM UM MONTE DE ETAPAS QUE 
+
+VOCê PODE COMBINAR DO JEITO QUE VOCê QUISER... --> E VOCÊ PODE REUTILIZAR 
+
+
+
+
+CERTOS 'stages'
+
+(
+
+
+    ou seja,
+
+    PODEMOS 
+
+
+    FAZER MATCH DE NOVO,
+
+    mais tarde,
+
+
+    PARA 'FILTER SUA DATA JÁ TRANSFORMADA' 
+
+
+    __AINDA  UM POUCO MAIS_....
+)
+
+
+
+
+
+
+
+
+
+
+-_> PORTANTO,
+
+
+VOCê TEM UMA MANEIRA MT FORTE DE MODELAR SUA DATA TRANSFORMATION ----------> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+E CADA STAGE NESSA 'PIPELINE'
+
+
+recebe 
+
+O OUTPUT/RESULTADO DO STAGE ANTERIOR...
+
+
+
+
+
+
+
+
+
+--> PORTANTO,
+
+VOCÊ PODE TER UMA ESTRUTURA BEM 
+
+ORGANIZADA DE 
+
+
+'TENHO UMA INPUT DATA',
+
+
+
+
+'OUPUTTO DATA MODIFICADA'.... ------> modificada do jeito que você quiser.....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NESSE MODULE,
+
+
+VEREMOS _ __ UM MONTE___ DE STAGES __ DA AGGREGATION PIPELINE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> A AGGREGATION PIPELINE/FRAMEWORK TE DÁ EXATAMENTE ISSO,
+
+
+VÁRIAS ETAPAS...
+
+
+
+
+
+
+
+
+
+
+
+--> VAMOS CONSTRUIR ESSA 
+
+PIPELINE JUNTOS...
+
+
+
+
+
+
+
+
+
+
+
+
+--> COMO VISTO NOS OFFICIALDOCS.
+
+
+
+
+TEMOS 1 MILHAO DE DIFERENTES STAGES QUE PODEMOS COMBINAR PARA RETRIEVAR EXATAMENTE A DATA QUE DESEJAMOS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> PODEMOS COMBINAR OS STAGES TODOS NA PIPELINE...
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR ENCORAJA 
+
+LER 
+
+
+ESSES DOCS POR CONTA PRÓPRIA 
+
+
+
+PARA 
+
+
+EXAMINAR 
+
+
+
+COMO PODEMOS TRANSFORMAR 
+
+
+A DATA COM A AGGREGATION FRAMEWORK...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> DEVEMOS COMEÇAR, VER EXATAMENTE COMO A AGG PIPELINE FUNCIONA...

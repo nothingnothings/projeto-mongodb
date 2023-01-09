@@ -1,0 +1,1414 @@
+
+
+
+
+
+
+
+
+
+
+
+--> OK... QUEREMOS 
+
+
+
+
+MUDAR 
+
+
+
+OS 'ROLES' 
+
+DE NOSSOS USERS,
+
+
+
+particularmente do user de 
+
+'appdev',
+
+
+QUE 
+
+ATÉ 
+
+aGORA 
+
+
+
+SÓ 
+
+
+POSSUI ESTE ROLE:
+
+
+
+
+> show users
+{
+        "_id" : "shop.appdev",
+        "userId" : UUID("22e08b36-4e89-4da3-ad74-df41576bbcae"),
+        "user" : "appdev",
+        "db" : "shop",
+        "roles" : [
+                {
+                        "role" : "readWrite",
+                        "db" : "shop"
+                }
+        ],
+        "mechanisms" : [
+                "SCRAM-SHA-1",
+                "SCRAM-SHA-256"
+        ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ATÉ AGORA,
+
+
+ESSE 
+
+
+
+USER de 'appdev'
+
+SÓ 
+
+TEM O ROLE de 
+
+
+'readWrite'
+
+
+
+NESSA PRÓPRIA DATABASE DE 
+
+'shop'
+
+EM QUE 
+
+
+
+É 
+
+AUTENTICADO...
+
+
+
+
+
+
+
+
+
+
+
+
+-----------> QUEREMOS QUE ELE SEJA CAPAZ DE REALIZAR ALGUMAS OPERAÇÕES 
+
+
+__fORa___ DESSA DATABASE EM QUE ELE É AUTENTICADO... -> em outras databases ... -> DIGAMOS QUE 
+
+
+
+
+TEMOS OUTRA 
+
+DATABASE,
+
+
+
+DATABASE 'blog',
+
+
+
+
+
+UM BLOG QUE PERTENCE 
+
+AO 
+
+'shop',
+
+
+
+
+QUE É UM BLOG EM QUE POSTAMOS SOBRE OS LATEST PRODUCTS... --> 
+
+
+
+
+
+O MESMO TIPO DE APP/DEVELOPER DEVE SER CAPAZ 
+
+DE 
+
+INTERAGIR 
+
+
+C
+OM 
+
+
+
+
+ESSA DATABASE, ISSO É O IDEAL.... --> OK, 
+
+MAS 
+
+COMO 
+
+
+PODEMOS 
+
+
+'UPDATAR'
+
+
+AS 
+
+PERMISSÕES DE NOSSO USER (seus roles)?
+
+
+
+
+
+
+
+
+
+
+
+
+-> BEM, FAZEMOS ISSO POR MEIO DO 
+
+
+
+
+COMANDO DE 'db.updateUser()'..
+
+
+
+
+
+
+
+
+
+
+
+-> vamos até a database de 
+
+
+
+'shop',
+
+QUE É 
+
+
+
+ONDE CRIAMOS NOSSO USER....
+
+
+
+
+
+
+
+--> AÍ EXECUTAMOS ISTO, NA COMMAND LINE:
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.updateUser(
+
+
+"appdev",
+
+{
+
+}
+)
+
+
+
+
+
+
+
+
+
+
+
+1o Parametro --> É O NOME DE SEU USER/username.... USER QUE VOCê QUER UPDATAR... (você vai querer updatar esse 'OBJECT' user)...
+
+
+
+
+
+
+2o parâmetro --> É UM OBJECT EM QUE VOCê VAI ESPECIFICAR A DATA QUE VOCÊ VAI QUERER ALTERAR... --> é meio parecido com state updates do react --> coloque 'roles: []' E AÍ ESPECIFIQUE O ARRAY DE ROLES QUE VOCÊ VAI QUERER QUE ESSE USER TENHA... 
+
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+db.updateUser(
+
+
+"appdev",
+
+{
+
+
+roles: [
+
+]
+
+}
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> OK... MAS O PROFESSOR NOS EXPLICA QUE ESSE 'UPDATE DO USER'
+ 
+
+
+ NAÕ FUNCIONA 
+
+
+ COMO 
+
+
+ O updateOne() 
+
+
+ updateMany()
+
+
+ visto lá 
+
+ nas database.... --> NÃO, EM VEZ DISSO,
+
+
+
+
+ ELE _ FUNCIONA 
+
+
+
+ COM 
+
+
+
+
+
+
+ '''UM PUNHADO DE KEY-VALUE PAIRS QUE VOCÊ PODE SETTAR''' ( há mais detalhes nos official docs)...
+
+
+
+
+
+
+
+
+
+
+
+ ---> O QUE VOCê PODE FAZER, NO CASO,
+
+ É:
+
+
+
+ 1) mudar o password ("pwd: 'xasxa'" ) 
+
+
+
+
+
+
+
+
+
+
+
+
+ 2) ASSIGNAR NOVOS ROLES --> IMPORTANTE --> O ARRAY DE ROLES QUE VOCê ESCREVE AQUI NÃO SERÁ 'ADDED AOS VELHOS ROLES',
+
+
+ e sim 
+
+
+ ___ SUBSTITUIRÁ O VELHO ARRAY....
+
+
+
+
+
+
+--> 
+
+
+O PROFESSOR 
+
+
+
+
+ESCREVE 
+
+[
+    "readWrite"
+],
+
+
+
+
+
+
+
+PQ ELE QUER CONTINUAR 
+
+
+ENTREGANDO ACESSO 'readWrite'
+
+
+A ESSA 
+
+DATABASE 
+DE 
+
+'shop'
+
+em que 
+
+esse user foi criado....
+
+
+
+
+
+
+
+
+-> MAS É CLARO QUE O PROFESSOR VAI QUERER FAZER MAIS DO QUE ISSO... -----> ELE QUER 
+
+
+
+
+TAMBÉM 
+
+DAR 
+
+AO 
+
+USER 
+
+
+ACESSO 
+
+'readWrite' 
+
+
+
+
+à DATABASE DE 
+
+'
+blog' --> PARA ISSO,
+
+
+
+
+ELE ADICIONA UM SEGUNDO 
+
+
+ELEMENTO 
+
+
+
+AO 
+
+ARRAY 
+
+DE 
+
+
+
+'roles',
+
+QUE 
+
+
+
+
+SERÁ _ UM OBJECT/DOCUMENT --> 
+
+
+
+
+
+eX:
+
+
+
+
+
+
+
+
+db.updateUser(
+
+
+"appdev",
+
+{
+
+
+roles: [
+    "readWrite", {} ////EIS O CÓDIGO EM QUESTÃO
+]
+
+}
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PQ 1 DOCUMENT?
+
+
+
+
+
+
+
+
+
+
+
+É PQ SE VOCê ESCREVEr 
+
+
+
+
+'readWrite' 
+
+
+
+ou 
+
+
+
+'delete' 
+
+
+COMO UMA STRING SOLTA,
+
+
+ESSA 
+
+PERMISSÃO 
+
+
+SEMPRE 
+
+
+SERÁ 
+
+
+
+APLICADA/DISPONIBILIZADA  __ SOBRE_ A DATABASE QUE ESSE USER FOI 'REGISTERED IN' (no caso, a database de 'shop', em que foi criado)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> CERTO.... --> MAS SE QUEREMOS DAR ACESSO __ A UMA DATABASE__ DISTINTA
+ 
+
+
+DAQUELA EM QUE O USER FOI CRIADO,
+
+
+POSSO FAZER ISSO
+
+
+
+
+
+COM o 
+
+'{}" 
+
+
+
+
+
+
+E AÍ 
+
+
+
+COM O WRITE DE UMA KEY CHAMADA DE 
+
+
+
+'role: '
+
+
+
+
+
+
+
+
+
+--> DEPOIS DE DEFINIR O 'ROLE',
+
+VOCÊ 
+
+
+DEVE 
+
+
+
+ESCREVER UMA KEY de 'db',
+
+QUE 
+
+É 
+
+
+A 
+
+DATABASE 
+
+EM QUE 
+
+
+
+ESSE 
+
+'RIGHT'/privilégio será exercidoo... -> 
+
+
+
+
+COLOCAMOS 
+O 
+
+
+NOME DE 
+'blog',
+
+PQ 
+
+
+É 
+
+LÁ QUE QUEREMOS QUE 
+
+ESSE 
+
+USER
+também
+
+SEJA 
+
+
+CAPAZ 
+
+DE 
+
+
+FAZER 
+
+READ/WRITE...
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+db.updateUser(
+
+
+"appdev",
+
+{
+
+
+roles: [
+    "readWrite", {
+
+     role: "readWrite",
+     db: "blog"           ////EIS O CÓDIGO EM QUESTÃO
+    } 
+]
+
+}
+)
+
+
+
+
+
+
+----------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+-> OK... MAS O QUE VOCÊ ACHA QUE ACONTECERÁ SE O PROFESSOR DIGITAR 'enter'?
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> ELE  VAI GANHAR 1 ERRO, É CLARO... --> VAI GANHAR 1 ERRO 
+
+
+
+
+DE 
+
+
+
+
+'UPDATING UESR FAIELD: NOT AUTHORIZED ON SHOP TO EXECUTE THIS COMMMAND'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> NÃO TEMOS AUTORIZAÇAÕ, EM 'SHOP',
+
+
+PARA 
+
+
+
+
+EXECUTAR ESSE COMANDO--> a razão disso,
+
+é 
+
+claro, 
+
+
+é que 
+
+
+O PROFESSOR 
+
+
+AINDA 
+
+
+ESTÁ LOGGADO 
+
+APENAS COMO 
+
+
+
+'appdev',
+
+
+esse 
+
+user 
+
+
+CHINELO,
+
+
+
+USER 
+
+QUE 
+
+SÓ 
+
+POSSUI 
+
+A 
+
+PERMISSÃO 
+
+PARA FAZER 
+
+'READ/WRITE' 
+
+
+de 
+
+data 
+
+
+
+
+lá 
+
+
+
+na database de 
+
+'shop',
+
+
+
+
+
+MAS QUE 
+
+
+NÃO TEM PERMISSÃO 
+
+PARA 
+
+
+'CHANGE/DELETE/ADD USERS'' --->  É POR ISSO QUE A COISA QUE O PROFESSOR PRECISA FAZER É:
+
+
+
+
+
+
+
+
+
+1) dar 'LOGOUT', por meio de 'db.logout()' 
+
+
+
+
+
+
+
+
+
+2) DAR LOGIN COM NOSSO 'SUPER USER', aquele user que foi criado na database de ADMIN, e que POSSUI RIGHTS PARA TODAS AS DATABASES,
+ALÉM DE A CAPACIDADE DE CRIAR/UPDATAR/DELETAR USERS (por ser um user criado na database de 'admin')...
+
+
+
+
+
+
+
+
+
+
+eX:
+
+
+
+
+
+
+
+
+
+db.logout()
+
+
+
+
+
+
+
+
+
+
+
+CERTO... ACHO QUE AGORA ESTAMOS 'LOGGED IN' :
+
+
+
+
+
+> use admin
+switched to db admin
+
+> db.auth("Arthur", "Juc@pirama1")
+1
+
+
+
+
+
+
+
+
+--------> DEVO TENTAR EXECUTAR AQUELE COMANDO 
+
+
+de 
+
+
+
+'''
+
+
+db.updateUser(
+
+
+"appdev",
+
+{
+
+
+roles: [
+    "readWrite", {
+
+     role: "readWrite",
+     db: "blog"           ////EIS O CÓDIGO EM QUESTÃO
+    } 
+]
+
+}
+)
+
+
+
+
+
+
+'''
+
+
+
+
+
+
+
+
+
+
+
+LÁ 
+
+
+
+NA DATABASE 
+DE 
+
+
+'shop',
+
+MAIS UMA VEZ....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... MAS EU ESCREVI ISSO AÍ, E NADA ACONTECEU...
+
+
+
+
+
+
+
+
+--> NA VERDADE, ACONTECEU SIM:
+
+
+
+
+
+> show users
+
+{
+        "_id" : "shop.appdev",
+        "userId" : UUID("22e08b36-4e89-4da3-ad74-df41576bbcae"),
+        "user" : "appdev",
+        "db" : "shop",
+        "roles" : [
+                {
+                        "role" : "readWrite",
+                        "db" : "blog"
+                },
+                {
+                        "role" : "readWrite",
+                        "db" : "shop"
+                }
+        ],
+        "mechanisms" : [
+                "SCRAM-SHA-1",
+                "SCRAM-SHA-256"
+        ]
+}
+
+
+
+
+
+
+
+
+
+
+
+----> SÓ QUE 
+
+
+
+O 
+
+
+
+TERMINAL NÃO 'DIZ QUE ACONTECEU',
+
+apenas fica em silêncio,
+
+
+
+
+mas 
+
+de 
+fato 
+
+
+
+
+
+O USER FOI UPDATADO, E AGORA POSSUI ESSE ROLE DE 'readWrite' 
+
+
+SOBRE A DATABASE DE 'shop'...
+
+
+
+
+
+
+
+
+
+
+-----> OK.... FIZEMOS LOGIN DESSE USER NA DATABASE DE 
+
+'admin',
+
+
+
+
+
+ESSE 'SUPER USER'...
+
+
+
+
+
+
+
+
+
+
+-----> você tem que trocar de databases para fazer login adequado de seus users...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA ESSE USER de 'appdev'
+
+
+POSSUI 
+
+
+
+READWRITE 
+
+
+TANTO NO SHOP, QUANTO NO 'BLOG'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, AGORA PODEMOS 
+
+
+
+
+FAZER LOGOUT DO 'super user'
+
+e entaõ 
+
+
+
+FAZER LOGIN do 'appdev'...
+
+
+
+
+
+
+
+
+---> MAS SE EU TENTO 
+
+
+
+
+
+
+
+FAZER ESSE ADD,
+
+EU FALHO... --> falho pq 
+
+
+NÃO FIZ LOGOUT DE MEU 
+
+
+
+
+
+USER 'admin',
+
+
+
+
+PQ 
+
+
+O 
+
+LOGOUT DE USERS 'admin'
+
+DEVE SER FEITO NA DATABASE DE 'admin', também....
+
+
+
+
+
+
+
+
+
+
+AGORA DEU CERTO:
+
+
+
+
+
+
+
+
+> use admin
+switched to db admin
+> db.logout() 
+{ "ok" : 1 }
+> use blog
+switched to db blog
+> db.auth("appdev", "devapp")
+Error: Authentication failed.
+0
+> use shop
+switched to db shop
+> db.auth("appdev", "devapp")
+1
+> use blog
+switched to db blog
+> db.messages.insertOne({title: 'title'})
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("621be2811ab5f2427ce3049a")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------> CONSEGUI ADICIONAR ESSE DOCUMENT A ESSA COLLECTION DA 
+
+
+
+DATABASE DE 
+
+
+
+'blog'... (
+
+    mesmo que esse user 
+
+    exista 
+
+
+    só Lá 
+
+    na 
+
+    SHOP....
+)
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO É ALGO QUE VOCÊ TEM QUE PEGAR AO LONGO DO TEMPO,
+
+MAS 
+
+NÃO É TÃO COMPLEXO... --> A DATABASE NÃO 
+
+
+
+FAZ, POR SI SÓ,
+
+
+
+'LOCKDOWN' 
+
+DA 
+
+
+
+DATA A QUE O USER TEM ACESSO,
+
+
+
+
+
+SÃO OS ROLES QUE FAZEM ISSO... .--> MAS SE VOCÊ ASSIGNA 1 ROLE A 1 USER,
+
+
+SEM ESPECIFICAR MAIS NADA,
+
+ESSE 
+
+ROLE É 
+
+ASSIGNADO 
+
+
+AO USER, À DATABASE EM QUE ELE (o user) FOI REGISTRADO, E A NENHUMA OUTRA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> MAS, COMO O PROFESSOR MOSTROU NESSA LIÇÃO,
+
+
+VOCÊ PODE ESTENDER AS CAPACIDADES 
+
+
+
+
+DO 
+
+
+USER,
+
+
+FAZER COM QUE ELE SEJA 
+
+CAPAZ 
+
+DE 
+
+LIDAR COM 
+
+
+
+OUTRAS DATABASES,
+
+
+BASTA 
+
+'expandir' 
+
+
+
+
+aquele 
+
+
+array de 
+
+'roles'
+
+
+
+com 
+
+OBJECTS,
+
+
+
+OBJECTS COM 
+
+
+o 
+
+formato 
+
+
+{
+
+    role: "readWrite",
+    db: "nomeDaDatabase"
+}

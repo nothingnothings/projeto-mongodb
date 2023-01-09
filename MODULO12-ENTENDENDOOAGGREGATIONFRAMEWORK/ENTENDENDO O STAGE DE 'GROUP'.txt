@@ -1,0 +1,2019 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> 
+
+
+
+
+
+
+O PROFESSOR VAI ESCREVER 
+
+
+
+
+
+AS QUERIES EM UMA HELPER FILE JAVASCRIPT,
+
+
+
+
+
+
+
+
+
+
+
+
+
+pq é mais fácil de ler...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.persons.aggregate(
+    [
+        {
+            $match: {gender: "female"}
+        }
+    ]
+).pretty( 
+
+
+
+
+
+
+
+
+
+
+    --> CERTO, ESSA É A PRIMEIRA 'STEP',
+
+    o uso de um FILTER,
+
+    para afunilar nossa data...
+
+
+
+
+
+
+
+
+
+
+
+    --> MAIS INTERESSANTE É O SEGUNDO STAGE,
+
+    GROUPING STAGE,
+
+     
+
+     QUE NOS DEIXA 
+
+
+     'GROUP OUR DATA'
+
+
+
+
+     POR MEIO DE 1 FIELD,
+
+
+     OU POR 
+
+     MÚLTIPLOS FIELDS...
+
+
+
+
+
+
+
+
+
+
+
+
+     --> DEVEMOS OLHAR NOSSA DATA, MAIS UMA VEZ....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     --> TEMOS NOSSOS DOCS,
+
+     sim,
+
+     QUE AGORA SÓ SERÃO 'FEMALES'...
+
+
+
+
+
+
+
+
+     --> MAS POR QUAL COISA VAMOS QUERER AS AGRUPAR?
+
+
+
+
+
+
+
+
+     BEM, VAMOS QUERER AGRUPAR PELO 'state'... --> VAMOS QUERER 
+
+     VER 
+
+
+
+     '
+     '' '' A QUANTIA DE PESSOAS VIVENDO NESSE STATE DE yukon'''' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     --> COM O AGGREGATE METHOD,
+
+
+
+     E A AGG FRAMEWORK,
+
+     ISSO É FÁCIL DE SE FAZER..
+
+
+
+
+
+
+
+
+
+
+     --> PRIMEIRAMENTE,
+
+
+
+
+     VAMOS USAR 
+     o 
+
+
+
+     {
+         $group: 
+     }
+
+
+
+
+
+
+
+
+
+
+     --> O PARÂMETRO 
+
+
+     É 
+
+
+     SEMPRE UM OBJECT ({})
+
+
+
+
+
+
+
+
+
+
+     --> O PRIMEIRO  PARÂMETRO,
+
+
+     NESSE OBJECT,
+
+     SEMPRE SERÁ 
+
+
+     '_id' ---> ESSE ID 
+
+
+
+     VAI 
+
+     DEFINIR 
+
+
+     ''''PARA QUAIS FIELDS VOCÊ VAI QUERER 
+
+     AGRUPAR 
+     SUA DATA''''
+
+
+
+
+
+
+
+
+
+
+
+--. aí vamos usar '_iD'
+
+
+
+
+
+DE UMA MANEIRA QUE NUNCA VIMOS ANTES... --> UTILIZAREMO-NO COMO __ UM OBJECT___ ... -> 
+
+
+
+
+
+
+
+ATÉ AGORA,
+
+SEMPRE VIMOS 
+
+
+
+
+'_id: ObjectId('asjassajasi'),'
+
+
+
+E NUNCA 
+
+VIMOS 
+
+
+
+
+
+COMO UM __ DOCUMENT/object...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM,
+
+
+
+ASSIM COMO __ QUALQUER _ OUTRO FIELD,
+
+
+VOCÊ PODE ASSIGNAR UM __ DOCUMENT_ COMO VALUE DE '_id'...  ------> SÓ NÃO É MT COMUM....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ENTRETANTO,
+
+PARA 
+
+ESSE STAGE DE 'group',
+
+
+É 
+
+
+BEM COMUM ESSA SINTAXE DE 
+
+
+
+
+
+{
+
+$group: {_id: {}}
+}
+
+
+
+
+
+
+
+
+
+
+
+--> ESSA SINTAXE É COMUM PQ __ ELA SERÁ INTERPRETADA DE UMA CERTA MANEIRA, PELO MONGODB....
+
+
+
+
+
+
+
+---> ESSA SINTAXE VAI TE PERMITIR ADICIONAR __ MÚLTIPLOS FIELDS 
+
+
+
+
+
+
+
+PELOS QUAIS VOCÊ VAI QUERER 'GROUP'...
+
+
+
+
+
+
+
+
+
+
+
+--> E VAMOS QUERER AGRUPAR POR 'location.state'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR FARÁ ISSO POR MEIO DO USO DE UM NAME QUALQUER 
+
+
+na esquerda/key... -----> 
+
+TIPO ASSMI:
+
+
+
+
+
+
+
+db.persons.aggregate(
+    [
+        {
+            $match: {gender: "female"},
+            {
+                $group: {_id: {chosenState: }}
+            }
+        }
+    ]
+).pretty()
+
+
+
+
+
+
+
+
+
+DEPOIS DISSO,
+
+ELE VAI....
+
+
+
+
+
+
+
+
+
+
+
+
+db.persons.aggregate(
+    [
+        {
+            $match: { gender: "female"}
+        },
+
+        {
+            $group: { _id: { chosenState}}
+        }
+    ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> QUEREMOS VER 
+
+
+''''A SOMA DAS PESSOAS VIVENDO NESSE STATE AÍ...''''
+
+
+
+
+
+
+
+
+
+------> "_id"  --> isso define 
+
+
+'''POR QUAIS FIELDS VOCÊ QUER AGRUPAR (group)'''' 
+
+
+
+
+
+
+
+
+
+
+
+----> 
+
+
+
+_id: {
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> _id: {
+
+
+}
+
+
+
+
+
+
+
+
+
+SINTAXE BEM COMUM COM O AGGREGATE FRAMEWORK...
+
+
+
+
+
+
+
+--> queremos 'group'
+
+
+POR LOCATION.state -------> 
+
+
+
+
+
+
+
+
+
+
+
+por isso vamos colocar 
+
+a 
+
+key 
+
+
+
+de 
+
+
+
+'chosenState',
+
+
+e aí 
+
+
+escrever:
+
+
+
+
+
+{
+
+_id: {
+    chosenState: "$location.state"
+}
+}
+
+
+
+
+
+
+
+
+
+
+--> ESCREVEMOS ESSE 
+
+
+
+'$location.state',
+
+
+
+
+
+ESSA STRING DESCRITIVA. AÍ....
+
+
+
+
+
+
+
+
+
+
+
+--> o professor nos explica que 
+
+
+'$location.state' 
+
+
+
+
+
+
+
+
+O DOLLAR SIGN AÍ É IMPORTANTE,
+
+
+pq   
+DIZ AO MONGODB 
+
+
+
+
+
+
+QUE 
+
+
+
+'''ESTAMOS NOS REFERINDO A UM FIELD DE NOSSO DOCUMENT,
+QUE POSSUI ESTE NAME''' 
+
+
+
+
+
+
+
+
+
+
+-> E AÍ ACESSAMOS ESSE NESTED FIELD DE 'state',
+
+por meio do 'dot',
+
+
+
+visto em 
+
+
+'$location.state'...
+
+
+
+
+
+
+
+
+
+FICA TIPO ASSIM, PORTANTO:
+
+
+
+
+db.persons.aggregate(
+    [
+        {
+            $match: { gender: "female"}
+        },
+
+        {
+            $group: { _id: { chosenState: "$location.state"}}
+        }
+    ]
+)
+
+
+
+------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> OK... ISSO SIGNIFICA QUE AGORA NOSSOS 
+
+
+
+RESULTADOS/DOCUMENTS RETRIEVADOS 
+
+
+SERÃO 
+
+
+
+
+
+'''GROUPED BY THE STATE'''''
+
+
+
+
+
+
+
+
+
+(
+
+    ou seja, ficará algo como 
+
+
+
+
+    texas
+    texas
+    texas 
+    texas 
+
+
+    dallas
+    dallas
+    dallas
+    dallas
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS ANTES DE PROSSEGUIRMOS, O PROFESSOR EXPLICA QUE DEVEMOS ADICIONAR UMA __ SEGUNDA __ KEY 
+
+
+
+
+
+
+AO 
+
+"$group: {}',
+
+
+
+
+
+
+
+
+
+QUE DEVERÁ SER UMA KEY NO MESMO NÍVEL DE '_id',
+
+
+
+em outras palavras...
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR ESCREVE UMA KEY DE NOME 'totalPersons',
+
+
+
+
+
+QUE __ TAMBÉM __ VAI SEGURAR UM OBJECT...
+
+
+
+
+
+
+
+
+tipo assim:
+
+
+
+
+
+
+
+
+
+db.persons.aggregate(
+    [
+        {
+            $match: { gender: "female"}
+        },
+
+        {
+            $group: { _id: { chosenState: "$location.state"}, totalPersons: {}
+            
+            }
+        }
+    ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> DENTRO DESSE OBJECT/document,
+
+
+
+
+
+__ __ VAMOS __ ESPECIFICAR__ 'THE KIND OF AGGREGATION FUNCTION' 
+
+que 
+
+
+
+
+VAMOS QUERER EXECUTAR,
+
+ NESSA 
+
+
+
+ NOSSA OPERAÇÃO....
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> AS AGGREGATION FUNCTIONS DISPONÍVEIS A NÓS PODEM SER ENCONTRADAS NO DOCS DO MONGODB,
+
+
+
+
+
+ em 
+
+
+
+
+ 'group (aggregation)'.... 
+
+
+
+
+
+
+
+
+ --> NESSA PÁGINA VOCÊ ENCONTRA __ TODOS __ OS 'ACCUMULATOR/AGGREGATION' operators 
+
+
+
+ QUE SÃO SUPORTADOS..
+
+
+
+
+
+
+
+
+
+
+
+ SÃO ALGUNS DELES:
+
+
+
+
+
+
+
+
+
+ $avg 
+
+
+
+
+ $first 
+
+
+
+
+
+ $last 
+
+
+ $max 
+
+
+ $min 
+
+
+
+ $push 
+
+
+
+ $addToSet
+
+
+
+
+
+ $stdDevPop 
+
+
+
+
+ $stdDevSamp
+
+
+
+ $sum
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ------> VAMOS QUERER ________ USAR O OPERATOR DE '$sum',
+
+
+
+
+
+ QUE 
+
+
+ VAI NOS RETORNAR 'A SOMA DE VALORES NUMÉRICOS'... (e ignora valores não numéricos)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> PARA USAR O OPERATOR DE '$sum',
+
+
+ professor escreve assim:
+
+
+
+
+
+
+
+ db.persons.aggregate(
+    [
+        {
+            $match: { gender: "female"}
+        },
+
+        {
+            $group: { _id: { chosenState: "$location.state"}, totalPersons: { $sum: }
+            
+            }
+        }
+    ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> 
+
+
+
+
+
+
+ou seja,
+
+
+tipo 
+
+
+
+
+
+
+
+totalPersons: {
+    $sum: 1
+}
+
+
+
+
+
+
+
+
+
+
+
+
+-> AÍ, NO SUM, VOCê PASSA ''''' A VALUE YOU WANNA ADD FOR EVERY DOCUMENT THAT IS GROUPED TOGETHEr'''' --> ISSO SIGNIFICA QUE 
+
+
+SE NÓS 
+
+
+TIVERMOS 
+
+
+
+
+
+
+
+3 PESSOAS DE 1 MESMO 'location.state',
+
+
+
+ALGUMAS DESSAS PESSOAS 
+
+
+
+SERÃO 
+
+
+
+'INCREMENTADAS POR 1 vezes 3'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+NAÕ ESTOU ENTENDENDO NADA... tenho que ler os docs...
+
+
+
+
+
+
+
+https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline/
+
+
+
+
+
+
+
+
+
+
+
+AS STAGES DO AGGREGATION FRAMEWORK SÃO:
+
+
+
+
+
+
+
+
+
+
+
+
+SQL Terms, Functions, and Concepts
+MongoDB Aggregation Operators
+
+
+
+WHERE
+$match
+
+
+GROUP BY
+$group
+
+
+HAVING
+$match
+
+
+SELECT
+$project
+
+
+ORDER BY
+$sort
+
+
+
+LIMIT
+$limit
+
+
+SUM()
+$sum
+
+
+
+COUNT()
+$sum
+$sortByCount
+
+
+join
+$lookup
+
+
+
+SELECT INTO NEW_TABLE
+$out
+
+
+MERGE INTO TABLE
+$merge (Available starting in MongoDB 4.2)
+
+
+UNION ALL
+$unionWith (Available starting in MongoDB 4.4)
+
+
+
+
+
+---------------------
+
+
+
+
+
+
+
+
+
+
+Groups input documents by the specified _id expression and for each distinct grouping,
+
+ outputs a document. The _id field of each output document contains the unique group by value. 
+ 
+ The output documents can also contain computed fields that hold the values of some accumulator expression.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------
+
+
+
+
+
+
+
+
+
+
+
+db.persons.aggregate(
+    [
+        {$match: {gender: "female"}, 
+        {
+            $group: {
+
+                _id: {
+                    chosenState: "$location.state"
+                },
+
+                totalPersons: {
+
+                }
+            }
+        }
+        
+        
+        }
+    ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+-------> AS AGGREGATION FUNCTIONS FAZEM DIVERSAS COISAS diferentes...
+
+(
+
+
+    temos coisas como 
+
+    "$count",
+
+    "$indexStats",
+    "$redact",
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+--------> todas essas são functions/operators...
+
+
+
+
+
+
+
+
+
+-> HÁ VÁRIOS 'ACCUMULATOR/AGGREGATION' functions/operators 
+
+
+QUE SÃO SUPORTADOS...
+
+
+
+
+
+
+
+
+
+
+
+
+-> vamos usar o '$sum'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+{
+    $sum: 1
+}
+
+
+
+
+
+
+
+
+--> ESPECIFICAMOS '''O VALOR QUE QUEREMOS ADICIONAR AOS NOSSOS DOCUMENTS,
+
+
+
+PARA __ CADA__ DOCUMENT QUE É 'GROUPED TOGETHER'.... ------->  ISSO SIGNIFICA QUE 
+
+SE 
+
+TIVERMOS 
+
+
+3 
+
+PESSOAS 
+
+'DO MESMO LOCATION.STATE',
+
+
+
+
+
+ESSE VALOR 
+
+
+DE 
+
+'$sum'
+
+
+SERÁ __ INCREMENTADA__ por 3 vezes.... (será 4; começamos com '1', mas vai aumentando a cada document que é agrupado)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> A PARTE INTERESSANTE, AQUI, É QUE O MONGODB 
+
+
+VAI FAZER 
+
+ESSE 
+'
+summing up' (de '$sum') 
+
+
+
+
+
+
+PARA NÓS__  -------> O MONGODB VAI 
+
+
+
+'KEEP THE AGGREGATED SUM ___ 
+
+
+NA SUA MEMÓRIA', ATÉ O MOMENTO EM QUE __ O GROUP TIVER SIDO COMPLETADO --> E QUANDO O GROUP TIVER ACABADO, o 'totalPersons', que 
+
+usa sse operator de '$sum', TERÁ SEU VALOR INSERIDO NESSE FIELD DE 'totalPersons'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> TAMBÉM É IMPORTANTE ENTENDER QUE 
+
+O 
+
+'GROUP'
+
+
+
+
+
+
+
+
+
+
+
+
+
+_____ FAZ O '''ACCUMULATE''' 
+
+DE DATA.... --> ISSO SIMPLESMENTE SIGNIFICA 
+
+que 
+
+
+'''VOCÊ PODE TER _ MÚLTIPLOS DOCUMENTS COM '$location.state' DE MESMO VALOR, tudo com o MESMO STATE,
+
+
+E AÍ o GROUP _ SÓ ___ VAI, AINDA  ASSIM, OUTPUTTAR 1 ÚNICO DOCUMENT... -> 
+
+
+
+
+
+
+
+SÓ SERÁ RETORNADO 1 ÚNICO DOCUMENT_ _ JUSTAMENTE __ PQ ESTAMOS
+
+
+
+
+
+
+
+'''AGGREGATING sua data''',
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> ISSO SIGNIFICA QUE 3 DOCUMENTS, COM O EXATO MESMO 'STATE' (texas, por exemplo), 
+
+
+
+
+SERÃO _ MERGADOS__ 
+
+EM 1 ÚNICO DOCUMENT --------> isso acontecerá/aconteceu __ JUSTAMENTE PQ, AQUI, VOCÊ ESTÁ 
+
+''AGGREGATING', 
+
+
+
+ESTÁ ___CONSTRUINDO UMA 'sum', nesse caso-exemplo...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS CHEGA DE CONVERSA, DEVEMOS RODAR ESTA FUNÇÃO NO TERMINAL:
+
+
+
+
+
+
+
+db.persons
+  .aggregate([
+    { $match: { gender: 'female' } },
+    {
+      $group: {
+        _id: {
+          chosenState: '$location.state',
+        },
+        totalPersons: {
+          $sum: 1,
+        },
+      },
+    },
+  ])
+  .pretty();
+
+
+
+
+----------------------------------
+
+
+
+
+
+
+
+
+
+
+
+NOSSOS RESULTS FICARAM BEM ESTRANHOS, E BEM DIFERENTES....
+
+
+
+
+
+
+
+ficaram assim os 'documents':
+
+
+
+
+{ "_id" : { "chosenState" : "southland" }, "totalPersons" : 8 }
+{ "_id" : { "chosenState" : "چهارمحال و بختیاری" }, "totalPersons" : 8 }
+{ "_id" : { "chosenState" : "karaman" }, "totalPersons" : 1 }
+{ "_id" : { "chosenState" : "central ostrobothnia" }, "totalPersons" : 8 }
+{ "_id" : { "chosenState" : "south dublin" }, "totalPersons" : 3 }
+{ "_id" : { "chosenState" : "bolu" }, "totalPersons" : 2 }
+{ "_id" : { "chosenState" : "mardin" }, "totalPersons" : 3 }
+{ "_id" : { "chosenState" : "elazığ" }, "totalPersons" : 4 }
+{ "_id" : { "chosenState" : "islas baleares" }, "totalPersons" : 5 }
+{ "_id" : { "chosenState" : "gwent" }, "totalPersons" : 1 }
+{ "_id" : { "chosenState" : "vaud" }, "totalPersons" : 6 }
+{ "_id" : { "chosenState" : "valais" }, "totalPersons" : 4 }
+{ "_id" : { "chosenState" : "description" }, "totalPersons" : 8 }
+{ "_id" : { "chosenState" : "aydın" }, "totalPersons" : 3 }
+{ "_id" : { "chosenState" : "zuid-holland" }, "totalPersons" : 11 }
+{ "_id" : { "chosenState" : "limerick" }, "totalPersons" : 5 }
+{ "_id" : { "chosenState" : "muğla" }, "totalPersons" : 3 }
+{ "_id" : { "chosenState" : "louth" }, "totalPersons" : 7 }
+{ "_id" : { "chosenState" : "massachusetts" }, "totalPersons" : 4 }
+{ "_id" : { "chosenState" : "قم" }, "totalPersons" : 4 }
+Type "it" for more
+
+
+
+
+
+
+
+
+
+----------------------------
+
+
+
+
+
+
+
+examine a query e os results,
+
+
+
+
+até entender o que aconteceu...
+
+
+
+
+
+
+
+
+
+
+db.persons.aggregate([
+    { $match: { gender: 'female' } },
+    {
+      $group: {
+        _id: {
+          chosenState: '$location.state',
+        },
+        totalPersons: {
+          $sum: 1,
+        },
+      },
+    },
+  ]).pretty();
+
+
+
+
+
+
+
+{ "_id" : { "chosenState" : "southland" }, "totalPersons" : 8 }
+{ "_id" : { "chosenState" : "چهارمحال و بختیاری" }, "totalPersons" : 8 }
+{ "_id" : { "chosenState" : "karaman" }, "totalPersons" : 1 }
+{ "_id" : { "chosenState" : "central ostrobothnia" }, "totalPersons" : 8 }
+{ "_id" : { "chosenState" : "south dublin" }, "totalPersons" : 3 }
+{ "_id" : { "chosenState" : "bolu" }, "totalPersons" : 2 }
+{ "_id" : { "chosenState" : "mardin" }, "totalPersons" : 3 }
+{ "_id" : { "chosenState" : "elazığ" }, "totalPersons" : 4 }
+{ "_id" : { "chosenState" : "islas baleares" }, "totalPersons" : 5 }
+{ "_id" : { "chosenState" : "gwent" }, "totalPersons" : 1 }
+{ "_id" : { "chosenState" : "vaud" }, "totalPersons" : 6 }
+{ "_id" : { "chosenState" : "valais" }, "totalPersons" : 4 }
+{ "_id" : { "chosenState" : "description" }, "totalPersons" : 8 }
+{ "_id" : { "chosenState" : "aydın" }, "totalPersons" : 3 }
+{ "_id" : { "chosenState" : "zuid-holland" }, "totalPersons" : 11 }
+{ "_id" : { "chosenState" : "limerick" }, "totalPersons" : 5 }
+{ "_id" : { "chosenState" : "muğla" }, "totalPersons" : 3 }
+{ "_id" : { "chosenState" : "louth" }, "totalPersons" : 7 }
+{ "_id" : { "chosenState" : "massachusetts" }, "totalPersons" : 4 }
+{ "_id" : { "chosenState" : "قم" }, "totalPersons" : 4 }
+Type "it" for more
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> EXPLICAÇÃO DO PROFESSOR...
+
+
+
+
+
+
+
+
+
+
+
+
+--> O QUE VEMOS, DIZ O PROFESSOR, É QUE ''''AINDA TEMOS UM MONTE DE STATES NA NOSSA DATA'''  (mais do que 20)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS JÁ PODEMOS PERCEBER QUE A 'AGGREGATION FUNCIONOU TOTALMENTE''' --> isso pq 
+
+
+OBTIVEMOS UM RESULTADO COMPLETAMENTE DIFERENTE....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> nós não conseguimos, com isso, o return de 'person data' (documents de 'person'),
+
+
+
+JUSTAMENTE PQ __ ALTERAMOS/MANIPULAMOS ESSA DATA... -------> NÓS USAMOS 
+
+
+
+
+
+'group'
+ 
+
+
+
+
+
+
+
+
+
+
+ PARA ___ MERGEAR__ NOSSOS DOCUMENTS __ EM NOVOS DOCUMENTS,
+
+
+
+
+
+
+
+ COM __ DATA __ TOTALMENTE DIFERENTE.. 
+
+
+
+
+
+
+ (
+
+ou seja,
+
+
+
+com 
+
+'totalPersons'
+ 
+
+ e com 
+
+ esse 
+
+ field de 
+
+ '_id'
+
+
+
+ DIFERENTE DO COMUM...  (pq possui um valor de '{chosenState: "$location.state" )'
+
+
+
+
+
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ O '_id',
+
+
+
+
+ COMO VOCÊ PODE TER PERCEBIDO,
+
+
+
+
+
+
+
+
+ É EXATAENTE AQUELE 'OBJECT' que havíamos definido,
+
+
+
+
+
+
+
+
+
+ COM O 'STATE ON WHICH IT IS GROUPED'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> a maior parte dos states POSSUEM APENAS 1 PERSON,
+
+
+
+ por conta de nosso demo set --> mas alguns states 
+
+
+
+
+ POSSUEM MAIS DE 1 ÚNICA PERSON,
+
+
+ COMO 'sinop'...
+
+
+
+
+
+
+
+
+
+
+ --> E PODEMOS PROVAR QUE 
+
+
+
+ NOSSA AGGREGATION ESTÁ FUNCIONANDO CORRETAMENTE,
+
+ AQUI,
+
+
+
+
+
+
+
+
+
+ por meio 
+
+
+ de uma query de find..
+
+
+
+
+
+
+
+
+
+
+
+
+ -> escrevemos assim:
+
+
+
+
+
+
+
+
+
+ db.persons.find(
+     {
+         "location.state": "sinop"
+     }
+ )
+
+
+
+
+
+
+
+
+
+
+ --> ISSO VAI RETORNAR 3 FEMALES... -----. que é o  que interessa, 
+
+
+
+ pq se compatibiliza com nosso call de 'match' com 'group'...
+
+
+
+
+
+
+
+
+
+ ------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ok..... ESSE É O AGGREGATION PIPELINE, e o stage de 'GROUP' em ação...
+
+
+
+
+
+
+
+
+
+ -> O STAGE DE GROUP PODE TE RETORNAR 
+
+
+
+
+ DOCUMENTS __ COMPLETAMENTE__ DISTINTOS __ 
+
+
+
+ DOS ORIGINAIS... (recebidos na primeira phase)...

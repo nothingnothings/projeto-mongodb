@@ -1,0 +1,383 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> VOCÊ TALVEZ POSSA TER UM BACKGROUND DE SQL....
+
+
+
+
+
+
+
+
+
+
+
+--> MAS QUANDO O PROFESSOR COMEÇOU A TRABALHAR COM O MONGODB,
+
+ELE TEVE DIFICULDADES,
+
+
+PQ 
+
+
+AS DATABASES SQL 
+
+
+
+SEMPRE FAZIAM 'normalize' de data-->  OU SEJA,
+
+
+
+
+
+
+ARMAZENAR DATA EM TABLES QUE POSSUEM UM SCHEMA CLARO... --> E AÍ USAR UM MONTE DE RELATIONS...
+
+
+
+
+
+
+
+
+
+
+ 
+
+ --> EM VEZ DE FAZER ISSO,
+
+
+ O MONGODB 
+
+
+
+ ARMAZENA SUA DATA TUDO EM 1 ÚNICO LUGAR, EM DOCUMENTS... -------> E ELE TAMBÉM NÃO FORÇA UM SCHEMA EM NÓS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --------> ex:
+
+
+
+
+
+
+
+ {
+
+     id: 1,
+     "name": "Max"
+ } 
+
+
+ {
+     age: 29,
+     address: "xxxx"
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ---> COLLECTION DE USERS,
+
+
+
+ MAS COM PROPRIEDADES DIFERENTES EM CADA OBJECT (Schema-less) --> É CLARO QUE ISSO PODE LEVAR A 
+
+ 'MESSY DATA',
+
+ MAS 
+
+
+
+ É A RESPONSABILIDADE DE VOCÊ, COMO DESENVOLVEDOR,
+
+
+
+
+CONSEGUIR TRABALHAR COM DATA CLEAN,
+
+E 
+
+
+
+IMPLEMENTAR UMA SOLUÇÃO QUE FUNCIONA...
+
+
+
+
+
+
+
+
+
+
+
+-> MAS POR OUTRO LADO, O MONGODB TE DÁ UM MONTE DE FLEXIBILIDADE --> É BOM DE SER USADO 
+
+EM APPS 
+
+
+QUE AINDA VÃO EVOLUIR,
+
+
+
+
+
+
+EM QUE OS REQUISITOS EXATOS DE DATA AINDA NÃO ESTÃO BEM DEFINIDOS... ----> VOCÊ PODE 
+
+
+
+
+COMEÇAR COM UMA DISPOSIÇÃO DE DATA NA SUA COLLECTION, E AÍ 
+
+
+UPGRADEAR ESSA DISPOSIÇÃO,
+
+
+COLOCAR MAIS FIELDS,
+
+EM 1 MOMENTO POSTERIOR NO TEMPO...
+
+
+
+
+
+
+
+
+
+
+
+------> VOCê TAMBÉM ACABA TRABALHANDO COM ___ MENOS _ RELATIONS....
+
+
+
+
+
+
+
+(
+
+
+
+    'NO/FEW RELATIONS'! 
+
+
+
+
+
+
+
+
+    ---> RELATIONAL DATA PRECISA SER MERGEADA _ MANUALMENTE__... (KINDOF)
+)
+
+
+
+
+
+
+
+
+
+
+
+-----> HÁ ALGUMAS RELATIONS, SIM,
+
+
+
+E O PROFESSOR TEM UM MÓDULO EM QUE ELE FALA SOBRE ISSO.. ( já vi isso)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> TEMOS RELATIONS, SIM,
+
+
+
+
+
+__ MAS __ COM ESSES EMBEDDED DOCUMENTS,
+
+
+
+
+
+UMA CORE THING DO MONGODB É QUE VOCÊ TERÁ MENOS TABLES que vocÊ terá de conectar,
+
+
+
+
+
+
+JUSTAMENTE PQ VOCÊ VAI 'STORE DATA TOGETHER'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> E O FATO DE QUE VOCê ARMAZENA A DATA TODA JUNTA É 
+
+O 
+
+QUE 
+
+GERA A EFICIÊNCIA ---> 
+
+
+
+
+QUANDO
+
+
+SEU APP PRECISA FETCHEAR DATA,
+
+
+
+ELE NÃO VAI TER QUE 
+
+MERGEAR DATA DA TABLE A COM A TABLE B COM A TABLE C--> 
+
+
+EM VEZ DISSO,
+
+
+
+
+ELE VAI SÓ ATÉ A COLLECTION 'A' 
+
+
+
+E AÍ 
+
+
+VAI USAR O QUERYING MECHANISM 
+
+
+DO 
+
+MONGODB, QUE É SUPER EFICIENTE,
+
+
+
+
+
+e que 
+
+
+
+
+vai 
+
+
+
+encontrar a data super rápido e que vai 
+
+
+então encontrar o document e ACABOU, SEM MERGING DE NADA.... --> é daí que vem toda a flexibilidade e agilidade 
+
+
+do mongodb- --> e isso é 
+
+
+
+
+
+
+
+útil quando construímos apps...
+
+
+
+
+
+
+
+
+
+
+--> É POR ISSO QUE SOLUÇÕES NOSQL SÃO 
+
+SUPER POPULARES EM APPS WRITE E READ HEAVY,
+
+ 
+
+ COM MT WORKLOAD,
+
+
+
+
+ APPS COM STORE DE MT DATA (
+
+     smart devices que enviam sensor data 
+
+
+     a cada segundo...
+ ) --> TAMBÉM 
+
+ É ÚTIL PARA LOJAS ONLINE,
+
+ OU PARA BLOGS...

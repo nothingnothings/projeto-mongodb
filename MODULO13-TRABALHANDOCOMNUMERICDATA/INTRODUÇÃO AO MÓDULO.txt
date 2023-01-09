@@ -1,0 +1,151 @@
+
+
+
+
+
+
+
+
+
+
+
+TRABALHANDO COM DADOS NUMÉRICOS...
+
+
+
+
+
+
+
+
+
+
+
+--> BEM MAIS COMPLEXO DO QUE VOCÊ PODE IMAGINAR...
+
+
+
+
+
+
+
+
+
+
+
+
+--> QUANDO CONSTRUÍMOS APPS COM MONGODB,
+
+
+
+VOCÊ PROVAVELMENTE 
+
+
+
+TRABALHARÁ COM NUMBERS....
+
+
+
+
+
+
+
+
+
+--> TVZ VC CONSTRUA 
+
+UMA 
+
+
+ONLINE SHOP, EM QUE 
+
+VOCÊ 
+
+
+
+
+ARMAZENA PRICES... -> VOCÊ TAMBÉM ARMAZENA 
+
+
+
+
+
+ORDERS (
+
+    que vão ter order volumes/prices...
+)
+
+
+
+
+
+
+
+
+
+
+
+OU ENTÃO VOCÊ 
+
+TVZ ESTEJA 
+
+
+CONSTRUINDO UMA DATABASE PARA SCIENTIFIC DATA,
+
+
+
+PELA QUAL 
+
+
+
+
+
+
+VOCÊ OU OUTRAS PESSOAS PODEM RODAR 'SCIENTIFIC CALCULATIONS' 
+
+
+
+
+
+
+
+
+
+
+
+--> NUMBERS ESTÃO POR TODA PARTE,
+
+
+E VOCê 
+
+
+VAI 
+
+ARMAZENAR 
+
+NUMBERS COM O MONGODB TAMBÉM...
+
+
+
+
+
+
+
+
+
+
+--> NUMBERS SÃO MAIS COMPLEXOS DO QUE VOCê PENSA... --> VEREMOS 
+
+
+
+
+OS DIFERENTES TYPES DE NUBMERS QUE O MONGODB SUPORTA,
+
+COMO ELES DIFEREM ENTRE SI, 
+
+
+
+
+
+
+E QUANDO VOCÊ USA cada 1 deles....

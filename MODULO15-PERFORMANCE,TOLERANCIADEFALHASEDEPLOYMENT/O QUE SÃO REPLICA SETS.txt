@@ -1,0 +1,1097 @@
+
+
+
+
+
+
+
+AGORA QUE ENTENDEMOS O QUE SÃO 'CAPPED COLLECTIONS' (collections limitadas/restritas/menores),
+
+
+
+
+
+
+
+
+
+VAMOS VER OS 'REPLICA SETS'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+REPLICA SETS  SÃO COISAS QUE VOCÊ CRIARÁ/CRIARIA COMO 'SYSTEM ADMIN/DATABASE ADMIN'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS O QUE SÃO REPLICA SETS?
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> DIGAMOS QUE TEMOS NOSSO CLIENT..
+
+
+
+
+
+
+
+
+
+
+CLIENT PODE SER O MONGOSHELL,
+
+
+OU ALGUM NATIVE DRIVER 
+
+PARA 
+
+
+
+NODE, PHP, C++, PHYTON,
+ 
+
+ etc..
+
+
+
+
+
+
+
+
+
+
+ -> OK... QUEREMOS ESCREVER UMA DATA A NOSSA DATABASE---> POR ISSO 
+
+
+ VAMOS 
+
+
+ ENVIAR 
+
+
+
+ UMA 
+
+
+
+ OPERATION DE INSERT AO SERVER.... -> 
+
+
+
+
+
+
+
+ ex:
+
+
+
+
+
+
+
+ CLIENT (SHELL, DRIVER)
+
+
+
+ |
+ |
+ |WRITE
+ V 
+
+
+
+ MONGODB SERVER 
+
+
+
+|
+|
+|
+|WRITE
+|
+V 
+
+
+
+PRIMARY NODE
+
+
+
+
+
+
+
+
+
+ESSE SERVER SE COMUNICA COM O 'PRIMARY NODE',
+
+você poderia dizer....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... MAS O QUE INTERESSA  É QUE 
+
+OS 
+
+
+
+'NODES', aqui,
+
+
+
+SÃO O ACTUAL 'MONGODB SERVER'... -----------> ISSO SIGNIFICA QUE 
+
+
+
+
+
+ATÉ AGORA,
+
+O QUE 
+USAMOS 
+
+
+COM O COMANDO 
+
+
+
+
+
+
+
+'''mongod''/net start mongodb,
+
+
+
+
+
+
+
+
+FOI UM __ NODE__,
+
+
+NOS DAVA ACESSO AO __ ÚNICO NODE QUE TÍNHAMOS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> ISSO SIGNIFICA QUE O MONGODB SERVER ESTÁ/É 'TECNICAMENTE ATTACHED'  A ESSE NODE.... 
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS É MAIS FÁCIL ENTENDER ASSIM, com esse esquema:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ CLIENT (SHELL, DRIVER)
+
+
+
+ |
+ |
+ |WRITE
+ V 
+
+
+
+ MONGODB SERVER 
+
+
+
+|
+|
+|
+|WRITE
+|
+V 
+
+
+
+PRIMARY NODE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> OK, TEMOS ESSE SERVER,
+
+
+
+QUE É ESSENCIALMENTE 1 'NODE'... 
+
+
+
+
+
+
+
+
+
+
+
+--> ENTRETANTO, VOCê PODE TER __ MAIS DE 1 NODE_.... -> SÃO CHAMADOS DE 'SECONDARY NODES'... ->  SÃO 
+
+
+
+
+'ADDITIONAL DATABASE SERVERS',
+
+
+
+
+
+
+QUE SÃO SEPARADOS,
+
+MAS QUE 
+
+ACABAM TODOS JUNTOS 
+
+
+
+EM 
+
+
+1 NEGÓCIO/CONJUNTO 
+
+
+
+
+CHAMADO DE 
+
+
+
+'REPLICA SET'.... -->  A IDEIA, AQUI,
+
+É QUE 
+
+VOCê 
+
+
+
+ 
+
+ ,
+
+
+
+
+
+ O APP/USER/DEV 
+
+ ,
+
+
+
+
+
+ SEMPRE VAI SE COMUNICAR 
+
+ COM O __ PRIMARY_ NODE___ AUTOMATICAMENTE... --------> OU SEJA,
+
+
+
+ VOCê NUNCA TEM QUE FAZER ISSO MANUALMENTE,
+
+
+
+
+ ACONTECE __ AUTOMATICAMENTE....  -------->  SE VOCÊ 
+
+
+
+
+
+ ENVIA 1 COMANDO DE 'INSERT'
+
+
+
+ AO SEU MONGOD SERVER,
+
+
+
+ ELE 
+ VAI 
+
+ AUTOMATICMAENTE 'TALK TO THE PRIMARY NODE'... -> ENTRETANTO, POR TRÁS DAS CENAS,
+
+
+
+
+
+
+
+ O PRIMARY NODE 
+
+
+
+
+
+ _ VAI __ REPLICAR_ _ ASSINCRONAMENTE__ A DATA __ LÁ _ NOS SECONDARY NODES...
+
+
+
+
+
+
+
+
+ Ex:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+ CLIENT (SHELL, DRIVER)
+
+
+
+ |
+ |
+ |WRITE
+ V 
+
+
+
+ MONGODB SERVER 
+
+
+
+|
+|
+|
+|WRITE
+|
+V 
+
+
+                async replication
+PRIMARY NODE ----------------> SECONDARY NODE 
+
+|
+|
+|
+|async replication
+|
+|
+V
+
+SECONDARY NODE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E 'ASYNC' SIMPLESMENTE SIGNIFICA QUE __ QUANDO VOCÊ INSERIR SUA DATA,
+
+
+
+ELA 
+
+NÃO SERÁ 
+
+'IMEDIATAMENTE INSERIDA NOS 
+
+SECONDARY NODES',
+
+
+
+
+
+
+MAS É CLARO QUE ESSE PROCESSO VAI ACONTECER 'RELATIVELY SOON'..
+
+
+
+
+
+
+
+
+
+ESTE É O 'REPLICA SET':
+
+
+
+------------------------------------------------------
+
+
+                async replication
+PRIMARY NODE ----------------> SECONDARY NODE 
+
+|
+|
+|
+|async replication
+|
+|
+V
+
+SECONDARY NODE
+
+
+------------------------------------------------- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->OK, TEMOS ESSA REPLICATION OF DATA... ------> MAS PQ/PARA QUE REPLICAR DATA?
+
+
+
+
+
+
+nós replicamos DATA PARA __ QUE, NESSE SETUP AÍ,
+
+
+SE NÓS 
+
+FIZERMOS 
+
+
+'READ' DE DATA 
+
+E 
+
+AÍ,
+
+
+POR ALGUMA RAZÃO,
+
+
+
+
+
+NOSSO PRIMARY NODE ACABA FICANDO 'OFFLINE',
+
+
+
+
+
+
+nós FICAMOS CAPAZES 
+
+DE 
+
+
+__NOS ___ CONECTAR/REACH _ 
+
+O
+ 
+
+
+ 'SECONDARY NODE' (     ---> O SECONDARY NODE SERÁ  ELEITO COMO 'O NOVO PRIMARY NODE');
+
+
+
+
+
+
+
+
+
+
+ OS SECONDARY NODES, EM UM REPLICA SET,
+
+
+ SEMPRE 
+
+ EXECUTAM UMA 'ELEIÇÃO'
+
+ QUANDO 
+ O 
+
+ PRIMARY NODE FICA INDISPONÍVEl/GOES DOWN...
+
+
+
+
+
+
+
+
+
+
+ -------> AÍ, QUANDO ISSO ACONTECE,
+
+
+ CONVERSAMOS 
+
+ COM 
+
+
+ ESSE 'NOVO PRIMARY NODE' 
+
+ ATÉ QUE 
+
+
+
+
+ NOSSO REPLICA SET INTEIRO (primary node + secondary nodes) 
+
+
+
+
+
+ CONSIGA SE RESTAURAR ...
+
+
+
+
+
+
+
+
+
+
+
+
+ --> COM ISSo,
+
+
+ GANHAMOS UM POUCO DE 'FAULT TOLERANCE'... --> pq se um de nossos SERVERS 'GOES DOWN',
+
+
+ PODEMOS 
+
+
+ CONVERSAR 
+ COM OUTRA INSTANCE/NODE 
+
+
+ NESSA 
+
+
+
+ SERVER NETWORK/CLUSTER,
+
+
+
+
+
+ PARA ENTÃO AINDA CONSEGUIR FAZER O 'READ' DE DATA..
+ .
+
+
+
+
+
+
+
+
+
+
+
+ -> ALÉM DE PODER FAZER 'READ' DE DATA NOS SECONDARY NODES,
+
+
+ TAMBÉM
+
+ SOMOS CAPAZES DE FAZER 'WRITE' DE DATA NELES...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> OK... RESPONDEMOS A PERGUNTA DO 'WHY REPLICA SETS':
+
+
+
+
+
+
+
+
+
+ 1) TEMOS MELHORES 'BACKUPS' e 'FAULT TOLERANCY' 
+
+
+
+
+
+
+
+
+ 2) TEMOS 'MELHOR READ PERFORMANCE' -----> ISSO O PROFESSOR AINDA NÃO EXPLICOU...
+
+
+
+
+
+
+
+
+
+
+
+
+ --> PROFESSOR, ATÉ AGORA,
+
+ SÓ FALOU DO BACKUP DE DATA 
+
+ E 
+
+ A POSSIBILIDADE DE CONTINUAR O 'READ' DE DATA MESMO COM O PRIMARY NODE CAIU...
+
+
+
+ (e também de WRITE aos secondaries, que repassam a info ao primary, quando ele fica online..)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> OK.... BEM,
+
+ QUANTO AO SETUP DE READ,
+
+
+
+ SECONDARY READS,
+
+
+ TEMOS ISTO:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CLIENT (SHELL, DRIVER)
+^
+|
+|READ
+|
+V
+
+MONGODB SERVER 
+
+
+^
+|
+|READ
+|
+V
+
+
+
+
+primary node  ---------- SECONDARY NODE 
+
+|
+|
+|
+|
+|
+
+SECONDARY NODE 
+
+
+
+
+
+
+
+
+
+
+
+---------> SE TEMOS ESSE SETUP AÍ,
+
+
+
+É 'FINE' 
+
+
+SE O PRIMARY NODE FICA 
+
+
+
+OFFLINE... ----> MESMO QUE ELE FIQUE OFFLINE,
+
+
+VOCÊ PODE 
+
+CONFIGURAR 
+SEU BACKEND DATABASE 
+
+__ DE __ MODO_ 
+
+
+
+
+
+
+QUE __ SEU BACKEND -- VAI 
+
+'AUTOMATICAMENTE DISTRIBUIR READ REQUESTS 
+
+AO LONGO 
+
+DE 
+
+___ MÚLTIPLOS NODES '''' --------> mas esse privilégio aí funciona SÓ COM READ REQUESTS... --> WRITES 
+
+
+SEMPRE 
+
+VÃO 
+
+IR 
+
+
+AO 
+
+
+'PRIMARY NODE',
+
+
+
+
+
+
+
+
+
+
+MAS/PORÉM/CONTUDO/TODAVIA,
+
+
+
+
+
+OS READ REQUESTS __ PODEM__, 
+
+
+SE O SV ESTÁ CONFIGURADO ADEQUADAMENTE (essa é uma tarefa do system e database admins) ,
+
+
+
+
+
+
+
+
+PODEM 'FALAR COM SECONDARY NODES '---------->  A IDEIA, COM ISSO, É CLARA:
+
+
+
+
+
+
+
+
+VOCÊ QUER ASSEGURAR QUE SUA DATA CONSIGA SER LIDA  DA FORMA MAIS RÁPIDA POSSÍVEL....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E SE VOCÊ TEM UM APP EM QUE VOCê TEM MILHARES DE READ REQUESTS POR SEGUNDO,
+
+
+
+AÍ É MT BOM 
+
+
+SE VOCê consegue ler não só
+
+
+'FROM JUST 1 NODE (que tem que handlar tudo isso, se não adicionar nenhum outro user..), 
+
+
+
+
+
+node 
+
+ QUE E´
+
+
+ 1 PC SOZINHO,
+
+
+
+
+
+E SIM 'READ FROM MULTIPLE COMPUTERS',
+
+o que acaba 
+
+causando 
+o 
+
+'SPLIT DO TRABALHO EVENLY'.....
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESSA É A IDEIA POR TRÁS dos replica sets --> ganhamos o 
+
+
+'
+BACKUP',
+
+a 
+
+
+FAULT TOLERANCY.... essa´e uma vantagem....
+
+
+
+
+-> PODEMOS ATÉ MESMO USAR O 'NODE' /REPLICA SETS PARA __ obter peformance mt boa DE 'READ'....
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, MAS COMO CRIAMOS UM REPLICA SET?
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, ISSO É UM CONCEITO ADMINISTRATIVO,
+
+POR ISOS 
+
+
+NÃO IREMOS TÃO FUNDO NESSE CURSO...
+
+
+
+
+(
+
+    é algo bem avançado..
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    MAS QUANDO DEPLOAYRMOS 
+
+
+
+
+    UM 
+
+
+
+    MONGODB SOLUTION,
+    PROFESSOR 
+
+
+
+
+    VAI 
+
+
+
+    NOS MOSTRAR UMA MANEIRA FÁCIL DE MANTER uma mongodb instance rodando....
+
+
+
+
+
+
+    VEREMOS ISSO NA PRÓXIma aula...

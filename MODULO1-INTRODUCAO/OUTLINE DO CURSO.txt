@@ -1,0 +1,518 @@
+
+
+
+
+
+
+
+
+
+
+
+
+--> COM TODA ESSA TEORIA, QUEREMOS COMEÇAR...
+
+
+
+
+
+1) INTRODUCTION...
+
+
+
+
+
+
+
+
+
+
+2) BASICS DO MONGODB, BASIC CRUD OPERATIONS...
+
+
+
+
+
+CREATE 
+
+READ 
+
+
+
+UPDATE 
+
+DELETE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+3) DATA SCHEMA E RELATIONS --> 
+
+
+
+
+
+
+VAMOS VER __ COMO _ MODELAR NOSSA DATA,
+
+
+COMO ENCONTRAR 
+
+
+O BALANÇO BOM ENTRE TER 
+
+
+
+UM 'FLEXIBLE DOCUMENT SCHEMA'  
+
+
+
+
+
+E __ AINDA__ USAR__ 1 SCHEMA NO SEU APP.... 
+
+
+
+
+
+
+
+--> TAMBÉM VEREMOS ___ como _ RELATE___ NOSSOS DOCUMENTS (por meio de ids, e por meio de EMBEDDING)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+4) DEPOIS DISSO,
+
+TRABALHAREMOS UM POUCO COM O SHELL;
+
+
+
+
+
+veremos umas diferentes coisas que podemos configurar no shell,
+
+
+
+
+COMO RODAR AQUELE 'mongod' service 
+
+
+no MAC E LINUX...
+
+
+
+
+
+
+
+
+5) DEPOIS DISSO,
+
+
+VEREMOS 
+
+A GRAPHICAL USER INTERFACE,
+
+QUE É O COMPASS... --> podemos usar isso para LOOK INTO OUR DATA....
+
+
+
+
+
+
+
+
+
+
+
+6) CRUD DEEP DIVE --> VEREMOS 
+
+
+
+
+AS CREATE OPERATIONS __ MAIS __ DE PERTO.... --> AQUI PODEMOS 
+
+
+
+COMEÇAR SE 
+
+JÁ TEMOS UM 
+
+
+
+BASIC UNDERSTANDING SOBRE O MONGODB...
+
+
+
+
+
+
+
+
+
+
+
+
+7) TEREMOS TAMBÉM UM DEEP DIVE SOBRE __ O READING, QUE É 
+
+O 
+
+'FILTERING E QUERYING' de data...
+
+
+
+
+
+
+
+
+
+8) DEEP DIVE DE 'UPDATING' 
+
+
+
+
+
+9 ) DEEP DIVE DE 'DELETING'...
+
+
+
+
+
+
+
+
+
+
+VEREMOS CONFIG OPTIONS DE TUDO ISSO AÍ, PARA CONSEGUIR A DATA QUE QUEREMOS....
+
+
+
+
+
+
+
+
+10) ESTUDAREMOS E USAREMOS OS __ INDEXES,
+
+
+
+
+UMA FEATURE__ QUE __ TE DEIXA__ 'SPEED UP' 
+
+seus queries.... ---> VEREMOS ALGUMAS VANTAGENS E DESVANTAGENS DE SUA UTILIZAÇÃO...
+
+
+
+
+
+(é uma feature mais avançada)....
+
+
+
+
+
+
+
+
+11) TRABALHAREMOS COM 'GEOSPATIAL DATA' --> ISSO PQ 
+
+
+O 
+
+
+MONGODB É MT BOM PARA O STORE DE ___ LOCATIONS,
+
+
+
+E PARA O QUERY DESSAS LOCATIONS... --> isso quer dizer que ele é mt bom para coisas como 
+
+
+
+''EU ESTOU AQUI, QUAL É O RESTAURANTE MAIS PRÓXIMO?''' ----------> ISSO É BEM FÁCIL DE SE FAZER COM O MONGODB....
+
+
+
+
+
+
+
+
+
+
+
+12 ) DEPOIS DISSO, VEREMOS O 
+
+
+'AGGREGATION FRAMEWORK',
+
+
+
+
+QUE 
+
+É 
+
+UMA MANEIRA MAIS FORTE ___DE  RETRIEVAR DATA DE SUA DATABASE,
+
+
+
+E VEREMOS COMO 
+
+
+
+USAR ISSO, E COMO PODEMOS __ CONSTRUIR COMPLEXAS 'AGGREGATION PIPELINES' com o mongodb...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+13) AÍ SERÁ HORA DE ESTUDAR E TRABALHAR COM UM TIPO ESPECIAL DE DATA,
+
+
+
+é o 
+
+'WORKING WITH NUMERIC DATA'....   --> PROFESSOR NOS ENSINARÁ 
+
+SOBRE COMO TRABALHAR COM DIFERENTES TIPOS DE NÚMEROs, E 
+
+
+O QUE É ESPECIAL SOBRE ISSO, NO MONGODB....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+14) com as core features estudadas,
+
+
+professor 
+
+
+
+
+VAI NOS FALAR DE UMA FEATURE CRUCIAL,
+
+QUE É 
+
+
+
+A 'SECURITY E AUTHENTICATION'  -------> COMO VOCÊ 
+
+SECURA 
+
+
+SUA 
+
+
+MONGODB DATABASE, 
+
+
+
+
+
+
+E COMO USERS PODEM 'AUTHENTICATE AGAINST IT'... 
+
+
+
+
+
+
+
+
+
+
+14) DEPOIS DISSO, VEREMOS PERFORMANCE, 
+
+FAULT TOLERANCE E DEPLOYMENT....
+
+
+(
+
+
+
+    ou seja, como você pode melhorar a performance, fatores importantes,
+
+
+
+
+    e aí 
+
+    COMO VOCÊ DEPLOYA SEU LOCAL MONGODB ENVIRONMENT LÁ NA WEB,
+
+
+    NA NUVEM,
+
+    PARA QUE VOCÊ CONSIGA USÁ-LA DE QUALQUER LUGAR, 
+
+
+    E NÃO SÓ DE SUA LOCAL MACHINE -----> isso é ótimo 
+
+    PARA__ DEVELOPING, PRACTICING E WORKING, mas 
+
+
+    NÃO TÃO BOM PARA A PRODUCTION, É CLARO...
+)
+
+
+
+
+
+
+
+
+
+
+
+15) DEPOIS DISSO, VEREMOS UMA FEATURE CHAMADA DE 'TRANSACTIONS', 
+
+que foi 
+
+implementada com a versão 4.0 DO MONGODB....
+
+
+
+
+
+
+
+
+
+
+
+16) DEPOIS DISSO VEREMOS __ COMO ___ PASSAR NOSSO CONHECIMENTO DA 'SHELL' aos 
+
+DRIVERS 
+
+
+
+DE CADA LINGUAGEM DE PROGRAMAÇÃO... --> VAMOS CONSTRUIR UM APP INTEIRO,
+
+UM 
+
+
+NODE REACT APP,
+
+
+
+
+PARA APRENDER SOBRE COMO USAR O NODE DRIVER 
+
+
+
+
+
+
+para rapidamente criar um aplicativo incrível...
+
+
+
+
+
+
+
+
+
+
+
+--> 17) ACABAREMOS O CURSO COM UMA OLHADA NO 
+
+
+'MONGODB STITCH',
+
+
+
+QUE É 
+
+
+O OUTRO PRODUTO 
+
+DO 
+
+MONGODB,
+
+
+
+
+com SERVERLESS FUNCTIONS,
+
+TRIGGERS E ASSIM POR DIANTE...
+
+
+
+
+
+
+(
+
+    veremos como 
+
+    usar isso 
+
+    PARA CONSTRUIR, JUNTO COM A MONGODB DATABASE,
+
+    UM APP INTEIRO, em que 
+
+    VOCÊ FOCA 
+
+    SÓ NA SUA BUSINESS LOGIC,
+
+
+    E EM QUE 
+
+    VOCÊ NÃO PRECISA SE PREOCUPAR 
+
+
+    COM O CREATE DE REST APIs,
+
+
+    CONFIGURAÇÃO DE SERVERS, OU QUALQUER COISA SSIM...
+)
+
+
+
+
+
+
+
+
+OK, VAMOS COMEÇAR....

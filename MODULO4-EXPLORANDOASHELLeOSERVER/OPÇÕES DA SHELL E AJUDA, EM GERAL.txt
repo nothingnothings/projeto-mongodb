@@ -1,0 +1,1391 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> OK... AO LONGO DAS ÚLTIMAS LIÇÕES,
+
+FALAMOS MT SOBRE O MONGODB SERVER E SUAS OPTIONS..
+
+
+
+
+
+
+
+
+
+--> AGORA VAMOS FALAR SOBRE AS OPTIONS QUE TEMOS NA MONGODB SHELL...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, DA MESMA MANEIRA QUE PODÍAMOS ESCREVEr 'mongod --help',
+
+
+PODEMOS ESCREVER 
+
+
+
+'mongo --help'...
+
+
+
+
+
+
+
+
+
+
+-->  A SHELL TEM BEM MENOS OPTIONS... .-> TEM MENOS OPTIONS JUSTAMENTE PQ É 
+
+''APENAS 1 CONNECTING CLIENT'.. (
+
+    e não o server....
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> VOCÊ PODE, POR EXEMPLO, RODAR A SHELL SEM A CONECTAR A UMA DATABASE,
+
+POR MEIO DA FLAG DE 
+
+
+
+
+'''--nodb''''... -----------> COMO A SHELL É BASEADA EM JAVASCRIPT,
+
+
+
+
+SE VOCÊ QUER SÓ RODAR UM CÓDIGO JAVASCRIPT COM ELA,
+
+VOCÊ PODE FAZER ISSO....
+
+
+
+
+
+
+
+
+
+
+
+
+-----> VOCÊ TAMBÉM PODE 
+
+
+
+
+RODAR 
+
+
+
+
+
+SUA SHELL NO 'QUIET MODE',
+
+
+PARA OUTPUTTAR 
+
+menos information...
+
+
+
+
+
+
+
+
+
+
+
+
+---> VOCÊ TAMBÉM PODE ESPECIFICAR 1 'PORT' 
+
+
+E 
+
+' 
+
+HOST' 
+
+
+para o server,
+
+
+
+OPTIONS QUE JÁ USAMOS ANTERIORMENTE.... (
+
+
+
+    POR DEFAULT,
+
+    ele vai tentar se conectar à port de 
+
+    27017 
+)
+
+
+
+
+
+
+
+
+
+
+
+--> POR DEFAULT,
+
+O 'host' será de 'localhost' ---------> MAS AO FINAL DO CURSO,
+
+CONECTAREMOS NOSSA 
+
+
+
+SHELL A UM HOST QUE NÃO SERÁ 'LOCALHOST'... (
+
+
+
+
+    rodaremos nosso mongod process em um local que NÃO SERÁ LOCALHOST...
+)
+
+
+
+
+(
+
+
+    vamos rodar o mongod em um server de verdade,
+
+OU NA CLOUD...
+
+
+
+
+
+
+) --------------> 
+
+
+
+
+
+
+
+
+
+
+E SE VOCÊ QUISER FAZER ISSO,
+
+CONECTAR A SHELL A ESSAS COISAS REMOTAS,
+
+
+
+VOCÊ VAI PRECISAR USAR ESSAS OPTIONS DE 
+
+
+'--port arg' 
+
+
+e 
+
+
+'--host arg'....
+
+
+
+
+
+(
+
+    EVITANDO, ASSIM, O TRY DE CONNECT AO LOCALHOST...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> AÍ VOCÊ TAMBÉM PODE SETTAR ALGUNS SSL SETTINGS,
+
+que o professor não precisa usar.. ---------->
+
+
+
+
+
+
+
+
+
+MAS MAIS TARDE, QUANDO ADICIONARMOS AUTHENTICATION,
+
+
+PODEREMOS ADICIONAR NOSSA 
+
+AUTHENTICATION 
+
+INFORMATION,
+
+
+POR MEIO DESTAS OPTIONS:
+
+
+
+
+
+
+
+
+
+
+Authentication Options:
+  -u [ --username ] arg                username for authentication
+  -p [ --password ] arg                password for authentication
+  --authenticationDatabase arg         user source (defaults to dbname)
+  --authenticationMechanism arg        authentication mechanism
+  --gssapiServiceName arg (=mongodb)   Service name to use when authenticating
+                                       using GSSAPI/Kerberos
+  --gssapiHostName arg                 Remote host name to use for purpose of
+                                       GSSAPI/Kerberos authentication
+
+
+
+
+
+
+
+
+
+
+--------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->> OK... ISSO SIGNIFICA QUE, POR ENQUANTO,
+
+NÃO HÁ REALMENTE UMA OPTION QUE O PROFESSOR VAI QUERER EXECUTAR...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS HÁ ALGO INTERESSANTE QUE EXISTE_ _ DENTRO__ DA SHELL,
+
+
+
+
+
+
+DEPOIS DE VOCÊ TER A INICIADO E CONECTADO.... --> na shell,
+
+você pode 
+
+
+
+
+digitar 
+
+
+'help',
+
+enquanto ela está sendo executada...
+
+
+
+
+
+
+
+
+
+
+
+-_> ISSO VAI TE DAR UM HELP ACERCA DOS COMANDOS DE RUNTIME DISPONÍVEIS...
+
+
+
+
+
+
+
+
+
+
+OS COMANDOS SÃO:
+
+
+
+
+
+
+
+
+
+
+
+    db.help()                    help on db methods
+        db.mycoll.help()             help on collection methods
+        sh.help()                    sharding helpers
+        rs.help()                    replica set helpers
+        help admin                   administrative help
+        help connect                 connecting to a db help
+        help keys                    key shortcuts
+        help misc                    misc things to know
+        help mr                      mapreduce
+
+        show dbs                     show database names
+        show collections             show collections in current database
+        show users                   show users in current database
+        show profile                 show most recent system.profile entries with time >= 1ms
+        show logs                    show the accessible logger names
+        show log [name]              prints out the last segment of log in memory, 'global' is default
+        use <db_name>                set current database
+        db.mycoll.find()             list objects in collection mycoll
+        db.mycoll.find( { a : 1 } )  list objects in mycoll where a == 1
+        it                           result of the last line evaluated; use to further iterate
+        DBQuery.shellBatchSize = x   set default number of items to display on shell
+        exit                         quit the mongo shell
+
+
+
+
+
+
+
+
+
+
+
+        -----------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+---------> OK... ALGUNS COMANDOS IMPORTANTES...
+
+
+
+
+
+
+
+
+
+
+
+--> VOCÊ TAMBÉMM PODE VER COMANDOS ESPECÍFICOS E SUA HELP,
+
+
+se digitarmos algo como 'help admin',
+
+ou 
+
+'help connect'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESSES COMANDOS:
+
+
+
+        ls([path])                      list files
+        pwd()                           returns current directory
+        listFiles([path])               returns file list
+        hostname()                      returns name of this host
+        cat(fname)                      returns contents of text file as a string
+        removeFile(f)                   delete a file or directory
+        load(jsfilename)                load and execute a .js file
+        run(program[, args...])         spawn a program and wait for its completion
+        runProgram(program[, args...])  same as run(), above
+        sleep(m)                        sleep m milliseconds
+        getMemInfo()                    diagnostic
+
+
+
+
+
+
+
+
+
+
+
+--> PODEM SER ÚTEIS QUANDO VOCÊ ESTIVER ADMINISTRANDO UMA DATABASE...
+
+
+
+
+
+
+
+EX:
+
+
+
+> hostname()
+DESKTOP-V43A7S1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> de volta aos comandos comuns,
+
+temos coisas como 'show dbs'
+
+
+e 
+
+
+'show collections',
+
+que usamos anteriormente....
+
+
+
+
+
+
+
+
+
+VOCÊ TAMBÉM VÊ COMO VOCÊ ENCONTRA TODOS OS OBJECTS EM UMA COLLECTION (
+
+
+
+
+
+    'db.foo.find()'
+
+
+
+)
+
+
+
+
+
+
+
+
+
+-> VOCê TAMBÉM PODE VER HELP SOBRE comandos/methods em uma database,
+
+
+
+ou então sobre os methods de uma COLLECTION NA SUA DATABASE...
+
+
+
+
+
+
+
+
+
+com 
+
+
+
+db.posts.help(),
+
+
+
+por exemplo,
+
+
+
+
+
+
+ou então 
+
+db.help()...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+> use blog
+switched to db blog
+> db.help()
+DB methods:
+        db.adminCommand(nameOrDocument) - switches to 'admin' db, and runs command [just calls db.runCommand(...)]
+        db.aggregate([pipeline], {options}) - performs a collectionless aggregation on this database; returns a cursor
+        db.auth(username, password)
+        db.commandHelp(name) returns the help for the command
+        db.createUser(userDocument)
+        db.createView(name, viewOn, [{$operator: {...}}, ...], {viewOptions})
+        db.currentOp() displays currently executing operations in the db
+        db.dropDatabase(writeConcern)
+        db.dropUser(username)
+        db.eval() - deprecated
+        db.fsyncLock() flush data to disk and lock server for backups
+        db.fsyncUnlock() unlocks server following a db.fsyncLock()
+        db.getCollection(cname) same as db['cname'] or db.cname
+        db.getCollectionInfos([filter]) - returns a list that contains the names and options of the db's collections
+        db.getCollectionNames()
+        db.getLastError() - just returns the err msg string
+        db.getLastErrorObj() - return full status object
+        db.getLogComponents()
+        db.getMongo() get the server connection object
+        db.getMongo().setSecondaryOk() allow queries on a replication secondary server
+        db.getName()
+        db.getProfilingLevel() - deprecated
+        db.getProfilingStatus() - returns if profiling is on and slow threshold
+        db.getReplicationInfo()
+        db.getSiblingDB(name) get the db at the same server as this one
+        db.getWriteConcern() - returns the write concern used for any operations on this db, inherited from server object if set
+        db.hostInfo() get details about the server's host
+        db.isMaster() check replica primary status
+        db.hello() check replica primary status
+        db.killOp(opid) kills the current operation in the db
+        db.listCommands() lists all the db commands
+        db.loadServerScripts() loads all the scripts in db.system.js
+        db.logout()
+        db.printCollectionStats()
+        db.printReplicationInfo()
+        db.printShardingStatus()
+        db.printSecondaryReplicationInfo()
+        db.rotateCertificates(message) - rotates certificates, CRLs, and CA files and logs an optional message   
+        db.runCommand(cmdObj) run a database command.  if cmdObj is a string, turns it into {cmdObj: 1}
+        db.serverStatus()
+        db.setLogLevel(level,<component>)
+        db.setProfilingLevel(level,slowms) 0=off 1=slow 2=all
+        db.setVerboseShell(flag) display extra information in shell output
+        db.setWriteConcern(<write concern doc>) - sets the write concern for writes to the db
+        db.shutdownServer()
+        db.stats()
+        db.unsetWriteConcern(<write concern doc>) - unsets the write concern for writes to the db
+        db.version() current version of the server
+        db.watch() - opens a change stream cursor for a database to report on all  changes to its non-system collections.
+>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> ok...
+
+
+
+
+
+
+--> VIMOS VÁRIOS COMANDOS QUE PODEMOS RODAR 
+
+NA DATABASE... --> MTOS DELES NUNCA VIMOS ANTES,
+
+
+
+
+E ALGUNS DELES NUNCA PRECISAREMOS UTILIZAR...
+
+
+
+
+
+
+
+
+
+
+
+
+-> mas também há comandos como 'db.createCollection()',
+
+
+
+
+QUE JÁ 
+
+USAMOS 
+
+NESTE CURSO...
+
+
+
+
+
+(
+
+    para settar o validation, se bem nos lembrarmos....
+)
+
+
+
+
+
+
+
+
+
+
+
+--> TAMBÉM  HÁ COMANDOS PARA O DROP DE DATABASES,
+
+
+POR EXEMPLO (
+
+    'db.dropDatabase()'...
+)
+
+
+
+
+
+
+
+
+--> TAMBÉM HÁ COMMANDS PAR ACONSEGUIR 
+
+
+
+
+TODO TIPO DE INFORMATION,
+
+COMO 
+
+'db.version()'... 
+
+
+
+
+
+
+
+
+
+
+
+
+---> TAMBÉM SÃO COMMANDS QUE EXISTEM NOS OFFICIAL DOCS... -------> 
+
+
+
+
+
+
+MAS É BOM CONHECER ESSES COMMANDS...
+
+
+
+
+
+
+
+
+
+
+
+'''
+
+db.runCommand()
+
+
+
+''''
+
+
+
+É OUTRO COMANDO QUE VIMOS MAIS CEDO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> TAMBÉM PODEMOS TER HELP NO LEVEL DE 'COLLECTION',
+
+
+
+basta rodar um código como 
+
+
+'db.posts.help()'...
+
+
+
+
+
+
+
+
+
+
+
+---------> OS COMANDOS SÃO:
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+
+
+> db.posts.help()
+DBCollection help
+        db.posts.find().help() - show DBCursor help
+        db.posts.bulkWrite( operations, <optional params> ) - bulk execute write operations, optional parameters 
+are: w, wtimeout, j
+        db.posts.count( query = {}, <optional params> ) - count the number of documents that matches the query, optional parameters are: limit, skip, hint, maxTimeMS
+        db.posts.countDocuments( query = {}, <optional params> ) - count the number of documents that matches the query, optional parameters are: limit, skip, hint, maxTimeMS
+        db.posts.estimatedDocumentCount( <optional params> ) - estimate the document count using collection metadata, optional parameters are: maxTimeMS
+        db.posts.convertToCapped(maxBytes) - calls {convertToCapped:'posts', size:maxBytes}} command
+        db.posts.createIndex(keypattern[,options])
+        db.posts.createIndexes([keypatterns], <options>)
+        db.posts.dataSize()
+        db.posts.deleteOne( filter, <optional params> ) - delete first matching document, optional parameters are: w, wtimeout, j
+        db.posts.deleteMany( filter, <optional params> ) - delete all matching documents, optional parameters are: w, wtimeout, j
+        db.posts.distinct( key, query, <optional params> ) - e.g. db.posts.distinct( 'x' ), optional parameters are: maxTimeMS
+        db.posts.drop() drop the collection
+        db.posts.dropIndex(index) - e.g. db.posts.dropIndex( "indexName" ) or db.posts.dropIndex( { "indexKey" : 
+1 } )
+        db.posts.hideIndex(index) - e.g. db.posts.hideIndex( "indexName" ) or db.posts.hideIndex( { "indexKey" : 
+1 } )
+        db.posts.unhideIndex(index) - e.g. db.posts.unhideIndex( "indexName" ) or db.posts.unhideIndex( { "indexKey" : 1 } )
+        db.posts.dropIndexes()
+        db.posts.explain().help() - show explain help
+        db.posts.reIndex()
+        db.posts.find([query],[fields]) - query is an optional query filter. fields is optional set of fields to 
+return.
+                                                      e.g. db.posts.find( {x:77} , {name:1, x:1} )
+        db.posts.find(...).count()
+        db.posts.find(...).limit(n) 
+        db.posts.find(...).skip(n)
+        db.posts.find(...).sort(...)
+        db.posts.findOne([query], [fields], [options], [readConcern])
+        db.posts.findOneAndDelete( filter, <optional params> ) - delete first matching document, optional parameters are: projection, sort, maxTimeMS
+        db.posts.findOneAndReplace( filter, replacement, <optional params> ) - replace first matching document, optional parameters are: projection, sort, maxTimeMS, upsert, returnNewDocument
+        db.posts.findOneAndUpdate( filter, <update object or pipeline>, <optional params> ) - update first matching document, optional parameters are: projection, sort, maxTimeMS, upsert, returnNewDocument
+        db.posts.getDB() get DB object associated with collection
+        db.posts.getPlanCache() get query plan cache associated with collection
+        db.posts.getIndexes()
+        db.posts.insert(obj)
+        db.posts.insertOne( obj, <optional params> ) - insert a document, optional parameters are: w, wtimeout, j        db.posts.insertMany( [objects], <optional params> ) - insert multiple documents, optional parameters are: w, wtimeout, j
+        db.posts.mapReduce( mapFunction , reduceFunction , <optional params> )
+        db.posts.aggregate( [pipeline], <optional params> ) - performs an aggregation on a collection; returns a 
+cursor
+        db.posts.remove(query)
+        db.posts.replaceOne( filter, replacement, <optional params> ) - replace the first matching document, optional parameters are: upsert, w, wtimeout, j
+        db.posts.renameCollection( newName , <dropTarget> ) renames the collection.
+        db.posts.runCommand( name , <options> ) runs a db command with the given name where the first param is the collection name
+        db.posts.save(obj)
+        db.posts.stats({scale: N, indexDetails: true/false, indexDetailsKey: <index key>, indexDetailsName: <index name>})
+        db.posts.storageSize() - includes free space allocated to this collection
+        db.posts.totalIndexSize() - size in bytes of all the indexes
+        db.posts.totalSize() - storage allocated for all data and indexes
+        db.posts.update( query, <update object or pipeline>[, upsert_bool, multi_bool] ) - instead of two flags, 
+you can pass an object with fields: upsert, multi, hint, let
+        db.posts.updateOne( filter, <update object or pipeline>, <optional params> ) - update the first matching 
+document, optional parameters are: upsert, w, wtimeout, j, hint, let
+        db.posts.updateMany( filter, <update object or pipeline>, <optional params> ) - update all matching documents, optional parameters are: upsert, w, wtimeout, j, hint, let
+        db.posts.validate( <full> ) - SLOW
+        db.posts.getShardVersion() - only for use with sharding
+        db.posts.getShardDistribution() - prints statistics about data distribution in the cluster
+        db.posts.getSplitKeysForChunks( <maxChunkSize> ) - calculates split points over all chunks and returns splitter function
+        db.posts.getWriteConcern() - returns the write concern used for any operations on this collection, inherited from server/db if set
+        db.posts.setWriteConcern( <write concern doc> ) - sets the write concern for writes to the collection    
+        db.posts.unsetWriteConcern( <write concern doc> ) - unsets the write concern for writes to the collection        db.posts.latencyStats() - display operation latency histograms for this collection
+>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> ESSES SÃO TODOS OS COMANDOS QUE PODEMOS RODAR SOBRE 1 COLLECTION...  -----> ~SAO TODOS COMMANDS DE 
+
+'insert',
+
+'update',
+
+
+'find',
+
+
+ etc...
+
+
+
+
+
+
+
+
+
+
+ --> MAS TAMBÉM TEMOS OUTROS COMMANDS,
+
+ COMO 
+
+
+ 'db.posts.stats()',
+
+
+
+
+
+
+
+
+ QUE 
+
+ É BOM, NICHO....
+
+
+
+
+
+
+
+
+
+ EX:
+
+
+
+
+
+
+
+
+
+
+
+ > db.posts.stats()
+{
+        "ns" : "blog.posts",
+        "size" : 332,
+        "count" : 2,
+        "avgObjSize" : 166,
+        "storageSize" : 36864,
+        "freeStorageSize" : 16384,
+        "capped" : false,
+        "wiredTiger" : {
+                "metadata" : {
+                        "formatVersion" : 1
+                },
+                "creationString" : "access_pattern_hint=none,allocation_size=4KB,app_metadata=(formatVersion=1),assert=(commit_timestamp=none,durable_timestamp=none,read_timestamp=none,write_timestamp=off),block_allocation=best,block_compressor=snappy,cache_resident=false,checksum=on,colgroups=,collator=,columns=,dictionary=0,encryption=(keyid=,name=),exclusive=false,extractor=,format=btree,huffman_key=,huffman_value=,ignore_in_memory_cache_size=false,immutable=false,import=(enabled=false,file_metadata=,repair=false),internal_item_max=0,internal_key_max=0,internal_key_truncate=true,internal_page_max=4KB,key_format=q,key_gap=10,leaf_item_max=0,leaf_key_max=0,leaf_page_max=32KB,leaf_value_max=64MB,log=(enabled=true),lsm=(auto_throttle=true,bloom=true,bloom_bit_count=16,bloom_config=,bloom_hash_count=8,bloom_oldest=false,chunk_count_limit=0,chunk_max=5GB,chunk_size=10MB,merge_custom=(prefix=,start_generation=0,suffix=),merge_max=15,merge_min=0),memory_page_image_max=0,memory_page_max=10m,os_cache_dirty_max=0,os_cache_max=0,prefix_compression=false,prefix_compression_min=4,readonly=false,source=,split_deepen_min_child=0,split_deepen_per_child=0,split_pct=90,tiered_object=false,tiered_storage=(auth_token=,bucket=,bucket_prefix=,cache_directory=,local_retention=300,name=,object_target_size=10M),type=file,value_format=u,verbose=[],write_timestamp_usage=none",
+                "type" : "file",
+                "uri" : "statistics:table:collection-44-2658221699332555351",
+                "LSM" : {
+                        "bloom filter false positives" : 0,
+                        "bloom filter hits" : 0,
+                        "bloom filter misses" : 0,
+                        "bloom filter pages evicted from cache" : 0,
+                        "bloom filter pages read into cache" : 0,
+                        "bloom filters in the LSM tree" : 0,
+                        "chunks in the LSM tree" : 0,
+                        "highest merge generation in the LSM tree" : 0,
+                        "queries that could have benefited from a Bloom filter that did not exist" : 0,
+                        "sleep for LSM checkpoint throttle" : 0,
+                        "sleep for LSM merge throttle" : 0,
+                        "total size of bloom filters" : 0
+                },
+                "block-manager" : {
+                        "allocations requiring file extension" : 0,
+                        "blocks allocated" : 0,
+                        "blocks freed" : 0,
+                        "checkpoint size" : 4096,
+                        "file allocation unit size" : 4096,
+                        "file bytes available for reuse" : 16384,
+                        "file magic number" : 120897,
+                        "file major version number" : 1,
+                        "file size in bytes" : 36864,
+                        "minor version number" : 0
+                },
+                "btree" : {
+                        "btree checkpoint generation" : 0,
+                        "btree clean tree checkpoint expiration time" : 0,
+                        "btree compact pages reviewed" : 0,
+                        "btree compact pages rewritten" : 0,
+                        "btree compact pages skipped" : 0,
+                        "btree skipped by compaction as process would not reduce size" : 0,
+                        "column-store fixed-size leaf pages" : 0,
+                        "column-store internal pages" : 0,
+                        "column-store variable-size RLE encoded values" : 0,
+                        "column-store variable-size deleted values" : 0,
+                        "column-store variable-size leaf pages" : 0,
+                        "fixed-record size" : 0,
+                        "maximum internal page size" : 4096,
+                        "maximum leaf page key size" : 2867,
+                        "maximum leaf page size" : 32768,
+                        "maximum leaf page value size" : 67108864,
+                        "maximum tree depth" : 0,
+                        "number of key/value pairs" : 0,
+                        "overflow pages" : 0,
+                        "row-store empty values" : 0,
+                        "row-store internal pages" : 0,
+                        "row-store leaf pages" : 0
+                },
+                "cache" : {
+                        "bytes currently in the cache" : 228,
+                        "bytes dirty in the cache cumulative" : 0,
+                        "bytes read into cache" : 52,
+                        "bytes written from cache" : 0,
+                        "checkpoint blocked page eviction" : 0,
+                        "checkpoint of history store file blocked non-history store page eviction" : 0,
+                        "data source pages selected for eviction unable to be evicted" : 0,
+                        "eviction gave up due to detecting an out of order on disk value behind the last update on the chain" : 0,
+                        "eviction gave up due to detecting an out of order tombstone ahead of the selected on disk update" : 0,
+                        "eviction gave up due to detecting an out of order tombstone ahead of the selected on disk update after validating the update chain" : 0,
+                        "eviction gave up due to detecting out of order timestamps on the update chain after the selected on disk update" : 0,
+                        "eviction walk passes of a file" : 0,
+                        "eviction walk target pages histogram - 0-9" : 0,
+                        "eviction walk target pages histogram - 10-31" : 0,
+                        "eviction walk target pages histogram - 128 and higher" : 0,
+                        "eviction walk target pages histogram - 32-63" : 0,
+                        "eviction walk target pages histogram - 64-128" : 0,
+                        "eviction walk target pages reduced due to history store cache pressure" : 0,
+                        "eviction walks abandoned" : 0,
+                        "eviction walks gave up because they restarted their walk twice" : 0,
+                        "eviction walks gave up because they saw too many pages and found no candidates" : 0,
+                        "eviction walks gave up because they saw too many pages and found too few candidates" : 0,
+                        "eviction walks reached end of tree" : 0,
+                        "eviction walks restarted" : 0,
+                        "eviction walks started from root of tree" : 0,
+                        "eviction walks started from saved location in tree" : 0,
+                        "hazard pointer blocked page eviction" : 0,
+                        "history store table insert calls" : 0,
+                        "history store table insert calls that returned restart" : 0,
+                        "history store table out-of-order resolved updates that lose their durable timestamp" : 0,
+                        "history store table out-of-order updates that were fixed up by reinserting with the fixed timestamp" : 0,
+                        "history store table reads" : 0,
+                        "history store table reads missed" : 0,
+                        "history store table reads requiring squashed modifies" : 0,
+                        "history store table truncation by rollback to stable to remove an unstable update" : 0,
+                        "history store table truncation by rollback to stable to remove an update" : 0,
+                        "history store table truncation to remove an update" : 0,
+                        "history store table truncation to remove range of updates due to key being removed from the data page during reconciliation" : 0,
+                        "history store table truncation to remove range of updates due to out-of-order timestamp update on data page" : 0,   
+                        "history store table writes requiring squashed modifies" : 0,
+                        "in-memory page passed criteria to be split" : 0,
+                        "in-memory page splits" : 0,
+                        "internal pages evicted" : 0,
+                        "internal pages split during eviction" : 0,
+                        "leaf pages split during eviction" : 0,
+                        "modified pages evicted" : 0,
+                        "overflow pages read into cache" : 0,
+                        "page split during eviction deepened the tree" : 0,
+                        "page written requiring history store records" : 0,
+                        "pages read into cache" : 1,
+                        "pages read into cache after truncate" : 0,
+                        "pages read into cache after truncate in prepare state" : 0,
+                        "pages requested from the cache" : 0,
+                        "pages seen by eviction walk" : 0,
+                        "pages written from cache" : 0,
+                        "pages written requiring in-memory restoration" : 0,
+                        "the number of times full update inserted to history store" : 0,
+                        "the number of times reverse modify inserted to history store" : 0,
+                        "tracked dirty bytes in the cache" : 0,
+                        "unmodified pages evicted" : 0
+                },
+                "cache_walk" : {
+                        "Average difference between current eviction generation when the page was last considered" : 0,
+                        "Average on-disk page image size seen" : 0,
+                        "Average time in cache for pages that have been visited by the eviction server" : 0,
+                        "Average time in cache for pages that have not been visited by the eviction server" : 0,
+                        "Clean pages currently in cache" : 0,
+                        "Current eviction generation" : 0,
+                        "Dirty pages currently in cache" : 0,
+                        "Entries in the root page" : 0,
+                        "Internal pages currently in cache" : 0,
+                        "Leaf pages currently in cache" : 0,
+                        "Maximum difference between current eviction generation when the page was last considered" : 0,
+                        "Maximum page size seen" : 0,
+                        "Minimum on-disk page image size seen" : 0,
+                        "Number of pages never visited by eviction server" : 0,
+                        "On-disk page image sizes smaller than a single allocation unit" : 0,
+                        "Pages created in memory and never written" : 0,
+                        "Pages currently queued for eviction" : 0,
+                        "Pages that could not be queued for eviction" : 0,
+                        "Refs skipped during cache traversal" : 0,
+                        "Size of the root page" : 0,
+                        "Total number of pages currently in cache" : 0
+                },
+                "checkpoint-cleanup" : {
+                        "pages added for eviction" : 0,
+                        "pages removed" : 0,
+                        "pages skipped during tree walk" : 0,
+                        "pages visited" : 0
+                },
+                "compression" : {
+                        "compressed page maximum internal page size prior to compression" : 4096,
+                        "compressed page maximum leaf page size prior to compression " : 131072,
+                        "compressed pages read" : 0,
+                        "compressed pages written" : 0,
+                        "number of blocks with compress ratio greater than 64" : 0,
+                        "number of blocks with compress ratio smaller than 16" : 0,
+                        "number of blocks with compress ratio smaller than 2" : 0,
+                        "number of blocks with compress ratio smaller than 32" : 0,
+                        "number of blocks with compress ratio smaller than 4" : 0,
+                        "number of blocks with compress ratio smaller than 64" : 0,
+                        "number of blocks with compress ratio smaller than 8" : 0,
+                        "page written failed to compress" : 0,
+                        "page written was too small to compress" : 0
+                },
+                "cursor" : {
+                        "Total number of entries skipped by cursor next calls" : 0,
+                        "Total number of entries skipped by cursor prev calls" : 0,
+                        "Total number of entries skipped to position the history store cursor" : 0,
+                        "Total number of times a search near has exited due to prefix config" : 0,
+                        "bulk loaded cursor insert calls" : 0,
+                        "cache cursors reuse count" : 0,
+                        "close calls that result in cache" : 0,
+                        "create calls" : 0,
+                        "cursor next calls that skip due to a globally visible history store tombstone" : 0,
+                        "cursor next calls that skip greater than or equal to 100 entries" : 0,
+                        "cursor next calls that skip less than 100 entries" : 0,
+                        "cursor prev calls that skip due to a globally visible history store tombstone" : 0,
+                        "cursor prev calls that skip greater than or equal to 100 entries" : 0,
+                        "cursor prev calls that skip less than 100 entries" : 0,
+                        "insert calls" : 0,
+                        "insert key and value bytes" : 0,
+                        "modify" : 0,
+                        "modify key and value bytes affected" : 0,
+                        "modify value bytes modified" : 0,
+                        "next calls" : 0,
+                        "open cursor count" : 0,
+                        "operation restarted" : 0,
+                        "prev calls" : 0,
+                        "remove calls" : 0,
+                        "remove key bytes removed" : 0,
+                        "reserve calls" : 0,
+                        "reset calls" : 0,
+                        "search calls" : 0,
+                        "search history store calls" : 0,
+                        "search near calls" : 0,
+                        "truncate calls" : 0,
+                        "update calls" : 0,
+                        "update key and value bytes" : 0,
+                        "update value size change" : 0
+                },
+                "reconciliation" : {
+                        "approximate byte size of timestamps in pages written" : 0,
+                        "approximate byte size of transaction IDs in pages written" : 0,
+                        "dictionary matches" : 0,
+                        "fast-path pages deleted" : 0,
+                        "internal page key bytes discarded using suffix compression" : 0,
+                        "internal page multi-block writes" : 0,
+                        "leaf page key bytes discarded using prefix compression" : 0,
+                        "leaf page multi-block writes" : 0,
+                        "leaf-page overflow keys" : 0,
+                        "maximum blocks required for a page" : 0,
+                        "overflow values written" : 0,
+                        "page checksum matches" : 0,
+                        "page reconciliation calls" : 0,
+                        "page reconciliation calls for eviction" : 0,
+                        "pages deleted" : 0,
+                        "pages written including an aggregated newest start durable timestamp " : 0,
+                        "pages written including an aggregated newest stop durable timestamp " : 0,
+                        "pages written including an aggregated newest stop timestamp " : 0,
+                        "pages written including an aggregated newest stop transaction ID" : 0,
+                        "pages written including an aggregated newest transaction ID " : 0,
+                        "pages written including an aggregated oldest start timestamp " : 0,
+                        "pages written including an aggregated prepare" : 0,
+                        "pages written including at least one prepare" : 0,
+                        "pages written including at least one start durable timestamp" : 0,
+                        "pages written including at least one start timestamp" : 0,
+                        "pages written including at least one start transaction ID" : 0,
+                        "pages written including at least one stop durable timestamp" : 0,
+                        "pages written including at least one stop timestamp" : 0,
+                        "pages written including at least one stop transaction ID" : 0,
+                        "records written including a prepare" : 0,
+                        "records written including a start durable timestamp" : 0,
+                        "records written including a start timestamp" : 0,
+                        "records written including a start transaction ID" : 0,
+                        "records written including a stop durable timestamp" : 0,
+                        "records written including a stop timestamp" : 0,
+                        "records written including a stop transaction ID" : 0
+                },
+                "session" : {
+                        "object compaction" : 0,
+                        "tiered operations dequeued and processed" : 0,
+                        "tiered operations scheduled" : 0,
+                        "tiered storage local retention time (secs)" : 0,
+                        "tiered storage object size" : 0
+                },
+                "transaction" : {
+                        "race to read prepared update retry" : 0,
+                        "rollback to stable history store records with stop timestamps older than newer records" : 0,
+                        "rollback to stable inconsistent checkpoint" : 0,
+                        "rollback to stable keys removed" : 0,
+                        "rollback to stable keys restored" : 0,
+                        "rollback to stable restored tombstones from history store" : 0,
+                        "rollback to stable restored updates from history store" : 0,
+                        "rollback to stable skipping delete rle" : 0,
+                        "rollback to stable skipping stable rle" : 0,
+                        "rollback to stable sweeping history store keys" : 0,
+                        "rollback to stable updates removed from history store" : 0,
+                        "transaction checkpoints due to obsolete pages" : 0,
+                        "update conflicts" : 0
+                }
+        },
+        "nindexes" : 1,
+        "indexBuilds" : [ ],
+        "totalIndexSize" : 36864,
+        "totalSize" : 73728,
+        "indexSizes" : {
+                "_id_" : 36864
+        },
+        "scaleFactor" : 1,
+        "ok" : 1
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PODEMOS PLAY AROUND COM ESSES COMANDOS,
+
+MAS MTOS NÃO SÃO UTILIZADOS...
+
+
+
+
+
+
+
+
+
+
+-> A SUA AJUDA PRINCIPAL SERÁ:
+
+
+
+
+
+
+
+1) GOOGLE 
+
+2) LOG FILES 
+
+
+
+3) OFFICIAL DOCS 
+
+
+
+4) ESSES 'HELP'... 
+
+
+
+
+
+
+
+--> É ASSIM QUE PODEMOS ENCONTRAR FEATURES ESPECÍFICAS NO MONGODB, E CONSERTAR RANDOM ISSUES....

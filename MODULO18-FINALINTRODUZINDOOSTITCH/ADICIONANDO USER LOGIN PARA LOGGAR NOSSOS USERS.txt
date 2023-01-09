@@ -1,0 +1,967 @@
+
+
+
+
+
+
+
+
+
+
+----> agora que adicionamos signup,
+
+
+por meio deste código:
+
+
+
+
+
+
+
+
+
+
+
+
+(App.js):
+
+
+
+
+
+
+
+
+
+
+
+  constructor() {
+    super();
+    this.client = Stitch.initializeDefaultAppClient('application-0-acjfk'); /// adicionamos esse client como PROPRIEDADE DESSA NOSSA CLASSE, PARA QUE SEJA POSSÍVEL O UTILIZAR EM OUTRAS FUNCTIONS DE NOSSA CLASS, e não só no constructor...
+    
+    
+  
+  
+  }
+
+
+
+
+
+
+
+
+    authHandler = (event, authData) => {
+    event.preventDefault();
+
+    if (authData.email.trim() === '' || authData.password.trim() === '') {
+      return;
+    }
+
+    const emailPassClient = this.client.auth.getProviderClient( ///client será usado TANTO AQUI COMO _ NA __ PAGE __ DE 'ConfirmAccount', em que esse processo de 'CREATE AN ACCOUNT' é concluído..
+      UserPasswordAuthProviderClient.factory
+    );
+
+    emailPassClient
+      .registerWithEmail(authData.email, authData.password)
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => {
+        // this.errorHandler(err.response.data.message); ///usado com o axios.
+        this.errorHandler('An error has occurred.')
+        console.log(err);
+        this.setState({ isAuth: false });
+      });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> E ESTE CÓDIGO:
+
+
+
+
+
+
+
+
+
+ConfirmAccountPage (obrigatória):
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import React, { Component } from 'react';
+
+import './ConfirmAccount.css';
+
+import {
+  Stitch,
+  UserPasswordAuthProviderClient,
+} from 'mongodb-stitch-browser-sdk'; ///vai armazenar nosso 'confirmed user' LÁ NO PRÓPRIO STITCH (E não na nossa database mongodb atlas)....
+
+class AuthPage extends Component {
+  componentDidMount() {
+    const queryUrl = window.location.search;
+    const queryParams = new URLSearchParams(queryUrl);
+    const token = queryParams.get('token');
+    const tokenId = queryParams.get('tokenId');
+    console.log('Account confirmed');
+
+    const client = Stitch.defaultAppClient.auth.getProviderClient(
+      UserPasswordAuthProviderClient.factory
+    );
+
+    client
+      .confirmUser(token, tokenId)
+      .then(() => {
+        console.log('user confirmed');
+        this.props.history.replace('/');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  render() {
+    return (
+      <main className="confirm-account-page">
+        <p>Confirming Account...</p>
+      </main>
+    );
+  }
+}
+
+export default AuthPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------> AGORA É HORA DE ADICIONAR LOGIN,
+
+PARA UTILIZAR ESSAS CONTAS QUE SÃO CRIADAS....
+
+
+
+
+
+
+
+-----------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO,
+
+
+
+NO 
+
+
+'AUTHHANDLER'
+
+
+
+do 
+
+
+
+
+'App.js',
+
+
+
+PRECISAMOS ENCONTRAR UMA ALTERNATIVA 
+
+
+
+
+AO 
+
+'SIGN USER UP'
+
+
+
+
+
+
+
+
+...
+
+
+
+
+
+
+
+
+
+
+
+
+--> ANTERIORMENTE,
+
+TÍNHAMOS UM IF CHECK,
+
+
+
+QUE VAMOS TER DE REIMPLEMENTAR,
+
+
+MAS 
+
+SEM O AXIOS...
+
+
+
+
+
+
+
+
+
+
+
+
+--> obs:
+
+
+
+
+
+
+
+
+
+
+    authHandler = (event, authData) => {
+    event.preventDefault();
+
+    if (authData.email.trim() === '' || authData.password.trim() === '') {
+      return;
+    }
+
+    let request 
+
+    const emailPassClient = this.client.auth.getProviderClient( ///client será usado TANTO AQUI COMO _ NA __ PAGE __ DE 'ConfirmAccount', em que esse processo de 'CREATE AN ACCOUNT' é concluído..
+      UserPasswordAuthProviderClient.factory
+    );
+
+
+
+    if (this.state.authMode === 'login') {
+        ////login/signin logic....
+    } else {
+        request = emailPassClient.registerWithEmail(authData.email, authData.password)
+
+    }
+
+
+    request
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => {
+        this.errorHandler('An error has occurred.')
+        console.log(err);
+        this.setState({ isAuth: false });
+      });
+
+
+
+
+
+
+
+
+
+
+----------> 
+
+
+
+
+
+
+OK, MAS AGORA PRECISAMOS ESCREVER ESSA 'LOGIN LOGIC'...
+
+
+
+
+
+
+
+
+
+COMO FAZEMOS LOGIN COM O STITCH?
+ 
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, PARA ISSO, PRIMEIRAMENTE,
+
+VAMOS PRECISAR 
+
+
+DE UM NOVO IMPORT,
+
+
+O 
+
+
+
+
+IMPORT DE 
+
+
+
+'UserPasswordCredential'  (em vez do 'AnonymousCredential')...
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+import {
+  Stitch,
+
+  // AnonymousCredential ////usado para fazer AUTH DE __ 'ANON USERS' no seu app ( ou seja, users 'SEM CONTA', nenhuma conta necessária)...
+  UserPasswordAuthProviderClient, ///usado para fazer auth de USERS COM 'USER + PASSWORD'... --> usado no REGISTERING DE USERS....
+  UserPasswordCredential ////também usado para fazer auth de users com 'USER + PASSWORD' (só que, no caso, esse objeto é usado para FAZER ___ LOGIN, E NÃO PARA REGISTER A USER...)
+
+
+} from 'mongodb-stitch-browser-sdk';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> CERTO.... 
+
+
+
+
+
+
+
+
+AÍ O PROFESSOR, LÁ NO BLOCK DE 'login',
+
+
+VAI CRIAR 
+
+
+
+UMA CONSTANTE DE NOME 'credential',
+
+
+
+que 
+
+armazenará 
+
+um OBJETO 
+
+
+DESSE 'UserPasswordCredential'...
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+    if (this.state.authMode === 'login') {
+        
+
+        const credential = new UserPasswordCredential()
+
+
+    } else {
+        request = emailPassClient.registerWithEmail(authData.email, authData.password)
+
+    }
+
+
+
+
+
+
+
+-----------------------------------
+
+
+
+
+
+
+
+
+
+E AÍ, DENTRO DESSE NEGÓCIO, VAMOS PASSAR COMO PARâMETROS 
+
+O 'email' e 'password'
+ 
+ do usr...
+
+
+
+
+
+ ex:
+
+
+
+
+
+
+ 
+    if (this.state.authMode === 'login') {
+        
+
+        const credential = new UserPasswordCredential(authData.email, authData.password)
+
+
+    } else {
+        request = emailPassClient.registerWithEmail(authData.email, authData.password)
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+O CÓDIGO COMPLETO VAI FICANDO ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+    let request;
+
+    const emailPassClient = this.client.auth.getProviderClient(
+      ///client será usado TANTO AQUI COMO _ NA __ PAGE __ DE 'ConfirmAccount', em que esse processo de 'CREATE AN ACCOUNT' é concluído..
+      UserPasswordAuthProviderClient.factory
+    );
+
+    if (this.state.authMode === 'login') {
+      const credential = new UserPasswordCredential(
+        authData.email,
+        authData.password
+      );
+    } else {
+      request = emailPassClient
+        .registerWithEmail(authData.email, authData.password) ////vai ENVIAR EMAIL AO EMAIL QUE O USER INPUTTOU, EMAIL DE CONFIRMAÇÕA..
+        .then((result) => {
+          console.log(result);
+        });
+    }
+
+    request.catch((err) => {
+      // this.errorHandler(err.response.data.message); ///usado com o axios.
+      this.errorHandler('An error has occurred.');
+      console.log(err);
+      this.setState({ isAuth: false });
+    });
+
+
+
+
+
+
+
+
+
+
+---------> MAS MESMO COM ESSE CÓDIGO INTEIRO AÍ,
+
+algo está __ FALTANDO... ----> 
+
+
+
+
+
+AQUELE 'const credential'
+
+
+__ AINDA NÃO FOI USADO.... -------> BEM,
+
+
+
+
+
+
+
+
+
+
+PARA QUE ELE SEJA UTILIZADO,
+
+
+
+PRECISAMOS USAR 
+
+O METHOD de 
+
+
+
+
+'this.client.auth.loginWithCredential()',
+
+
+
+
+E AÍ 
+
+PASSAR 
+
+ESSE 'credential'
+
+
+COMO PARÂMETRO...
+
+
+
+
+
+
+
+
+
+
+
+TIPO ASSIM:
+
+
+
+
+
+
+
+   if (this.state.authMode === 'login') {
+      const credential = new UserPasswordCredential(
+        authData.email,
+        authData.password
+      );
+
+      request = this.client.auth.loginWithCredential(credential); ////bem encaixado...
+    } 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    --> E O CÓDIGO COMPLETO FICA ASSIM:
+
+
+
+
+
+
+
+      authHandler = (event, authData) => {
+    event.preventDefault();
+
+    if (authData.email.trim() === '' || authData.password.trim() === '') {
+      return;
+    }
+
+    let request;
+
+    const emailPassClient = this.client.auth.getProviderClient(
+      ///client será usado TANTO AQUI COMO _ NA __ PAGE __ DE 'ConfirmAccount', em que esse processo de 'CREATE AN ACCOUNT' é concluído..
+      UserPasswordAuthProviderClient.factory
+    );
+
+    if (this.state.authMode === 'login') {
+      const credential = new UserPasswordCredential(
+        authData.email,
+        authData.password
+      );
+
+      request = this.client.auth.loginWithCredential(credential); ////bem encaixado...
+    } else {
+      request = emailPassClient
+        .registerWithEmail(authData.email, authData.password) ////vai ENVIAR EMAIL AO EMAIL QUE O USER INPUTTOU, EMAIL DE CONFIRMAÇÕA..
+        .then((result) => {
+          console.log(result);
+        });
+    }
+
+    request.catch((err) => {
+      // this.errorHandler(err.response.data.message); ///usado com o axios.
+      this.errorHandler('An error has occurred.');
+      console.log(err);
+      this.setState({ isAuth: false });
+    });
+
+
+
+
+
+
+
+
+
+
+
+---------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> CERTO... -> AÍ PODEMOS CHECAR O RESULT DE 'login' 
+
+
+LÁ NAQUELE 
+
+
+
+THEN BLOCK EM 'request.then(),',
+
+
+ etc etc...
+ .
+
+
+
+
+
+
+
+
+
+
+ --> OK, AÍ COLOQUE SEU EMAIL E O PASSWORD CORRETO -->
+
+
+
+
+
+
+
+
+ O CONSOLE NOS MOSTRA QUE 
+
+ NÃO TIVEMOS UM 
+
+ ERRO 
+
+ NA RESPONSE,
+
+
+O QUE É UM BOM SINAL...
+
+
+
+
+
+
+
+
+
+
+
+--> OBS: 
+
+   
+   AS SESSIONS/TOKENS 
+
+
+   DO USER 
+
+
+   SÃO 
+
+   MANAGEADAS __ PELO _ STITCH,
+
+   POR TRÁS DAS CENAS....
+
+
+
+
+
+
+
+
+   --> COM EFEITO,
+
+   LÁ 
+
+   NA STORAGE DE NOSSO 
+
+
+
+   CHROME,
+
+
+   VEMOS 
+
+
+
+
+
+   1 token/session,
+
+
+
+
+
+
+
+
+
+   como:
+
+   {"user_id":"6228f58df7af98f3e42f53ba","access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJiYWFzX2RldmljZV9pZCI6IjYyMjhmNThkZjdhZjk4ZjNlNDJmNTNiYyIsImJhYXNfZG9tYWluX2lkIjoiNjIyNmNlMGY1MjA2Y2FmOTg5MDkxN2M5IiwiZXhwIjoxNjQ2ODUzMjY5LCJpYXQiOjE2NDY4NTE0NjksImlzcyI6IjYyMjhmNThkZjdhZjk4ZjNlNDJmNTNiZSIsInN0aXRjaF9kZXZJZCI6IjYyMjhmNThkZjdhZjk4ZjNlNDJmNTNiYyIsInN0aXRjaF9kb21haW5JZCI6IjYyMjZjZTBmNTIwNmNhZjk4OTA5MTdjOSIsInN1YiI6IjYyMjhmNThkZjdhZjk4ZjNlNDJmNTNiYSIsInR5cCI6ImFjY2VzcyJ9.3V4xDrbuE92TtgmEB2uyTSGTg00n2XBF9KeDXKlqy2A","refresh_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJiYWFzX2RhdGEiOm51bGwsImJhYXNfZGV2aWNlX2lkIjoiNjIyOGY1OGRmN2FmOThmM2U0MmY1M2JjIiwiYmFhc19kb21haW5faWQiOiI2MjI2Y2UwZjUyMDZjYWY5ODkwOTE3YzkiLCJiYWFzX2lkIjoiNjIyOGY1OGRmN2FmOThmM2U0MmY1M2JlIiwiYmFhc19pZGVudGl0eSI6eyJpZCI6IjYyMjhlZDMzZWZkZDM3ZGNlODhmNWI4OSIsInByb3ZpZGVyX3R5cGUiOiJsb2NhbC11c2VycGFzcyIsInByb3ZpZGVyX2lkIjoiNjIyOGU4NDMyZTgwNmQxOGY2NTIxZmZiIn0sImV4cCI6MTY1MjAzNTQ2OSwiaWF0IjoxNjQ2ODUxNDY5LCJzdGl0Y2hfZGF0YSI6bnVsbCwic3RpdGNoX2RldklkIjoiNjIyOGY1OGRmN2FmOThmM2U0MmY1M2JjIiwic3RpdGNoX2RvbWFpbklkIjoiNjIyNmNlMGY1MjA2Y2FmOTg5MDkxN2M5Iiwic3RpdGNoX2lkIjoiNjIyOGY1OGRmN2FmOThmM2U0MmY1M2JlIiwic3RpdGNoX2lkZW50Ijp7ImlkIjoiNjIyOGVkMzNlZmRkMzdkY2U4OGY1Yjg5IiwicHJvdmlkZXJfdHlwZSI6ImxvY2FsLXVzZXJwYXNzIiwicHJvdmlkZXJfaWQiOiI2MjI4ZTg0MzJlODA2ZDE4ZjY1MjFmZmIifSwic3ViIjoiNjIyOGY1OGRmN2FmOThmM2U0MmY1M2JhIiwidHlwIjoicmVmcmVzaCJ9.WB4Bq4BOuAj7ZFrJUBdvPo_sP0h6E4FntN6hlG92fXg","device_id":"6228f58df7af98f3e42f53bc","logged_in_provider_name":"local-userpass","logged_in_provider_type":"local-userpass","last_auth_activity":1646851469124,"user_profile":{"data":{"email":"madblorga@hotmail.com"},"type":"normal","identities":[{"id":"6228ed33efdd37dce88f5b89","provider_type":"local-userpass"}]}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ------> TUDO ISSO É MANAGEADO PELO STITCH,
+
+
+
+
+
+
+
+   SEM PROBLEMAS...
+
+
+
+
+
+
+
+
+   ----> 
+ SE TIVERMOS UM RESULTADO PARA O LOGIN,
+
+
+ VAMOS QUERER 
+ 
+
+ TROCAR O 
+
+
+
+
+ AUTHSTATUS, O QUE FARÁ COM QUE 
+
+
+
+
+
+ NOSSO BROWSER SEJA 
+
+
+
+ REDIRECIONADO PARA A PAGE DE 'PRODUCTS' (pq 'isAuth === true')...
+
+
+
+
+
+
+
+
+
+
+ RESOLVIDO:
+
+
+
+
+
+
+
+
+
+   authHandler = (event, authData) => {
+    event.preventDefault();
+
+    if (authData.email.trim() === '' || authData.password.trim() === '') {
+      return;
+    }
+
+    let request;
+
+    const emailPassClient = this.client.auth.getProviderClient(
+      ///client será usado TANTO AQUI COMO _ NA __ PAGE __ DE 'ConfirmAccount', em que esse processo de 'CREATE AN ACCOUNT' é concluído..
+      UserPasswordAuthProviderClient.factory
+    );
+
+    if (this.state.authMode === 'login') {
+      const credential = new UserPasswordCredential(
+        authData.email,
+        authData.password
+      );
+      console.log('PASSED');
+      request = this.client.auth.loginWithCredential(credential); ////bem encaixado...
+    } else {
+      request = emailPassClient.registerWithEmail(
+        authData.email,
+        authData.password
+      ); ////vai ENVIAR EMAIL AO EMAIL QUE O USER INPUTTOU, EMAIL DE CONFIRMAÇÕA..
+    }
+
+    request
+      .then((result) => {
+        if (result) {
+          this.setState({ isAuth: true });
+        }
+      })
+      .catch((err) => {
+        // this.errorHandler(err.response.data.message); ///usado com o axios.
+        this.errorHandler('An error has occurred.');
+        console.log(err);
+        this.setState({ isAuth: false });
+      });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> AGORA SÓ PRECISAMOS ALTERAR NOSSAS RULES DE MODO QUE 'APENAS AUTH USERS PODERÃO ALTERAR/DELETAR NOSSOS PRODUCTS/ADICIONAR PRODUCTS'...

@@ -1,0 +1,699 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> devemos criar 2 collections, 1 de users, outra de 'posts'...
+
+
+
+
+
+
+
+
+ok....
+
+
+
+
+
+
+
+
+
+-->--  PROFESSOR VAI PARA DENTRO DA DATABASE DE 'blog'...
+
+
+
+
+
+
+
+
+
+
+
+
+--> lá dentro, ele vai querer criar 2 collections...
+
+
+
+
+
+
+
+
+
+
+
+
+--> PRIMEIRO VAMOS QUEREr a collection de 'users'...
+
+
+
+
+
+
+
+--> VAMOS QUERER INSERIR 'MANY USERS'...
+
+
+
+
+
+db.users.insertMany(
+    [
+
+
+        {
+            name: "max",
+            age: 29,
+            email: "max@test.com"
+        },
+
+        {
+            name: 'manu',
+            age: 30,
+            email: 'manu@test.com'
+        }
+    ]
+)
+
+
+
+
+
+
+
+
+
+
+INSERIMOS ISSO AÍ,
+
+AÍ NOSSA COLLECTION DE USERS FICA ASSIM:
+
+
+
+
+
+
+> db.users.find().pretty()
+{
+        "_id" : ObjectId("6202b5b500850b5389a7f56c"),
+        "name" : "max",
+        "age" : 29,
+        "email" : "max@test.com"
+}
+{
+        "_id" : ObjectId("6202b5b500850b5389a7f56d"),
+        "name" : "manu",
+        "age" : 30,
+        "email" : "manu@test.com"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA DEVEMOS IR ATÉ NOSSA COLLECTION DE 'POSTS'...
+
+
+
+
+
+
+
+
+
+
+--> VAMOS QUERER INSERIR APENAS 1 POST...
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.posts.insertOne(
+    {
+        title: "WHAT",
+
+        text: "Hello, how are you doing",
+
+
+        comments: [
+
+        ]
+
+
+    }
+)
+
+
+
+
+
+
+
+
+
+
+-_> ESSA SERÁ A ESTRUTURA...
+
+
+
+
+
+
+
+
+--> O 'text', que possui um text type, É CAPAZ DE ARMAZENAR VERY LONG TEXT...
+
+
+
+
+
+
+
+
+
+
+--> TAMBÉM TEREMOS UMAS TAGS,
+
+QUE SERÃO UM ARRAY DE STRINGS..
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+db.posts.insertOne(
+    {
+        title: "WHAT",
+
+        text: "Hello, how are you doing",
+
+
+        comments: [
+
+        ],
+
+
+        tags: [
+            'hello', 'new', 'tech'
+        ]
+
+    }
+)
+
+
+
+
+
+----------------------------------
+
+
+
+
+
+
+
+AGORA É HORA DAS RELATIONS.... --> A RELATION EM QUESTÃO É QUE ESSE POST vai ter 'embedded comments'...
+
+
+
+
+
+
+
+--> TAMBÉM QUE ELE VAI SER CRIADO POR 1 USER.... 
+
+
+
+
+
+
+
+
+
+
+--> para isso,
+
+
+
+colocamos uma propriedade de 'creatorId'..
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+db.posts.insertOne(
+    {
+        title: "WHAT",
+
+        text: "Hello, how are you doing",
+
+
+        comments: [
+
+        ],
+
+
+        tags: [
+            'hello', 'new', 'tech'
+        ],
+
+        creatorId: ObjectId('aaaaaaa');
+
+    }
+)
+
+
+
+
+
+
+
+
+
+---------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AQUI EU COLOQUEI SÓ 1 ID,
+
+MAS ISSO PODERIA SER UMA __ lIST__ (array),
+
+
+
+
+
+SE VOCÊ TIVER MÚLTIPLOS AUTHORS NO SEU APP..
+
+
+
+
+
+
+
+tipo assim:
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.posts.insertOne(
+    {
+        title: "WHAT",
+
+        text: "Hello, how are you doing",
+
+
+        comments: [
+
+        ],
+
+
+        tags: [
+            'hello', 'new', 'tech'
+        ],
+
+        creatorId: [ ObjectId('aaaaaaa'),   ObjectId('bbbbbbb') ]
+
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS AQUI TEREMOS SÓ 1 CREATOR POR POST...
+
+
+
+
+
+
+
+
+
+
+--> AQUI MEU AUTHOR DEVERÁ TER SIDO CRIADO POR 1 DOS MEUS AUTHORS..
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+
+
+db.posts.insertOne(
+    {
+        title: "WHAT",
+
+        text: "Hello, how are you doing",
+
+
+        comments: [
+
+        ],
+
+
+        tags: [
+            'hello', 'new', 'tech'
+        ],
+
+        creatorId: ObjectId("6202b5b500850b5389a7f56c")
+
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> OK, É O MESMO ID DE 'max':
+
+
+{
+        "_id" : ObjectId("6202b5b500850b5389a7f56c"),
+        "name" : "max",
+        "age" : 29,
+        "email" : "max@test.com"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NÓS TAMBÉM VAMOS TER ALGUNS COMMENTS.... ----> CADA COMMENT SERÁ EMBEDDED,
+
+
+TEREMOS UMA LISTA DE COMMENTS EMBEDDED, AQUI....
+
+
+
+
+
+eX:
+
+
+
+
+
+
+
+
+
+
+
+
+db.posts.insertOne(
+    {
+        title: "WHAT",
+        text: "Hello, how are you doing",
+        comments: [
+                {
+                    text: 'OH NO',
+                    authorId: ObjectId("6202b5b500850b5389a7f56c")
+                },
+                                {
+                    text: 'OH YES',
+                    authorId: ObjectId("6202b5b500850b5389a7f56c")
+                }
+        ],
+        tags: [
+            'hello', 'new', 'tech'
+        ],
+        creatorId: ObjectId("6202b5b500850b5389a7f56c")
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+--------------> OK.... AGORA TODOS ESSES COMMENTS TERÃO SIDO CRIADOS PELO  MESMO USER... ('max')....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> INSERIMOS ISSO AÍ....
+
+DÁ 'SUCCESS':
+
+
+
+
+
+
+
+
+
+
+
+{
+        "_id" : ObjectId("6202b74600850b5389a7f56e"),
+        "title" : "WHAT",
+        "text" : "Hello, how are you doing",
+        "comments" : [
+                {
+                        "text" : "OH NO",
+                        "authorId" : ObjectId("6202b5b500850b5389a7f56c")
+                },
+                {
+                        "text" : "OH YES",
+                        "authorId" : ObjectId("6202b5b500850b5389a7f56c")
+                }
+        ],
+        "tags" : [
+                "hello",
+                "new",
+                "tech"
+        ],
+        "creatorId" : ObjectId("6202b5b500850b5389a7f56c")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------------
+
+
+
+
+
+
+
+ok.... ----> TEMOS:
+
+
+
+
+1) o id do post em SI 
+
+
+
+
+2) o id do  CRIADOR DO POST ("creatorId')... (referencing)
+
+
+
+
+
+
+
+3) o id do AUTHOR do comment... (REFERENCING)...
+
+
+
+
+
+
+
+
+4) COMMENTS DENTRO DE NOSSO POST( embedding)... (embedding com REFERENCING, REFERENCING EM RELAÇÃO AO AUTHOR DO COMMENT)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO DEVE TE DAR UMA IDEIA DE COMO ESTRUTURAR SUA DATA DE UM MODO QUE FAZ SENTIDO...
+
+
+
+
+
+
+
+
+
+
+
+
+CONSIDERE:
+
+
+
+
+
+
+
+
+
+
+
+1) A QUANTIDADE DE DATA 
+
+
+
+2) A FREQUENCIA PELA QUAL VOCê VAI MUDAR A DATA 
+
+
+
+3) A RELATION QUE VOCÊ PRECISA CODAR, NESSE APP...

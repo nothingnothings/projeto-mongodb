@@ -1,0 +1,1297 @@
+
+
+
+
+
+
+
+
+
+
+
+
+OK.... QUE TIPO DE NUMBERS NÓS TEMOS, E QUE TEMOS DE DIFERENCIAR?
+
+
+
+
+
+
+
+
+
+
+
+
+1) INTEGERS 
+
+
+
+
+
+
+
+
+
+2) LONGS (long integers) 
+
+
+
+
+
+
+
+
+
+
+
+
+3) DOUBLES (que também possuem diferentes tipos)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NA VERDADE,
+
+ 
+
+ PODEMOS TRABALHAR COM 4 TIPOS DE NUMBERS NO MONGODB:
+
+
+
+
+
+
+
+ Integers (int32) 
+
+
+
+
+
+ Longs( int64) 
+
+
+
+
+ Doubles(64bit) 
+
+
+
+
+ High pRECISION Doubles (128bit)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> INTEGERS,
+
+ INT32 INTEGERS,
+
+
+
+
+ NO MONGODB.... -------> esses são 'FULL NUMBERs'... -->  ISSO SIGNIFICA UQE 
+
+
+
+
+ NÃO TEMOS NENHUM DECIMAL PLACE NELES...
+
+
+
+
+
+
+
+
+
+
+
+
+ --> PARA LONGS,
+
+
+ TAMBÉM TEMOS 
+
+
+ FULL NUMBERS...
+
+
+
+
+
+
+
+
+
+ INT64 --> FULL NUMBERS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 2 TYPES DE 
+
+
+ DATA QUE 
+
+ SÃO ALL ABOUT O STORE 
+
+
+
+
+
+ DE 'FULL NUMBERS'...
+
+
+
+
+
+
+
+
+
+
+
+ --> AÍ TEMOS 'doubles',
+
+
+
+
+ QUE TAMBÉM são 64 bit( exatamente como os int64),
+
+
+
+
+ MAS QUE 
+
+ ACTUALLY CONSEGUEM ARMAZENAR 
+
+ NUMBERS COM 
+
+
+
+ DECIMAL PLACES (
+
+
+     ou seja,
+
+     numbers como 
+
+
+
+
+     1.57
+
+ )
+
+
+
+
+
+
+
+
+
+
+
+ -->   E ESSE FORMATO 'doubles' (int64) 
+
+ É O FORMATO 
+
+
+
+
+
+
+
+ DEFAULT QUE O MONGODB USA 
+
+
+ SE VOCÊ PASSA 1 NUMBER SEM NENHUMA INFO ADICIONAL.... --> E ISSO 
+
+
+
+
+
+
+INDEPENDENTEMENTE 
+
+
+
+SE O NUMBER FOR TEORICAMENTE UMA INTEGER (ou seja, um number SEM DECIMAL PLACES )....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NÃO INTERESSA SE FOR UMA INTEGER,
+PQ 
+
+ELE 
+
+
+VAI ARMAZENAR  
+
+
+
+
+COMO UM 64BIT DOUBLE DE QUALQUER FORMA,
+
+ISSO 
+
+SE 
+
+VOCÊ 
+
+
+PASSAR ESSE NUMBER ATRAVÉS 
+
+DA SHELL...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> nós também TEMOS UM TYPE ESPECIAL,
+
+QUE É O 
+
+'high precision doubles' 128 bit -----> ESSES TAMBÉM SÃO NUMBERS COM DECIMAL PLACES,
+
+
+MAS POSSUEM UMA DIFERENÇA 
+
+
+ESSENCIAL EM 
+
+RELAÇAÕ 
+
+
+AOS 
+
+DOUBLES COMUNS (64 bit)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS AGORA DEVEMOS VER QUAL É A DIFERENÇA ENTRE ESSES 64BIT E 128BIT DOUBLES...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> mas antes disso,
+
+
+
+devemos entender os 'integers 32bit'...
+
+
+
+
+
+
+
+
+
+
+
+os integers 32bit
+
+
+
+SÃO 
+
+OS 
+
+NUMBERS 
+
+
+
+NA RANGE DE 
+
+
+
+
+-2, 147, 483, 648'    2 bilhoes e 200 mil...
+
+
+e 
+
+
+
+
+-2, 147, 483, 647'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->  ESSA É UMA RANGE BEM GRANDE, E SERÁ SUFICIENTE PARA UM MONTE DAS COISAS QUE VOCÊ 
+
+FOR FAZER NO SEU APP....
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> COMO VOCÊ PODE ARMAZENAR 
+
+
+NUMBERS ATÉ 2 BILHOES POSITIVOS/NEGATIVOS,
+
+
+
+
+VOCê TEM ESPAÇO PARA UM MONTE DE COISAS QUE VOCê 
+
+PRECISA FAZER, EM UM MONTE DE APPS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> MAS àS VEZES ISSO NÃO SERÁ SUFICIENTE... -> NESSAS HIPÓTESES,
+
+
+USAMOS 
+
+
+'LONGS'...
+
+
+
+
+
+
+
+
+
+
+
+--> COM LONGS,
+
+VOCê TEM AINDA MAIS 
+
+
+RANGE DE NUMBERS...
+
+
+
+
+
+
+
+
+
+
+
+
+A RANGE É 
+
+
+DE 
+
+
+
+-9, 223, 372, 036, 854 
+
+
+
+à 
+
+
+
+
+
+9, 223, 372, 036, 854 
+
+
+
+
+
+
+
+
+
+
+
+--> 9 trilhoes, essencialmente..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> MAS SE VOCÊ QUISER TRABALHAR COM NUMBERS AINDA MAIORES,
+
+VOCÊ 
+
+
+
+TERÁ 
+
+
+DE SPLITTAR 
+
+
+
+
+
+
+seus numbers em 
+
+'2 fields',
+
+
+
+
+2 fields que 
+
+vocÊ teria/tem de combinar 
+
+MANUALMENTE,
+
+
+
+
+de acordo com a maneira pela qual você processa esses numbers...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, 
+
+
+ESSES SÃO OS INTEGERS.... --> POR INTEGERS,
+
+
+FALAMOS 
+
+
+
+DE NÚMEROS FULL,
+
+
+SEM CASAS DECIMAIS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS É CLARO QUE EM UM MONTE DE APPS VOCÊ TERÁ DECIMAL PLACES,
+
+COMO 
+
+PRODUCTS (
+
+
+seu product pode custar 10.99, e n 11 dolares....
+
+)
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO,
+
+VOCÊ TEM __ DOUBLES__... --> 
+
+
+
+
+
+
+
+
+AÍ,
+
+COM DOUBLES 64 bit,
+
+
+
+
+
+vocÊ 
+
+TEM QUE 
+
+
+SABER 
+
+
+
+
+QUE 
+
+
+
+TODOS SEUS DECIMAL VALUES SÃO 
+
+
+
+''approximated'..
+
+
+
+
+
+
+
+
+----> O PROFESSOR LOGO NOS MOSTRARÁ O QUE ISSO SIGNIFICA  ---> 
+
+
+
+
+
+MAS É IMPORTANTE ENTENDER QUE 
+
+DOUBLES COMUNS,
+
+
+64 BIT,
+
+
+TODOS 
+
+ELES 
+
+SÃO 
+
+
+APROXIMADOS... 
+
+
+
+
+
+
+
+
+--> ELES NÃO TEM PRECISÃO ABSOLUTA/GARANTIDA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E ESSA É PRECISAMENTE A DIFERENÇA ENTRE 
+DOUBLES 64 BIT E 128 BIT (high precision doubleS)
+
+
+
+
+
+
+HIGH PRECISION DOUBLES TE DEIXAM
+
+
+
+ARMAZENAR DECIMAL VALUES 
+
+
+
+
+COM ALTA PRECISÃO ATÉ 
+
+
+34 decimal digits... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ISSO SIGNIFICA QUE 
+
+
+
+SE VOCÊ 
+
+DIGITAR 
+
+
+9.999999999999999999999,
+
+
+
+
+
+
+
+
+
+ISSO 
+
+SERÁ ARMAZENADO EXATAMENTE ASSIM, E NÃO DE OUTRA FORMA.... -------> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+UÉ, MAS PQ 
+
+
+
+
+DIABOS VOCÊ ARMAZENARIA ALGUMA COISA COM 
+
+
+MENOR PRECISÃO? --------> 
+
+
+
+
+
+
+
+
+É JUSTAMENTE 
+
+
+PQ 
+
+HÁ ALGUMAS LIMITAÇÕES QUE 
+
+
+
+ENCONTRAMOS 
+
+
+
+EM
+
+
+COMPUTAÇÃO... ---> ISSO 
+
+
+
+
+ACONTECE POR CONTA DA MANEIRA PELA QUAL 
+
+
+
+
+A COMPUTAÇÃO FUNCIONA, COM BITS E ETC...
+
+
+
+
+
+
+
+
+
+
+
+-> ISSO VAI ALÉM DESSE CURSO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> MAS NA ÚLTIMA LIÇÃO DESSE MÓDULO,
+
+
+PROFESSOR 
+
+
+TEM ALGUNS LINKS SOBRE ISSO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> DOUBLES --> POR CONTA DE ALGUMAS RAZÕES TÉCNICAS,
+
+
+NÃO SÃO 100% GARANTIDAMENTE PRECISOS,
+
+
+só 
+
+se você 
+
+usar 
+
+
+
+
+high precision doubles,
+
+até 
+
+o 
+
+34 decimal digits... ------>  esses decimals 128bit 
+
+
+
+
+
+
+TEM UMA RANGE UM POUCO MENOR nos valores 'inteiros',
+
+
+
+
+
+
+MAS 
+
+
+VOCê 
+
+TEM MAIS PRECISION __ DEPOIS DA VÍRGULA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> JÁ NOS DOUBLES 64BIT,
+
+
+
+a parte integer é MAIOR,
+
+mas 
+
+
+a parte decimal perde precisão...
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> ESSE É O ROUGH OVERVIEW,
+
+
+
+E VEREMOS TUDO ISSO NA SHELL,
+
+E NA PRÁTICA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> COMO 1 PRIMEIRO RÁPIDO SUMMARY,
+
+
+
+
+A IDEIA 
+
+
+
+
+
+
+É QUE VOCÊ DEVE USAR 'normal integers' 
+
+
+
+
+
+
+
+
+__ PARA __ NORMAL INTEGERS,
+
+
+
+
+VALORES 
+
+
+QUE 
+
+
+
+
+SÃO 
+
+NUMBERS NESSA RANGE 
+
+
+NORMALZINHA ALI... -->  de 2 bilhoes negativos/positivos --> considere 
+
+
+
+usar 
+
+
+
+INTEGERS 32BIT PQ _ ISSO VAI _ USAR __ MENOS ESPAÇO.... vai usar 
+
+
+
+menos espaço 
+
+
+
+do que 
+
+se vocÊ 
+
+armazenar como um 
+
+
+
+'NORMAL NUMBER VALUE' (que é 64 bit, esse é o valor NORMAL dos numbers armazenados no mongodb)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NUMBERS SÃO ARMAZENADOS COMO 64 BIT DOUBLE POR DEFAULT QUANDO USAMOS O MONGODBSHELL (pq 
+
+o shell é baseado no javascript, é claro)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> USE 1 LONG,
+NO CASO,
+
+
+
+
+
+
+
+
+
+
+SE 
+
+
+
+
+A RANGE 
+
+
+
+
+
+DO SEU FULL NUMBER 
+
+FOR EXCEDENTE à  
+
+
+
+2, 147, 483, 648 ....  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> USE 'doubles' (64 bit doubles ) ___ PARA TODOS OS VALUES 
+EM QUE 
+
+VOCÊ NÃO PRECISA 
+
+DE 'HIGH PRECISION' --> É O SEU 
+
+'QUICK AND LAZY APPROACH' 
+
+
+
+
+
+
+
+PARA O STORE DE NUMBERS -->  E DEVE SER USADO 
+
+
+
+
+
+QUANDO VOCÊ QUER ARMAZENAR FLOATS EM QUE __ HIGH PRECISION NÃO É NECESSÁRIA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->  HIGH PRECISION DOUBLES 128 bits --> 
+
+
+
+
+
+DEVEM SER USADOS QUNADO VOCÊ PRECISA DESSA PRECISION,
+
+
+PARA 
+
+
+
+CÁLCULOS COM DADOS MONETÁRIOS,
+
+
+
+OU 
+
+
+CÁLCULOS CIENTÍFICOS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AO LONGO DO 
+
+CURSO,
+
+
+
+SEMPRE USAMOS OS 64 BIT DOUBLEs.. --> QUANDO INSERIMOS UM NUMBER NO MONGOSHELL,
+
+
+SEMPRE 
+O 
+
+DEFAULT É ISSO...
+
+
+
+
+
+
+
+
+
+
+
+--> MAS AGORA VAMOS PODER ESCREVER NUMBERS EM DATA TYPES DISTINTOS....
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> SE VOCÊ ESTÁ ESCREVENDO UM APP,
+
+
+
+E VOCÊ SABE QUE ESTÁ ARMAZENANDO ALGO COMO UMA 'AGE',
+
+
+VOCÊ 
+CERTAMENTE 
+
+DEVERÁ 
+CONSIDERAR 
+
+ARMAZENAR UM 'int32'
+
+EM VEZ 
+
+
+DA LAZY ROUTE DE USAR UM 'DOUBLE',
+
+pq isso certamente será menor...
+
+
+
+
+
+
+
+
+
+
+
+--> MAS VEREMOS ISSO NAS PRÓXIMAS AULAS...
+
+
+
+
+
+
+
+

@@ -1,0 +1,792 @@
+
+
+
+
+
+
+
+
+
+
+--> AGORA QUE TUDO ESTÁ SETTADO, E VOCÊ TEM UM WORKING MONGODB SERVER (com 'mongod', iniciado o server na nossa local machine),
+ E A SHELL CONECTADA A ELE (com 'mongo', conectado o client/nossa local machine)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -> AGORA DEVEMOS TRABALHAR COM A DATABASE...
+
+
+
+
+
+
+
+
+ --> PODEMOS 
+
+
+
+
+
+ ESCREVER O CÓDIGO 'show dbs'
+
+ PARA __ MOSTRAR__ AS 
+
+
+ DATABASES EXISTENTES....
+
+
+
+
+
+
+
+ EX:
+
+
+
+
+
+
+ > show dbs
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOCÊ SEMPRE COMEÇA COM ESSAS 3 DATABASES,
+
+que ARMAZENAM 'SOME METADATA'..
+
+
+
+
+
+
+
+
+
+
+
+
+'mongod' -------> INICIA O DATABASE SERVER...
+
+
+
+
+
+
+
+
+
+
+--> 'mongo' --_> conecta sua máquina local ao server iniciado com 'mongodb'....
+
+
+
+
+
+
+
+
+
+'mongod --
+
+
+
+showdbs -------> MOSTRA AS DATABASES  QUE VOCê TEM NESSE SERVER...
+
+
+
+
+
+
+
+
+
+
+
+'''dbpath'
+
+
+
+
+
+
+
+
+
+
+altera o local de run do server.....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... COM O SERVER RODANDO,
+
+
+
+
+podemos executar alguns comandos...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> podemos nos conectar a UMA DE NOSSAS DATABASES COM O COMANDO 'use nomeDaDatabase'..
+
+
+
+
+
+
+
+
+
+
+---> se você quer usar uma database que ainda não existe, escreva 
+
+'use nomeDaDatabaseQueAindaNãoExiste'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> isso vai te CONECTAR A ESSA DATABASE AINDA INEXISTENTE....
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+---
+> use shop
+switched to db shop
+>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> aí  
+
+
+vamos querer CRIAR UMA NOVA COLLECTION NESSA DATABASE...
+
+
+
+
+
+
+
+
+--> para isso,
+
+
+escrevemos 'db.NOMEDACOLLECTION',
+
+
+e DEPOIS
+
+
+um comando,
+
+
+como '.insertOne()'...
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+---
+> use shop
+switched to db shop
+> db.products.insertOne({title: 'Book'})
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("61fec6469bf66aa0c5f81b3c")
+}
+>
+
+
+
+
+
+
+
+
+
+
+---------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> isso terá inserido um NOVO PRODUCT NESSA COLLECTION DE 'products',
+
+
+que passará a existir...
+
+
+
+
+
+
+
+
+
+
+
+professor fala que escrevemos esse {
+
+
+
+},
+
+
+
+que envolverá a data que você quer inserir nessa collection...
+
+
+
+
+
+ex:
+
+
+> db.products.insertOne({title: 'Book'})
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR EXPLICA QUE VOCÊ PODE ESQUECER o '' em volta do keyname (
+
+
+    essa é uma feautre,
+
+
+
+    pq 
+
+
+
+
+    na hora da compilation isso é convertido para ficar 
+
+
+    "name": "Max"
+)
+
+
+
+
+
+
+
+
+
+---------------------- OK....
+
+
+
+
+
+
+
+COLOCAMOS OUTRO DOCUMENT,
+
+
+
+
+
+
+COM UM DISPOSIÇÃO UM PCO DIFERENTE...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------> QUANDO VOCÊ INSERE ALGO EM UMA COLLECTION, EM UMA DATABASE, O MONGODB TE RETORNA UMA 
+
+RESPONSE,
+
+que será assim:
+
+
+
+{
+        "acknowledged" : true,
+        "insertedId" : ObjectId("61fec6f79bf66aa0c5f81b3d")
+}
+
+
+
+
+
+ 
+
+
+
+
+--> esse inserted id é o '_id' 
+
+
+de cada 
+
+
+MONGODB DOCUMENT...
+
+
+
+
+
+
+
+
+
+
+--> SE VOCÊ QUER RETRIEVAR DOCUMENTS,
+
+VOCÊ VAI EXECUTAR  O CLÁSSICO '.find()'...
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO NOS RETORNA TODOS NOSSOS PRODUCTS/DOCUMENTS, nesse caso..
+
+
+
+
+
+
+EX:
+
+
+
+{ "_id" : ObjectId("61fec6469bf66aa0c5f81b3c"), "title" : "Book" }
+{ "_id" : ObjectId("61fec6f79bf66aa0c5f81b3d"), "title" : "Max", "age" : 25 }
+
+
+
+
+
+--------------------------------------------------
+
+
+
+
+
+
+
+se você não passa argument algum, você recebe todos os documents naquela collection...
+
+
+
+
+
+
+
+
+
+
+certo... --> É CLARO QUE HÁ OUTRA VERSÃO 
+
+
+DESSE CÓDIGO DE 
+
+
+
+'db.products.find()'... --> 
+
+
+
+SE VOCê 
+
+
+ESCREVE 
+
+
+'db.products.find().pretty()',
+
+
+
+VOCÊ  FAZ COM QUE ESSA DATA SEJA OUTPUTTADA DE UMA MANEIRA MAIS BONITA, TIPO ASSim:
+
+
+> db.products.find().pretty()
+{ "_id" : ObjectId("61fec6469bf66aa0c5f81b3c"), "title" : "Book" }
+{
+        "_id" : ObjectId("61fec6f79bf66aa0c5f81b3d"),
+        "title" : "Max",
+        "age" : 25
+}
+
+
+
+
+
+
+
+-----------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+tente adicionar outro product por conta própria....
+
+
+
+
+
+
+--> também tente adicionar um field a mais, que não existe nos outros....
+
+
+
+
+
+
+
+
+
+
+
+SUCESSO:
+
+
+
+
+
+
+
+
+
+
+
+> db.products.find().pretty()
+{ "_id" : ObjectId("61fec6469bf66aa0c5f81b3c"), "title" : "Book" }
+{
+        "_id" : ObjectId("61fec6f79bf66aa0c5f81b3d"),
+        "title" : "Max",
+        "age" : 25
+}
+{
+        "_id" : ObjectId("61fec7de9bf66aa0c5f81b3e"),
+        "title" : "Manu",
+        "age" : 28,
+        "text" : "DUMMY"
+}
+
+
+
+
+
+
+
+
+------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ok.... deu certo.
+
+
+
+
+cls --> limpa 
+
+
+
+nosso terminal de mensagens.... 
+
+
+
+
+
+
+
+
+
+
+
+
+--> JÁ VEMOS AQUELE NEGÓCIO DE 'SCHEMALESS '(nossos documents não tem exatamente a mesma estrutura)...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> professor insere ainda outro 
+
+
+product,
+
+
+
+com uma disposição diferente...
+
+
+
+
+
+
+
+
+e agora, outra oddball --> 
+
+
+
+
+
+vamos colocar um EMBEDDED DOCUMENT EM 'details',
+
+
+em que 
+
+
+
+COLOCAREMOS 
+
+
+
+NESTED DATA...
+
+
+
+
+
+
+
+MAS ISSO NÃO ESTÁ FUNCIONANDO... (estou recebendo '...' em vez de uma response)...
+
+
+
+
+
+
+
+havia esquecido um '}'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+OK, AGORA DEU CERTO:
+
+
+
+> db.products.find()
+{ "_id" : ObjectId("61fec6469bf66aa0c5f81b3c"), "title" : "Book" }
+{ "_id" : ObjectId("61fec6f79bf66aa0c5f81b3d"), "title" : "Max", "age" : 25 }
+{ "_id" : ObjectId("61fec7de9bf66aa0c5f81b3e"), "title" : "Manu", "age" : 28, "text" : "DUMMY" }
+{ "_id" : ObjectId("61fec9b79bf66aa0c5f81b3f"), "title" : "Computer", "age" : 28, "text" : "DUMMY", "details" : { "GPU" : "nvidia", "CPU" : 7700, "fans" : true } }
+
+
+
+
+
+
+
+
+
+--------------------------------------------
+
+
+
+
+
+
+
+
+
+VEMOS ESSE 'EMBEDDED DOCUMENT'....
+
+
+
+
+
+
+
+
+
+--> eSTAMOS SÓ BRINCANDO COM O SHELL
+
+
+
+
+
+
+
+
+
+
+
+-_> PODEMOS TAMBÉM DELETE E UPDATE DOCUMENTS,
+
+E PODEMOS __ FILTER__ OS PRODUCTS QUANDO OS RETRIEVAMOS, ETC....
+
+
+
+
+
+
+
+
+
+
+
+--> É ASSIM QUE TRABALHAREMOS COM O MONGODB AO LONGO DE GRANDE PARTE DO CURSO...

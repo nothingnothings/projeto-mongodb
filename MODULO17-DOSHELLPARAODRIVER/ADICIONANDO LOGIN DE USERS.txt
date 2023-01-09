@@ -1,0 +1,270 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> na última aula,
+
+
+adicionamos o CREATE DE ACCOUNTS...
+
+
+
+
+
+
+--> agora queremos adicionar o LOGIN DE USERS...
+
+
+
+
+
+
+
+
+
+
+
+--> A ROUTE É ESTA:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+router.post('/login', (req, res, next) => {
+  const email = req.body.email;
+  const password = req.body.passsword;
+
+  //CHECK IF USER LOGIN IS VALID  (authentication)
+
+  const db = getDb();
+
+  db.collection('users');
+
+  //IF YES, CREATE TOKEN AND RETURN IT TO CLIENT
+  const token = createToken();
+  //res.status(200).json({token: token, user: {email: "dummy@dummy.com"}})
+
+  res
+    .status(401)
+    .json({ message: 'Authentication failed, invalid username or password.' });
+});
+
+
+
+
+
+
+-------------------------------
+
+
+
+
+
+
+
+
+
+TEMOS QUE ESTABELECER UMA 
+
+BATERIA DE 'finds' aqui...
+
+
+
+
+
+
+--> primeiro,
+ 
+ CHECAR SE HÁ UM DOCUMENT COM ESSE EMAIL NA NOSSA DATABASE....
+
+
+
+
+
+
+
+
+ --> DEPOIS, CHECAREMOS SE 
+
+
+ O 
+
+
+
+ PASSWORD DESSE USER DOCUMENT É IGUAL AO PASSWORD SUBMITTADO, por meio da função 
+
+
+ 'compare' 
+
+ do 
+
+ bcrypt..
+
+
+
+
+
+
+
+
+
+
+
+
+ ACHO QUE O CÓDIGO VAI FICAR ASSIM:
+
+
+
+
+
+
+
+
+
+
+  const email = req.body.email;
+  const password = req.body.passsword;
+
+
+
+   const db = getDb().db();
+
+  db.collection('users')
+    .find({
+      email: email,
+    })
+    .then((user) => {
+      if (!user) {
+        res
+          .status(401)
+          .json({
+            message: 'Authentication failed, invalid username or password.',
+          })
+      }
+
+
+      bcrypt.compare(
+        password, user.password
+      ).then(
+        (result) => {
+          if (!result) {
+            res
+            .status(401)
+            .json({
+              message: 'Authentication failed, invalid username or password.',
+            })
+          }
+
+          const token = createToken();
+          res.status(200).json({token: token, user: {email: email}})
+        }
+      )
+    });
+
+
+
+
+
+
+
+
+
+
+
+-----> só não sei se está tudo certo...
+
+
+
+
+
+
+
+
+
+--> OK, PARECE QUE EU ESQUECI DE usar 'findOne' 
+
+em vez de 'find()'...
+
+
+
+
+
+
+
+
+
+
+
+-_> ok.. faço exatamente o que o professor fez...
+
+
+
+
+
+
+
+
+
+
+-->  ok, mas ainda estou com problemas no código... --> o código de 'duplicate user' ainda está crashando o server...
+
+
+
+
+
+
+
+
+
+
+ok, consertei de novo....
+
+
+
+
+
+
+
+
+
+
+AGORA GANHEI UM ERROR NO LOGIN, COM O BCRYPT:
+
+
+
+Error: Illegal arguments: undefined, string
+
+
+
+
+
+--> consertei o problema, era um mistype....
+
+
+
+
+
+
+
+
+--> agora  o wrapup

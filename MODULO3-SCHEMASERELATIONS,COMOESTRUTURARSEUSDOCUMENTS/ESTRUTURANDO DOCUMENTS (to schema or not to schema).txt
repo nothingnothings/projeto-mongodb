@@ -1,0 +1,767 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> VAMOS DAR UMA OLHADA NAQUELE NEGÓCIO DE 'schema':
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PODEMOS TER 
+
+
+
+1
+ APPROACH TOTALMENTE CAÓTICO,
+
+
+
+
+
+ OU ENTÃO 
+
+
+
+
+
+ SEGUIMOS UM APPROACH DE 'SQL WORLD',
+
+ em que 
+
+
+
+ TODAS AS ENTRIES POSSUEM EXATAMENTE O MESMO 
+
+
+
+
+ SCHEMA,
+
+
+ E NENHUMA EXTRA ENTRY 
+
+
+
+
+ EM QUALQUER DOCUMENT...
+
+
+
+
+
+
+
+
+
+
+
+
+ ----> no mundo do chaos temos 
+
+
+
+
+
+ uma coisa como 
+
+
+
+ { "_id" : ObjectId("61ffda13919138fa9fce93d3"), "name" : "ASS" }
+{ "_id" : ObjectId("61ffda1d919138fa9fce93d4"), "price" : 25 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO É POSSÍVEL,
+
+
+MAS 
+
+
+RARAMENTE VOCÊ TERÁ COISAS TÃO DIFERENTES...
+
+
+
+
+
+
+
+
+
+
+-_> EXEMPLO DE 
+
+
+ESTRUTURA ACEITÁVEL, IN-BETWEEN (nem tao bagunçado, nem tao certinho):
+
+
+
+
+
+
+
+{
+
+"title": "Book",
+"price": 12.99
+
+
+}
+
+
+
+
+
+{
+    "title": "Bottle",
+    "price": 5.99,
+    "available": true /////INFORMAÇÃO EXTRA...
+}
+
+
+
+
+
+
+
+-------------------------------------------
+
+
+
+
+O GENERAL SCHEMA É O MESMO,
+
+
+
+HÁ UNS CORE FIELDS EM CADA 
+
+DOCUMENT,
+
+
+
+
+
+
+
+MAS UNS FIELDS ADICIONAIS QUE SÓ EXISTEM EM ALGUNS DOCUMENTS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ou então fazemos coisas totalmente certinhas, tipo assim:
+
+
+
+
+{
+
+"title": "Book",
+"price": 12.99
+
+
+}
+
+
+
+
+
+{
+    "title": "Bottle",
+    "price": 5.99,
+
+}
+
+
+
+
+
+
+
+(
+
+    ESSE É O SQL WORLD...
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> O APPRAOCH DO MEIO É O MELHOR,
+
+
+PQ 
+
+TEMOS 
+
+
+
+1 POUCO DA FLEXIBILIDADE DO MONGODB,
+
+
+
+AO MESMO TEMPO QUE 
+
+TEMOS 
+
+
+
+UMA ESTRUTURA RÍGIDA...
+
+
+
+
+
+
+
+
+
+
+
+------------------> no mundo sql isso também é POSSÍVEL,
+
+
+BTW.... --> VOCÊ SIMPLESMENTE COLOCARIA ESSE FIELD DE 'available',
+
+e aí colocaria como 'null' NOS 
+
+PRODUCTS QUE NÃO PRECISASSEM DISSO... (
+
+
+        JÁ NO mongodb,
+
+        você omitiria esse field por inteiro,
+        pq o mongodb não vai reclamar....
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR DELETA TODAS AS ENTRIES EM 'products'
+
+
+
+por meio de 
+
+'db.products.deleteMany({})'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AÍ 
+
+
+ELE 
+
+
+
+
+
+QUER INSERIR 
+
+
+
+
+
+
+PRODUCTS, PARA MOSTRAR OS APPROACHES MAIS COMUNS....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> TODOS PRODUCTS VAO PRECISAR DESSES 'name' e 'price'..
+
+
+
+
+
+
+
+
+-----> nosso outro product também terá isso....
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+> db.products.find().pretty()
+{
+        "_id" : ObjectId("61ffdc0b919138fa9fce93d5"),
+        "name" : "A",
+        "price" : 12.99
+}
+{
+        "_id" : ObjectId("61ffdc25919138fa9fce93d6"),
+        "name" : "B",
+        "price" : 16.99
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> OK...  ESSE É O MUNDO SQL,
+
+
+
+ESTRUTURA TOTALMENTE CERTINHA, ETC ETC...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS AGORA DIGAMOS QUE TEMOS UM OUTRO DOCUMENT,
+
+
+
+COM 
+
+
+
+
+
+
+
+1 field extra,
+
+
+
+de 'details'...
+
+
+
+
+
+
+
+AGORA TEREMOS UMA ESTRUTURA ASSIM:
+
+
+
+
+
+
+
+
+
+> db.products.find().pretty()                                                       
+{
+        "_id" : ObjectId("61ffdc0b919138fa9fce93d5"),
+        "name" : "A",
+        "price" : 12.99
+}
+{
+        "_id" : ObjectId("61ffdc25919138fa9fce93d6"),
+        "name" : "B",
+        "price" : 16.99
+}
+{
+        "_id" : ObjectId("61ffdc7f919138fa9fce93d7"),
+        "name" : "AC",
+        "price" : 12.99,
+        "details" : {
+                "cpu" : "Intel i7 7700"
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK... TEMOS A MESMA ESTRUTURA,
+
+
+MAS UM FIELD EXTRA EM 1 DOS DOCUMENTS...
+
+
+
+
+
+
+
+
+
+
+
+--> PODEMOS TER 1 CÓDIGO, NO NOSSO APP,
+
+
+QUE SEMPRE 
+
+
+DISPLAYS 
+
+NAME E PRICE,
+
+
+MAS QUE 
+
+SÓ 
+
+
+MOSTRA 'DETAILS' 
+
+
+SE ESSA PROPRIEDADE EXISTE 
+
+
+
+EM NOSSO DOCUMENT....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, ESSE É UM DOS CASOS MAIS REALISTAS QUE TEREMOS NO MONGODB...
+
+
+
+
+
+
+
+
+
+
+-> ESSE É O USE-CASE QUE MAIS VEREOMS 
+
+
+
+
+
+
+NA PRÁTICA....
+
+
+
+
+
+
+
+
+
+
+
+-------> PROFESSOR VAI NOVAMENTE DELETAR TUDO NA NOSSA DATABASE... --> QUEREMOS 
+
+
+TER 
+
+A MESMA ESTRUTURA 
+
+
+
+
+
+DE ANTES,
+
+MAS COM 
+
+
+
+
+
+TODOS 
+
+
+OS FIELDS EXATAMENTE IGUAIS....
+
+
+
+
+
+------> BEM, SE QUISERMOS ISSO,
+
+
+
+
+
+
+MESMO COM A EXISTÊNCIA DESSA PROPRIEDADE DE 'details'
+
+
+
+em 1 dos documents,
+
+PODEOMS DEFINIR 'details' nos outros documetns como 'null'...
+
+
+
+
+
+ex:
+
+
+db.products.insertOne({name: 'ACB', price: 12.99, details: null )  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> O 'null' indica ESSENCIALMENTE QUE ESSE FIELD __ EXISTE,
+
+MAS QUE 
+
+NÃO TEREMOS 
+
+
+
+VALOR ALI..... (mas o field fica disponível)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------->  OK.... SE AGORA PROCURARMOS TODOS NOSSOS PRODUCTS E FIZERMOS 'pretty print',
+
+veremos isto:
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+db.products.find({})
+{ "_id" : ObjectId("61ffdc7f919138fa9fce93d7"), "name" : "AC", "price" : 12.99, "details" : { "cpu" : "Intel i7 7700" } }  
+{ "_id" : ObjectId("61ffddfb919138fa9fce93d8"), "name" : "ACS", "price" : 12.99, "details" : null }
+
+
+
+
+
+
+
+
+
+
+
+--> ESSA É A ESTRUTURA MAIS CORRECTA, 
+
+
+
+
+DO MUNDO SQL,
+
+
+EM QUE TEMOS 
+
+
+
+FIELDS EXATAMENTE IGUAIS EM TODOS OS DOCUMENTS,
+
+
+
+
+
+
+mas com o 'null' nos documents em que 
+
+esses 
+
+valores não existem/não são usados....
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOCÊ PODE USAR TANTO A ROTA DO MONGODB (omitir esse field por inteiro)
+
+
+
+
+
+ou usar a ROTA DO SQL (deixar o field, mas settar como 'null')...

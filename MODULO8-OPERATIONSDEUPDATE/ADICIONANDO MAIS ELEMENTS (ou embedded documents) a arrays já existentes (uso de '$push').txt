@@ -1,0 +1,978 @@
+
+
+
+
+
+
+
+
+
+--> OK... TRABALHAMOS UM MONTE COM O UPDATE DE ELEMENTS EM ARRAYS.. -> AGORA VAMOS TRABALHAR 
+
+
+
+
+
+
+COM 
+
+O 
+
+'ADD E REMOVE'
+
+
+de elementos de arrays...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> pARA ISSO,
+
+
+TAMBÉM TEMOS ALGUNS METHODS ÚTEIS QUE PODEMOS 
+
+
+USAR....
+
+
+
+
+
+
+
+
+
+
+
+
+
+-_> DIGAMOS QUE QUEREMOS EDITAR ESPEFICAMENTE 'maria'...
+
+
+
+
+
+
+
+
+
+
+
+escrevemos assim:
+
+
+
+
+
+
+
+
+
+
+db.users.updateOne(
+    {
+        name: "Maria"
+    },
+
+    {
+        $set: {hobbies: }
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> CERTO.... MAS SE ESCREVEMOS 'hobbies: [...]'.
+
+
+
+
+
+VAMOS ACABAR __ OVERWRITTANDO __ O ARRAY DE HOBBIES COM ESSE NOVO VALOR dele, settado com 'set'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> QUEREMOS MANTER OS ELEMENTS ANTIGOS DE 'hobbies',
+
+
+
+E AÍ ADICIONAR UM NOVO ELEMENT/OBJECT/EMBEDDED DOCUMENT nesse array...
+
+
+
+
+
+
+
+
+
+------------> para isso,
+
+
+DEVEMOS USAR 
+
+
+__ UM OPERATOR DIFERNETE DE '$set'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> EM VEZ DE USAR 'SEt',
+
+
+
+PODEMOS USAR 
+
+
+
+
+"$push",
+
+
+
+PARA ENTÃO 
+
+
+
+
+'''''PUSH A NEW ELEMENT' '''
+
+
+
+
+
+
+
+
+
+
+PARA DENTRO DO ARRAY... .-----> 
+
+
+
+
+
+
+
+ESCREVEMOS ASSIM:
+
+
+
+
+
+
+
+db.users.updateOne(
+    {
+        name: "Maria"
+    },
+
+    {
+        $push: {}
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------> DENTRO DE '$push: {}',
+
+
+
+
+
+
+
+
+DESSE OBJETO AÍ DELE,
+
+
+
+
+
+DEVEMOS ESPECIFICAR: 
+
+
+
+1) O _ ARRAY__ A QUE VOU QUERER PUSHAR... (''hobbies'')
+
+
+
+
+
+
+
+2) O __ ELEMENT/COISA/OBJECT QUE VOU QUERER FAZER 'PUSH' para dentro daquele array...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ESCREVEMOS ASSIM:
+
+
+
+
+
+
+
+
+db.users.updateOne(
+    {
+        name: "Maria"
+    },
+
+    {
+        $push: {hobbies: {title: "Sports", frequency: 3}}
+    }
+)
+
+
+
+
+
+
+--> SERÁ  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+UM OBJECT ({})
+
+
+COM TITLE DE SPORTS,
+
+
+
+E AÍ FREQUENCY DE 3...
+
+
+
+
+
+
+
+
+--> COM ISSO,
+
+
+
+
+
+SE AGORA SALVARMOS, 
+
+
+VEREOMS QUE 
+
+
+
+1 
+
+DOCUMENT TERÁ SIDO MODIFICADO....
+
+
+
+
+
+
+
+
+
+
+
+--> 
+
+
+
+VEREOMS QUE 
+
+
+
+
+
+A MARIA FICARÁ ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+{
+
+
+
+
+    name: "maria",
+
+    age: 29,
+
+    hobbies: [
+
+        {
+            title: "good food",
+            frequency: 3,
+            goodFrequency: true
+        },
+
+        {
+            title: 'sports',
+            frequency: 3 
+        }
+    ],
+
+    isSporty: true
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> ok, ela vai SEGUIR COM OS ELEMENTS QUE TINHA ANTES,
+
+MAS AGORA TERÁ ESSE NOVO ELEMENT de 
+
+
+'{
+    title: 'sports',
+    frequency: 3
+}
+'
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> E, EXPLICA O PROFESSOR,
+
+
+
+
+O PUSH PODE SER USADO COM __ MAIS DE 1 
+
+
+
+
+
+DOCUMENT.... --> ou seja,
+
+ELE PODE 'push'
+
+
+
+MAIS DE 
+
+
+
+
+
+
+APENAS 1 ÚNICO DOCUMENT, NO SEU ARRAY.... -->  PARA ISSO,
+
+
+
+
+
+PODEMOS 
+
+
+USAR UMA SINTAXE 1 POUCO DIFERENTE...
+
+
+
+
+
+
+
+
+
+
+
+
+--> EM VEZ DE ESCREVER nosso object solto, tipo 
+
+
+
+{
+    title: 'Sports',
+    frequency: 2
+},
+
+
+
+
+
+
+
+
+O PROFESSOR EXPLICA QUE PODEMOS escrever 
+
+
+
+
+'$each',
+
+
+QUE EXIGE 1 
+
+
+
+ARGUMENTO QUE É '[]'.... ----> É UM ARRAY COM OS MÚLTIPLOS ELEMENTS QUE 
+
+
+
+
+VAMOS QUERER PUSHAR....
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+db.users.updateOne({name: "Maria"}, {$push: {hobbies: {$each: [{title: "good wine", frequency: 1}, {title: 'hiking', frequency: 2}
+
+
+
+
+]}}})
+
+
+
+
+
+
+
+
+
+-------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ok......... AGORA AMBOS 
+
+
+ELEMENTS SERÃO 'PUSHED' PARA DENTRO DO ARRAY DE 'HOBBIES'...
+
+
+
+
+
+
+
+--> BEM, ANTES DO PROFESSOR APERTAR ENTER,
+
+
+
+
+ELE QUER MENCIONAR 2 COISAS QUE PODERÍAMOS TER FEITO:
+
+
+
+
+
+
+
+1) VOCê PODERIA, SE QUISESSE,
+
+
+
+ADICIONAR '$sort' DENTRO DESSE OBJECT EM QUE TEMOS '$each',
+
+
+TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+db.users.updateOne({name: "Maria"}, {$push: {hobbies: {$each: 
+
+[{title: "good wine", frequency: 1}, {title: 'hiking', frequency: 2}],
+
+$sort: 
+
+
+
+
+
+}}})
+
+
+
+
+
+
+
+
+
+
+------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+$sort AÍ DESCREVERÁ __ 'COMO OS ELEMENTS NO ARRAY DE 'EACH'  DEVERÃO SER SORTED, __ ANTES__ _ DE SEREM 'PUSHED' PARA 
+
+DENTRO DO ARRAY QUE VOCÊ ESPECIFICOU NO INÍCIO (no caso, hobbies)'....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... E ISSO PODE PARECER REDUNDANTE,
+
+
+
+PQ 
+
+
+
+
+'''SE EU QUISER UMA ORDEM ESPECÍFICA, POSSO SIMPLESMENTE ESCREVER A ORDEM CERTA MANUALMENTE,
+
+sem usar esse '$sort'''' -->  MAS 
+
+
+SEMPRE TENHA 
+
+
+EM MENTE 
+
+
+
+
+
+
+QUE 
+
+
+ESSA 
+
+
+DATA que será pushada 
+
+
+
+TVZ __ SEJA__ DATA __ QUE VIRÁ __ DE SEUS USERS... -> E AÍ _ VOCÊ _ TALVEZ QUEIRA TER UMA 
+
+
+
+'SORTED ORDER'
+
+
+no seu array.... ------> OU SEJA,
+
+
+
+SE USERS 
+
+
+
+
+
+INPUTTAREM INGREDIENTES PARA UMA RECIPE _ EM UMA ORDEM ALEATÓRIA,
+
+ISSO 
+
+SERIA FINE,
+
+
+
+
+
+
+mas digamos que você quer uma ORDEM ALFABÉTICA.... -->  É ESSA A UTILIDADE DE '$sort',
+
+PQ 
+
+
+ELE 
+
+
+ASSEGURARÁ QUE VOCê SEMPRE TERÁ UM 'SORTED ARRAY' 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AQUI, NO CASO, O PROFESSOR VAI QUERER 'sort' por '-1' 
+
+
+na frequency (ou seja, AS FREQUENCIES MAIORES, SEGUIDAS DAS MENORES)..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+db.users.updateOne({name: "Maria"}, {$push: {hobbies: {$each: 
+
+[{title: "good wine", frequency: 1}, {title: 'hiking', frequency: 2}],
+
+$sort: {
+    frequency: -1
+}
+
+
+
+
+
+}}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+POR FIM,
+
+
+
+
+
+
+TEMOS 
+
+
+2) ----> VOCÊ PODE USAR O '$slice',
+
+
+PARA AÍ 
+
+
+
+
+
+DIZER 
+
+
+
+
+
+'''''APENAS ADICIONE 1 ELEMENT DOS 2 ELEMENTS QUE TEMOS AQUI''''' 
+
+
+
+(
+
+
+
+
+    isso não faz mt sentido nesse exemplo,
+
+
+    MAS, DE NOVO,
+    VOCÊ PODE TER 1 CASE EM QUE 
+
+
+    SEU APP ESTÁ MANDANDO UM PUNHADO DE DATA,
+
+
+
+    E AÍ VOCÊ VAI QUERER 'SORT',
+
+    E AÍ 
+
+
+    VAI QUERER 'ONLY TAKE THE FIRST THREE ELEMENTS' (e o resto pode ser descartado)...
+
+
+
+
+
+
+)
+
+
+
+
+
+
+
+
+
+A ESCRITA FICA/FICARIA ASSIM:
+
+
+
+
+
+
+db.users.updateOne({name: "Maria"}, {$push: {hobbies: {$each: 
+
+[{title: "good wine", frequency: 1}, {title: 'hiking', frequency: 2}],
+
+$sort: {
+    frequency: -1
+},
+
+
+
+$slice: 2
+
+
+
+
+}}})
+
+
+
+
+
+
+
+
+
+-----------------------------
+
+
+
+
+
+
+
+
+
+MAS O PROFESSOR NÃO VAI QUERER O 
+
+
+
+
+
+'slice'
+,
+
+
+VAI FICAR SÓ COM O 
+
+
+
+$push e o 
+
+'$sort'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----> OK.... AGORA O SORT E O PUSH VAO FAZRE SEU TRABALHO, E OS DOCUMENTS SERÃO ADICIONADOS AO ARRAY DE 
+
+'hobbies'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> MAS OUTRO DETALHE QUE É IMPORTANTE É QUE O 
+
+'sorting' feito por essa operação VAI SORTAR MAIS DO QUE APENAS OS ELEMENTS QUE SÃO ADDADOS,
+
+
+
+TAMBÉM 
+
+VAI SORTAR O ARRAY EM QUE FORAM ADDADOS ( o 'hobbies', nesse caso).... --> isso é great, pq vocÊ sempre terá um SORTED ARRAY,
+
+
+IRRELEVANTE O NUMERO DE ELEMENTS QUE VOCÊ ADDAR....

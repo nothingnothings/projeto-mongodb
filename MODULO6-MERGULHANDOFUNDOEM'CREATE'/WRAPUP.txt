@@ -1,0 +1,404 @@
+
+
+
+
+
+
+
+
+
+
+ACABAMOS ESTE MÓDULO...
+
+
+
+
+
+
+
+
+APRENDEMOS BASTANTE SOBRE O INSERT DE DOCUMENTS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> insertONe e insertMany...
+
+
+
+
+
+
+
+
+
+
+
+--> VOCê PODE USAR 
+
+
+
+insertOne({})
+
+
+ou 
+
+
+insertMany([{}, {}])
+
+
+
+
+
+
+
+
+
+
+
+
+--> insert() é deprecado, pq não te dá informação como 'insertedIds',
+
+que é uma info ÚTIL EM VÁRIOS APPS....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TAMBÉM APRENDEMOS SOBRE 'ORDERED INSERTS'... --> POR DEFAULT,
+
+
+QUANDO 
+USAMOS 
+
+
+'insertMany',
+
+
+
+INSERTS SÃO 
+
+
+'
+ordered' ---> ISSO SIGNIFICA QUE O PROCESSO DE INSERT É INTERROMPIDO, PARA TODOS OS DOCUMENTS À DIREITA DO QUE DEU ERRO,
+
+
+QUANDO 
+
+O INSERT DAQUELE DOCUMENT DEU ERRO..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> VOCê PODE TROCAR ISSO QUANDO VOCÊ TROCA PARA 
+
+'unordered inserts',
+
+
+
+
+
+
+que é uma feature ativada quando você especifica 'ordered: false',
+
+
+
+lá 
+
+
+
+
+no seu 
+
+
+'insertMany(
+    [
+        {},
+        {}
+    ],
+
+    {
+        ordered: false,
+        writeConcern: {j: true, w: 1}
+    }
+)
+
+'
+
+
+
+
+
+
+
+
+
+
+-> se você deixa 'unordered: false',
+
+
+
+O INSERTING PROCCESS VAI CONTINUAR,
+
+
+
+MESMO SE ERRORS TIVEREM ACONTECIDO... (serão feitas tentativas de insert nos items restantes, mesmo se um erro tiver ocorrido)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EM AMBOS OS CASOS,
+
+SUCCESSFUL INSERTS NUNCA SERÃO 'ROLLED BACK''' --> isso signiifca que 
+
+mesmo com 
+
+um 
+
+ORDERED INSERT,
+
+
+
+SE VOCÊ TIVER UM ERRO,
+
+
+TODOS OS DOCUMENTS QUE FORAM ADICIONADOS __ ANTES__ DESSE ERROR EM 1 DOS DOCUMENTS,
+
+ 
+
+ ELES NÃO SOFRERÃO ROLLBACK, VÃO CONTINUAR NA DATABAS.E..
+
+
+
+
+
+
+
+
+
+
+ ----> SE VOCê, POR ACASO,
+
+ PRECISAR DE UMA BULK OPERATION (como insertMany)
+
+
+
+
+
+
+
+
+ QUE É 'ROLLED BACK' em caso de errors,
+
+
+
+ VOCê DEVE, POSTERIORMETNE,
+
+ CHECAR O MÓDULO 
+
+
+ DE 
+
+
+
+ 'transactions',
+
+
+
+
+
+
+ NO FINAL DO CURSO,
+
+
+
+
+
+EM QUE O PROFESSOR NOS MOSTRA COMO ISSO FUNCIONA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+POR FIM, ESTUDAMOS O 'writeConcern' ---> COM ELE,
+
+
+PODEMOS 
+
+
+CONTROLAR O 
+
+
+'LEVEL OF GUARANTEE'
+
+
+
+DE QUE 
+
+
+
+
+SEU 'WRITE'
+
+vai SUCCEED ----> ISSO PQ 
+
+
+VOCÊ 
+
+TEM AQUELA 
+
+STORAGE ENGINE 
+
+
+HANDLANDO SUA WRITE OPERATION,
+
+
+
+
+E AÍ 
+
+ESSA STORAGE ENGINE MANTEM UM JOURNAL,
+
+QUE É COMO UMA 'toDo list' 
+
+
+
+DE TASKS QUE VAI REALIZAR.. .--> E AÍ VOCê PODE __ OU ESPERAR POR ESSE 
+
+
+
+JOURNAL SER UPDATADO,
+
+
+
+
+
+
+OU ENTÃO VOCÊ NÃO ESPERA POR ISSO (
+
+
+    e, a depender disso,
+
+    seu write será mais lento, 
+
+
+    MAS 
+
+    VOCÊ TERÁ UM GUARANTEE MAIOR DE QUE SEU PROCESSO VAI ACONTECER, EVENTUALMENTE...
+)
+
+
+
+
+
+
+
+
+
+ESCOLHA A OPÇÃO COM BASE NOS REQUISITOS DO SEU APP...
+
+
+
+
+
+
+
+
+
+
+
+---> OK... POR FIM, TAMBÉM VEMOS 'mongoimport',
+
+
+QUE É BEM SIMPLES E 
+
+SELF-EXPLANATORY...
+
+
+
+
+
+
+
+
+
+--> AGORA TEMOS UM SOLID TOOLSET PARA FAZER O GET 
+DE 
+DATA NA SUA DATABASE...
+
+
+
+
+
+
+
+
+
+
+
+--> O PROFESSOR AGORA QUER NOS MOSTRAR COMO PODEMOS 'read' a data na database,
+
+
+
+E AS VÁRIAS OPÇÕES QUE TEMOS PARA O FILTERING, E PARA CONSEGUIR A EXATA DATA QUE DESEJAMOS...

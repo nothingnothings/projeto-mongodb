@@ -1,0 +1,779 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NOSSA QUERY DE 'CHECAR SE ESSA OUTRA LOCATION É PRÓXIMA DA LOCATION QUE TEMOS NA NOSSA DATABASE'
+
+
+FALHOU,
+
+POR CONTA DA AUSÊNCIA DE 1 GEOSPATIAL INDEX 
+
+
+
+
+
+NA NOSSA COLLECTION de 'places'..
+
+
+
+
+
+
+
+ex:
+
+
+
+
+> db.places.find({
+...   location: {
+...     $near: {
+...       $geometry: {
+...         type: 'Point',
+...         coordinates: [-52.5466813, -27.724483256429384],
+...       },
+...     },
+...   },
+... });
+Error: error: {
+        "ok" : 0,
+        "errmsg" : "error processing query: ns=maps.placesTree: GEONEAR  field=location maxdist=1.79769e+308 isNearSphere=0\nSort: {}\nProj: {}\n planner returned error :: caused by :: unable to find index for $geoNear query",
+        "code" : 291,
+        "codeName" : "NoQueryExecutionPlans"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> ESSE 
+
+
+
+OPERATOR DE '$near'
+
+
+
+PRECISA 
+
+
+
+
+
+DE UM INDEX DESSES..
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA CRIAR 1 INDEX DESSES,
+
+COMEÇAMOS COM 
+
+
+
+
+
+
+
+db.places.createIndex(
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AÍ VAMOS QUERER 
+
+
+COLOCAR UM INDEX DESSES DENTRO DO FIELD DE 'location',
+
+PQ 
+
+É 
+
+DENTRO DELE QUE ESTAMOS 
+
+
+
+ARMAZENANDO NOSSO 'GEOJSON OBJECT' (geo data) --------> 
+
+
+
+
+
+
+EX:
+
+
+
+
+
+db.places.createIndex(
+    {
+        location: 
+    }
+)
+
+
+
+-------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK, MAS AGORA NÃO VAMOS ESPECIFICAR '1' ou '-1',
+
+
+
+
+ou 'text'.... --> NÃO FAREMOS NENHUMA DESSAS COISAS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------> O VALUE Desse 'location'/de nosso index 
+
+
+
+
+
+SERÁ 
+
+DE 
+
+
+
+
+'2dsphere'...
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+db.places.createIndex(
+    {
+        location: "2dsphere"
+    }
+)
+
+
+
+
+
+
+
+
+
+------------------------------
+
+
+
+
+
+
+
+
+
+
+
+----------> ok.... COM ISSO,
+
+
+TEREMOS CRIADO UM GEO SPATIAL INDEX,
+
+
+
+
+NO FIELD DE 'LOCATION'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+> db.places.createIndex(
+...     {
+...         location: "2dsphere"
+...     }
+... )
+{
+        "numIndexesBefore" : 1,
+        "numIndexesAfter" : 2,
+        "createdCollectionAutomatically" : false,
+        "ok" : 1
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA, COM ISSO,
+
+
+SE RODARMOS 
+
+db.places.find({   location: {     $near: {       $geometry: {         type: 'Point',         coordinates: [-52.5466813, -27.724483256429384],       },     },   }, });,
+
+
+
+
+
+
+
+
+
+
+
+
+
+VAMOS GANHAR OUTRO RESULTADO....
+
+
+
+
+
+
+> db.places.find({   location: {     $near: {       $geometry: {         type: 'Point',         coordinates: [-52.5466813, -27.724483256429384],       }, 
+
+    },   }, }).pretty()
+
+
+
+
+
+{
+        "_id" : ObjectId("6211d26f4bf425539a521037"),
+        "name" : "California Academy of Sciences",
+        "location" : {
+                "type" : "Point",
+                "coordinates" : [
+                        -122.4757474,
+                        37.7689999
+                ]
+        }
+}
+
+
+
+
+
+--------------------------------------
+
+
+
+
+
+
+-------------> OU SEJA,
+
+A QUERY FOI BEM SUCEDIDA,
+
+E RETRIEVOU ESSE POINT ESPECÍFICO... -----------> ELE RETORNOU ESSE POINT, SIM, MAS 
+
+
+
+
+ISSO 
+
+
+NÃO NOS 'TELL TOO MUCH',
+
+
+
+
+
+
+
+
+
+NOSSO POINT INPUTTADO EM '$near: {$geometry: {{}}' 
+
+
+
+
+CERTAMENTE 
+
+
+ESTÁ 
+
+'near'
+
+
+
+A ESSE PONTO,
+
+MAS 
+
+
+nosso 
+
+
+
+return de 'find'
+
+
+NÃO NOS DIZ NADA SOBRE ISSO...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------> BEM, O PROFESSOR NOS EXPLICA QUE 
+
+
+
+
+
+'NEAR'
+
+
+NÃO FAZ MUITO SENTIDO, NÃO FAZ SENTIDO SE NÓS NÃO O LIMITARMOS... -----> 'RESTRICT IT'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> É POR ISSO QUE TIPICAMENTE VOCÊ VAI PASSAR MAIS DO QUE APENAS UMA 'GEOMETRY'
+
+
+ao 
+
+'$near'... -->  VOCê 
+
+
+
+VAI 
+
+
+
+PASSAR TAMBÉM 
+
+
+__OUTRO__ ARGUMENTO,
+
+
+
+
+
+
+
+
+
+
+OUTROS ARGUMENTOS, NA VERDADE,
+
+QUE 
+
+
+SERÃO 
+
+
+
+'$maxDistance' 
+
+
+
+e 
+
+'$minDistance'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAX DISTANCE É SIMPLESMENTE UM VALOR EM NÚMEROS....
+
+
+
+
+
+
+
+
+
+
+
+-> se o professor definir '30',
+ 
+
+
+
+
+
+ ELE VAI ACTUALLY NÃO ENCONTRAR COISA ALGUMA.... 
+
+ (
+
+     pq 
+
+     a distancia entre os dois é maior do que 30...
+ )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ --> 'min Distance' é o contrário....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+NO GOOGLE MAPS,
+
+ 
+ PODEMOS MEDIR A DISTÂNCIA,
+
+ por meio do right click --> measure distance.... 
+
+
+
+
+
+
+
+
+
+
+
+
+
+ -----------> PROFESSOR MEDE A DISTÂNCIA, QUE DÁ 435.36m...
+
+
+
+
+
+
+
+
+ -----> AÍ ELE DEFINE A DISTANCE COMO '500'... --> COM ISSO,
+
+
+ VAMOS 
+
+ ENCONTRAR O PLACE,
+
+
+
+
+ ELE VAI APARECER NO FIND,
+
+
+
+
+PQ A QUERY TERÁ SIDO SATISFEITA....
+
+
+
+
+
+
+
+
+
+-> MAS É CLARO QUE EU BOTEI UM POINTER ___BEM__ LONGE_ 
+
+DE ONDE 
+
+
+
+FICA ESSA ACADEMY AÍ,
+
+
+
+por isso devo usar 'minDistance',
+
+e não 
+
+
+'maxDistance', para que 
+
+
+esse object apareça (ou, então, colocar uma maxDistance enorme)...
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+
+db.places.find({
+  location: {
+    $near: {
+      $geometry: {
+        type: 'Point',
+        coordinates: [-52.5466813, -27.724483256429384],
+      },
+      $maxDistance: 50000000
+    },
+  },
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+> db.places.find({
+...   location: {
+...     $near: {
+...       $geometry: {
+...         type: 'Point',
+...         coordinates: [-52.5466813, -27.724483256429384],
+...       },
+...       $maxDistance: 50000000
+...     },
+...   },
+... })
+{ "_id" : ObjectId("6211d26f4bf425539a521037"), "name" : "California Academy of Sciences", "location" : { "type" : "Point", "coordinates" : [ 
+-122.4757474, 37.7689999 ] } }
+
+
+
+
+
+
+
+
+
+
+
+-> ISSO ENCONTRA ESSA 'LOCATION', pq estará satisfeita essa query de 'maxDistance'...
+
+
+
+
+
+
+
+
+
+
+--> MAS SE EU REDUZIR MINHA MAXDISTANCE POR 1 '0' (10x menos distancia):
+
+
+
+
+
+
+
+
+> db.places.find({   location: {     $near: {       $geometry: {         type: 'Point',         coordinates: [-52.5466813, -27.724483256429384],       },       $maxDistance: 500000     },   }, })
+
+
+
+
+
+
+
+
+
+
+-> NÃO ENCONTRO NADA....
+
+
+
+
+
+
+
+
+
+
+
+
+
+ok... significa que isso deu certo....
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> ESSAS QUERIES DE 'max' e 'min'
+
+
+SÃO MT BOAS,
+
+
+PQ 
+
+
+
+NOS DEIXAM
+ 
+
+
+ RESPONDER A PERGUNTA:
+
+
+
+ '''QUAIS LOCALIZAÇÕES ESTÃO PRÓXIMAS DE NÓS, EM UM RAIO DE X X X METROS'''.... (
+
+
+
+     essa é uma pergunta frequente, em mtos apps....
+ )

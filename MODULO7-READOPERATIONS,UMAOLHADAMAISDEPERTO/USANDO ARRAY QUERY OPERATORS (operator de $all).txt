@@ -1,0 +1,423 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> COM '$size'
+
+FORA DO CAMINHO,
+
+
+ 
+
+
+ AGORA DEVEMOS 
+
+
+
+DAR UMA OLHADA NO OPERATOR DE '$all'....
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA ISSO,
+
+
+
+O PROFESSOR 
+
+TAMBÉM VAI USAR A DATA DOS USERS,
+
+
+
+
+
+
+
+DATA QUE TAMBÉM USOU NO ASSIGNMENT...
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------> na verdade,
+
+vai traabalhar com 'movieStarts'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------>  EU NÃO FIZ ESSE ASSIGNMENT, ACHO...
+
+
+
+
+
+
+
+
+
+
+
+
+A DATA É MAIS OUMENOS ASSIM:
+
+
+
+
+
+
+
+
+
+{
+
+
+    "title": "The Last Student Returns",
+    "meta": {
+        "rating": 9.5,
+        "aired": 2018,
+        "runtime": 100
+    },
+
+    "visitors": 1300000,
+    "expectedVisitors": 15500000,
+    "genre": [
+
+        "drama",
+        "action"
+    ]
+}
+
+{
+
+
+    "title": "DEEP",
+    "meta": {
+        "rating": 8.0,
+        "aired": 2019,
+        "runtime": 140
+    },
+
+    "visitors": 1100000,
+    "expectedVisitors": 13000000,
+    "genre": [
+        "action",
+        "drama"
+    ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+AGORA DIGAMOS QUE QUEREMOS ENCONTRAR MOVIES QUE TENHAM _ EXATAMENTE__ 
+
+
+
+
+
+
+
+
+GENRES DE 'thriller' e 'action' ---> MAS EU NÃO VOU ME IMPORTAR COM A ORDER 
+
+
+
+DESSES NEGÓCIOS,
+
+
+PQ 
+
+
+
+
+TENHO 2 MOVIES,
+
+
+
+
+E AMBOS 
+
+TEM THRILLER E ACTION,
+
+MAS EM ORDERS DIFERENTES.... --------> COMO ESTÃO EM ORDERS DIFERNTES,
+
+
+
+
+NÃO POSSO ESCREVER 
+
+
+
+
+
+
+db.movieStarts({genre: ["drama", "action"]}),
+
+
+
+
+
+
+
+
+
+
+
+PQ ISSO 
+
+AÍ SÓ VAI ENCONTRAR 1 ÚNICO DOCUMENT,
+
+O QUE TEM A ORDEM INVERSA DE STRINGS NESSE ARRAY __ NÃO SERÁ __ ENCONTRADO_....
+
+
+
+
+
+
+
+
+
+
+
+------> OK.... ------> MAS E SE EU NÃO ME INTERESSASSE pela order? -----> BEM, AÍ O OPERATOR DE '$all'
+
+
+PODERIA/PODE ME AJUDAR...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PARA USAR O OPERATOR DE '$all',
+
+
+nós simplesmente WRAPPAMOS 
+
+
+
+
+NOSSO ___ ARRAY__ 
+
+
+
+
+EM 
+
+
+
+UM OBJECT com o operator de '$all'...
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+db.movieStarts.find({genre: { $all: ["drama", "action"] }}),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$all
+Matches arrays that contain all elements specified in the query.
+
+
+
+
+
+
+
+
+
+------------------------------------------
+
+
+
+
+
+
+db.movieStarts.find({genre: { $all: ["drama", "action"] }})
+
+
+
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+
+
+> db.movieStarts.find({genre: { $all: ["drama", "action"] }}).pretty()
+{
+        "_id" : ObjectId("6208841a2867f483687f834c"),
+        "title" : "The Last Student Returns",
+        "meta" : {
+                "rating" : 9.5,
+                "aired" : 2018,
+                "runtime" : 100
+        },
+        "visitors" : 1300000,
+        "expectedVisitors" : 15500000,
+        "genre" : [
+                "action",
+                "drama"
+        ]
+}
+{
+        "_id" : ObjectId("6208841a2867f483687f834d"),
+        "title" : "DEEP",
+        "meta" : {
+                "rating" : 8,
+                "aired" : 2019,
+                "runtime" : 140
+        },
+        "visitors" : 1100000,
+        "expectedVisitors" : 13000000,
+        "genre" : [
+                undefined,
+                "drama",
+                "action"
+        ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------> OK.... --> ISSO DEU CERTO.... ------> BASTA ESSES ITEMS EXISTIREM EM 'genre'
+
+
+
+PARA 
+
+
+QUE 
+
+
+ELES APAREÇAM NO FIND, AGORA....
+
+
+
+
+
+
+
+
+(E A ORDER NÃO IMPORTA)...
+
+
+
+
+
+
+
+
+
+
+--> $ALL, PORTANTO, É MT ÚTIL QUANDO VOCÊ NÃO SE IMPORTA COM A ORDER,
+
+
+
+
+
+
+E SÓ SE IMPORTA COM A PRESENÇA DESSES ELEMENTOS EM 1 ARRAY...

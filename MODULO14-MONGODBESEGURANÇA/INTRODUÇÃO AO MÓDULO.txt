@@ -1,0 +1,513 @@
+
+
+
+
+
+
+
+
+
+
+SEGURANÇA E USER AUTHENTICATION...
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> FAÇA 'LOCK DOWN' da sua data...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> NÓS JÁ VIMOS UM MONTE DE COISAS IMPORTANTES QUE SERÃO USADAS POR VOCÊ,
+
+
+SE VOCÊ FOR USAR O MONGODB...
+
+
+
+
+
+
+
+
+
+
+-> ESSE CURSO DE MONGODB É 
+
+CONSTRUÍDO PARA DESENVOLVEDORES,
+
+
+POR ISSO 
+
+AS COISAS 
+
+QUE 
+
+
+VAMOS 
+
+
+
+
+COBRIR NESSE MÓDULO SÃO 
+
+
+PARCIALMENTE IMPORTANTES A NÓS...
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> SEGURANÇA É IMPORTANTE... --> POR ISSO 
+
+VAMOS DAR UMA OLHADA 
+
+
+EM ALGO QUE 
+
+
+
+
+É 
+
+
+TRABALHO DO SEU DATA ADMINISTRATOR,
+
+E NÃO DE VOCÊ, O DESENVOLVEDOR,
+
+
+
+MAS 
+
+
+
+COMO 
+
+VOCÊ 
+
+
+
+
+
+
+FARÁ PARTE DE UM DOS ROLES 
+
+
+
+
+
+NA 'SECURITY E USER AUTHENTICATION',
+
+
+
+
+o professor 
+
+
+
+
+
+
+
+
+acha importante nos guiar através das partes 
+
+
+
+MAIS IMPORTANTES PARA O SECURE DE UMA 
+
+
+
+
+
+DATABASE MONGODB...
+
+
+
+
+
+
+
+
+
+
+
+
+--> HÁ UMA SECURITY CHECKLIST, QUANTO AO HARDEN DE SEU MONGODB ENVIRONMENT, QUE GARANTE SUA SEGURANÇA:
+
+
+(cant be intruded from outside)...
+
+
+
+
+
+
+
+AS COISAS SÃO
+
+
+
+
+
+
+
+
+
+
+1) AUTHENTICATION E AUTHORIZATION...  --> ISSO É UMA DAS COISAS QUE VOCÊ, COMO DESENVOLVEDOR,
+
+
+PODE deixar melhor ---> professor vai nos mostrar como FAZEMOS 'AUTHORIZE' de certos ips,
+
+
+
+tbm veremos isso lá no módulo do 'from shell to driver'..
+
+
+
+
+
+
+
+
+
+
+
+ESSA PARTE INICIAL SERÁ IMPORTANTE.... --> SUA DATABASE QUE VOCÊ USA PARA 
+
+ARMAZENAR DATA --> ELA VAI SABER OS 'USERS' que a utilizam... -> E VOCÊ VAI TER QUE 'AUTHENTICATE',
+
+com essa database,
+
+
+
+
+para 
+
+
+
+ver se 
+
+aquele user pode insert data, delete data, update data, etc....
+
+
+
+
+
+
+
+
+
+
+
+--> esse é um building block bem importante...
+
+
+
+
+
+
+
+
+
+2) UMA COISA QUE AINDA NÃO VIMOS, O 'Transport Encryption' ---> ISSO SIGNIFICA QUE 
+
+
+DATA 
+
+
+QUE É ENVIADA DO SEU APP (nodeexpress server, exemplo) PARA O SERVEr  DEVE SER 
+
+
+__ENCRIPTADA_, PARA QUE 
+
+
+
+NINGUÉM CONSIGA 'SIT IN THE MIDDLE' e consiga SPOOF sua conexão e ler sua data...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+3) POR FIM, TEMOS O TÓPICO DO 
+
+
+'Encryption em REST'  ----------> É IMPORTANTE .. --> ISSO SIGNIFICA QUE 
+
+
+A 
+
+
+
+DATA __ NA SUA__ DATABASE_ TAMBÉM PRECISA __ FICAR ENCRIPTADA ___ --> isso pq 
+
+
+SE ALGUÉM 
+
+
+DE ALGUMA FORMA CONSEGUIR ACESSO A 
+
+SEUS DATABASE SERVERS,
+
+
+
+
+ELES CONSEGUIRÃO ACESSO 
+
+
+
+
+AOS SEUS PASSWRODS EM PLAIN TEXT (
+
+    mas isso é fácil de evitar, só usar bcrypt e outras ferramentas...
+)
+
+
+
+--> VAMOS ENCRIPTAR NOSSA 
+
+DATA NA DATABASE,
+
+PQ 
+
+
+AÍ MESMO SE PESSOAS CONSEGUIREM ACESSO A SEU DATABASE SERVER,
+
+
+SUA DATA ESTARÁ 'UNREADABLE'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+4) AUDITING --> ESSE É OUTRO BUILDING BLOCK IMPORTANTE --> ENTRETANTO,
+
+
+NÃO VEREMOS ISSO NO MÓDULO, NEM NO CURSO.... (
+
+    é uma coisa puramente dos admins...
+)
+
+
+(
+
+    MAS É CLARO QUE O MONGODB NOS PROVIDENCIA FEATURES PARA  AUDIT NOSSOS SERVERS, 
+
+    PARA VER QUEM FEZ CADA COISA,
+
+
+    PARA 
+
+    VER O QUE 
+
+
+    ESTÁ ACONTECENDO NA DATABASE, QUEM EFETUOU MUDANÇAS...
+)
+
+
+
+
+
+
+
+
+
+
+5) DEPOIS DISSO,
+
+
+
+
+
+
+TEMOS O TÓPICO DO 
+
+
+''SERVER E NETWORK CONFIG AND SETUP' '' --> O SERVER EM QUE 
+
+
+
+VOCê RODA SEU DATABASE SERVER, A MÁQUINA FÍSICA QUE ESTÁ RODANDO EM ALGUM LUGAR,
+
+OU ENTÃO 
+
+
+ALGUM CLOUD PROVIDER (como AWS) ,
+
+
+
+
+as 
+
+INSTANCES QUE VOCÊ BOOKOU LÁ... --> A NETWORK QUE VOCê ESTÁ USANDO PARA HOSTEAR SEU 
+
+
+
+AMBIENTE 
+
+
+
+MONGODB TAMBÉM 
+
+DEVE 
+
+
+SER SEGURA -------> MAS ISSO VAI ALÉM DESSE CURSO,
+
+
+E DO QUE DEVEMOS FAZER COMO DEVs...
+
+
+
+
+
+
+
+
+--> POR FIM,
+
+
+
+
+TEMOS BACKUPS E SOFTWARE UPDATES ---> 
+
+
+
+VOCÊ,
+
+COMO O OWNER DE UM 
+
+
+MONGODB ENVIRONMENT,
+
+
+DEVE REGULARMENTE 
+
+
+FAZER BACKUP DE SUA DATABASE --> TAMBÉM TEM QUE ASSEGURAR QUE 
+
+
+SEU SOFTWARE 
+ESTÁ 'up-to-date',
+
+
+
+para consertar quaisquer security holes que venham a surgir...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> vAMOS VER SÓ OS 3 PRIMEIROS,
+
+
+
+
+
+
+
+PQ 
+
+
+ELES AFETAM SEU TRABALHO COMO DEV...
+
+
+
+
+
+
+veremos:
+
+
+
+
+
+
+
+
+1) AUTH e authorization 
+
+
+
+
+
+2) transport encryption 
+
+
+
+
+
+3) encryption at rest...
+
+
+
+
+
+
+
+
+
+
+
+
+--> veremos isso agora e depois no módulo do 'from shell to driver'..

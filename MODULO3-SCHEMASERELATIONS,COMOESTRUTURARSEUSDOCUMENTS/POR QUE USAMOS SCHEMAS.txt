@@ -1,0 +1,225 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+COMEÇAMOS COM DOCUMENT SCHEMAS....
+
+
+
+
+
+
+
+
+
+
+
+
+--> HÁ 1 QUESTÃO IMPORTANTE:
+
+
+
+
+
+
+
+
+
+A MORAL DO MONGODB NÃO É SER SCHEMALESS,
+
+
+E NÃO 
+
+ENFORCAR NENHUM SCHEMA?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> SIM, ESSA É A MORAL... --> VOCÊ PODE TER DOCUMENTS COMPLETAMENTE DISTINTOS EM 
+
+
+1 MESMA COLLECTION....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> professor troca para a database interna de 'shop', com 'use shop'....
+
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+{ "_id" : ObjectId("61ffda13919138fa9fce93d3"), "name" : "ASS" }
+{ "_id" : ObjectId("61ffda1d919138fa9fce93d4"), "price" : 25 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ok,
+
+
+mongodb não reclama sobre isso,
+
+
+podemos ter SCHEMAS COMPLETAMENTE DIFERENTES,
+
+NO PROBLEM...
+
+
+
+
+
+
+
+
+
+
+
+
+MONGODB ENFORCES NO SCHEMAS....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> MAS NA REALIDADE, NO MUNDO REAL,
+
+
+SEMPRE 
+
+
+VOCÊ TERÁ ALGUM TIPO DE SCHEMA... --> 
+
+VOCÊ 
+
+SEMPRE VAI QUERER TER UMA ESTRUTURA MÍNIMA...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO PQ SE VOCÊ ESCREVER UM CÓDIGO EM PHP/NODEJS 
+
+
+E ENTÃO 
+
+RETRIEVAR 
+
+
+SUA 
+DATA 
+
+
+
+LÁ DA DATABASE,
+
+VOCê VAI QUERER 
+
+
+
+
+CICLAR POR SUA DATABASE E ENTÃO RENDER UMA VIEW 
+
+
+COM ESSA DATA... --> vocÊ 
+
+terá um tipo de schema,
+
+
+pq 
+
+
+seu aplicativo vai precisar disso.... ---------> 
+
+
+
+
+
+
+
+
+VOCÊ ACABARÁ COM ALGUM TIPO DE ESTRUTURA... --> na realidade, você nunca terá toda essa liberdade...

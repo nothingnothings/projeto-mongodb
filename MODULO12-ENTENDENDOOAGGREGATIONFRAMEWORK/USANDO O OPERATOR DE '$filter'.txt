@@ -1,0 +1,1417 @@
+
+
+
+
+
+
+
+
+
+
+
+
+--> AGORA DEVEMOS DAR UMA OLHADA NO 
+
+
+
+
+
+NOSSOS 'friends'
+
+
+
+mais uma vez,
+
+sua forma padrão...
+
+
+
+
+
+EX:
+
+
+
+
+
+
+> db.arrayCollection.find({}).pretty()
+{
+        "_id" : ObjectId("6215b908ecbbf58f4c1d5e59"),
+        "name" : "Maria",
+        "hobbies" : [
+                "Cooking",
+                "Skiing"
+        ],
+        "age" : 29,
+        "examScores" : [
+                {
+                        "difficulty" : 3,
+                        "score" : 75.1
+                },
+                {
+                        "difficulty" : 8,
+                        "score" : 44.2
+                },
+                {
+                        "difficulty" : 6,
+                        "score" : 61.5
+                }
+        ]
+}
+{
+        "_id" : ObjectId("6215b908ecbbf58f4c1d5e5a"),
+        "name" : "Manu",
+        "hobbies" : [
+                "Eating",
+                "Data Analytics"
+        ],
+        "age" : 30,
+        "examScores" : [
+                {
+                        "difficulty" : 7,
+                        "score" : 52.1
+                },
+                {
+                        "difficulty" : 2,
+                        "score" : 74.3
+                },
+                {
+                        "difficulty" : 5,
+                        "score" : 53.1
+                }
+        ]
+}
+{
+        "_id" : ObjectId("6215b908ecbbf58f4c1d5e5b"),
+        "name" : "Max",
+        "hobbies" : [
+                "Sports",
+                "Cooking"
+        ],
+        "age" : 29,
+        "examScores" : [
+                {
+                        "difficulty" : 4,
+                        "score" : 57.9
+                },
+                {
+                        "difficulty" : 6,
+                        "score" : 62.1
+                },
+                {
+                        "difficulty" : 3,
+                        "score" : 88.5
+                }
+        ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> OK.... QUEREMOS 
+
+
+
+
+
+
+TRANSFORMAR 'examScores',
+
+
+
+fazer com que 
+
+
+SEJAM MOSTRADOS _ APENAS ___ OS 
+
+
+
+
+
+
+OBJECTS 'examScore'
+
+
+
+
+QUE 
+
+
+POSSUAM 
+
+
+UM 
+
+
+SCORE MAIOR DO QUE 60....
+
+
+
+
+
+
+
+
+
+
+
+
+
+-> PARA ISSO,
+ 
+
+ PODEMOS USAR O OPERATOR ÚTIL DE '$filter'...
+
+
+
+
+
+
+
+ ex:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+podemos começar assim:
+
+
+
+
+
+
+
+
+
+
+
+
+db.arrayCollection.aggregate(
+    [
+        {
+            $project: {
+                _id: 0,
+
+                newExamScores: {
+                    $filter: [
+                        "$examScores", 
+                    ]
+                }
+            }
+        }
+    ]
+)
+
+
+
+
+
+
+
+
+
+
+-_> TALVEZ COMEÇAMOS ASSIM? (não sei se o array em '$filter' está correto)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> PROFESSOR EXPLICA QUE ISSO 
+
+
+PODE SER FEITO NA PHASE DE 'project', sim,
+
+
+
+
+
+
+E NÃO SÓ NA DE 'group' ---> ISSO PQ VOU QUERER, NESSE CASO,
+
+
+
+TRANSFORMAR 
+
+'EVERY SINGLE DOCUMENT',
+
+
+
+
+e não 'GROUP ANYTHING'... ----> só vamos querer transformar o array dentro do negócio...
+
+
+
+
+
+
+
+
+
+
+
+
+----> ok...
+
+
+
+
+
+
+
+
+professor começa exatamente assim:
+
+
+
+
+
+newExamScores: {
+    $filter: 
+}
+
+
+
+
+
+
+
+
+
+----> FILTER TE DEIXA FILTRAR CERTOS ELEMENTS EM 1 ARRAY.... E AÍ,
+
+
+
+RETRIEVAR SÓ 
+
+
+
+AQUELES ELEMENTS QUE 
+
+
+CUMPRIREM CERTA CONDITION...
+
+
+
+
+
+
+
+OK, MAS __ COMO ISSO FUNCIONA?
+
+
+
+
+
+
+
+
+
+
+
+--> bem,
+
+antes de mais nada,
+
+
+você não escreverá 
+
+
+
+
+$filter: [] ---------> EM VEZ DISSO,
+
+
+
+
+
+
+
+ESCREVA ASSIM:
+
+
+
+
+
+
+
+$filter: {
+    input: 
+}
+
+
+
+
+
+
+
+
+
+--> O FILTER SEMPRE PRECISARÁ DESSA KEY DE 'input'... --> EM INPUT, VOCÊ APONTA AO ARRAY QUE VOCÊ VAI QUERER FILTAR..
+
+
+
+
+
+
+
+
+
+--> '$examScores' 
+
+
+
+
+
+
+
+
+
+
+----> EX:
+
+
+
+
+
+db.arrayCollection.aggregate(
+    [
+        {
+            $project: {
+                _id: 0,
+
+                newExamScores: {
+                    $filter: {
+                        input: "$examScores", 
+                }
+                }
+            }
+        }
+    ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--> AÍ, ISSO FEITO,
+
+VAMOS 
+
+
+
+TER QUE 
+
+ESCREVER UMA KEY DE 
+
+
+'as'...  
+
+
+
+
+
+
+
+
+
+
+--> ISSO SERÁ ALGO QUE CHAMAMOS DE ' TEMPORARY NAME'  --------> O QUE VOCÊ ESCREVER EM 
+
+'as' como value 
+
+SERÁ _ USADO__ 
+
+
+
+
+COMO UMA 'LOCAL VARIABLE', que 
+
+será usada DENTRO 
+
+DE NOSSA 
+
+
+
+FILTER EXPRESSION, QUE ESCREVEREMOS EM UM SEGUNDO (ou seja, é exatamente como array.filter((localVariable) => {}))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> VOCê PODE COLOCAR O NOME QUE QUISER NESSE NEGÓCIO... -_> professor coloca 'sc' (Abreviação de 'score'),
+
+
+
+
+
+PARA QUE NÃO fiquemos repetindo 'score score score' 
+toda hora..
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+db.arrayCollection.aggregate(
+    [
+        {
+            $project: {
+                _id: 0,
+
+                newExamScores: {
+                    $filter: {
+                        input: "$examScores", 
+                        as: "sc"
+                }
+                }
+            }
+        }
+    ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+--------> ok..... --> vamos aplicar esse filter sobre 'examScores'....
+
+
+
+
+
+
+
+
+
+--> a variável 'sc' 
+
+
+vai representar nossos OBJECTS, eu acho...
+
+
+
+
+
+
+
+
+
+--> mas o último field de que precisamos,
+
+
+dentro do object 
+
+'filter',
+
+
+
+
+
+
+
+
+é a 'CONDITION',
+
+
+
+
+
+que é o field de 'cond'...
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+cond: {}
+
+
+
+
+
+
+
+
+
+EX:
+
+
+
+
+
+
+
+
+
+db.arrayCollection.aggregate(
+    [
+        {
+            $project: {
+                _id: 0,
+
+                newExamScores: {
+                    $filter: {
+                        input: "$examScores", 
+                        as: "sc",
+                        cond: {
+
+                        }
+                }
+                }
+            }
+        }
+    ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---> OK... É NA 'cond' que temos o MEAT do filter... --> 
+
+
+
+
+é nele que podemos usar UM MONTE DE EXPRESSION OPERATORS.... -------> 
+
+
+
+
+
+
+PODEMOS 
+
+
+
+USAR EXPRESSION OPERATORS ALI.... ---> 
+
+
+
+
+
+
+
+
+
+
+o expression operator que o PROFESSOR VAI QUERER USAR É O CLÁSSICO 
+
+
+
+'$gt' ...
+
+
+
+
+
+
+
+
+
+
+
+--> BEM, 
+
+
+
+
+VAMOS QUERER QUE O 
+
+
+
+
+'$gt' 
+
+
+seja aplicado ao field de 
+
+
+'examScores.score'...
+
+
+
+
+
+
+
+
+--> ENTRETANTO,
+
+
+
+O COMPORTAMENTO DE '$gt'
+ 
+ é um POUCO DIFERENTE, AQUI, 
+
+
+
+
+ DAQUELE __ COM QUE ESTÁVAMOS ACOSTUMADOS, LÁ COM 
+
+
+ '$match'/find....
+
+
+
+
+
+
+
+
+
+ -----> AQUI, EM VEZ DE O '$gt'
+
+
+ ser aplicado '''SOBRE ESTE FIELD EM TODOS SEUS DOCUMENTS'''',
+
+  
+
+
+
+
+
+
+
+  ELE 
+
+
+
+
+
+
+  VAI QUERER __ UM 'ARRAY DE VALUES QUE VAI QUERER COMPARAR'.... ------> 
+
+
+
+
+
+
+  TIPO ASSIM:
+
+
+
+
+
+
+
+
+
+  cond: {
+      $gt: []
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+  --> E O PROFESSOR DIZ QUE ISSO FAZ SENTIDO,
+
+  PQ 
+
+  AGORA 
+
+
+  NÓS ESTAMOS NO CONTEXTO '''DE OUTRO OPERATOR''' ( o operator de '$filter', que muda tudo, até mesmo o comportamento de '$gt' e outros EXPRESSION OPERATORS)....
+
+
+
+
+
+
+
+
+
+
+
+
+
+  -> ISSO SIGNIFICA QUE '''NÃO VAMOS PODER COMPARAR examScore',
+
+
+
+
+  os objects 'examScore' 
+
+
+
+  dentro do array de 'examScores'... ------> EM VEZ DISSO,
+
+
+
+  O QUE VAMOS QUERER 
+
+
+  COMPARAR,
+
+
+
+
+  DENTRO 
+
+
+
+  DA 
+
+  NOSSA 
+
+  'filter expression',
+
+
+
+
+
+  é claro que 
+
+  SERÁ 
+
+
+  O 
+
+
+
+  VALOR 
+
+
+
+  de 'sc',
+
+
+
+
+
+
+
+
+
+  ESSA 'temporary variable',
+
+
+  QUE VAI SE __ REFERIR__ JUSTAMENTE AOS DIFERENTES VALUES 
+
+
+
+
+
+  QUE TEMOS DENTRO DO ARRAY 'examScores' 
+
+
+(
+
+
+    ou seja,
+
+
+    vai se referir a:
+
+
+
+      "examScores" : [
+                {
+                        "difficulty" : 4,
+                        "score" : 57.9
+                },
+                {
+                        "difficulty" : 6,
+                        "score" : 62.1
+                },
+                {
+                        "difficulty" : 3,
+                        "score" : 88.5
+                }
+        ]
+
+
+
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ISSO SIGNIFICA QUE VOCÊ PODE IMAGINAR O 'filter' COMO UMA VERDADEIRA FUNCTION DE 'filter'
+
+
+
+SENDO EXECUTADA...
+
+
+
+
+
+
+
+-->  e o 'cond' 
+
+
+é 
+
+o 
+
+FUNCTION BODY desse filter,
+
+
+
+
+
+
+tipo assim:
+
+
+
+
+arrayCollection.filter(
+    (sc) => {
+
+            return sc.score >= 60
+
+
+    }
+)
+
+
+
+
+
+
+
+
+
+
+
+
+-------> CADA VALOR, CADA 'examScore',
+
+
+
+
+será __ armazenado TEMPORARIAMENTE COMO 'sc'...
+
+
+
+
+
+
+
+-> É POR ISSO 
+
+
+
+
+QUE DENTRO DE 
+
+
+'$gt'
+
+
+
+VAMOS 
+
+
+COLOCAR 
+
+
+
+2 VALORES, 
+
+
+2 VALORES NESSE ARRAY DE PARÂMETROS... --> O PRIMEIRO 
+
+
+
+VALOR 
+
+
+SERÁ 
+
+
+'sc.score' (
+
+
+    o score que será examinado, em cada 
+
+    object 'sc', que são objects 'examScore'...
+)
+,
+
+
+
+
+
+
+
+
+E O SEGUNDO SERÁ 
+
+'60' (pq o SC TERÁ DE SER MAIOR DO QUE 60 PARA QUE CONSIGA SER RETORNADO COM ESSE FILTER)...
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+$filter: {
+    input: "$examScores",
+
+    as: "sc",
+    cond: {
+        $gt: ["sc.score", 60]
+    }
+}
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------
+
+
+
+
+
+
+
+OK.... MAS AQUI TEMOS UM PROBLEMA... ---> 
+
+
+
+"sc.score",
+
+escrito assim,
+
+
+VAI SE REFERIR A UMA STRING,
+
+E NÃO 
+
+
+A 
+ESSA 
+
+
+'TEMPORARY VARIABLE'..  -----> PRECISAMOS DIZER AO MONGODB 
+
+
+QUE 
+ESTAMOS 
+
+
+
+
+______PROCURANDO ___ POR ESSA VARIABLE...
+
+
+
+
+
+
+
+
+
+
+
+
+-> E '$' no início NÃO VAI NOS AJUDAR, PQ ESCREVER ESSE '$' 
+
+
+
+SERIA APENAS DIZER '''ESTAMOS PROCURANDO POR UM FIELD CHAMADO sc'''' ,
+
+
+
+
+mas esse FIELD NÃO EXISTE, PQ É APENAS 
+
+
+UMA TEMPORARY VARIABLE....
+
+
+
+
+
+
+
+
+
+
+--> PARA CONSEGUIR FAZER COM QUE ELE 'CAPTE'/compreenda que você está escrevendo uma TEMPORARY VARIABLE,
+
+
+
+VOCÊ DEVE 
+
+
+escrever '$$' (2 dollar signs seguidos)...
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+$filter: {
+    input: "$examScores",
+
+    as: "sc",
+    cond: {
+        $gt: ["$$sc.score", 60]
+    }
+}
+
+
+
+------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+VOCÊ NÃO VAI ENCONTRAR COM TANTA FREQUÊNCIA USOS DE 
+
+
+'$$' -------> MAS FILTER,
+
+
+
+
+QUE __ SEMPRE __ VAI EXECUTAR UMA FUNCTION 'OVER AND OVER AGAIN',
+
+
+em cima DE TODOS OS ELEMENTS EM 
+
+
+
+'$examScores',
+
+
+
+
+
+
+__ ELE VAI PRECISAR DESSA TEMPORARY VARIABLE AÍ,  ISSO PARA CADA 
+
+STEP QUE 
+
+
+ELE 
+
+EXECUTAR PARA NÓS....
+
+
+
+
+
+
+
+
+
+-_> E AÍ PODEMOS NOS REFERENCIAR A ESSA TEMPORARY VARIABLE COM 
+
+'$$sc'....
+
+
+
+
+
+
+
+
+
+
+
+
+------> MAS AINDA ASSIM, SE NÃO ESCREVERMOS 
+
+
+
+'$$sc.score',
+
+
+
+
+
+
+NÃO OBTEREMOS NOSSO 
+
+
+
+SCORE.... (precisamos da dot notation, e da referência a esse score)...
+
+
+
+
+
+
+
+
+
+OK, 
+
+
+
+NOSSO CÓDIGO COMPLETO FICA ASSIM:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.arrayCollection.aggregate(
+    [
+        {
+            $project: {
+                _id: 0,
+
+                newExamScores: {
+            $filter: {
+         input: "$examScores",
+
+                 as: "sc",
+                cond: {
+              $gt: ["$$sc.score", 60]
+                    }
+                }           
+                }
+            }
+        }
+    ]
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+NOSSO RESULTADO FICA ASSIM:
+
+
+
+
+
+
+
+
+
+
+> db.arrayCollection.aggregate([
+...   {
+...     $project: {
+...       _id: 0,
+...
+...       newExamScores: {
+...         $filter: {
+...           input: '$examScores',
+...
+...           as: 'sc',
+...           cond: {
+...             $gt: ['$$sc.score', 60],
+...           },
+...         },
+...       },
+...     },
+...   },
+... ]);
+{ "newExamScores" : [ { "difficulty" : 3, "score" : 75.1 }, { "difficulty" : 6, "score" : 61.5 } ] }
+{ "newExamScores" : [ { "difficulty" : 2, "score" : 74.3 } ] }
+{ "newExamScores" : [ { "difficulty" : 6, "score" : 62.1 }, { "difficulty" : 3, "score" : 88.5 } ] }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> DEU CERTO, PQ 
+
+
+O SEGUNDO DOCUMENT SÓ TINHA 1 ÚNICO DOCUMENT COM 'score acima de 60'...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------> OK, É ASSIM QUE O FILTER FUNCIONA.... --> 
+
+
+O FILTER TE DEIXA 
+
+
+
+
+
+
+
+
+''''FILTER ARRAYS __ IN DOCUMENTS,
+
+INSIDE OF THE PROJECTION PHASE''''....

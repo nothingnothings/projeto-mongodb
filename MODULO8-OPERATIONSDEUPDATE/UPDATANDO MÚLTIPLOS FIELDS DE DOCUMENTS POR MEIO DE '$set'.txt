@@ -1,0 +1,233 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> ANTES DE PROSSEGUIRMOS COM NOSSO ESTUDO,
+
+DEVEMOS VER COMO USAR o "$set'
+
+para updatar MÚLTIPLOS 
+
+
+FIELDS EM DOCUMENTS DE NOSSA COLLECTION...
+
+
+
+
+
+
+
+
+
+
+ex:
+
+
+
+
+
+
+
+
+
+
+db.users.updateMany(
+    {
+
+    },
+
+
+    {
+        $set: {isSporty: true, isCool: false}
+    }
+)
+
+
+
+
+
+
+
+
+
+------> ISSO VAI SETTAR 
+
+
+
+
+
+2 FIELDS DENTRO DE NOSSOS DOCUMENTS,
+
+
+O FIELD DE 
+
+'isSporty'
+
+
+e 
+
+'isCool'...
+
+
+
+
+
+
+
+
+
+
+--> 
+
+
+
+
+
+
+
+'db.users.updateOne()" --> é mais claro sobre a intenção de 
+
+
+
+
+
+
+UPDATAR APENAS 1 DOCUMENT....
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> o professor usa o '$set',
+
+coisa normal,
+
+
+mas aí 
+
+ele vai escrever exatamente o que eu escrevi,
+
+
+tipo assim:
+
+
+
+
+
+
+
+
+
+
+
+{$set: {age: 40, phone: 4129201490}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--> $set,
+
+portnato,
+
+
+NÃO É LIMITADO ÀPENAS 
+
+AO UPDATE 
+
+
+DE 
+
+
+
+
+1 
+
+
+field 
+
+
+
+em 1 document... pq pode ser usado para updatar múltiplos fields...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------> É CLARO QUE pode também adicionar fields FORA de arrays...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----> ISSO SIGNIFICA QUE TODA A FLEXIBILIDADE QUE VOCÊ VÊ COM SEU 'INSERTING' 
+
+
+É 
+
+VISTA COM O 
+
+
+'update',
+
+
+
+TAMBÉM...
+(
+
+
+
+    mas ele EITHER ADDS A FIELD,
+
+    OR EDITS it...
+)

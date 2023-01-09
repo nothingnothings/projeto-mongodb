@@ -1,0 +1,304 @@
+
+
+
+
+
+
+PERFORMANCE, TOLERANCIA DE FALHAS E DEVELOPMENT.
+
+
+
+
+
+
+
+
+--> APRENDEMOS MT SOBRE MONGODB E SOBRE COMO O UTILIZAR COMO DEVELOPER....
+
+
+
+
+
+
+--> ENTRANDO NO 'ENTERPRISE WORLD'...
+
+
+
+
+
+
+
+
+
+
+--> FALAREMOS SOBRE COISAS QUE NÃO FAZEM PARTE DE SUA FUNÇÃO COMO DESENVOLVEDOR,
+
+MAS QUE 
+
+
+AINDA SÃO IMPORTANTES DE SEREM COMPREENDIDAS,
+
+
+AINDA MAIS 
+
+
+SE VOCÊ ESTIVER 
+
+TRABALHANDO 
+SOZINHO EM UM PROJETO... -->  vocÊ 
+
+
+TEM QUE 
+
+
+
+ENTENDER O QUE IMPACTA A PERFORMANCE DO SEU MONGODBSERVER/mongodb solution --> 
+
+
+
+
+
+
+
+VOCê 
+
+TEM QUE 
+
+
+ENTENDER COMO VOCÊ PODE 'AUMENTAR A TOLERÂNCIA DO SEU APP MONGODB',
+
+
+
+e COMO 
+
+VOCê 
+
+
+
+PODE 
+
+
+
+DEPLOYAR SUA 
+
+
+
+LOCAL 
+
+
+MONGODB 
+
+
+SERVER/INSTANCE/DATABASE 
+
+
+
+
+__ NA _ wEB__,
+
+
+
+ou seja,
+
+
+EM UMA 
+
+CLOUD MACHINE,
+
+
+OU EM 1 SERVER NA WEB,
+
+
+E NÃO 
+
+NO SEU LOCALHOST- --------> PQ SEU APP/WEBAPP 
+
+
+
+PROVAVELMENTE VAI RODAR 
+
+EM 
+
+1 
+
+SERVER/SMART DEVICE,
+
+
+
+E AÍ 
+
+VAI 
+
+SE COMUNICAR 
+
+
+AO 
+
+SEU 
+
+SERVER 
+
+NA 
+WEB,
+
+
+
+ E NÃO 
+
+
+ AO SEU 
+
+
+ 'LOCAL MACHINE' 
+
+ em que 
+
+ você está desenvolvendo...
+
+
+
+
+
+
+
+
+
+
+
+
+ --> O QUE HÁ NESSE MÓDULO:
+
+
+
+
+
+
+
+
+
+
+
+ 1) VEREMOS O QUE INFLUENCIA PERFORMANCE, E COMO VOCÊ PODE CONTROLAR ESSES ASPECTOS...
+
+
+
+
+
+ 2) VEREMOS UM TIPO ESPECIAL DE 'COLLECTION',
+
+
+
+ 'CAPPED COLLECTIONS',
+
+
+
+ QUE PODEM
+
+
+
+ SER ÚTEIS EM CERTAS SITUAÇÕES,
+
+
+
+ E QUE 
+
+ VOCê DEVE COMPREENDER...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 3) DAREMOS UMA OLHADA EM 
+
+
+ 'REPLICA SETS',
+
+
+ entenderemos o que isso significa....
+
+
+
+
+
+
+
+
+ 4) VEREMOS 
+
+ 'SHARDING' ---> O PROFESSOR TAMBÉM NOS EXPLICARÁ O QUE É ISSO...
+
+
+
+
+
+
+
+
+ REPLICA SETS E SHARDING -----------> OS 2 CONCEITOS POSSUEM RELAÇAÕ COM 'FAULT TOLERANCE E PERFORMANCE'...
+
+
+
+
+
+
+
+
+
+
+
+
+ ------> POR FIM,
+
+
+
+ O PROFESSOR 
+
+
+
+
+ VAI NOS EXPLICAR 'WHAT IT TAKES' 
+
+
+
+ para 
+
+ fazer 
+
+ DEPLOY DE UM LOCAL MONGODB SERVER 
+
+
+
+
+ NA WEB.... ----> E AÍ, TAMBÉM VAI NOS FALAR SOBRE 
+
+
+ AS SOLUÇÕES 
+
+
+
+
+ QUE ELE PROPÕE/RECOMENDA
+  
+
+  PARA 
+
+
+
+  CONSEGUIR 
+
+
+
+
+  FAZER SUA 
+  MONGODB 
+
+  SOLUTION FICAR 'UP AND RUNNING' na web...
